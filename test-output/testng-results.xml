@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" ignored="0" total="1" passed="1">
+  <reporter-output>
+  </reporter-output>
+  <suite name="Default suite" duration-ms="34803" started-at="2018-05-03T11:34:21Z" finished-at="2018-05-03T11:34:56Z">
+    <groups>
+    </groups>
+    <test name="Default test" duration-ms="34803" started-at="2018-05-03T11:34:21Z" finished-at="2018-05-03T11:34:56Z">
+      <class name="TC_NewCISOrgnizationCreation">
+        <test-method status="PASS" signature="loginToeOasis()[pri:0, instance:TC_NewCISOrgnizationCreation@7a419da4]" name="loginToeOasis" is-config="true" duration-ms="7436" started-at="2018-05-03T11:34:21Z" finished-at="2018-05-03T11:34:29Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- loginToeOasis -->
+        <test-method status="PASS" signature="createNewOrganization()[pri:0, instance:TC_NewCISOrgnizationCreation@7a419da4]" name="createNewOrganization" duration-ms="27331" started-at="2018-05-03T11:34:29Z" finished-at="2018-05-03T11:34:56Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- createNewOrganization -->
+        <test-method status="PASS" signature="closeBrowser()[pri:0, instance:TC_NewCISOrgnizationCreation@7a419da4]" name="closeBrowser" is-config="true" duration-ms="1" started-at="2018-05-03T11:34:56Z" finished-at="2018-05-03T11:34:56Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- closeBrowser -->
+      </class> <!-- TC_NewCISOrgnizationCreation -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>
