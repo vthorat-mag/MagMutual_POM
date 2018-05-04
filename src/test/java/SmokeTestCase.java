@@ -1,4 +1,7 @@
+import java.awt.AWTException;
+
 import org.openqa.selenium.WebDriver;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -7,13 +10,15 @@ import com.mm.browsers.BrowserTypes;
 import com.mm.pages.cisPage;
 import com.mm.pages.homePage;
 import com.mm.pages.loginPage;
+import com.mm.pages.rateApolicyPage;
 
-public class TC_NewCISOrgnizationCreation extends BrowserTypes {
+public class SmokeTestCase extends BrowserTypes {
 	
 	WebDriver driver = BrowserTypes.getDriver();
 	loginPage loginpage;
 	cisPage cispage;
 	homePage homepage;
+	rateApolicyPage rateapolicypage;
 	
 	@BeforeMethod
 	public void loginToeOasis()
@@ -22,8 +27,8 @@ public class TC_NewCISOrgnizationCreation extends BrowserTypes {
 		loginpage.loginToeOasis();
 	}
 	
-	@Test
-	public void createNewOrganization() throws InterruptedException
+	@Test(description="Verify Add Organization")
+	public void TC42404() throws InterruptedException
 	{
 		homepage = new homePage(driver);
 		homepage.navigateToCISPage();
@@ -34,10 +39,26 @@ public class TC_NewCISOrgnizationCreation extends BrowserTypes {
 		cispage.saveNewOrgDetails();
 	}
 	
-	@AfterMethod
-	public void closeBrowser()
+	//@Test(description="Hospital Rate")
+	public void TC42239() throws InterruptedException, AWTException
 	{
-        driver.quit();
+		homepage = new homePage(driver);
+		homepage.navigateToPolicyPage();
+		rateapolicypage = new rateApolicyPage(driver);
+		rateapolicypage.policySearch();
+		rateapolicypage.saveRatedetails();
+		rateapolicypage.startExcelExport();
+	}
+	
+	@AfterMethod
+	public void logoffFromAppclication()
+	{
+		homepage.logoutFromeOasis();
 	}
 
+	@AfterClass
+	public void closeBrowser()
+	{
+		driver.quit();
+	}
 }

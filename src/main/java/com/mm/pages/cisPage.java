@@ -1,6 +1,5 @@
 package com.mm.pages;
 
-import java.util.Set;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -9,12 +8,14 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import com.mm.utils.commonMethods;
 import com.mm.utils.commonUtilities;
 
-public class cisPage {
+import BaseClass.CommonActionInterface;
+
+public class cisPage  extends commonMethods{
 	
 	WebDriver driver;
-	commonUtilities util = new commonUtilities();
 	
 	@FindBy(id="CI_NEW_ORG")
 	WebElement New_Org;
@@ -42,12 +43,6 @@ public class cisPage {
 
 	@FindBy(name="address_stateCode")
 	WebElement State;
-
-
-	//We will value of this zip code from config.properties, so no need of xpath for all zip codes.
-
-	/*@FindBy(xpath="//input[@value='30004']")
-	WebElement Zip_Code1;*/
 
 	@FindBy(xpath="//input[@type='button' and @value='OK']")
 	WebElement OK;
@@ -77,82 +72,55 @@ public class cisPage {
 	
 	public void clickOnNewOrganization()
 	{
-		New_Org.click();
+		click(New_Org);
 	}
-	
-	
 			
-	/*Excel_File_Reader reader= new Excel_File_Reader("C:\\Vivek_MM_docs\\Form_Data.xlsx");
-	int rowCount = reader.getRowCount("New_Org_data");
-	
-	for(int rowNum=2;rowNum<=rowCount;rowNum++){
-		
-		Thread.sleep(2000);
-		String longName1 =reader.getCellData("New_Org_data", "LongName", rowNum);
-		
-		String Addr_Line_1 =reader.getCellData("New_Org_data", "Address_Line1", rowNum);
-		
-		String City1 = reader.getCellData("New_Org_data", "City", rowNum);
-	
-		String Phon_num = reader.getCellData("New_Org_data", "Phone_no", rowNum);
-	
-	    String ToDate = reader.getCellData("New_Org_data", "Class_Eff_To_Date", rowNum);
-	    
-	    String Area_code1 = reader.getCellData("New_Org_data", "Area_code", rowNum);*/
-	
 	public void enterDataInNewOrgPage() throws InterruptedException
 	{
 	   
-   	    Long_Name.sendKeys("AAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+   	    enterTextIn(Long_Name,"AAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 	    
-   	    CIS_OrgName.click();
+   	    click(CIS_OrgName);
 	    
-	    Addr_Line1.sendKeys("Add line 1");
+	    enterTextIn(Addr_Line1,"Add line 1");
 	    
-	    Addr_City.sendKeys("Alpharetta");
+	    enterTextIn(Addr_City,"Alpharetta");
 	    
-	    Ph_no.sendKeys("1234567890");
+	    enterTextIn(Ph_no,"1234567890");
 	    
-	    AreaCode.sendKeys("12345");
-	    
+	    enterTextIn(AreaCode,"12345");
 	    Thread.sleep(2000);
 	    
-	    Eff_To_Date.sendKeys("05102018");
+	    enterTextIn(Eff_To_Date,"05102018");
 	    
-	    util.selectDropdown(Classification, "CARRIER");
+	    selectDropdown(Classification, "CARRIER");
 		
-	    util.selectDropdown(Addr_Type, "POLICY");
+	    selectDropdown(Addr_Type, "POLICY");
 	    
-		util.selectDropdown(State,"GA");
+		selectDropdown(State,"GA");
 	    Thread.sleep(3000);
 	}
 	   
 	    public void selectZipCode() throws InterruptedException
 	    {
-	    	   /*  for(String currentWindow : handles){
-	    	   if(!currentWindow.equals(parentWindow))
-	    	  {
-	    	   driver.switchTo().window(currentWindow);*/
-	    	   String parentwindow = util.switchToWindow(driver);
-	    	   Thread.sleep(4000);
+	    	   String parentwindow = switchToWindow(driver);
+	    	   Thread.sleep(2000);
 	    	  	    	   
 	    	   WebElement zipCode = driver.findElement(By.xpath("//input[@value='30004']")); 
-	    	   
-	    	   JavascriptExecutor executor = (JavascriptExecutor) driver;
-	           executor.executeScript("arguments[0].click();", zipCode);
+	    	   click(zipCode);
 
-	           Thread.sleep(2000);
-	    	   OK.click();
+	           Thread.sleep(1000);
+	    	   click(OK);
 
 	    	   Thread.sleep(2000);
-      	       util.switchToParentWindow(driver, parentwindow); 
+      	       switchToParentWindowfromotherwindow(driver, parentwindow); 
       	      
 		}
 		
 		public void saveNewOrgDetails() throws InterruptedException
 		{
 			Thread.sleep(3000);
-			Save_btn.click();
+			click(Save_btn);
 		}
 	}
 	

@@ -2,9 +2,12 @@ package com.mm.utils;
 
 import java.util.Set;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
+
+import BaseClass.CommonActionInterface;
 
 public class commonUtilities {
 	
@@ -31,11 +34,6 @@ public class commonUtilities {
 		 return parentWindow;
 	}
 	
-	public void switchToParentWindow(WebDriver driver, String parentwindow)
-	{
-		//String handle = driver.getWindowHandle();
-		driver.switchTo().window(parentwindow);
-	}
 }
 
  

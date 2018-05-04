@@ -2,24 +2,28 @@
 <testng-results skipped="0" failed="0" ignored="0" total="1" passed="1">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="34803" started-at="2018-05-03T11:34:21Z" finished-at="2018-05-03T11:34:56Z">
+  <suite name="Default suite" duration-ms="33868" started-at="2018-05-04T08:39:05Z" finished-at="2018-05-04T08:39:39Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="34803" started-at="2018-05-03T11:34:21Z" finished-at="2018-05-03T11:34:56Z">
-      <class name="TC_NewCISOrgnizationCreation">
-        <test-method status="PASS" signature="loginToeOasis()[pri:0, instance:TC_NewCISOrgnizationCreation@7a419da4]" name="loginToeOasis" is-config="true" duration-ms="7436" started-at="2018-05-03T11:34:21Z" finished-at="2018-05-03T11:34:29Z">
+    <test name="Default test" duration-ms="33868" started-at="2018-05-04T08:39:05Z" finished-at="2018-05-04T08:39:39Z">
+      <class name="SmokeTestCase">
+        <test-method status="PASS" signature="loginToeOasis()[pri:0, instance:SmokeTestCase@14555e0a]" name="loginToeOasis" is-config="true" duration-ms="4055" started-at="2018-05-04T08:39:05Z" finished-at="2018-05-04T08:39:09Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- loginToeOasis -->
-        <test-method status="PASS" signature="createNewOrganization()[pri:0, instance:TC_NewCISOrgnizationCreation@7a419da4]" name="createNewOrganization" duration-ms="27331" started-at="2018-05-03T11:34:29Z" finished-at="2018-05-03T11:34:56Z">
+        <test-method status="PASS" signature="TC42404()[pri:0, instance:SmokeTestCase@14555e0a]" name="TC42404" duration-ms="23215" started-at="2018-05-04T08:39:09Z" description="Verify Add Organization" finished-at="2018-05-04T08:39:33Z">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- createNewOrganization -->
-        <test-method status="PASS" signature="closeBrowser()[pri:0, instance:TC_NewCISOrgnizationCreation@7a419da4]" name="closeBrowser" is-config="true" duration-ms="1" started-at="2018-05-03T11:34:56Z" finished-at="2018-05-03T11:34:56Z">
+        </test-method> <!-- TC42404 -->
+        <test-method status="PASS" signature="logoffFromAppclication()[pri:0, instance:SmokeTestCase@14555e0a]" name="logoffFromAppclication" is-config="true" duration-ms="515" started-at="2018-05-04T08:39:33Z" finished-at="2018-05-04T08:39:33Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- logoffFromAppclication -->
+        <test-method status="PASS" signature="closeBrowser()[pri:0, instance:SmokeTestCase@14555e0a]" name="closeBrowser" is-config="true" duration-ms="6067" started-at="2018-05-04T08:39:33Z" finished-at="2018-05-04T08:39:39Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- closeBrowser -->
-      </class> <!-- TC_NewCISOrgnizationCreation -->
+      </class> <!-- SmokeTestCase -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>

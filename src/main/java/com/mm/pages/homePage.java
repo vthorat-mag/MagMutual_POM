@@ -13,6 +13,12 @@ public class homePage {
 	@FindBy(id="CIS")
 	WebElement cisTab;
 	
+	@FindBy(xpath="//li[@id='Policy']//a[@class='fNiv']")
+	WebElement Policy_tab;
+	
+	@FindBy(name="logoff")
+	WebElement logoff;
+	
 	public homePage(WebDriver driver)
 	{
 		this.driver=driver;
@@ -22,5 +28,15 @@ public class homePage {
 	public void navigateToCISPage()
 	{
 		cisTab.click();
+	}
+	
+	public void navigateToPolicyPage()
+	{
+		Policy_tab.click();
+	}
+	
+	public void logoutFromeOasis()
+	{
+		logoff.click();
 	}
 }
