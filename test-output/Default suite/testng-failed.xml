@@ -3,13 +3,14 @@
 <suite guice-stage="DEVELOPMENT" name="Failed suite [Default suite]">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="TC_NewCISOrgnizationCreation">
+      <class name="SmokeTestCase">
         <methods>
           <include name="loginToeOasis"/>
           <include name="closeBrowser"/>
-          <include name="createNewOrganization"/>
+          <include name="logoffFromAppclication"/>
+          <include name="TC42404"/>
         </methods>
-      </class> <!-- TC_NewCISOrgnizationCreation -->
+      </class> <!-- SmokeTestCase -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->
