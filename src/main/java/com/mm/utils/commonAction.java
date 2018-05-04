@@ -9,7 +9,7 @@ import org.openqa.selenium.support.ui.Select;
 
 import BaseClass.CommonActionInterface;
 
-public class commonMethods implements CommonActionInterface {
+public class commonAction implements CommonActionInterface {
 
 
 	public void switchToParentWindowfromotherwindow(WebDriver driver, String parentwindow)
@@ -119,6 +119,11 @@ public class commonMethods implements CommonActionInterface {
 		
 		Select Sel = new Select(element);
 		Sel.selectByValue(DropDownOption);
+	}
+	
+	public void excelRead() throws Exception
+	{
+		ExcelUtil exlutil = new ExcelUtil();
 	}
 
 

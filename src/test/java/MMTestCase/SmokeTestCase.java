@@ -1,3 +1,6 @@
+package MMTestCase;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.Test;
 import java.awt.AWTException;
 
 import org.openqa.selenium.WebDriver;
@@ -7,6 +10,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.mm.browsers.BrowserTypes;
+import com.mm.listeners.testListeners;
 import com.mm.pages.cisPage;
 import com.mm.pages.homePage;
 import com.mm.pages.loginPage;
@@ -21,14 +25,15 @@ public class SmokeTestCase extends BrowserTypes {
 	rateApolicyPage rateapolicypage;
 	
 	@BeforeMethod
-	public void loginToeOasis()
+	public void loginToeOasis() throws Exception
 	{
 		loginpage = new loginPage(driver);
 		loginpage.loginToeOasis();
+		testListeners testlist = new testListeners();
 	}
 	
 	@Test(description="Verify Add Organization")
-	public void TC42404() throws InterruptedException
+	public void TC42404() throws Exception
 	{
 		homepage = new homePage(driver);
 		homepage.navigateToCISPage();
@@ -39,7 +44,7 @@ public class SmokeTestCase extends BrowserTypes {
 		cispage.saveNewOrgDetails();
 	}
 	
-	//@Test(description="Hospital Rate")
+	@Test(description="Hospital Rate")
 	public void TC42239() throws InterruptedException, AWTException
 	{
 		homepage = new homePage(driver);

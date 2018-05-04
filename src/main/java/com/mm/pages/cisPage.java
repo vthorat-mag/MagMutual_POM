@@ -8,14 +8,16 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-import com.mm.utils.commonMethods;
+import com.mm.utils.ExcelUtil;
+import com.mm.utils.commonAction;
 import com.mm.utils.commonUtilities;
 
 import BaseClass.CommonActionInterface;
 
-public class cisPage  extends commonMethods{
+public class cisPage  extends commonAction{
 	
 	WebDriver driver;
+	//commonUtilities util = new commonUtilities();
 	
 	@FindBy(id="CI_NEW_ORG")
 	WebElement New_Org;
@@ -75,23 +77,23 @@ public class cisPage  extends commonMethods{
 		click(New_Org);
 	}
 			
-	public void enterDataInNewOrgPage() throws InterruptedException
+	public void enterDataInNewOrgPage() throws Exception
 	{
-	   
-   	    enterTextIn(Long_Name,"AAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+		ExcelUtil exlutil = new ExcelUtil();
+   	    enterTextIn(Long_Name,exlutil.getCellData("TC42404", "LongName", 2));
 	    
    	    click(CIS_OrgName);
 	    
-	    enterTextIn(Addr_Line1,"Add line 1");
+	    enterTextIn(Addr_Line1,exlutil.getCellData("TC42404", "Address_Line1", 2));
 	    
-	    enterTextIn(Addr_City,"Alpharetta");
+	    enterTextIn(Addr_City,exlutil.getCellData("TC42404", "City", 2));
 	    
-	    enterTextIn(Ph_no,"1234567890");
+	    enterTextIn(Ph_no,exlutil.getCellData("TC42404", "Phone_no", 2));
 	    
-	    enterTextIn(AreaCode,"12345");
+	    enterTextIn(AreaCode,exlutil.getCellData("TC42404", "Area_code", 2));
 	    Thread.sleep(2000);
 	    
-	    enterTextIn(Eff_To_Date,"05102018");
+	    enterTextIn(Eff_To_Date,exlutil.getCellData("TC42404", "Class_Eff_To_Date", 2));
 	    
 	    selectDropdown(Classification, "CARRIER");
 		

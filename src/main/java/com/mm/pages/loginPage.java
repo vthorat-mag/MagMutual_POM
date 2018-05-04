@@ -5,7 +5,10 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class loginPage {
+import com.mm.utils.ExcelUtil;
+import com.mm.utils.commonAction;
+
+public class loginPage extends commonAction{
 	
 	WebDriver driver;
 	
@@ -24,12 +27,13 @@ public class loginPage {
 		PageFactory.initElements(driver, this);
 	}
 
-	public void loginToeOasis()
+	public void loginToeOasis() throws Exception
 	{
+		ExcelUtil exlutil = new ExcelUtil();
 		driver.get("http://oasiscloud2017t:8081/oas17bts/CS/login.jsp");
 		driver.manage().window().maximize();
-		userName.sendKeys("vthorat");
-		password.sendKeys("M@G580746");
+		enterTextIn(userName,exlutil.getCellData("eOasis_Credentials", "UserName", 2));
+		enterTextIn(password,exlutil.getCellData("eOasis_Credentials", "Password", 2));
 		loginBtn.click();
 	}
 	
