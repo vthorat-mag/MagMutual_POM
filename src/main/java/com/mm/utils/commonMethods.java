@@ -7,13 +7,17 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
+import com.relevantcodes.extentreports.LogStatus;
+
 import BaseClass.CommonActionInterface;
 
 public class commonMethods implements CommonActionInterface {
 
 
+
 	public void switchToParentWindowfromotherwindow(WebDriver driver, String parentwindow)
 	{
+		
 		driver.switchTo().window(parentwindow);
 	}
 	
@@ -24,6 +28,7 @@ public class commonMethods implements CommonActionInterface {
 	}
 	public void switchToParentWindowfromframe(WebDriver driver)
 	{
+		ExtentReporter.logger.log(LogStatus.INFO, "Switching control back to main window");
 		driver.switchTo().defaultContent();
 	}
 	
@@ -34,18 +39,25 @@ public class commonMethods implements CommonActionInterface {
 
 	public void navigateTo(String url) {
 		// TODO Auto-generated method stub
+	
+		ExtentReporter.logger.log(LogStatus.INFO, "Navigating to eOasis web application");
 		
 	}
 
-	public void enterTextIn(WebElement pageElement, String text) {
+	public void enterTextIn(WebElement pageElement, String text, String textField) {
 		// TODO Auto-generated method stub
 		pageElement.sendKeys(text);
 		
+		ExtentReporter.logger.log(LogStatus.INFO, "Entered text in text box "+textField);
+		
 	}
 
-	public void clickButton(WebElement pageElement) {
+	public void clickButton(WebElement pageElement, String buttonName) {
 		// TODO Auto-generated method stub
 		pageElement.click();
+		
+		ExtentReporter.logger.log(LogStatus.INFO, "Clicked on the "+buttonName);
+		
 		
 	}
 
@@ -74,9 +86,10 @@ public class commonMethods implements CommonActionInterface {
 		return null;
 	}
 
-	public void clearTextBox(WebElement pageElement) {
+	public void clearTextBox(WebElement pageElement, String textField) {
 		// TODO Auto-generated method stub
 		pageElement.clear();
+		ExtentReporter.logger.log(LogStatus.INFO, "Cleared the initial contents from "+textField);
 		
 	}
 
@@ -85,9 +98,11 @@ public class commonMethods implements CommonActionInterface {
 		return null;
 	}
 
-	public void click(WebElement pageElement) {
+	public void click(WebElement pageElement, String ElementName) {
 		// TODO Auto-generated method stub
 		pageElement.click();
+		
+		ExtentReporter.logger.log(LogStatus.INFO, "Clicked on the "+ ElementName);
 		
 	}
 
@@ -99,9 +114,14 @@ public class commonMethods implements CommonActionInterface {
 	public void visibilityOfElement(WebElement pageElement) {
 		// TODO Auto-generated method stub
 		
+		
+		
 	}
 
 	public String switchToWindow(WebDriver driver) {
+		
+	
+		ExtentReporter.logger.log(LogStatus.INFO, "Switching to the pop up window");
 		Set<String> handles = driver.getWindowHandles();      //Return a set of window handle
 		 
 	    String parentWindow = driver.getWindowHandle();
@@ -110,15 +130,18 @@ public class commonMethods implements CommonActionInterface {
 	    	   if(!currentWindow.equals(parentWindow))
 	    	  {
 	    	   driver.switchTo().window(currentWindow);
+	    ExtentReporter.logger.log(LogStatus.INFO, "Control is switched to pop up window");
 	    	  }
 		 }
 		 return parentWindow;
 	}
 
-	public void selectDropdown(WebElement element, String DropDownOption) {
+	public void selectDropdown(WebElement element, String DropDownOption, String label) {
 		
+		ExtentReporter.logger.log(LogStatus.INFO, "Selecting the value from "+label+ " drop down");
 		Select Sel = new Select(element);
 		Sel.selectByValue(DropDownOption);
+		ExtentReporter.logger.log(LogStatus.INFO, "Value is selected from "+label+" drop down");
 	}
 
 

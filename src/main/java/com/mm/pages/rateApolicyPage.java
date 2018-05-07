@@ -56,26 +56,26 @@ public class rateApolicyPage extends commonMethods {
 	public void policySearch() throws InterruptedException, AWTException{
 		
 		Thread.sleep(3000);
-		clearTextBox(Policy_Search);
-		enterTextIn(Policy_Search, "Q09101299-NB18-01");
-		click(Search_btn);
-		click(RateBtn);
+		clearTextBox(Policy_Search, "Exter Policy text field");
+		enterTextIn(Policy_Search, "Q09101299-NB18-01", "Exter Policy text field");
+		click(Search_btn, "Search button");
+		click(RateBtn, "Rate button");
 		Thread.sleep(5000);
 	}
 	public void saveRatedetails() throws InterruptedException
 	{
 		switchToFrame(driver,"popupframe1");
 	    Thread.sleep(1000);
-	    selectDropdown(Continue_saving, "Y"); 
+	    selectDropdown(Continue_saving, "Y", "Continue saving without Quote"); 
 	    Thread.sleep(1000);
-	    click(Notify_Close);
+	    click(Notify_Close, "Close button");
 	    Thread.sleep(3000);
 	}
 	
 				
 	public void startExcelExport() throws InterruptedException,AWTException
 	{
-	    	 click(Export);
+	    	 click(Export, "Export link");
 	    	 Thread.sleep(2000);
 	    	 
 	    	 Robot rob = new Robot();
@@ -117,10 +117,10 @@ public class rateApolicyPage extends commonMethods {
 	    	 rob.keyPress(KeyEvent.VK_ENTER);
 	    	 rob.keyRelease(KeyEvent.VK_ENTER);
 	    	 
-	    	 click(Prem_Close);
+	    	 click(Prem_Close,"Premium close");
 	    	 Thread.sleep(1000);
 	    	 
-	    	 click(Exit_Ok);
+	    	 click(Exit_Ok, "OK button");
 	    	 switchToParentWindowfromframe(driver);
 	    	
 	    	 rob.keyPress(KeyEvent.VK_F6);

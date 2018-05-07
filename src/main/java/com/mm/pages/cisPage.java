@@ -8,6 +8,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import com.mm.utils.ExtentReporter;
 import com.mm.utils.commonMethods;
 import com.mm.utils.commonUtilities;
 
@@ -15,9 +16,12 @@ import BaseClass.CommonActionInterface;
 
 public class cisPage  extends commonMethods{
 	
+	
+//	ExtentReporter	extReport =  new ExtentReporter();
+	
 	WebDriver driver;
 	
-	@FindBy(id="CI_NEW_ORG")
+	@FindBy(id="CI_NEW_ORG")				
 	WebElement New_Org;
 
 	@FindBy(name="entity_veryLongName")
@@ -30,8 +34,8 @@ public class cisPage  extends commonMethods{
 	WebElement Addr_Type;
 
 	@FindBy(name="address_addressLine1")
-	WebElement Addr_Line1;
 
+	WebElement Addr_Line1;
 	@FindBy(name="address_addressLine2")
 	WebElement Addr_Line2;
 
@@ -56,7 +60,7 @@ public class cisPage  extends commonMethods{
 	@FindBy(name="entityClass_entityClassCode")
 	WebElement Classification;
 
-	@FindBy(name="entityClass_effectiveToDate")
+	@FindBy(name="entityClass_effectiveToDate")			
 	WebElement Eff_To_Date;
 
 	@FindBy(id="CI_ENTADDOU_SAV")
@@ -72,32 +76,32 @@ public class cisPage  extends commonMethods{
 	
 	public void clickOnNewOrganization()
 	{
-		click(New_Org);
+		click(New_Org, "New Organization tab");
 	}
 			
 	public void enterDataInNewOrgPage() throws InterruptedException
 	{
 	   
-   	    enterTextIn(Long_Name,"AAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+   	    enterTextIn(Long_Name, "BBAAAAAAAAAAAAAAAAAABBBB", "LongName");
 	    
-   	    click(CIS_OrgName);
+   	    click(CIS_OrgName, "Org Name text field");				
 	    
-	    enterTextIn(Addr_Line1,"Add line 1");
+	    enterTextIn(Addr_Line1,"Add line 1", "Address Line1");
 	    
-	    enterTextIn(Addr_City,"Alpharetta");
+	    enterTextIn(Addr_City,"Alpharetta", "City");
 	    
-	    enterTextIn(Ph_no,"1234567890");
+	    enterTextIn(Ph_no,"1234556890", "Phone number");
 	    
-	    enterTextIn(AreaCode,"12345");
+	    enterTextIn(AreaCode,"12745", "Area code");
 	    Thread.sleep(2000);
 	    
-	    enterTextIn(Eff_To_Date,"05102018");
+	    enterTextIn(Eff_To_Date,"05102018", "Effective_To_Date");
 	    
-	    selectDropdown(Classification, "CARRIER");
+	    selectDropdown(Classification, "CARRIER", "Classification");
 		
-	    selectDropdown(Addr_Type, "POLICY");
+	    selectDropdown(Addr_Type, "POLICY", "Address_Type");
 	    
-		selectDropdown(State,"GA");
+		selectDropdown(State,"GA","State");
 	    Thread.sleep(3000);
 	}
 	   
@@ -107,10 +111,10 @@ public class cisPage  extends commonMethods{
 	    	   Thread.sleep(2000);
 	    	  	    	   
 	    	   WebElement zipCode = driver.findElement(By.xpath("//input[@value='30004']")); 
-	    	   click(zipCode);
+	    	   click(zipCode,"ZipCode");
 
 	           Thread.sleep(1000);
-	    	   click(OK);
+	    	   click(OK,"OK button");
 
 	    	   Thread.sleep(2000);
       	       switchToParentWindowfromotherwindow(driver, parentwindow); 
@@ -120,7 +124,7 @@ public class cisPage  extends commonMethods{
 		public void saveNewOrgDetails() throws InterruptedException
 		{
 			Thread.sleep(3000);
-			click(Save_btn);
+			click(Save_btn, "Save button");
 		}
 	}
 	
