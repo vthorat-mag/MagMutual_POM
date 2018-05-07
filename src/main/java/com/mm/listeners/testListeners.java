@@ -13,7 +13,7 @@ public class testListeners implements ITestListener{
 
 	public void onTestSuccess(ITestResult result) {
 		// TODO Auto-generated method stub
-		System.out.println("Test Case "+result.getName()+"is pass");
+		System.out.println("Test Case "+ "'" +result.getName()+" is passed.");
 	}
 
 	public void onTestFailure(ITestResult result) {
