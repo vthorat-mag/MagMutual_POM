@@ -8,6 +8,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+
 import com.mm.utils.ExcelUtil;
 import com.mm.utils.commonAction;
 import com.mm.utils.commonUtilities;
@@ -16,10 +17,13 @@ import BaseClass.CommonActionInterface;
 
 public class cisPage  extends commonAction{
 	
+	
+//	ExtentReporter	extReport =  new ExtentReporter();
+	
 	WebDriver driver;
 	//commonUtilities util = new commonUtilities();
 	
-	@FindBy(id="CI_NEW_ORG")
+	@FindBy(id="CI_NEW_ORG")				
 	WebElement New_Org;
 
 	@FindBy(name="entity_veryLongName")
@@ -32,8 +36,8 @@ public class cisPage  extends commonAction{
 	WebElement Addr_Type;
 
 	@FindBy(name="address_addressLine1")
-	WebElement Addr_Line1;
 
+	WebElement Addr_Line1;
 	@FindBy(name="address_addressLine2")
 	WebElement Addr_Line2;
 
@@ -58,7 +62,7 @@ public class cisPage  extends commonAction{
 	@FindBy(name="entityClass_entityClassCode")
 	WebElement Classification;
 
-	@FindBy(name="entityClass_effectiveToDate")
+	@FindBy(name="entityClass_effectiveToDate")			
 	WebElement Eff_To_Date;
 
 	@FindBy(id="CI_ENTADDOU_SAV")
@@ -74,16 +78,18 @@ public class cisPage  extends commonAction{
 	
 	public void clickOnNewOrganization()
 	{
-		click(New_Org);
+		click(New_Org, "New Organization tab");
 	}
 			
 	public void enterDataInNewOrgPage() throws Exception
 	{
+
 		ExcelUtil exlutil = new ExcelUtil();
    	    enterTextIn(Long_Name,exlutil.getCellData("TC42404", "LongName", 2));
 	    
-   	    click(CIS_OrgName);
+   	    click(CIS_OrgName, "Org Name text field");				
 	    
+
 	    enterTextIn(Addr_Line1,exlutil.getCellData("TC42404", "Address_Line1", 2));
 	    
 	    enterTextIn(Addr_City,exlutil.getCellData("TC42404", "City", 2));
@@ -95,11 +101,11 @@ public class cisPage  extends commonAction{
 	    
 	    enterTextIn(Eff_To_Date,exlutil.getCellData("TC42404", "Class_Eff_To_Date", 2));
 	    
-	    selectDropdown(Classification, "CARRIER");
+	    selectDropdown(Classification, "CARRIER", "Classification");
 		
-	    selectDropdown(Addr_Type, "POLICY");
+	    selectDropdown(Addr_Type, "POLICY", "Address_Type");
 	    
-		selectDropdown(State,"GA");
+		selectDropdown(State,"GA","State");
 	    Thread.sleep(3000);
 	}
 	   
@@ -109,10 +115,9 @@ public class cisPage  extends commonAction{
 	    	   Thread.sleep(2000);
 	    	  	    	   
 	    	   WebElement zipCode = driver.findElement(By.xpath("//input[@value='30004']")); 
-	    	   click(zipCode);
+	    	   click(zipCode,"ZipCode");
 
-	           Thread.sleep(1000);
-	    	   click(OK);
+	    	   click(OK,"OK button");
 
 	    	   Thread.sleep(2000);
       	       switchToParentWindowfromotherwindow(driver, parentwindow); 
@@ -122,7 +127,7 @@ public class cisPage  extends commonAction{
 		public void saveNewOrgDetails() throws InterruptedException
 		{
 			Thread.sleep(3000);
-			click(Save_btn);
+			click(Save_btn, "Save button");
 		}
 	}
 	

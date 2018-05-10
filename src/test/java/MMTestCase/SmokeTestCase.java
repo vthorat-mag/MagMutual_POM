@@ -2,6 +2,7 @@ package MMTestCase;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 import java.awt.AWTException;
+import java.lang.reflect.Method;
 
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterClass;
@@ -17,6 +18,10 @@ import com.mm.pages.cisPage;
 import com.mm.pages.homePage;
 import com.mm.pages.loginPage;
 import com.mm.pages.rateApolicyPage;
+import com.mm.utils.ExtentReporter;
+import com.relevantcodes.extentreports.ExtentReports;
+import com.relevantcodes.extentreports.ExtentTest;
+import com.relevantcodes.extentreports.LogStatus;
 
 public class SmokeTestCase extends BrowserTypes {
 	
@@ -25,18 +30,21 @@ public class SmokeTestCase extends BrowserTypes {
 	cisPage cispage;
 	homePage homepage;
 	rateApolicyPage rateapolicypage;
+//	ExtentReporter	extReport;
 	
 	@BeforeTest	
 	public void loginToeOasis() throws Exception
 	{
 		loginpage = new loginPage(driver);
 		loginpage.loginToeOasis();
-		testListeners testlist = new testListeners();
 	}
 	
 	@Test(testName ="Verify Add Organization")
-	public void TC42404() throws Exception
+	public void TC42404(Method method) throws Exception
 	{
+		ExtentReporter.logger=ExtentReporter.report.startTest(method.getName());
+		//extReport.logger.assignCategory("Smoke Test");
+		
 		homepage = new homePage(driver);
 	
 		homepage.navigateToCISPage();
@@ -48,8 +56,9 @@ public class SmokeTestCase extends BrowserTypes {
 	}
 	
 	@Test(testName="Hospital Rate")
-	public void TC42239() throws InterruptedException, AWTException
+	public void TC42239(Method method) throws InterruptedException, AWTException
 	{
+		ExtentReporter.logger=ExtentReporter.report.startTest(method.getName());
 		homepage = new homePage(driver);
 		homepage.navigateToPolicyPage();
 		rateapolicypage = new rateApolicyPage(driver);
@@ -61,12 +70,18 @@ public class SmokeTestCase extends BrowserTypes {
 	@AfterTest
 	public void logoffFromAppclication()
 	{
+		
+		ExtentReporter.report.endTest(ExtentReporter.logger);
+		
 		homepage.logoutFromeOasis();
+		driver.quit();
 	}
 
 	@AfterClass
 	public void closeBrowser()
 	{
-		driver.quit();
+		ExtentReporter.report.flush();
+		ExtentReporter.report.close();
+		
 	}
 }
