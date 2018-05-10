@@ -1,13 +1,19 @@
+package MMTestCase;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.Test;
 import java.awt.AWTException;
 import java.lang.reflect.Method;
 
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.mm.browsers.BrowserTypes;
+import com.mm.listeners.testListeners;
 import com.mm.pages.cisPage;
 import com.mm.pages.homePage;
 import com.mm.pages.loginPage;
@@ -26,23 +32,21 @@ public class SmokeTestCase extends BrowserTypes {
 	rateApolicyPage rateapolicypage;
 //	ExtentReporter	extReport;
 	
-	@BeforeMethod
-	public void loginToeOasis()
+	@BeforeTest	
+	public void loginToeOasis() throws Exception
 	{
 		loginpage = new loginPage(driver);
 		loginpage.loginToeOasis();
-	//	extReport =  new ExtentReporter();
-	
 	}
 	
-	@Test(alwaysRun = true, priority =1,description="Verify Add Organization")
-	public void TC42404(Method method) throws InterruptedException
-	
+	@Test(testName ="Verify Add Organization")
+	public void TC42404(Method method) throws Exception
 	{
 		ExtentReporter.logger=ExtentReporter.report.startTest(method.getName());
 		//extReport.logger.assignCategory("Smoke Test");
 		
 		homepage = new homePage(driver);
+	
 		homepage.navigateToCISPage();
 		cispage = new cisPage(driver);
 		cispage.clickOnNewOrganization();
@@ -51,7 +55,7 @@ public class SmokeTestCase extends BrowserTypes {
 		cispage.saveNewOrgDetails();
 	}
 	
-	@Test(alwaysRun = true, priority =2,description="Hospital Rate")
+	@Test(testName="Hospital Rate")
 	public void TC42239(Method method) throws InterruptedException, AWTException
 	{
 		ExtentReporter.logger=ExtentReporter.report.startTest(method.getName());
@@ -63,7 +67,7 @@ public class SmokeTestCase extends BrowserTypes {
 		rateapolicypage.startExcelExport();
 	}
 	
-	@AfterMethod
+	@AfterTest
 	public void logoffFromAppclication()
 	{
 		

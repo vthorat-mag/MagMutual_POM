@@ -11,7 +11,7 @@ import com.relevantcodes.extentreports.LogStatus;
 
 import BaseClass.CommonActionInterface;
 
-public class commonMethods implements CommonActionInterface {
+public class commonAction implements CommonActionInterface {
 
 
 
@@ -44,11 +44,11 @@ public class commonMethods implements CommonActionInterface {
 		
 	}
 
-	public void enterTextIn(WebElement pageElement, String text, String textField) {
+	public void enterTextIn(WebElement pageElement, String text) {
 		// TODO Auto-generated method stub
 		pageElement.sendKeys(text);
 		
-		ExtentReporter.logger.log(LogStatus.INFO, "Entered text in text box "+textField);
+		ExtentReporter.logger.log(LogStatus.INFO, "Entered text in text box "+text);
 		
 	}
 
@@ -142,6 +142,16 @@ public class commonMethods implements CommonActionInterface {
 		Select Sel = new Select(element);
 		Sel.selectByValue(DropDownOption);
 		ExtentReporter.logger.log(LogStatus.INFO, "Value is selected from "+label+" drop down");
+	}
+	
+	public void excelRead() throws Exception
+	{
+		ExcelUtil exlutil = new ExcelUtil();
+	}
+
+	public void enterTextIn(WebElement pageElement, String text, String field) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

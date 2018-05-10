@@ -15,10 +15,10 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-import com.mm.utils.commonMethods;
+import com.mm.utils.commonAction;
 import com.mm.utils.commonUtilities;
 
-public class rateApolicyPage extends commonMethods {
+public class rateApolicyPage extends commonAction {
 	
 	WebDriver driver;
 	
