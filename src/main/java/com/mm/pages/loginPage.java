@@ -1,12 +1,18 @@
 package com.mm.pages;
 
+import java.lang.reflect.Method;
+import java.util.concurrent.TimeUnit;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.testng.Assert;
 
 import com.mm.utils.ExcelUtil;
+import com.mm.utils.ExtentReporter;
 import com.mm.utils.commonAction;
+import com.relevantcodes.extentreports.LogStatus;
 
 public class loginPage extends commonAction{
 	
@@ -31,10 +37,42 @@ public class loginPage extends commonAction{
 	{
 		ExcelUtil exlutil = new ExcelUtil();
 		driver.get("http://oasiscloud2017t:8081/oas17bts/CS/login.jsp");
+		ExtentReporter.logger.log(LogStatus.INFO, "Accessing the URL - http://oasiscloud2017t:8081/oas17bts/CS/login.jsp");
 		driver.manage().window().maximize();
-		enterTextIn(userName,exlutil.getCellData("eOasis_Credentials", "UserName", 2));
-		enterTextIn(password,exlutil.getCellData("eOasis_Credentials", "Password", 2));
-		loginBtn.click();
+		
+		//Entering User Name.
+		try{
+			Assert.assertTrue(userName.isDisplayed(), "User Name Field is displayed.");
+			userName.sendKeys(exlutil.getCellData("eOasis_Credentials", "UserName", 2));
+			ExtentReporter.logger.log(LogStatus.PASS, " User Name is entered in to userName Field");
+		}catch(Exception e)
+		{
+			ExtentReporter.logger.log(LogStatus.FAIL, " Error while entering data into username field.");
+		}
+		
+		//driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+		
+		
+		//Entering Password.
+		try{
+			Assert.assertTrue(password.isDisplayed(), "Password Field is displayed.");
+			Thread.sleep(2000);
+			password.sendKeys(exlutil.getCellData("eOasis_Credentials", "Password", 2));
+			ExtentReporter.logger.log(LogStatus.PASS, " Password is entered in to password Field");
+		}catch(Exception e)
+		{
+			ExtentReporter.logger.log(LogStatus.FAIL, " Error while entering data into password field.");
+		}
+
+		//Clicking on login button.
+		try{
+			Assert.assertTrue(password.isDisplayed(), "Login button is displayed.");
+			loginBtn.click();
+			ExtentReporter.logger.log(LogStatus.PASS, "Clicked on Login Button");
+			}catch(Exception e)
+			{
+				ExtentReporter.logger.log(LogStatus.FAIL, "Issue with login button.");
+			}
+		
 	}
-	
 }

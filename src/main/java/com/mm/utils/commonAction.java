@@ -1,30 +1,58 @@
 package com.mm.utils;
 
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
+import org.testng.Assert;
+
+import com.relevantcodes.extentreports.LogStatus;
 
 import BaseClass.CommonActionInterface;
 
 public class commonAction implements CommonActionInterface {
 
-
 	public void switchToParentWindowfromotherwindow(WebDriver driver, String parentwindow)
 	{
-		driver.switchTo().window(parentwindow);
+		
+		
+		try
+		{
+			driver.switchTo().window(parentwindow);
+			ExtentReporter.logger.log(LogStatus.PASS, "User Switched back to parent window.");
+		}catch(Exception e)
+		{
+			ExtentReporter.logger.log(LogStatus.FAIL, "Error while switching to parent window.");
+		}
 	}
 	
 	public void switchToFrame(WebDriver driver, String frameName)
 	{
 		
-		driver.switchTo().frame(frameName);
+		
+		try
+		{
+			driver.switchTo().frame(frameName);
+			ExtentReporter.logger.log(LogStatus.PASS, "User Switched to frame.");
+		}catch(Exception e)
+		{
+			ExtentReporter.logger.log(LogStatus.FAIL, "Error while switching to frame.");
+		}
+		
 	}
 	public void switchToParentWindowfromframe(WebDriver driver)
 	{
-		driver.switchTo().defaultContent();
+		try
+		{
+			driver.switchTo().defaultContent();
+			ExtentReporter.logger.log(LogStatus.PASS, "User Switched to default frame.");
+		}catch(Exception e)
+		{
+			ExtentReporter.logger.log(LogStatus.FAIL, "Error while switching to default frame.");
+		}
 	}
 	
 	public String randomNoGenerator()
@@ -37,26 +65,41 @@ public class commonAction implements CommonActionInterface {
 		
 	}
 
-	public void enterTextIn(WebElement pageElement, String text) {
+	public void enterTextIn(WebElement pageElement, String text, String textField) {
 		// TODO Auto-generated method stub
-		pageElement.sendKeys(text);
-		
+		try
+		{
+			Assert.assertTrue(pageElement.isDisplayed(), textField+" is displayed on screen.");
+			pageElement.sendKeys(text);
+			ExtentReporter.logger.log(LogStatus.PASS, "Value entered in text box -"+textField);
+		}catch(Exception e)
+		{
+			ExtentReporter.logger.log(LogStatus.FAIL, textField+ " element is not found.");
+		}
 	}
 
-	public void clickButton(WebElement pageElement) {
-		// TODO Auto-generated method stub
-		pageElement.click();
-		
-	}
+		public void clickButton(WebElement pageElement, String buttonName) {
+			// TODO Auto-generated method stub
+			try
+			{
+				Assert.assertTrue(pageElement.isDisplayed(), buttonName+" button is displayed on screen.");
+				pageElement.click();
+				ExtentReporter.logger.log(LogStatus.PASS, "clicked on button - "+buttonName);
+			}catch(Exception e)
+			{
+				ExtentReporter.logger.log(LogStatus.FAIL, buttonName+ " element is not found.");
+			}
+		}
 
-	public void waitFor(long ms) {
+	public void waitFor(WebDriver driver, long time) {
 		// TODO Auto-generated method stub
+		driver.manage().timeouts().implicitlyWait(time, TimeUnit.SECONDS);
 	}
 
 	public void close(WebDriver driver) {
 		// TODO Auto-generated method stub
 		driver.quit();
-		
+		ExtentReporter.logger.log(LogStatus.PASS, "Browser is closed.");
 	}
 
 	public void takeScreenShot(String pageTitle) {
@@ -74,10 +117,17 @@ public class commonAction implements CommonActionInterface {
 		return null;
 	}
 
-	public void clearTextBox(WebElement pageElement) {
+	public void clearTextBox(WebElement pageElement, String textField) {
 		// TODO Auto-generated method stub
-		pageElement.clear();
-		
+		try
+		{
+			Assert.assertTrue(pageElement.isDisplayed(), textField+" is displayed");
+			pageElement.clear();
+			ExtentReporter.logger.log(LogStatus.PASS, "Cleared the initial contents from "+textField);
+		}catch(Exception e)
+		{
+			ExtentReporter.logger.log(LogStatus.FAIL, textField+ " element is not found.");
+		}
 	}
 
 	public String getAttributeValue(WebElement pageElement, String attributeName) {
@@ -85,9 +135,17 @@ public class commonAction implements CommonActionInterface {
 		return null;
 	}
 
-	public void click(WebElement pageElement) {
+	public void click(WebElement pageElement, String ElementName) {
 		// TODO Auto-generated method stub
-		pageElement.click();
+		try
+		{
+			Assert.assertTrue(pageElement.isDisplayed(), ElementName+" is displayed on screen.");
+			pageElement.click();
+			ExtentReporter.logger.log(LogStatus.PASS, "clicked on Element - "+ElementName);
+		}catch(Exception e)
+		{
+			ExtentReporter.logger.log(LogStatus.FAIL, ElementName+ " element is not found.");
+		}
 		
 	}
 
@@ -102,6 +160,9 @@ public class commonAction implements CommonActionInterface {
 	}
 
 	public String switchToWindow(WebDriver driver) {
+		
+		
+		ExtentReporter.logger.log(LogStatus.INFO, "Switching to the pop up window");
 		Set<String> handles = driver.getWindowHandles();      //Return a set of window handle
 		 
 	    String parentWindow = driver.getWindowHandle();
@@ -110,21 +171,65 @@ public class commonAction implements CommonActionInterface {
 	    	   if(!currentWindow.equals(parentWindow))
 	    	  {
 	    	   driver.switchTo().window(currentWindow);
+	    	   ExtentReporter.logger.log(LogStatus.INFO, "Control is switched to pop up window");
 	    	  }
 		 }
 		 return parentWindow;
 	}
 
-	public void selectDropdown(WebElement element, String DropDownOption) {
+
+	public void selectDropdown(WebElement element, String DropDownOption, String label) {
 		
+		ExtentReporter.logger.log(LogStatus.INFO, "Selecting the value from "+label+ " drop down");
 		Select Sel = new Select(element);
 		Sel.selectByValue(DropDownOption);
+		ExtentReporter.logger.log(LogStatus.PASS, "Value is selected from "+label+" drop down");
 	}
 	
 	public void excelRead() throws Exception
 	{
 		ExcelUtil exlutil = new ExcelUtil();
 	}
+	
+	public void verifyTextPresent(String getTextPolicyPhase,String actualText,String fieldName)
+	{
+		try{
+			
+			Assert.assertEquals(getTextPolicyPhase,actualText,getTextPolicyPhase+" element is present");
+			ExtentReporter.logger.log(LogStatus.PASS, getTextPolicyPhase+" element is present");
+		}catch(Exception e){
+			ExtentReporter.logger.log(LogStatus.FAIL, getTextPolicyPhase+" element is NOT present");
+		}
+	}
 
+	public void enterTextIn(WebElement pageElement, String text) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void clickButton(WebElement pageElement) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void clearTextBox(WebElement pageElement) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void click(WebElement pageElement) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void selectDropdown(WebElement Value, String DropDownOption) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void waitFor(long ms) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
