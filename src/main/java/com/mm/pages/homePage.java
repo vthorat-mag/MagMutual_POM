@@ -4,8 +4,11 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.testng.Assert;
 
-public class homePage {
+import com.mm.utils.commonAction;
+
+public class homePage extends commonAction{
 
 	
 	WebDriver driver;
@@ -19,24 +22,39 @@ public class homePage {
 	@FindBy(name="logoff")
 	WebElement logoff;
 	
+	@FindBy(id="headerLogoTips")
+	WebElement logo;
+	
+	@FindBy(id="topnav_Policy")
+	WebElement Policy_link;
+	
 	public homePage(WebDriver driver)
 	{
 		this.driver=driver;
 		PageFactory.initElements(driver, this);
 	}
 	
+	public void verifyLogoIsAvailable(){
+		
+		visibilityOfElement(logo, "DELPHI TECHNOLOGY");
+		
+		
+	}
+	
 	public void navigateToCISPage()
 	{
-		cisTab.click();
+		click(cisTab,"CIS tab");
 	}
 	
 	public void navigateToPolicyPage()
 	{
-		Policy_tab.click();
+	//	Policy_link.isSelected();
+		
+		click(Policy_tab, "Policy tab");
 	}
-	
+		
 	public void logoutFromeOasis()
 	{
-		logoff.click();
+		click(logoff,"Logoff button");
 	}
 }
