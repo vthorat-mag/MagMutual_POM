@@ -19,7 +19,7 @@ public class cisPage  extends commonAction{
 	WebDriver driver;
 	//commonUtilities util = new commonUtilities();
 	
-	@FindBy(id="CI_NEW_ORG")
+	@FindBy(id="CI_NEW_ORG") 
 	WebElement New_Org;
 
 	@FindBy(name="entity_veryLongName")
