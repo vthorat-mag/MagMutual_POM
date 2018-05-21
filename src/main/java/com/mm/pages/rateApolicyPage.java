@@ -32,6 +32,7 @@ public class rateApolicyPage extends commonAction {
 	String valueOfPolicyActionAccept = "javascript:acceptQuote();";
 	String billingSetup = "javascript:billingSetup();";
 	String paymentPlanValue = "660262192";
+	commonUtilities comUtil = new commonUtilities();
 	//Object repository for all elements on rate A policy page.
 	
 	@FindBy(name="globalSearch")
@@ -60,6 +61,10 @@ public class rateApolicyPage extends commonAction {
 	
 	@FindBy(xpath="//div[@id='globalDropdownActionItems']//select[@class='globalActionItemList']")
 	WebElement policyAction;
+	
+	@FindBy(id="pageTitleForpageHeaderForPolicyFolder")
+	WebElement pageHeaderForPolicyFolder;
+	
 	
 	//@FindBy(id="polPhaseCodeROSPAN")
 	@FindBy(xpath="//table[@id='formFieldsTableForHeaderFieldsSecond']//span[@id='polPhaseCodeROSPAN']")
@@ -106,21 +111,28 @@ public class rateApolicyPage extends commonAction {
 	@FindBy(xpath="//iframe[contains(@id='popupframe')]")
 	List<WebElement> allIframes;
 	
-	//Constructor to initialize all elements on this page.
 	public rateApolicyPage(WebDriver driver)
 	{
 		this.driver=driver;
 		PageFactory.initElements(driver, this);
 	}
 	
-	//Policy Search Code.
+	
 	public void policySearch(String policyNo) throws InterruptedException, AWTException{
 		
-		Thread.sleep(3000);
-		clearTextBox(Policy_Search, "Policy text field");
-		enterTextIn(Policy_Search, policyNo, "Policy text field");
+		String policy_no="Q09101355-NB18-01";
+		Thread.sleep(2000);
+		clearTextBox(Policy_Search, "Enter Policy text field");
+		enterTextIn(Policy_Search, policy_no, "Enter Policy text field");
 		click(Search_btn, "Search button");
+		
+		String actual=getText(pageHeaderForPolicyFolder);
+				
+		Assert.assertEquals(actual, "Policy Folder "+policy_no, "The policy "+policy_no+" is Not available.");
+		Thread.sleep(4000);
+	
 	}
+
 	
 	//Save Rate details code.
 	public void saveRatedetails() throws InterruptedException
@@ -129,18 +141,18 @@ public class rateApolicyPage extends commonAction {
 		Thread.sleep(5000);
 		switchToFrame(driver,"popupframe1");
 	    Thread.sleep(1000);
-	    selectDropdown(Continue_saving, "Y", "Continue saving without Quote"); 
+	    selectDropdownByValue(Continue_saving, "Y", "Continue saving without Quote"); 
 	    Thread.sleep(1000);
 	    click(Notify_Close, "Close button");
 	    Thread.sleep(3000);
 	}
 	
 	//Donwload Excel report and save in defined folder
-	public void startExcelExport() throws InterruptedException,AWTException
+public String startExcelExport() throws InterruptedException,AWTException
 	{
-		   	 click(Export, "Export link");
-		   	 Thread.sleep(2000);
-			    	 
+	    	 click(Export, "Export link");
+	    	 Thread.sleep(2000);
+	    	 
 	    	 Robot rob = new Robot();
 	    	 
 	    	 rob.keyPress(KeyEvent.VK_F6);
@@ -150,7 +162,6 @@ public class rateApolicyPage extends commonAction {
 	    	 rob.keyPress(KeyEvent.VK_TAB);
 	    	 rob.keyRelease(KeyEvent.VK_TAB);
 	    	 
-	    	
 	    	 rob.setAutoDelay(1000);
 	    	 rob.keyPress(KeyEvent.VK_DOWN);
 	    	 
@@ -158,20 +169,23 @@ public class rateApolicyPage extends commonAction {
 	    	 rob.keyPress(KeyEvent.VK_DOWN);
 	    	 rob.keyRelease(KeyEvent.VK_DOWN);
 	    	 
-	    	 
 	    	 rob.setAutoDelay(1000);
 	    	 rob.keyPress(KeyEvent.VK_ENTER);
 	    	 rob.keyRelease(KeyEvent.VK_ENTER);
-	    	 
+	    	/* 
 	    	 DateFormat dateFormatter = new SimpleDateFormat("MMddyy_hhmmss");
 	 		 Date today = Calendar.getInstance().getTime();        
 	 		 String date= dateFormatter.format(today);
+	 		*/
+	    	 
+	    	 String fileDate = comUtil.getSystemDate();
+	    	 
+	    	 String fileNamePath = "C:\\MM_Testcase_Output\\"+fileDate+".xlsx";
+	    	 StringSelection fileName = new StringSelection(fileNamePath);
 	 		
-	 		 StringSelection sysDate = new StringSelection("C:\\MM_Testcase_Output\\"+date+".xlsx");
-	 		
-	 	 	 Toolkit.getDefaultToolkit().getSystemClipboard().setContents(sysDate, null);
+	 	 	 Toolkit.getDefaultToolkit().getSystemClipboard().setContents(fileName, null);
 
-	 	 	 rob.keyPress(KeyEvent.VK_CONTROL); 									    //press 'cntrl' key
+	 	 	 rob.keyPress(KeyEvent.VK_CONTROL); 									//press 'cntrl' key
 			 rob.keyPress(KeyEvent.VK_V);											//press 'V' key
 			
 			 rob.keyRelease(KeyEvent.VK_CONTROL);
@@ -180,10 +194,10 @@ public class rateApolicyPage extends commonAction {
 	    	 rob.keyPress(KeyEvent.VK_ENTER);
 	    	 rob.keyRelease(KeyEvent.VK_ENTER);
 	    	 
-	    	 click(Prem_Close, " premium view");
+	    	 click(Prem_Close,"Premium close");
 	    	 Thread.sleep(1000);
 	    	 
-	    	 click(Exit_Ok, "Ok[Exit] Button");
+	    	 click(Exit_Ok, "OK button");
 	    	 switchToParentWindowfromframe(driver);
 	    	
 	    	 rob.keyPress(KeyEvent.VK_F6);
@@ -196,11 +210,34 @@ public class rateApolicyPage extends commonAction {
 	    	 rob.setAutoDelay(1000);
 	    	 rob.keyPress(KeyEvent.VK_ENTER);
 	    	 rob.keyRelease(KeyEvent.VK_ENTER);
+	    	/*try
+		 	{
+	    	 File file = new File("C:\\MM_Testcase_Output\\"+fileDate+".xlsx");
+	    	 
+	    	if(file.exists())
+	    	{
+	    	System.out.println("File is available at location");
+	    	ExtentReporter.logger.log(LogStatus.PASS, "Excel file is available at download location.");
+	    	}
+	    	 
+	    	}catch(Exception e)
+	    	{
+	    	System.out.println("File is Not available at location");
+	    	ExtentReporter.logger.log(LogStatus.FAIL, "Excel file is Not available at download location.");
+	    	 e.printStackTrace();	
+	    	}*/
+	    	 return fileNamePath;
+	    }	 	
+	public void verifyFileExists(String fileNamePath){
+		
+		comUtil.downloadedFileExists(fileNamePath);
 	}
+
+	
 	
 	public void AcceptFromActionDropDown()
 	{
-		selectDropdown(policyAction, valueOfPolicyActionAccept, "Policy Action");
+		selectDropdownByValue(policyAction, valueOfPolicyActionAccept, "Policy Action");
 		
 	}
 	public void isAlertPresent() throws InterruptedException 
@@ -228,10 +265,10 @@ public class rateApolicyPage extends commonAction {
 	}
 	public void billingSetup() throws InterruptedException
 	{
-		selectDropdown(policyAction, billingSetup, "Policy Action");
+		selectDropdownByValue(policyAction, billingSetup, "Policy Action");
 		waitFor(driver, 5000);
 		switchToFrame(driver, "popupframe1");
-		selectDropdown(paymentPlan, paymentPlanValue, "Payment Plan");
+		selectDropdownByValue(paymentPlan, paymentPlanValue, "Payment Plan");
 		Thread.sleep(5000);
 		//clickButton(billingSetupSaveBtn, "Save Button");
 		JavascriptExecutor js = (JavascriptExecutor)driver;

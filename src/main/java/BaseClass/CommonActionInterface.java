@@ -13,14 +13,14 @@ public interface CommonActionInterface {
     void takeScreenShot(String pageTitle);
     String getPageTitle();
     String getText(WebElement pageElement);
-    void clearTextBox(WebElement pageElement);
+    void clearTextBox(WebElement pageElement, String textfield);
     String getAttributeValue(WebElement pageElement, String attributeName);
-    void click(WebElement pageElement);
-    void clear(WebElement pageElement);
+    void click(WebElement pageElement, String elementName);
+//  void clear(WebElement pageElement);
     void switchToFrame(WebDriver driver, String uniqId);
     void switchToParentWindowfromframe(WebDriver driver);
-    void visibilityOfElement(WebElement pageElement);
+    void visibilityOfElement(WebElement pageElement, String text);
     String switchToWindow(WebDriver driver);
-    void selectDropdown(WebElement Value,String DropDownOption);
+    void selectDropdownByValue(WebElement Value,String DropDownOption, String name);
     void switchToParentWindowfromotherwindow(WebDriver driver, String parentwindow);
 }
