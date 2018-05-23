@@ -34,7 +34,7 @@ public class commonAction implements CommonActionInterface {
 		}
 	}
 
-	public void switchToFrame(WebDriver driver, String frameName) {
+	public void switchToFrameUsingId(WebDriver driver, String frameName) {
 
 		try {
 			driver.switchTo().frame(frameName);
@@ -45,6 +45,18 @@ public class commonAction implements CommonActionInterface {
 		}
 
 	}
+	
+	public void switchToFrameUsingElement(WebDriver driver, WebElement element)
+	{
+		try {
+			driver.switchTo().frame(element);
+			ExtentReporter.logger.log(LogStatus.PASS, "Control switched Switched to frame.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			ExtentReporter.logger.log(LogStatus.FAIL, "Error while switching to frame.");
+		}
+	}
+	
 
 	public void switchToParentWindowfromframe(WebDriver driver) {
 		try {
@@ -76,12 +88,13 @@ public class commonAction implements CommonActionInterface {
 		}
 	}
 
-		public void clickButton(WebElement pageElement, String buttonName) {
+		public void clickButton(WebDriver driver, WebElement pageElement, String buttonName) {
 			// TODO Auto-generated method stub
 			try
 			{
+				JavascriptExecutor js = (JavascriptExecutor)driver;
 				Assert.assertTrue(pageElement.isDisplayed(), buttonName+" button is displayed on screen.");
-				pageElement.click();
+				js.executeScript("arguments[0].click();", pageElement);
 				ExtentReporter.logger.log(LogStatus.PASS, "clicked on button - "+buttonName);
 			}catch(Exception e)
 			{
@@ -112,7 +125,7 @@ public class commonAction implements CommonActionInterface {
 
 	public String getText(WebElement pageElement) {
 		// TODO Auto-generated method stub
-		return null;
+		return pageElement.getAttribute("innerHTML");
 	}
 
 	public void clearTextBox(WebElement pageElement, String textField) {
@@ -250,11 +263,6 @@ public class commonAction implements CommonActionInterface {
 	public void waitForElementToLoad(WebDriver driver, int time){
 		
 		WebDriverWait wait=new WebDriverWait(driver, time);
-		
-	}
-
-	public void clickButton(WebElement pageElement) {
-		// TODO Auto-generated method stub
 		
 	}
 

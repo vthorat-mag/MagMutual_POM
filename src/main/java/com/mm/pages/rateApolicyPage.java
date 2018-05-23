@@ -5,6 +5,7 @@ import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -13,15 +14,19 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 import com.mm.utils.ExtentReporter;
+import com.mm.utils.PDFReader;
 import com.mm.utils.commonAction;
 import com.mm.utils.commonUtilities;
 import com.relevantcodes.extentreports.LogStatus;
@@ -33,6 +38,7 @@ public class rateApolicyPage extends commonAction {
 	String billingSetup = "javascript:billingSetup();";
 	String paymentPlanValue = "660262192";
 	commonUtilities comUtil = new commonUtilities();
+	PDFReader pdfread = new PDFReader();
 	//Object repository for all elements on rate A policy page.
 	
 	@FindBy(name="globalSearch")
@@ -87,16 +93,16 @@ public class rateApolicyPage extends commonAction {
 	@FindBy(xpath = "//table[@id='maintainManuscriptListGrid']")
 	WebElement 	manuscriptList;
 	
-	@FindBy(id="PM_MANU_DELETE)")
+	@FindBy(id="PM_MANU_DELETE")
 	WebElement manuscriptPageDeleteBtn;
 	
-	@FindBy(id="PM_MANU_ADD)")
+	@FindBy(id="PM_MANU_ADD")
 	WebElement manuscriptPageAddBtn;
 	
-	@FindBy(xpath="//table[@id='selectManuscriptGrid']//tr[@class='hiliteSelectRow']//div[@id='CSHORTDESCRIPTION']")
+	@FindBy(xpath="//table[@id='selectManuscriptGrid']//tr//div[@id='CSHORTDESCRIPTION']")
 	List<WebElement> manuscriptAddListformName;
 	
-	@FindBy(xpath="//table[@id='selectManuscriptGrid']//tr[@class='hiliteSelectRow']//input[@name='chkCSELECT_IND']")
+	@FindBy(xpath="//table[@id='selectManuscriptGrid']//tr//input[@name='chkCSELECT_IND']")
 	List<WebElement> manuscriptAddListformNameChkBox;
 	
 	@FindBy(id="PM_SEL_MANU_DONE")
@@ -111,16 +117,34 @@ public class rateApolicyPage extends commonAction {
 	@FindBy(xpath="//iframe[contains(@id='popupframe')]")
 	List<WebElement> allIframes;
 	
+	@FindBy(id="PM_COMMON_TABS_RATE")
+	WebElement rateBtn;
+	
+	@FindBy(id="PM_COMMON_TABS_RATE")
+	WebElement closeBtnOnViewPremiumPopup;
+	
+	@FindBy(name="workflowExit_Ok")
+	WebElement okPolicySaveAsWIPPopup;
+	
+	@FindBy(id="PM_COMMON_TABS_PREVIEW")
+	WebElement previewBtn;
+
+	@FindBy(xpath="//span[@class='txtOrange']")
+	WebElement loader;
+	
+	
 	public rateApolicyPage(WebDriver driver)
 	{
 		this.driver=driver;
 		PageFactory.initElements(driver, this);
 	}
 	
+	String profileNoLable = pageHeaderForPolicyFolder.getAttribute("innerHTML");
+	String[] portfolioNo = profileNoLable.split(" ",3);
 	
-	public void policySearch(String policyNo) throws InterruptedException, AWTException{
+	public void policySearch() throws InterruptedException, AWTException{
 		
-		String policy_no="Q09101355-NB18-01";
+		String policy_no="Q09100439-NB17-01";
 		Thread.sleep(2000);
 		clearTextBox(Policy_Search, "Enter Policy text field");
 		enterTextIn(Policy_Search, policy_no, "Enter Policy text field");
@@ -130,7 +154,6 @@ public class rateApolicyPage extends commonAction {
 				
 		Assert.assertEquals(actual, "Policy Folder "+policy_no, "The policy "+policy_no+" is Not available.");
 		Thread.sleep(4000);
-	
 	}
 
 	
@@ -139,7 +162,7 @@ public class rateApolicyPage extends commonAction {
 	{
 		click(RateBtn, "Rate button");
 		Thread.sleep(5000);
-		switchToFrame(driver,"popupframe1");
+		switchToFrameUsingId(driver,"popupframe1");
 	    Thread.sleep(1000);
 	    selectDropdownByValue(Continue_saving, "Y", "Continue saving without Quote"); 
 	    Thread.sleep(1000);
@@ -267,7 +290,7 @@ public String startExcelExport() throws InterruptedException,AWTException
 	{
 		selectDropdownByValue(policyAction, billingSetup, "Policy Action");
 		waitFor(driver, 5000);
-		switchToFrame(driver, "popupframe1");
+		switchToFrameUsingId(driver, "popupframe1");
 		selectDropdownByValue(paymentPlan, paymentPlanValue, "Payment Plan");
 		Thread.sleep(5000);
 		//clickButton(billingSetupSaveBtn, "Save Button");
@@ -297,32 +320,52 @@ public String startExcelExport() throws InterruptedException,AWTException
 				break;
 			}
 		}
-		//clickButton(optionalFormBtn, "Optional Form");
-		JavascriptExecutor js = (JavascriptExecutor)driver;
-		js.executeScript("arguments[0].click();", optionalFormBtn);
-		
-		for (int i=0;i<allIframes.size();i++)
-		{
-			System.out.println(allIframes.get(i).getAttribute("id"));
-		}
-		switchToFrame(driver, "popupframe7");
+		clickButton(driver, optionalFormBtn, "Optional Form");
+		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+portfolioNo[2]+"')]")));
 		if (manuscriptList.isDisplayed())
 		{
-			click(manuscriptPageDeleteBtn, "Delete");
-			click(manuscriptPageAddBtn, "Add");
+			clickButton(driver, manuscriptPageDeleteBtn, "Manu script Delete");
+			clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
 		}else{
-			click(manuscriptPageAddBtn, "Add");
+			clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
 		}
+
+		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+portfolioNo[2]+"')]")));
 		
 		for(int i=0;i<manuscriptAddListformName.size();i++)
 		{
 			if(manuscriptAddListformName.get(i).getAttribute("innerHTML").equals(binderForm))
 			{
-				click(manuscriptAddListformNameChkBox.get(i), "check Box for "+binderForm);
+				//click(manuscriptAddListformNameChkBox.get(i), "check Box for "+binderForm);
+				//js.executeScript("arguments[0].click();", manuscriptAddListformNameChkBox.get(i));
+				clickButton(driver, manuscriptAddListformNameChkBox.get(i), "check Box for "+binderForm);
 				break;
 			}
 		}
+		clickButton(driver, manuscriptAddListDoneBtn, "Done");
+		switchToParentWindowfromframe(driver);
+		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+portfolioNo[2]+"')]")));
+		clickButton(driver, manuscriptPageSaveBtn, "Manu Script page Save");
+		clickButton(driver, manuscriptPageCloseBtn, "Manu Script page Close");
+	}
+	
+	public void rateFunctionality() throws InterruptedException
+	{
+		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+portfolioNo[2]+"')]")));
+		clickButton(driver, rateBtn, "Rate Tab");
+		Thread.sleep(3000);
+		clickButton(driver, closeBtnOnViewPremiumPopup, "Close");
+		switchToParentWindowfromframe(driver);
+		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+portfolioNo[2]+"')]")));
+		clickButton(driver, okPolicySaveAsWIPPopup, "Ok");
 		
-		click(manuscriptAddListDoneBtn,"Done");
+	}
+	
+	public void pdfVerify() throws Exception
+	{
+		clickButton(driver, previewBtn, "Preview");
+		WebDriverWait wait=new WebDriverWait(driver, 20);
+		wait.until(ExpectedConditions.invisibilityOf(loader));
+		pdfread.readValue();
 	}
 }

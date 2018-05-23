@@ -74,7 +74,7 @@ public class findPolicyPage extends commonAction{
 				{
 					click(policyPhaseCheckBox.get(i), policyPhaseCheckBox.get(i).getAttribute("value")+" Check Box");
 				}
-				if(policyPhaseCheckBox.get(i).getAttribute("value").equals("QUOTE"))
+				if(policyPhaseCheckBox.get(i).getAttribute("value").equals("SUBMISSION"))
 				{
 					click(policyPhaseCheckBox.get(i), "Policy phase Check Box");
 				}
@@ -96,7 +96,7 @@ public class findPolicyPage extends commonAction{
 			{
 				for(int i=0; i<policyList.size();i++)
 				{
-					if(policyList.get(i).getAttribute("innerHTML").contains("NB18") && policyList.get(i).getAttribute("innerHTML").contains("-01"))
+					if(policyList.get(i).getAttribute("innerHTML").contains("NB19") && policyList.get(i).getAttribute("innerHTML").contains("-01"))
 					{
 						policyNo= policyList.get(i).getAttribute("innerHTML");
 						break;
