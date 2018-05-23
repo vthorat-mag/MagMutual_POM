@@ -143,7 +143,7 @@ public class indicationPage extends commonAction {
 		String Eff_Date="01012017";
 		Thread.sleep(1000);
 		
-		switchToFrame(driver, "popupframe1");
+		switchToFrameUsingId(driver, "popupframe1");
 		Thread.sleep(1000);
 		enterTextIn(Effe_Date,Eff_Date, "Effective Date");
 		Thread.sleep(1000);

@@ -259,7 +259,7 @@ public class policyDetailsPage extends commonAction {
 			
 			Thread.sleep(3000);
 			
-			switchToFrame(driver, "popupframe1");
+			switchToFrameUsingId(driver, "popupframe1");
 			Thread.sleep(2000);
 			click(Add_Agent, "Add button");
 			
@@ -302,7 +302,7 @@ public class policyDetailsPage extends commonAction {
 			click(Add_Coverage, "Add button");
 			
 			Thread.sleep(3000);
-			switchToFrame(driver, "popupframe1");
+			switchToFrameUsingId(driver, "popupframe1");
 			
 			Thread.sleep(2000);
 			click(Checkbox, "checkbox from coverage list");			//change comment label
@@ -326,7 +326,7 @@ public class policyDetailsPage extends commonAction {
 			Thread.sleep(2000);
 			click(Add_CoverageClass, "Add button for coverage class");
 			Thread.sleep(2000);
-			switchToFrame(driver, "popupframe1");
+			switchToFrameUsingId(driver, "popupframe1");
 			Thread.sleep(5000);
 			
 			driver.findElement(By.xpath("//div[@id='CCOVERAGECLASSLONGDESCRIPTION'and contains(text(),'Acute Care')]"
@@ -346,17 +346,17 @@ public class policyDetailsPage extends commonAction {
 			click(Optional_Forms, "Optional Forms button");
 			
 			Thread.sleep(3000);
-			switchToFrame(driver, "popupframe1");
+			switchToFrameUsingId(driver, "popupframe1");
 			Thread.sleep(2000);
 			click(Add_Manuscript, "Add button for Manuscript");
 			Thread.sleep(3000);
-			switchToFrame(driver, "popupframe4");
+			switchToFrameUsingId(driver, "popupframe4");
 			
 			Thread.sleep(5000);
 			driver.findElement(By.xpath("//div[@id='CSHORTDESCRIPTION'and contains(text(),'INDICATION')]//parent::td//preceding-sibling::"
 					+ "td//preceding-sibling::td//input[@type='checkbox']")).click();
 		
-			switchToFrame(driver, "popupframe1");
+			switchToFrameUsingId(driver, "popupframe1");
 			
 			Thread.sleep(3000);
 			click(Save_Manuscript, "Save button for Manuscript");

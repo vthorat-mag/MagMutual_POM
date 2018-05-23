@@ -7,7 +7,7 @@ public interface CommonActionInterface {
 	
 	void navigateTo(String url);
 	void enterTextIn(WebElement pageElement, String text);
-    void clickButton(WebElement pageElement);
+    void clickButton(WebDriver driver, WebElement pageElement, String buttonName);
     void waitFor(long ms);
     void close(WebDriver driver);
     void takeScreenShot(String pageTitle);
@@ -17,7 +17,8 @@ public interface CommonActionInterface {
     String getAttributeValue(WebElement pageElement, String attributeName);
     void click(WebElement pageElement, String elementName);
 //  void clear(WebElement pageElement);
-    void switchToFrame(WebDriver driver, String uniqId);
+    void switchToFrameUsingId(WebDriver driver, String uniqId);
+    void switchToFrameUsingElement(WebDriver driver, WebElement element);
     void switchToParentWindowfromframe(WebDriver driver);
     void visibilityOfElement(WebElement pageElement, String text);
     String switchToWindow(WebDriver driver);
