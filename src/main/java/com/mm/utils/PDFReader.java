@@ -55,7 +55,7 @@ public class PDFReader {
 		 robot.keyPress(KeyEvent.VK_ENTER);
 		 robot.keyRelease(KeyEvent.VK_ENTER);
 		 
-		/*driver.get("www.google.com");
+		driver.get("www.google.com");
 		URL url = new URL(driver.getCurrentUrl());
 		
 		BufferedInputStream fileToParse = new BufferedInputStream(url.openStream());
@@ -66,6 +66,6 @@ public class PDFReader {
 			ExtentReporter.logger.log(LogStatus.PASS, "clicked on button");
 		}else{
 		    System.out.println("False");
-		}*/
+		}
 	}
 }

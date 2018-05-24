@@ -15,6 +15,9 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import com.mm.browsers.BrowserTypes;
 import com.mm.listeners.testListeners;
+import com.mm.pages.Policy_Binder_Page;
+import com.mm.pages.Policy_Quote_Page;
+import com.mm.pages.Policy_Submission_Page;
 import com.mm.pages.cisPage;
 import com.mm.pages.findPolicyPage;
 import com.mm.pages.homePage;
@@ -28,11 +31,15 @@ import com.relevantcodes.extentreports.LogStatus;
 public class SmokeTestCase extends BrowserTypes {
 	
 	WebDriver driver = BrowserTypes.getDriver();
+	
 	loginPage loginpage;
 	cisPage cispage;
 	homePage homepage;
 	rateApolicyPage rateapolicypage;
 	findPolicyPage findpolicypage;
+	Policy_Binder_Page policybinderpage;
+	Policy_Quote_Page policyquotepage;
+	Policy_Submission_Page policysubmissionpage;
 	
 	@BeforeMethod
 	public void loginToeOasis() throws Exception
@@ -73,7 +80,7 @@ public class SmokeTestCase extends BrowserTypes {
 		rateapolicypage.startExcelExport();
 	}
 	
-	@Test(description="HPL - Binder")
+	//@Test(description="HPL - Binder")
 	public void TC42541() throws Exception
 	{
 		ExtentReporter.logger=ExtentReporter.report.startTest("TC42541");
@@ -84,18 +91,91 @@ public class SmokeTestCase extends BrowserTypes {
 		homepage = new homePage(driver);
 		homepage.navigateToPolicyPage();
 		findpolicypage = new findPolicyPage(driver);
-		String policyNo = findpolicypage.findQuotewithActiveState();
+		//String policyNo = findpolicypage.findQuotewithActiveState();
 		rateapolicypage = new rateApolicyPage(driver);
-		rateapolicypage.policySearch(policyNo);
+		String searchPolicyNum = "09100275";
+		rateapolicypage.searchPolicy(searchPolicyNum);
 		rateapolicypage.AcceptFromActionDropDown();
 		rateapolicypage.isAlertPresent();
 		ExtentReporter.logger.log(LogStatus.INFO, "Make sure Phase is set to Binder.");
 		//rateapolicypage.identifyPhase();
 		rateapolicypage.billingSetup();
-		
 		rateapolicypage.coverageDetailsSelect();
-		rateapolicypage.coverageUpdates("Prof Liab-Out", "BINDER-EXCESS");
+		String policyNumber = rateapolicypage.policyNo();
+		rateapolicypage.coverageUpdates("Prof Liab-Out", "BINDER", policyNumber);
+		//rateapolicypage.coverageUpdates("Prof Liab-Out", "BINDER-EXCESS");
+		//rateapolicypage.coverageUpdates("UMB PL-Ins", "BINDER-UMB");
+		rateapolicypage.rateFunctionality(policyNumber);
+		//rateapolicypage.pdfVerify();
+		rateapolicypage.saveOption(policyNumber);
 	}
+	
+	//@Test(description="Hospital Issue Policy Forms- Complete")
+	public void TC42665() throws Exception
+	{
+		ExtentReporter.logger=ExtentReporter.report.startTest("TC42541");
+		loginpage = new loginPage(driver);
+		loginpage.loginToeOasis();
+		ExtentReporter.logger.log(LogStatus.INFO, "User logged into application sucessfully.");
+		ExtentReporter.logger.log(LogStatus.INFO, "Started HPL - Binder  test");
+		homepage = new homePage(driver);
+		homepage.navigateToPolicyPage();
+		policybinderpage = new Policy_Binder_Page(driver);
+		String searchPolicyNum = "09100275";
+		policybinderpage.searchPolicy(searchPolicyNum);
+		String policyNumber = policybinderpage.policyNo();
+		policybinderpage.endorsementFromActionDropDown();
+		policybinderpage.endorsPolicy(policyNumber);
+		policybinderpage.identifyPhase();
+		policybinderpage.rateFunctionality(policyNumber);
+		policybinderpage.saveOption(policyNumber);
+	}
+	
+	//@Test(description="Hospital Quote")
+	public void TC42238() throws Exception
+	{
+		ExtentReporter.logger=ExtentReporter.report.startTest("TC42541");
+		loginpage = new loginPage(driver);
+		loginpage.loginToeOasis();
+		ExtentReporter.logger.log(LogStatus.INFO, "User logged into application sucessfully.");
+		ExtentReporter.logger.log(LogStatus.INFO, "Started HPL - Binder  test");
+		homepage = new homePage(driver);
+		homepage.navigateToPolicyPage();
+		policyquotepage = new Policy_Quote_Page(driver);
+		String searchPolicyNum = "09100275";
+		policyquotepage.searchPolicy(searchPolicyNum);
+		policyquotepage.CopyOptionFromActionDropDown();
+		policyquotepage.changePhaseToQuote();
+		policyquotepage.coverageDetailsSelect();
+		String policyNumber = policyquotepage.policyNo();
+		policyquotepage.coverageUpdates("Prof Liab-Out", "QUOTE-EXCESS", policyNumber);
+		//policyquotepage.coverageUpdates("Quote UMB-Out", "QUOTE-UMB", policyNumber);
+		//policyquotepage.coverageUpdates("UMB PL-Ins", "INDICATION_UMB", policyNumber);
+		policyquotepage.rateFunctionality(policyNumber);
+		policyquotepage.saveOption(policyNumber);
+	}
+	
+	@Test(description = "Hospital Copy to Quote")
+	public void TC42245() throws Exception
+	{
+		ExtentReporter.logger=ExtentReporter.report.startTest("TC42541");
+		loginpage = new loginPage(driver);
+		loginpage.loginToeOasis();
+		ExtentReporter.logger.log(LogStatus.INFO, "User logged into application sucessfully.");
+		ExtentReporter.logger.log(LogStatus.INFO, "Started HPL - Binder  test");
+		homepage = new homePage(driver);
+		homepage.navigateToPolicyPage();
+		policybinderpage = new Policy_Binder_Page(driver);
+		String searchPolicyNum = "09100200";
+		policybinderpage.searchPolicy(searchPolicyNum);
+		String policyNumber = policybinderpage.policyNo();
+		policybinderpage.copyToQuoteFromActionDropDown(policyNumber);
+		policysubmissionpage = new Policy_Submission_Page(driver);
+		policysubmissionpage.copyFromActionDropDown(policyNumber);
+		policysubmissionpage.changePhaseToIndication();
+		policysubmissionpage.saveWip();
+	}
+	
 	
 	@AfterMethod
 	public void logoffFromAppclication(ITestResult result) throws IOException, InterruptedException
@@ -114,10 +194,10 @@ public class SmokeTestCase extends BrowserTypes {
 			ExtentReporter.logger.log(LogStatus.PASS, result.getName());
 		}
 		ExtentReporter.report.flush();
-		Thread.sleep(2000);
+		Thread.sleep(2000);	
 		//driver.close();
 	}
-
+	
 	@AfterClass
 	public void closeBrowser()
 	{	

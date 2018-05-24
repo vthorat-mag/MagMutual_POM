@@ -1,0 +1,241 @@
+package com.mm.pages;
+
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+import org.testng.Assert;
+
+import com.mm.utils.ExtentReporter;
+import com.mm.utils.commonAction;
+import com.relevantcodes.extentreports.LogStatus;
+
+public class Policy_Quote_Page extends commonAction {
+	
+	WebDriver driver;
+	
+	String valueOfPolicyActionCopy = "javascript:copyQuote();";
+	String saveAsPolicyValue="OFFICIAL";
+	String QuotePhaseValue="QUOTE";
+	String ProductNotifyValue="Y";
+	
+	@FindBy(name="globalSearch")
+	WebElement Policy_Search;
+
+	@FindBy(name="search")
+	WebElement Search_btn;
+	
+	@FindBy(id="pageTitleForpageHeaderForPolicyFolder")
+	WebElement pageHeaderForPolicyFolder;
+	
+	@FindBy(xpath="//div[@id='globalDropdownActionItems']//select[@class='globalActionItemList']")
+	WebElement policyAction;
+	
+	@FindBy(xpath="//a[@id='PM_PT_VIEWCVG']//span[@class='tabWithNoDropDownImage']")
+	WebElement coverageTab;
+	
+	@FindBy(xpath = "//table[@id='coverageListGrid']//tbody//td//div[@id='CPRODUCTCOVERAGEDESC']")
+	List<WebElement> coverageList;
+	
+	@FindBy(xpath = "//input[@id='PM_QT_MANU_PUP']")
+	WebElement optionalFormBtn;
+	
+	@FindBy(xpath = "//table[@id='maintainManuscriptListGrid']")
+	WebElement 	manuscriptList;
+	
+	@FindBy(id="PM_MANU_DELETE")
+	WebElement manuscriptPageDeleteBtn;
+	
+	@FindBy(id="PM_MANU_ADD")
+	WebElement manuscriptPageAddBtn;
+	
+	@FindBy(xpath="//table[@id='selectManuscriptGrid']//tr//div[@id='CSHORTDESCRIPTION']")
+	List<WebElement> manuscriptAddListformName;
+	
+	@FindBy(xpath="//table[@id='selectManuscriptGrid']//tr//input[@name='chkCSELECT_IND']")
+	List<WebElement> manuscriptAddListformNameChkBox;
+	
+	@FindBy(id="PM_SEL_MANU_DONE")
+	WebElement manuscriptAddListDoneBtn;
+	
+	@FindBy(id="PM_MANU_SAVE")
+	WebElement manuscriptPageSaveBtn;
+	
+	@FindBy(id="PM_MANU_CLOSE")
+	WebElement manuscriptPageCloseBtn;
+	
+	@FindBy(id="PM_COMMON_TABS_RATE")
+	WebElement rateBtn;
+	
+	@FindBy(id="PM_VIEW_PREM_CLOSE")
+	WebElement closeBtnOnViewPremiumPopup;
+	
+	@FindBy(name="workflowExit_Ok")
+	WebElement okPolicySaveAsWIPPopup;
+	
+	@FindBy(id="PM_COMMON_TABS_SAVE")
+	WebElement saveOptionBtn;
+	
+	@FindBy(xpath="//select[@name='saveAsCode']")
+	WebElement saveAsDropDown;
+	
+	@FindBy(id="PM_SAVE_OPTION_OK")
+	WebElement saveOptionOkBtn;
+	
+	@FindBy(name="workflowExit_Ok")
+	WebElement Exit_Ok;
+	
+	@FindBy(name="policyPhaseCode")
+	WebElement policyPhase;
+	
+	@FindBy(xpath="//select[contains(@name,'confirmed')]")
+	WebElement productNotifyDropDown;
+	
+	@FindBy(id="PM_NOTIFY_CLOSE")
+	WebElement prodNotifyClose;
+	
+	public Policy_Quote_Page(WebDriver driver)
+	{
+		this.driver=driver;
+		PageFactory.initElements(driver, this);
+	}
+	
+	public void searchPolicy(String policy_no) throws InterruptedException
+	{
+		Thread.sleep(3000);
+		policySearch(policy_no,Policy_Search, Search_btn);
+		String actual=getText(pageHeaderForPolicyFolder);
+		Assert.assertEquals(actual, "Policy Folder "+policy_no, "The policy "+policy_no+" is Not available.");
+		Thread.sleep(3000);
+	}
+	
+	public String policyNo()
+	{
+		String profileNoLable = pageHeaderForPolicyFolder.getAttribute("innerHTML");
+		String[] portfolioNo = profileNoLable.split(" ",3);
+		return portfolioNo[2];
+	}
+	
+	public void CopyOptionFromActionDropDown() throws InterruptedException
+	{
+		Thread.sleep(4000);
+		selectDropdownByValue(policyAction, valueOfPolicyActionCopy, "Policy Action");
+	}
+	public void coverageDetailsSelect() throws InterruptedException
+	{
+		Thread.sleep(3000);
+		clickButton(driver, coverageTab, "Coverage");
+		Thread.sleep(3000);
+	}
+	
+	public void coverageUpdates(String CoverageName, String binderForm, String PolicyNo) throws InterruptedException
+	{
+		for (int i = 0; i<coverageList.size();i++)
+		{
+			if(coverageList.get(i).getAttribute("innerHTML").equals(CoverageName))
+			{
+				clickButton(driver, coverageList.get(i),coverageList.get(i).getAttribute("innerHTML"));
+				Thread.sleep(4000);
+				break;
+			}
+		}
+		clickButton(driver, optionalFormBtn, "Optional Form");
+		Thread.sleep(2000);
+		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+PolicyNo+"')]")));
+		if (manuscriptList.isDisplayed())
+		{
+			clickButton(driver, manuscriptPageDeleteBtn, "Manu script Delete");
+			driver.switchTo().alert().accept();
+			Thread.sleep(2000);
+			clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
+		}else{
+			clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
+		}
+		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+PolicyNo+"')]")));
+		Thread.sleep(3000);
+		for(int i=0;i<manuscriptAddListformName.size();i++)
+		{
+			if(manuscriptAddListformName.get(i).getAttribute("innerHTML").equals(binderForm))
+			{
+				clickButton(driver, manuscriptAddListformNameChkBox.get(i), "check Box for "+binderForm);
+				break;
+			}
+		}
+		Thread.sleep(2000);
+		clickButton(driver, manuscriptAddListDoneBtn, "Done");
+		switchToParentWindowfromframe(driver);
+		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+PolicyNo+"')]")));
+		Thread.sleep(2000);
+		clickButton(driver, manuscriptPageSaveBtn, "Manu Script page Save");
+		Thread.sleep(2000);
+		clickButton(driver, manuscriptPageCloseBtn, "Manu Script page Close");
+		switchToParentWindowfromframe(driver);
+	}
+	
+	public void rateFunctionality(String policyNo) throws InterruptedException
+	{
+		Thread.sleep(3000);
+		clickButton(driver, rateBtn, "Rate Tab");
+		Thread.sleep(4000);
+		try{
+			switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
+			selectDropdownByValue(productNotifyDropDown, ProductNotifyValue, "product notify");
+			Thread.sleep(1000);
+			clickButton(driver, prodNotifyClose, "Product Notify Close");
+			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window dispalyed to user.");
+			ExtentReporter.logger.log(LogStatus.PASS, " Yes selection from Product Notify dorp down.");
+		}catch (Exception e)
+		{
+			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window is NOT dispalyed to user.");
+		}
+		Thread.sleep(3000);
+		switchToParentWindowfromframe(driver);
+		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
+		//switchToFrameUsingId(driver,"popupframe1");
+		Thread.sleep(2000);
+		clickButton(driver, closeBtnOnViewPremiumPopup, "Close");
+		Thread.sleep(2000);
+		switchToParentWindowfromframe(driver);
+		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
+		clickButton(driver, okPolicySaveAsWIPPopup, "Ok");
+		switchToParentWindowfromframe(driver);
+	}
+	
+	public void saveOption(String policyNo) throws InterruptedException
+	{
+		Thread.sleep(2000);
+		clickButton(driver, saveOptionBtn, "Save Option");
+		Thread.sleep(4000);
+		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
+		selectDropdownByValue(saveAsDropDown, saveAsPolicyValue, "Save Option");
+		clickButton(driver, saveOptionOkBtn, "Save");
+		Thread.sleep(6000);
+		try{
+			switchToParentWindowfromframe(driver);
+			switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
+			selectDropdownByValue(productNotifyDropDown, ProductNotifyValue, "product notify");
+			Thread.sleep(1000);
+			clickButton(driver, prodNotifyClose, "Product Notify Close");
+			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window dispalyed to user.");
+			ExtentReporter.logger.log(LogStatus.PASS, " Yes selection from Product Notify dorp down.");
+		}catch (Exception e)
+		{
+			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window is NOT dispalyed to user.");
+		}
+		switchToParentWindowfromframe(driver);
+		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
+		Thread.sleep(4000);
+		clickButton(driver, Exit_Ok, "Exit Ok");
+	}
+	
+	public void changePhaseToQuote() throws InterruptedException
+	{
+		Thread.sleep(4000);
+		selectDropdownByValue(policyPhase, QuotePhaseValue, "Phase");
+	}
+
+}
