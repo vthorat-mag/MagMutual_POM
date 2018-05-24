@@ -37,6 +37,8 @@ public class rateApolicyPage extends commonAction {
 	String valueOfPolicyActionAccept = "javascript:acceptQuote();";
 	String billingSetup = "javascript:billingSetup();";
 	String paymentPlanValue = "660262192";
+	String saveAsPolicyValue="OFFICIAL";
+	String ProductNotifyValue="Y";
 	commonUtilities comUtil = new commonUtilities();
 	PDFReader pdfread = new PDFReader();
 	//Object repository for all elements on rate A policy page.
@@ -120,7 +122,7 @@ public class rateApolicyPage extends commonAction {
 	@FindBy(id="PM_COMMON_TABS_RATE")
 	WebElement rateBtn;
 	
-	@FindBy(id="PM_COMMON_TABS_RATE")
+	@FindBy(id="PM_VIEW_PREM_CLOSE")
 	WebElement closeBtnOnViewPremiumPopup;
 	
 	@FindBy(name="workflowExit_Ok")
@@ -132,6 +134,23 @@ public class rateApolicyPage extends commonAction {
 	@FindBy(xpath="//span[@class='txtOrange']")
 	WebElement loader;
 	
+	@FindBy(xpath="//button[contains(@class,'titlebar-close')]")
+	WebElement closePdf;
+	
+	@FindBy(id="PM_COMMON_TABS_SAVE")
+	WebElement saveOptionBtn;
+	
+	@FindBy(xpath="//select[@name='saveAsCode']")
+	WebElement saveAsDropDown;
+	
+	@FindBy(id="PM_SAVE_OPTION_OK")
+	WebElement saveOptionOkBtn;
+	
+	@FindBy(xpath="//select[contains(@name,'confirmed')]")
+	WebElement productNotifyDropDown;
+	
+	@FindBy(id="PM_NOTIFY_CLOSE")
+	WebElement prodNotifyClose;
 	
 	public rateApolicyPage(WebDriver driver)
 	{
@@ -139,12 +158,12 @@ public class rateApolicyPage extends commonAction {
 		PageFactory.initElements(driver, this);
 	}
 	
-	String profileNoLable = pageHeaderForPolicyFolder.getAttribute("innerHTML");
-	String[] portfolioNo = profileNoLable.split(" ",3);
-	
+	/*String profileNoLable = pageHeaderForPolicyFolder.getAttribute("innerHTML");
+	String[] portfolioNo = profileNoLable.split(" ",3);*/
+	/*
 	public void policySearch() throws InterruptedException, AWTException{
 		
-		String policy_no="Q09100439-NB17-01";
+		String policy_no="Q09101503-NB17-01";
 		Thread.sleep(2000);
 		clearTextBox(Policy_Search, "Enter Policy text field");
 		enterTextIn(Policy_Search, policy_no, "Enter Policy text field");
@@ -154,6 +173,15 @@ public class rateApolicyPage extends commonAction {
 				
 		Assert.assertEquals(actual, "Policy Folder "+policy_no, "The policy "+policy_no+" is Not available.");
 		Thread.sleep(4000);
+	}*/
+	
+	public void searchPolicy( String policy_no) throws InterruptedException
+	{
+		Thread.sleep(3000);
+		policySearch(policy_no,Policy_Search, Search_btn);
+		String actual=getText(pageHeaderForPolicyFolder);
+		Assert.assertEquals(actual, "Policy Folder "+policy_no, "The policy "+policy_no+" is Not available.");
+		Thread.sleep(3000);
 	}
 
 	
@@ -256,8 +284,6 @@ public String startExcelExport() throws InterruptedException,AWTException
 		comUtil.downloadedFileExists(fileNamePath);
 	}
 
-	
-	
 	public void AcceptFromActionDropDown()
 	{
 		selectDropdownByValue(policyAction, valueOfPolicyActionAccept, "Policy Action");
@@ -286,6 +312,13 @@ public String startExcelExport() throws InterruptedException,AWTException
 		String getTextPolicyPhase = policyPhaseBinder.getAttribute("innerText");
 		verifyTextPresent(getTextPolicyPhase,"Binder","Policy Phase");
 	}
+	public String policyNo()
+	{
+		String profileNoLable = pageHeaderForPolicyFolder.getAttribute("innerHTML");
+		String[] portfolioNo = profileNoLable.split(" ",3);
+		return portfolioNo[2];
+	}
+	
 	public void billingSetup() throws InterruptedException
 	{
 		selectDropdownByValue(policyAction, billingSetup, "Policy Action");
@@ -306,7 +339,7 @@ public String startExcelExport() throws InterruptedException,AWTException
 		js.executeScript("arguments[0].click();", coverageTab);
 	}
 	
-	public void coverageUpdates(String CoverageName, String binderForm) throws InterruptedException
+	public void coverageUpdates(String CoverageName, String binderForm, String PolicyNo) throws InterruptedException
 	{
 		for (int i = 0; i<coverageList.size();i++)
 		{
@@ -321,17 +354,19 @@ public String startExcelExport() throws InterruptedException,AWTException
 			}
 		}
 		clickButton(driver, optionalFormBtn, "Optional Form");
-		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+portfolioNo[2]+"')]")));
-		if (manuscriptList.isDisplayed())
+		Thread.sleep(4000);
+		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+PolicyNo+"')]")));
+		/*if (manuscriptList.isDisplayed())
 		{
 			clickButton(driver, manuscriptPageDeleteBtn, "Manu script Delete");
 			clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
 		}else{
 			clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
-		}
-
-		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+portfolioNo[2]+"')]")));
+		}*/
+		clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
+		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+PolicyNo+"')]")));
 		
+		Thread.sleep(3000);
 		for(int i=0;i<manuscriptAddListformName.size();i++)
 		{
 			if(manuscriptAddListformName.get(i).getAttribute("innerHTML").equals(binderForm))
@@ -344,28 +379,81 @@ public String startExcelExport() throws InterruptedException,AWTException
 		}
 		clickButton(driver, manuscriptAddListDoneBtn, "Done");
 		switchToParentWindowfromframe(driver);
-		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+portfolioNo[2]+"')]")));
+		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+PolicyNo+"')]")));
+		Thread.sleep(2000);
 		clickButton(driver, manuscriptPageSaveBtn, "Manu Script page Save");
+		Thread.sleep(2000);
 		clickButton(driver, manuscriptPageCloseBtn, "Manu Script page Close");
+		switchToParentWindowfromframe(driver);
 	}
 	
-	public void rateFunctionality() throws InterruptedException
+	public void rateFunctionality(String policyNo) throws InterruptedException
 	{
-		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+portfolioNo[2]+"')]")));
-		clickButton(driver, rateBtn, "Rate Tab");
 		Thread.sleep(3000);
-		clickButton(driver, closeBtnOnViewPremiumPopup, "Close");
+		clickButton(driver, rateBtn, "Rate Tab");
+		Thread.sleep(4000);
+		try{
+			switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
+			selectDropdownByValue(productNotifyDropDown, ProductNotifyValue, "product notify");
+			Thread.sleep(1000);
+			clickButton(driver, prodNotifyClose, "Product Notify Close");
+			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window dispalyed to user.");
+			ExtentReporter.logger.log(LogStatus.PASS, " Yes selection from Product Notify dorp down.");
+		}catch (Exception e)
+		{
+			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window is NOT dispalyed to user.");
+		}
+		Thread.sleep(3000);
 		switchToParentWindowfromframe(driver);
-		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+portfolioNo[2]+"')]")));
+		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
+		//switchToFrameUsingId(driver,"popupframe1");
+		Thread.sleep(2000);
+		clickButton(driver, closeBtnOnViewPremiumPopup, "Close");
+		Thread.sleep(2000);
+		switchToParentWindowfromframe(driver);
+		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
 		clickButton(driver, okPolicySaveAsWIPPopup, "Ok");
-		
+		switchToParentWindowfromframe(driver);
 	}
 	
 	public void pdfVerify() throws Exception
 	{
 		clickButton(driver, previewBtn, "Preview");
-		WebDriverWait wait=new WebDriverWait(driver, 20);
-		wait.until(ExpectedConditions.invisibilityOf(loader));
-		pdfread.readValue();
+		Thread.sleep(4000);
+		//switchToFrameUsingId(driver,"popupframe1");
+		//WebDriverWait wait=new WebDriverWait(driver, 20);
+		//wait.until(ExpectedConditions.invisibilityOf(loader));
+		Thread.sleep(4000);
+		//pdfread.readValue();
+		clickButton(driver, closePdf, "Close PDF");
+		//switchToParentWindowfromframe(driver);
+		
+	}
+	
+	public void saveOption(String policyNo) throws InterruptedException
+	{
+		Thread.sleep(2000);
+		clickButton(driver, saveOptionBtn, "Save Option");
+		Thread.sleep(4000);
+		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
+		selectDropdownByValue(saveAsDropDown, saveAsPolicyValue, "Save Option");
+		clickButton(driver, saveOptionOkBtn, "Save");
+		Thread.sleep(6000);
+		try{
+			switchToParentWindowfromframe(driver);
+			switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
+			selectDropdownByValue(productNotifyDropDown, ProductNotifyValue, "product notify");
+			Thread.sleep(1000);
+			clickButton(driver, prodNotifyClose, "Product Notify Close");
+			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window dispalyed to user.");
+			ExtentReporter.logger.log(LogStatus.PASS, " Yes selection from Product Notify dorp down.");
+		}catch (Exception e)
+		{
+			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window is NOT dispalyed to user.");
+		}
+		switchToParentWindowfromframe(driver);
+		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
+		Thread.sleep(4000);
+		clickButton(driver, Exit_Ok, "Exit Ok");
 	}
 }

@@ -116,7 +116,7 @@ public class indicationPage extends commonAction {
 		
 		WebDriverWait wait=new WebDriverWait(driver, Integer.valueOf(properties.prop.getProperty("High")));
 		
-		waitForElementToLoad(driver, Integer.valueOf(properties.prop.getProperty("High")));
+		//waitForElementToLoad(driver, Integer.valueOf(properties.prop.getProperty("High")));
 		
 		wait.until(ExpectedConditions.visibilityOf(Last_Org_Name));
 		

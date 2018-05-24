@@ -1,5 +1,7 @@
 package BaseClass;
 
+import java.awt.AWTException;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -24,4 +26,5 @@ public interface CommonActionInterface {
     String switchToWindow(WebDriver driver);
     void selectDropdownByValue(WebElement Value,String DropDownOption, String name);
     void switchToParentWindowfromotherwindow(WebDriver driver, String parentwindow);
+    void policySearch(String policyNo, WebElement policySearchTxtBox, WebElement earchBtn);
 }

@@ -1,5 +1,6 @@
 package com.mm.utils;
 
+import java.awt.AWTException;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -9,6 +10,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -260,14 +262,21 @@ public class commonAction implements CommonActionInterface {
 			
 	}
 
-	public void waitForElementToLoad(WebDriver driver, int time){
+	public void waitForElementToLoad(WebDriver driver, int time, WebElement element){
 		
 		WebDriverWait wait=new WebDriverWait(driver, time);
+		wait.until(ExpectedConditions.visibilityOf(element));
 		
 	}
 
 	public void waitFor(long ms) {
 		// TODO Auto-generated method stub
 		
+	}
+	public void policySearch(String policyNo, WebElement policySearchTxtBox, WebElement searchBtn) 
+	{
+		clearTextBox(policySearchTxtBox, "Enter Policy text field");
+		enterTextIn(policySearchTxtBox, policyNo, "Enter Policy text field");
+		click(searchBtn, "Search button");
 	}
 }
