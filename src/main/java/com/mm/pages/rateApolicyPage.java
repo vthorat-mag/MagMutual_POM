@@ -36,7 +36,7 @@ public class rateApolicyPage extends commonAction {
 	WebDriver driver;
 	String valueOfPolicyActionAccept = "javascript:acceptQuote();";
 	String billingSetup = "javascript:billingSetup();";
-	String paymentPlanValue = "660262192";
+	String paymentPlanValue = "659689385";
 	String saveAsPolicyValue="OFFICIAL";
 	String ProductNotifyValue="Y";
 	commonUtilities comUtil = new commonUtilities();
@@ -152,6 +152,9 @@ public class rateApolicyPage extends commonAction {
 	@FindBy(id="PM_NOTIFY_CLOSE")
 	WebElement prodNotifyClose;
 	
+	@FindBy(name="additionalText")
+	WebElement addText;
+	
 	public rateApolicyPage(WebDriver driver)
 	{
 		this.driver=driver;
@@ -199,7 +202,7 @@ public class rateApolicyPage extends commonAction {
 	}
 	
 	//Donwload Excel report and save in defined folder
-public String startExcelExport() throws InterruptedException,AWTException
+	public String startExcelExport() throws InterruptedException,AWTException
 	{
 	    	 click(Export, "Export link");
 	    	 Thread.sleep(2000);
@@ -287,6 +290,7 @@ public String startExcelExport() throws InterruptedException,AWTException
 	public void AcceptFromActionDropDown()
 	{
 		selectDropdownByValue(policyAction, valueOfPolicyActionAccept, "Policy Action");
+		ExtentReporter.logger.log(LogStatus.PASS, "Select Accept from the dropdown screen.");
 		
 	}
 	public void isAlertPresent() throws InterruptedException 
@@ -294,10 +298,9 @@ public String startExcelExport() throws InterruptedException,AWTException
 	    try 
 	    { 
 	    	Thread.sleep(5000);
-	        driver.switchTo().alert().accept();
-	        //ExtentReporter.logger.log(LogStatus.INFO, alert.getText());
-	        /*driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-	        alert.dismiss();*/
+	    	Alert alert = driver.switchTo().alert();
+	        alert.accept();
+	        ExtentReporter.logger.log(LogStatus.INFO, alert.getText());
 	        Thread.sleep(5000);
 	    }   // try 
 	    catch (NoAlertPresentException Ex) 
@@ -311,6 +314,7 @@ public String startExcelExport() throws InterruptedException,AWTException
 		waitFor(driver, 2);
 		String getTextPolicyPhase = policyPhaseBinder.getAttribute("innerText");
 		verifyTextPresent(getTextPolicyPhase,"Binder","Policy Phase");
+		ExtentReporter.logger.log(LogStatus.PASS, "Verify Phase is changed to Binder.");
 	}
 	public String policyNo()
 	{
@@ -321,22 +325,25 @@ public String startExcelExport() throws InterruptedException,AWTException
 	
 	public void billingSetup() throws InterruptedException
 	{
+		Thread.sleep(3000);
 		selectDropdownByValue(policyAction, billingSetup, "Policy Action");
 		waitFor(driver, 5000);
 		switchToFrameUsingId(driver, "popupframe1");
 		selectDropdownByValue(paymentPlan, paymentPlanValue, "Payment Plan");
 		Thread.sleep(5000);
-		//clickButton(billingSetupSaveBtn, "Save Button");
-		JavascriptExecutor js = (JavascriptExecutor)driver;
-		js.executeScript("arguments[0].click();", billingSetupSaveBtn);
+		clickButton(driver, billingSetupSaveBtn, "Save Button");
 		Thread.sleep(35000);
 		switchToParentWindowfromframe(driver);
 	}
 	public void coverageDetailsSelect()
 	{
-		//click(coverageTab, "Coverage");
-		JavascriptExecutor js = (JavascriptExecutor)driver;
-		js.executeScript("arguments[0].click();", coverageTab);
+		try{
+			clickButton(driver,coverageTab, "Coverage");
+			ExtentReporter.logger.log(LogStatus.PASS, "Click Coverage tab.");
+		}catch(Exception e)
+		{
+			ExtentReporter.logger.log(LogStatus.FAIL, "Can not click on Coverage tab.");
+		}
 	}
 	
 	public void coverageUpdates(String CoverageName, String binderForm, String PolicyNo) throws InterruptedException
@@ -345,45 +352,80 @@ public String startExcelExport() throws InterruptedException,AWTException
 		{
 			if(coverageList.get(i).getAttribute("innerHTML").equals(CoverageName))
 			{
-				//click(coverageList.get(i),coverageList.get(i).getAttribute("innerHTML"));
-				Thread.sleep(4000);
-				JavascriptExecutor js = (JavascriptExecutor)driver;
-				js.executeScript("arguments[0].click();", coverageList.get(i));
-				
-				break;
+				try{
+					clickButton(driver, coverageList.get(i),coverageList.get(i).getAttribute("innerHTML"));
+					ExtentReporter.logger.log(LogStatus.PASS, "Select"+ CoverageName +" Coverage.");
+					Thread.sleep(4000);
+					break;
+				}catch(Exception e){
+					ExtentReporter.logger.log(LogStatus.FAIL, "Can not select"+ CoverageName + "Coverage.");
+				}
 			}
 		}
 		clickButton(driver, optionalFormBtn, "Optional Form");
+		ExtentReporter.logger.log(LogStatus.PASS, "Click [Optional Forms]");
 		Thread.sleep(4000);
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+PolicyNo+"')]")));
-		/*if (manuscriptList.isDisplayed())
+		if (manuscriptList.isDisplayed())
 		{
-			clickButton(driver, manuscriptPageDeleteBtn, "Manu script Delete");
-			clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
+			try {
+				clickButton(driver, manuscriptPageDeleteBtn, "Manu script Delete");
+				driver.switchTo().alert().accept();
+				ExtentReporter.logger.log(LogStatus.PASS, "Delete the Quote form.");
+				Thread.sleep(2000);
+				clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
+				ExtentReporter.logger.log(LogStatus.PASS, "Click [Add].");
+			}catch(Exception e)
+			{
+				ExtentReporter.logger.log(LogStatus.FAIL, "Can not delete the Quote form.");
+			}
 		}else{
 			clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
-		}*/
-		clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
+			ExtentReporter.logger.log(LogStatus.PASS, "Click [Add].");
+		}
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+PolicyNo+"')]")));
-		
 		Thread.sleep(3000);
 		for(int i=0;i<manuscriptAddListformName.size();i++)
 		{
 			if(manuscriptAddListformName.get(i).getAttribute("innerHTML").equals(binderForm))
 			{
-				//click(manuscriptAddListformNameChkBox.get(i), "check Box for "+binderForm);
-				//js.executeScript("arguments[0].click();", manuscriptAddListformNameChkBox.get(i));
-				clickButton(driver, manuscriptAddListformNameChkBox.get(i), "check Box for "+binderForm);
-				break;
+				try{
+					clickButton(driver, manuscriptAddListformNameChkBox.get(i), "check Box for "+binderForm);
+					ExtentReporter.logger.log(LogStatus.PASS, "Select "+ binderForm +" and Click done.");
+					break;
+				}
+				catch(Exception e){
+					ExtentReporter.logger.log(LogStatus.FAIL, "Can not select "+ binderForm +".");
+				}
 			}
 		}
 		clickButton(driver, manuscriptAddListDoneBtn, "Done");
+		Thread.sleep(2000);
 		switchToParentWindowfromframe(driver);
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+PolicyNo+"')]")));
-		Thread.sleep(2000);
-		clickButton(driver, manuscriptPageSaveBtn, "Manu Script page Save");
-		Thread.sleep(2000);
-		clickButton(driver, manuscriptPageCloseBtn, "Manu Script page Close");
+		try{
+			enterTextIn(addText, binderForm+" form added.", "Aditional Text");
+			
+			/*JavascriptExecutor executor = (JavascriptExecutor)driver;
+			executor.executeScript("arguments[0].value='admin'",addText);*/
+			
+			ExtentReporter.logger.log(LogStatus.PASS, "Enter additional text: "+ binderForm+" form added.");
+		}catch(Exception e)
+		{
+			ExtentReporter.logger.log(LogStatus.FAIL, "Can not enter additional text");
+		}
+		switchToParentWindowfromframe(driver);
+		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+PolicyNo+"')]")));
+		
+		try{
+			clickButton(driver, manuscriptPageSaveBtn, "Manu Script page Save");
+			Thread.sleep(2000);
+			clickButton(driver, manuscriptPageCloseBtn, "Manu Script page Close");
+			ExtentReporter.logger.log(LogStatus.PASS, "Click [Save] and Click [Close]");
+		}catch(Exception e)
+		{
+			ExtentReporter.logger.log(LogStatus.FAIL, "Can not click [Save] and Click [Close]");
+		}
 		switchToParentWindowfromframe(driver);
 	}
 	
@@ -391,22 +433,22 @@ public String startExcelExport() throws InterruptedException,AWTException
 	{
 		Thread.sleep(3000);
 		clickButton(driver, rateBtn, "Rate Tab");
+		ExtentReporter.logger.log(LogStatus.PASS, "Click [Rate].");
 		Thread.sleep(4000);
-		try{
+		
+		/*try{
 			switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
 			selectDropdownByValue(productNotifyDropDown, ProductNotifyValue, "product notify");
 			Thread.sleep(1000);
 			clickButton(driver, prodNotifyClose, "Product Notify Close");
-			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window dispalyed to user.");
-			ExtentReporter.logger.log(LogStatus.PASS, " Yes selection from Product Notify dorp down.");
+			ExtentReporter.logger.log(LogStatus.PASS, " Yes selected from Product Notify dorp down.");
 		}catch (Exception e)
 		{
-			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window is NOT dispalyed to user.");
-		}
+			ExtentReporter.logger.log(LogStatus.FAIL, "Product Notify Window is NOT dispalyed to user.");
+		}*/
 		Thread.sleep(3000);
 		switchToParentWindowfromframe(driver);
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
-		//switchToFrameUsingId(driver,"popupframe1");
 		Thread.sleep(2000);
 		clickButton(driver, closeBtnOnViewPremiumPopup, "Close");
 		Thread.sleep(2000);
@@ -434,10 +476,13 @@ public String startExcelExport() throws InterruptedException,AWTException
 	{
 		Thread.sleep(2000);
 		clickButton(driver, saveOptionBtn, "Save Option");
+		ExtentReporter.logger.log(LogStatus.PASS, "Click Save Options.");
 		Thread.sleep(4000);
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
 		selectDropdownByValue(saveAsDropDown, saveAsPolicyValue, "Save Option");
+		ExtentReporter.logger.log(LogStatus.PASS, "Select Official.");
 		clickButton(driver, saveOptionOkBtn, "Save");
+		ExtentReporter.logger.log(LogStatus.PASS, "Click [OK]");
 		Thread.sleep(6000);
 		try{
 			switchToParentWindowfromframe(driver);
@@ -445,15 +490,15 @@ public String startExcelExport() throws InterruptedException,AWTException
 			selectDropdownByValue(productNotifyDropDown, ProductNotifyValue, "product notify");
 			Thread.sleep(1000);
 			clickButton(driver, prodNotifyClose, "Product Notify Close");
-			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window dispalyed to user.");
 			ExtentReporter.logger.log(LogStatus.PASS, " Yes selection from Product Notify dorp down.");
 		}catch (Exception e)
 		{
 			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window is NOT dispalyed to user.");
 		}
+		Thread.sleep(5000);
 		switchToParentWindowfromframe(driver);
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
-		Thread.sleep(4000);
 		clickButton(driver, Exit_Ok, "Exit Ok");
+		ExtentReporter.logger.log(LogStatus.PASS, "Click [OK]");
 	}
 }
