@@ -101,7 +101,7 @@ public class Policy_Binder_Page extends commonAction {
 	public void copyToQuoteFromActionDropDown(String policyNum) throws InterruptedException
 	{
 		selectDropdownByValue(policyAction, valueOfPolicyActionCopyToQuote, "Policy Action");
-		Thread.sleep(6000);
+		Thread.sleep(10000);
 		String getUpdatedPolicyNo = policyNo();
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+getUpdatedPolicyNo+"')]")));
 		click(Exit_Ok, "OK button");

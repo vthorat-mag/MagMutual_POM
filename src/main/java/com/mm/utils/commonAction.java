@@ -276,6 +276,7 @@ public class commonAction implements CommonActionInterface {
 	public void policySearch(String policyNo, WebElement policySearchTxtBox, WebElement searchBtn) 
 	{
 		clearTextBox(policySearchTxtBox, "Enter Policy text field");
+		ExtentReporter.logger.log(LogStatus.PASS, "Enter in Policy # from Quote Test case in the upper right corner of the screen.");
 		enterTextIn(policySearchTxtBox, policyNo, "Enter Policy text field");
 		click(searchBtn, "Search button");
 	}
