@@ -17,8 +17,8 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
 import com.mm.browsers.BrowserTypes;
-import com.mm.listeners.testListeners;
 import com.mm.pages.Policy_Binder_Page;
 import com.mm.pages.Policy_Quote_Page;
 import com.mm.pages.Policy_Submission_Page;
@@ -54,15 +54,15 @@ public class SmokeTestCase extends BrowserTypes {
 	endorsePolicyPage endorsepolicypage;
 	
 	@BeforeMethod
-	public void loginToeOasis() throws Exception
+	public void Setup(Method method) throws Exception
 	{
-		testListeners testlist = new testListeners();
+		ExtentReporter.logger=ExtentReporter.report.startTest(method.getName());
+	
 	}
 	
 	//@Test(description="Verify Add Organization")
 	public void TC42404() throws Exception
 	{
-		ExtentReporter.logger=ExtentReporter.report.startTest("TC42404");
 		loginpage = new loginPage(driver);
 		loginpage.loginToeOasis("UserName", "Password");
 		homepage = new homePage(driver);
@@ -77,7 +77,6 @@ public class SmokeTestCase extends BrowserTypes {
 	//@Test(description="Hospital Rate")
 	public void TC42239() throws Exception
 	{
-		ExtentReporter.logger=ExtentReporter.report.startTest("TC42239");
 		loginpage = new loginPage(driver);
 		loginpage.loginToeOasis("UserName", "Password");
 		homepage = new homePage(driver);
@@ -91,7 +90,6 @@ public class SmokeTestCase extends BrowserTypes {
 	//@Test(description="HPL - Binder")
 	public void TC42242() throws Exception
 	{
-		ExtentReporter.logger=ExtentReporter.report.startTest("TC42541");
 		loginpage = new loginPage(driver);
 		loginpage.loginToeOasis("UserName", "Password");
 		homepage = new homePage(driver);
@@ -118,7 +116,6 @@ public class SmokeTestCase extends BrowserTypes {
 	//@Test(description="Hospital Issue Policy Forms- Complete")
 	public void TC42665() throws Exception
 	{
-		ExtentReporter.logger=ExtentReporter.report.startTest("TC42541");
 		loginpage = new loginPage(driver);
 		loginpage.loginToeOasis("UserName", "Password");
 		homepage = new homePage(driver);
@@ -137,7 +134,6 @@ public class SmokeTestCase extends BrowserTypes {
 	@Test(description="Hospital Quote")
 	public void TC42238() throws Exception
 	{
-		ExtentReporter.logger=ExtentReporter.report.startTest("TC42238");
 		loginpage = new loginPage(driver);
 		loginpage.loginToeOasis("UserName", "Password");
 		homepage = new homePage(driver);
@@ -159,7 +155,6 @@ public class SmokeTestCase extends BrowserTypes {
 	//@Test(description = "Hospital Copy to Quote")
 	public void TC42245() throws Exception
 	{
-		ExtentReporter.logger=ExtentReporter.report.startTest("TC42541");
 		loginpage = new loginPage(driver);
 		loginpage.loginToeOasis("UserName", "Password");
 		homepage = new homePage(driver);
