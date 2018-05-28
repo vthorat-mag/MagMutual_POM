@@ -193,7 +193,6 @@ public class commonAction implements CommonActionInterface {
 	public void selectDropdownByValue(WebElement element, String DropDownOption, String label) {
 
 		try {
-			ExtentReporter.logger.log(LogStatus.INFO, "Selecting the value from " + label + " drop down");
 			Select Sel = new Select(element);
 			Sel.selectByValue(DropDownOption);
 			ExtentReporter.logger.log(LogStatus.PASS, "Value is selected from " + label + " drop down");
@@ -208,7 +207,6 @@ public class commonAction implements CommonActionInterface {
 	public void selectDropdownByVisibleText(WebElement element, String DropDownOption, String label) {
 
 		try {
-			ExtentReporter.logger.log(LogStatus.INFO, "Selecting the value from " + label + " drop down");
 			Select Sel = new Select(element);
 			Sel.selectByVisibleText(DropDownOption);
 			ExtentReporter.logger.log(LogStatus.PASS, "Value is selected from " + label + " drop down");
@@ -276,8 +274,9 @@ public class commonAction implements CommonActionInterface {
 	public void policySearch(String policyNo, WebElement policySearchTxtBox, WebElement searchBtn) 
 	{
 		clearTextBox(policySearchTxtBox, "Enter Policy text field");
-		ExtentReporter.logger.log(LogStatus.PASS, "Enter in Policy # from Quote Test case in the upper right corner of the screen.");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click policy in right corner of screen");
 		enterTextIn(policySearchTxtBox, policyNo, "Enter Policy text field");
 		click(searchBtn, "Search button");
+		ExtentReporter.logger.log(LogStatus.INFO, "Enter Policy # into Policy entry box, Click Search.");
 	}
 }
