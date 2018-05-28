@@ -186,6 +186,15 @@ public class rateApolicyPage extends commonAction {
 		Assert.assertEquals(actual, "Policy Folder "+policy_no, "The policy "+policy_no+" is Not available.");
 		Thread.sleep(3000);
 	}
+	
+	
+/*	public void policySearch(String policyNo, WebElement policySearchTxtBox, WebElement searchBtn) 
+	
+	{
+		clearTextBox(policySearchTxtBox, "Enter Policy text field");
+		enterTextIn(policySearchTxtBox, policyNo, "Enter Policy text field");
+		click(searchBtn, "Search button");
+	}*/
 
 	
 	//Save Rate details code.

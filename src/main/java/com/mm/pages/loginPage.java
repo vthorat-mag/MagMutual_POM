@@ -33,7 +33,7 @@ public class loginPage extends commonAction{
 		PageFactory.initElements(driver, this);
 	}
 
-	public void loginToeOasis() throws Exception
+	public void loginToeOasis(String UserName, String PassWord) throws Exception
 	{
 		ExcelUtil exlutil = new ExcelUtil();
 		driver.get("http://oasiscloud2017t:8081/oas17bts/CS/login.jsp");
@@ -43,21 +43,20 @@ public class loginPage extends commonAction{
 		//Entering User Name.
 		try{
 			Assert.assertTrue(userName.isDisplayed(), "User Name Field is displayed.");
-			userName.sendKeys(exlutil.getCellData("eOasis_Credentials", "UserName", 2));
+			userName.sendKeys(exlutil.getCellData("eOasis_Credentials", UserName, 2));
 			ExtentReporter.logger.log(LogStatus.PASS, " User Name is entered in to userName Field");
 		}catch(Exception e)
 		{
 			ExtentReporter.logger.log(LogStatus.FAIL, " Error while entering data into username field.");
 		}
 		
-		//driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 		
 		
 		//Entering Password.
 		try{
 			Assert.assertTrue(password.isDisplayed(), "Password Field is displayed.");
 			Thread.sleep(2000);
-			password.sendKeys(exlutil.getCellData("eOasis_Credentials", "Password", 2));
+			password.sendKeys(exlutil.getCellData("eOasis_Credentials", PassWord, 2));
 			ExtentReporter.logger.log(LogStatus.PASS, " Password is entered in to password Field");
 		}catch(Exception e)
 		{

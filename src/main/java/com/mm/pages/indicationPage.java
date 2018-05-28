@@ -12,8 +12,10 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.mm.utils.ExtentReporter;
 import com.mm.utils.commonAction;
 import com.mm.utils.properties;
+import com.relevantcodes.extentreports.LogStatus;
 
 
 public class indicationPage extends commonAction {
@@ -98,42 +100,53 @@ public class indicationPage extends commonAction {
 		
 		Actions action = new Actions(driver);
 		action.moveToElement(Policy_tab).click().build().perform();
+	
 		
 		Thread.sleep(2000);
 		
 		JavascriptExecutor js = (JavascriptExecutor)driver;
 		js.executeScript("arguments[0].click();", Create_New);
+	//	ExtentReporter.logger.log(LogStatus.INFO, "");
 			
 	}
 		
 	public void create_Quote() throws InterruptedException{
 		
+		//waitForElementToLoad(driver, 10, Create_Quote);
+		Thread.sleep(2000);
+	//	click(Create_Quote, "CReate Quote");
+	//	clickButton(driver, Create_Quote, "CReate Quote");
 		
 		JavascriptExecutor js = (JavascriptExecutor)driver;
 		js.executeScript("arguments[0].click();", Create_Quote);
+		
+		ExtentReporter.logger.log(LogStatus.INFO, "Entity Select Search window opens​​​​​​​");
 
 		String parentWindow = switchToWindow(driver);
 		
-		WebDriverWait wait=new WebDriverWait(driver, Integer.valueOf(properties.prop.getProperty("High")));
 		
-		//waitForElementToLoad(driver, Integer.valueOf(properties.prop.getProperty("High")));
+	//	waitForElementToLoad(driver, Integer.valueOf(properties.prop.getProperty("High")));
 		
-		wait.until(ExpectedConditions.visibilityOf(Last_Org_Name));
-		
-		Thread.sleep(3000);
+		waitForElementToLoad(driver, 10, Last_Org_Name);
 		
 		enterTextIn(Last_Org_Name, "Test_Automation_V1", "Last Org Name");
 		
+		
 		click(Search_Quote,"Search button");
+	//	ExtentReporter.logger.log(LogStatus.INFO, "");
 		
-		wait.until(ExpectedConditions.visibilityOf(Select_Entity_Checkbox));
+		waitForElementToLoad(driver, 30, Select_Entity_Checkbox);
 		
-		js.executeScript("arguments[0].click();", Select_Entity_Checkbox);
+		ExtentReporter.logger.log(LogStatus.INFO, "List is populated of risk to select Automated Hospital with today's date");
 		
+		clickButton(driver, Select_Entity_Checkbox, "Select Entity Checkbox");
+		
+		ExtentReporter.logger.log(LogStatus.INFO, "Risk is selected");	
 		click(Select_Entity_Checkbox, "Check box");
 		
 		click(Select_Entity, "Select button");
 			
+		ExtentReporter.logger.log(LogStatus.INFO, "Select Policy Type Window displays");	
 		switchToParentWindowfromotherwindow(driver, parentWindow);
 	}
 		
@@ -146,23 +159,20 @@ public class indicationPage extends commonAction {
 		switchToFrameUsingId(driver, "popupframe1");
 		Thread.sleep(1000);
 		enterTextIn(Effe_Date,Eff_Date, "Effective Date");
-		Thread.sleep(1000);
 		
 		selectDropdownByValue(Issue_Comp,"363536755","Issue Company");
-		Thread.sleep(1000);
 		selectDropdownByValue(Issue_State_Code,"GA","Issue State");
-		Thread.sleep(1000);
 		
 		click(Policy_Search, "Search button for policy type");
 		Thread.sleep(2000);
+		ExtentReporter.logger.log(LogStatus.INFO, "Policy Type window will display below");
 		
 		//Institution -highlight
 		
 		click(CrePol_Done, "Done button");
-		Thread.sleep(20000);//need t replace with exp wait
-		
+				
+		ExtentReporter.logger.log(LogStatus.INFO, "Policy Folder window is opened");
 		switchToParentWindowfromframe(driver);
-		
 
 	}
 	

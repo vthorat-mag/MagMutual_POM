@@ -6,7 +6,9 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
+import com.mm.utils.ExtentReporter;
 import com.mm.utils.commonAction;
+import com.relevantcodes.extentreports.LogStatus;
 
 public class homePage extends commonAction{
 
@@ -51,10 +53,13 @@ public class homePage extends commonAction{
 	//	Policy_link.isSelected();
 		
 		click(Policy_tab, "Policy tab");
+		
+		ExtentReporter.logger.log(LogStatus.INFO, "Search Policy Screen is opened");
 	}
 		
 	public void logoutFromeOasis()
 	{
 		click(logoff,"Logoff button");
+		ExtentReporter.logger.log(LogStatus.INFO, "User is logged out from application");
 	}
 }
