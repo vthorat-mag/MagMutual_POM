@@ -17,6 +17,8 @@ import org.testng.Assert;
 
 import com.relevantcodes.extentreports.LogStatus;
 
+import com.relevantcodes.extentreports.LogStatus;
+
 import BaseClass.CommonActionInterface;
 
 public class commonAction implements CommonActionInterface {
@@ -24,9 +26,15 @@ public class commonAction implements CommonActionInterface {
 	
 	Properties pro=new Properties();
 	
+	//Integer.valueOf(properties.prop.getProperty("High"));
+	
+	int Low=10;
+	int Medium=25;
+	int High=50;
 
 	public void switchToParentWindowfromotherwindow(WebDriver driver, String parentwindow) {
 
+<<<<<<< HEAD
 		try {
 			driver.switchTo().window(parentwindow);
 			ExtentReporter.logger.log(LogStatus.PASS, "Control switched back to parent window.");
@@ -34,6 +42,13 @@ public class commonAction implements CommonActionInterface {
 			e.printStackTrace();
 			ExtentReporter.logger.log(LogStatus.FAIL, "Error while switching to parent window.");
 		}
+=======
+
+	public void switchToParentWindowfromotherwindow(WebDriver driver, String parentwindow)
+	{
+		
+		driver.switchTo().window(parentwindow);
+>>>>>>> 6b1ae3f1c223c1e44b13c8768f9f68633335efed
 	}
 
 	public void switchToFrameUsingId(WebDriver driver, String frameName) {
@@ -50,6 +65,7 @@ public class commonAction implements CommonActionInterface {
 	
 	public void switchToFrameUsingElement(WebDriver driver, WebElement element)
 	{
+<<<<<<< HEAD
 		try {
 			driver.switchTo().frame(element);
 			ExtentReporter.logger.log(LogStatus.PASS, "Control switched Switched to frame.");
@@ -57,6 +73,10 @@ public class commonAction implements CommonActionInterface {
 			e.printStackTrace();
 			ExtentReporter.logger.log(LogStatus.FAIL, "Error while switching to frame.");
 		}
+=======
+		ExtentReporter.logger.log(LogStatus.INFO, "Switching control back to main window");
+		driver.switchTo().defaultContent();
+>>>>>>> 6b1ae3f1c223c1e44b13c8768f9f68633335efed
 	}
 	
 
@@ -70,6 +90,7 @@ public class commonAction implements CommonActionInterface {
 		}
 	}
 
+<<<<<<< HEAD
 	public String randomNoGenerator() {
 		return RandomStringUtils.random(2, "1234567890");
 	}
@@ -88,6 +109,30 @@ public class commonAction implements CommonActionInterface {
 			e.printStackTrace();
 			ExtentReporter.logger.log(LogStatus.FAIL, textField + " element is not found.");
 		}
+=======
+	public void navigateTo(String url) {
+		// TODO Auto-generated method stub
+	
+		ExtentReporter.logger.log(LogStatus.INFO, "Navigating to eOasis web application");
+		
+	}
+
+	public void enterTextIn(WebElement pageElement, String text) {
+		// TODO Auto-generated method stub
+		pageElement.sendKeys(text);
+		
+		ExtentReporter.logger.log(LogStatus.INFO, "Entered text in text box "+text);
+		
+	}
+
+	public void clickButton(WebElement pageElement, String buttonName) {
+		// TODO Auto-generated method stub
+		pageElement.click();
+		
+		ExtentReporter.logger.log(LogStatus.INFO, "Clicked on the "+buttonName);
+		
+		
+>>>>>>> 6b1ae3f1c223c1e44b13c8768f9f68633335efed
 	}
 
 		public void clickButton(WebDriver driver, WebElement pageElement, String buttonName) {
@@ -132,6 +177,7 @@ public class commonAction implements CommonActionInterface {
 
 	public void clearTextBox(WebElement pageElement, String textField) {
 		// TODO Auto-generated method stub
+<<<<<<< HEAD
 		try
 		{
 			Assert.assertTrue(pageElement.isDisplayed(), textField+" is displayed");
@@ -141,6 +187,11 @@ public class commonAction implements CommonActionInterface {
 			e.printStackTrace();
 			ExtentReporter.logger.log(LogStatus.FAIL, textField + " element is not found.");
 		}
+=======
+		pageElement.clear();
+		ExtentReporter.logger.log(LogStatus.INFO, "Cleared the initial contents from "+textField);
+		
+>>>>>>> 6b1ae3f1c223c1e44b13c8768f9f68633335efed
 	}
 
 	public String getAttributeValue(WebElement pageElement, String attributeName) {
@@ -149,6 +200,7 @@ public class commonAction implements CommonActionInterface {
 	}
 
 	public void click(WebElement pageElement, String ElementName) {
+<<<<<<< HEAD
 
 		try {
 			Assert.assertTrue(pageElement.isDisplayed(), ElementName + " is not displayed on screen.");
@@ -158,9 +210,18 @@ public class commonAction implements CommonActionInterface {
 			e.printStackTrace();
 			ExtentReporter.logger.log(LogStatus.FAIL, ElementName + " element is not found on page.");
 		}
+=======
+		// TODO Auto-generated method stub
+		pageElement.click();
+		
+		ExtentReporter.logger.log(LogStatus.INFO, "Clicked on the "+ ElementName);
+		
+	}
+>>>>>>> 6b1ae3f1c223c1e44b13c8768f9f68633335efed
 
 	}
 
+<<<<<<< HEAD
 	public void visibilityOfElement(WebElement pageElement, String text) {
 
 		try {
@@ -171,11 +232,30 @@ public class commonAction implements CommonActionInterface {
 			e.printStackTrace();
 			ExtentReporter.logger.log(LogStatus.FAIL, "Logo " + text + " is not displayed on page after login");
 		}
+=======
+	public void visibilityOfElement(WebElement pageElement) {
+		// TODO Auto-generated method stub
+		
+		
+		
+>>>>>>> 6b1ae3f1c223c1e44b13c8768f9f68633335efed
 	}
 
+	
 	public String switchToWindow(WebDriver driver) {
+<<<<<<< HEAD
 
 		ExtentReporter.logger.log(LogStatus.INFO, "Switching to the pop up window");
+	/*	
+		WebDriverWait wait=new WebDriverWait(driver, 10);
+		wait.until(ExpectedConditions.numberOfwindowsToBe(num));
+		*/
+		
+=======
+		
+	
+		ExtentReporter.logger.log(LogStatus.INFO, "Switching to the pop up window");
+>>>>>>> 6b1ae3f1c223c1e44b13c8768f9f68633335efed
 		Set<String> handles = driver.getWindowHandles();      //Return a set of window handle
 		 
 	    String parentWindow = driver.getWindowHandle();
@@ -184,12 +264,17 @@ public class commonAction implements CommonActionInterface {
 	    	   if(!currentWindow.equals(parentWindow))
 	    	  {
 	    	   driver.switchTo().window(currentWindow);
+<<<<<<< HEAD
 	    	   ExtentReporter.logger.log(LogStatus.INFO, "Control is switched to pop up window");
+=======
+	    ExtentReporter.logger.log(LogStatus.INFO, "Control is switched to pop up window");
+>>>>>>> 6b1ae3f1c223c1e44b13c8768f9f68633335efed
 	    	  }
 		 }
 		 return parentWindow;
 	}
 
+<<<<<<< HEAD
 	public void selectDropdownByValue(WebElement element, String DropDownOption, String label) {
 
 		try {
@@ -202,6 +287,14 @@ public class commonAction implements CommonActionInterface {
 			ExtentReporter.logger.log(LogStatus.FAIL, "Value is not selected from" + label + "drop down");
 		}
 
+=======
+	public void selectDropdown(WebElement element, String DropDownOption, String label) {
+		
+		ExtentReporter.logger.log(LogStatus.INFO, "Selecting the value from "+label+ " drop down");
+		Select Sel = new Select(element);
+		Sel.selectByValue(DropDownOption);
+		ExtentReporter.logger.log(LogStatus.INFO, "Value is selected from "+label+" drop down");
+>>>>>>> 6b1ae3f1c223c1e44b13c8768f9f68633335efed
 	}
 	
 	public void selectDropdownByVisibleText(WebElement element, String DropDownOption, String label) {
@@ -223,6 +316,7 @@ public class commonAction implements CommonActionInterface {
 		ExcelUtil exlutil = new ExcelUtil();
 	}
 
+<<<<<<< HEAD
 	public void verifyTextPresent(String getTextPolicyPhase, String actualText, String fieldName) {
 		try {
 
@@ -259,6 +353,13 @@ public class commonAction implements CommonActionInterface {
 		wait.until(pageLoadCondition);
 			
 	}
+=======
+	public void enterTextIn(WebElement pageElement, String text, String field) {
+		// TODO Auto-generated method stub
+		
+	}
+
+>>>>>>> 6b1ae3f1c223c1e44b13c8768f9f68633335efed
 
 	public void waitForElementToLoad(WebDriver driver, int time, WebElement element){
 		
@@ -266,6 +367,7 @@ public class commonAction implements CommonActionInterface {
 		wait.until(ExpectedConditions.visibilityOf(element));
 		
 	}
+	
 
 	public void waitFor(long ms) {
 		// TODO Auto-generated method stub
@@ -279,4 +381,6 @@ public class commonAction implements CommonActionInterface {
 		click(searchBtn, "Search button");
 		ExtentReporter.logger.log(LogStatus.INFO, "Enter Policy # into Policy entry box, Click Search.");
 	}
+
+	
 }

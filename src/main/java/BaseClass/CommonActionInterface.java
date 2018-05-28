@@ -28,3 +28,4 @@ public interface CommonActionInterface {
     void switchToParentWindowfromotherwindow(WebDriver driver, String parentwindow);
     void policySearch(String policyNo, WebElement policySearchTxtBox, WebElement earchBtn);
 }
+

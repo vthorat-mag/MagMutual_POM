@@ -9,5 +9,4 @@ public class ExtentReporter {
 
 	public static ExtentReports report= new ExtentReports(System.getProperty("user.dir")+"\\target\\Reports\\SmokeTestReport.HTML");
 	
-	
 }
