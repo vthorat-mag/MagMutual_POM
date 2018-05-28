@@ -53,8 +53,6 @@ public class SmokeTestCase extends BrowserTypes {
 		ExtentReporter.logger=ExtentReporter.report.startTest("TC42404");
 		loginpage = new loginPage(driver);
 		loginpage.loginToeOasis();
-		ExtentReporter.logger.log(LogStatus.INFO, "User logged into application sucessfully.");
-		ExtentReporter.logger.log(LogStatus.INFO, "Started Add org  test");
 		homepage = new homePage(driver);
 		homepage.navigateToCISPage();
 		cispage = new cisPage(driver);
@@ -70,8 +68,6 @@ public class SmokeTestCase extends BrowserTypes {
 		ExtentReporter.logger=ExtentReporter.report.startTest("TC42239");
 		loginpage = new loginPage(driver);
 		loginpage.loginToeOasis();
-		ExtentReporter.logger.log(LogStatus.INFO, "User logged into application sucessfully.");
-		ExtentReporter.logger.log(LogStatus.INFO, "Started Add rate  test");
 		homepage = new homePage(driver);
 		homepage.navigateToPolicyPage();
 		rateapolicypage = new rateApolicyPage(driver);
@@ -81,24 +77,21 @@ public class SmokeTestCase extends BrowserTypes {
 	}
 	
 	//@Test(description="HPL - Binder")
-	public void TC42541() throws Exception
+	public void TC42242() throws Exception
 	{
 		ExtentReporter.logger=ExtentReporter.report.startTest("TC42541");
 		loginpage = new loginPage(driver);
 		loginpage.loginToeOasis();
-		ExtentReporter.logger.log(LogStatus.INFO, "User logged into application sucessfully.");
-		ExtentReporter.logger.log(LogStatus.INFO, "Started HPL - Binder  test");
 		homepage = new homePage(driver);
 		homepage.navigateToPolicyPage();
 		findpolicypage = new findPolicyPage(driver);
-		//String policyNo = findpolicypage.findQuotewithActiveState();
+		//String policyNo = findpolicypage.findQuotewithActiveState("Policy", "Active");
 		rateapolicypage = new rateApolicyPage(driver);
-		String searchPolicyNum = "09100275";
+		String searchPolicyNum = "Q09101597-NB17-01";
 		rateapolicypage.searchPolicy(searchPolicyNum);
 		rateapolicypage.AcceptFromActionDropDown();
 		rateapolicypage.isAlertPresent();
-		ExtentReporter.logger.log(LogStatus.INFO, "Make sure Phase is set to Binder.");
-		//rateapolicypage.identifyPhase();
+		rateapolicypage.identifyPhase();
 		rateapolicypage.billingSetup();
 		rateapolicypage.coverageDetailsSelect();
 		String policyNumber = rateapolicypage.policyNo();
@@ -116,8 +109,6 @@ public class SmokeTestCase extends BrowserTypes {
 		ExtentReporter.logger=ExtentReporter.report.startTest("TC42541");
 		loginpage = new loginPage(driver);
 		loginpage.loginToeOasis();
-		ExtentReporter.logger.log(LogStatus.INFO, "User logged into application sucessfully.");
-		ExtentReporter.logger.log(LogStatus.INFO, "Started HPL - Binder  test");
 		homepage = new homePage(driver);
 		homepage.navigateToPolicyPage();
 		policybinderpage = new Policy_Binder_Page(driver);
@@ -131,14 +122,12 @@ public class SmokeTestCase extends BrowserTypes {
 		policybinderpage.saveOption(policyNumber);
 	}
 	
-	//@Test(description="Hospital Quote")
+	@Test(description="Hospital Quote")
 	public void TC42238() throws Exception
 	{
-		ExtentReporter.logger=ExtentReporter.report.startTest("TC42541");
+		ExtentReporter.logger=ExtentReporter.report.startTest("TC42238");
 		loginpage = new loginPage(driver);
 		loginpage.loginToeOasis();
-		ExtentReporter.logger.log(LogStatus.INFO, "User logged into application sucessfully.");
-		ExtentReporter.logger.log(LogStatus.INFO, "Started HPL - Binder  test");
 		homepage = new homePage(driver);
 		homepage.navigateToPolicyPage();
 		policyquotepage = new Policy_Quote_Page(driver);
@@ -155,14 +144,12 @@ public class SmokeTestCase extends BrowserTypes {
 		policyquotepage.saveOption(policyNumber);
 	}
 	
-	@Test(description = "Hospital Copy to Quote")
+	//@Test(description = "Hospital Copy to Quote")
 	public void TC42245() throws Exception
 	{
 		ExtentReporter.logger=ExtentReporter.report.startTest("TC42541");
 		loginpage = new loginPage(driver);
 		loginpage.loginToeOasis();
-		ExtentReporter.logger.log(LogStatus.INFO, "User logged into application sucessfully.");
-		ExtentReporter.logger.log(LogStatus.INFO, "Started HPL - Binder  test");
 		homepage = new homePage(driver);
 		homepage.navigateToPolicyPage();
 		policybinderpage = new Policy_Binder_Page(driver);

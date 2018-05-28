@@ -54,7 +54,7 @@ public class findPolicyPage extends commonAction{
 		PageFactory.initElements(driver, this);
 	}
 	
-	public String findQuotewithActiveState() throws InterruptedException
+	public String findQuotewithActiveState(String phase, String status) throws InterruptedException
 	{
 		
 		Thread.sleep(5000);//Need to replace with explicit wait
@@ -74,7 +74,7 @@ public class findPolicyPage extends commonAction{
 				{
 					click(policyPhaseCheckBox.get(i), policyPhaseCheckBox.get(i).getAttribute("value")+" Check Box");
 				}
-				if(policyPhaseCheckBox.get(i).getAttribute("value").equals("SUBMISSION"))
+				if(policyPhaseCheckBox.get(i).getAttribute("value").equals(phase))
 				{
 					click(policyPhaseCheckBox.get(i), "Policy phase Check Box");
 				}
@@ -82,7 +82,7 @@ public class findPolicyPage extends commonAction{
 			click(policyStatusSearch, "Policy Status Search");
 			for(int i=0;i<policyStatusValues.size();i++)
 			{
-				if(policyStatusValues.get(i).getAttribute("value").equals("ACTIVE"))
+				if(policyStatusValues.get(i).getAttribute("value").equals(status))
 				{
 					click(policyStatusValues.get(i), policyStatusValues.get(i).getAttribute("value")+" Check Box");
 				}

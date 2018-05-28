@@ -37,7 +37,7 @@ public class loginPage extends commonAction{
 	{
 		ExcelUtil exlutil = new ExcelUtil();
 		driver.get("http://oasiscloud2017t:8081/oas17bts/CS/login.jsp");
-		ExtentReporter.logger.log(LogStatus.INFO, "Accessing the URL - http://oasiscloud2017t:8081/oas17bts/CS/login.jsp");
+		ExtentReporter.logger.log(LogStatus.INFO, "Log into Environment http://oasiscloud2017t:8081/oas17bts/CS/login.jsp");
 		driver.manage().window().maximize();
 		
 		//Entering User Name.
@@ -73,6 +73,6 @@ public class loginPage extends commonAction{
 			{
 				ExtentReporter.logger.log(LogStatus.FAIL, "Issue with login button.");
 			}
-		
+		ExtentReporter.logger.log(LogStatus.INFO, "Enter Username: Enter Password:");
 	}
 }

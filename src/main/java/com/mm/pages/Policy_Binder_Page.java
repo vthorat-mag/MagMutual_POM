@@ -96,15 +96,19 @@ public class Policy_Binder_Page extends commonAction {
 	public void endorsementFromActionDropDown()
 	{
 		selectDropdownByValue(policyAction, valueOfPolicyActionEndorse, "Policy Action");
+		ExtentReporter.logger.log(LogStatus.PASS, "Click Policy Actions > Select value from the dropdown screen.");
+		
 	}
 	
 	public void copyToQuoteFromActionDropDown(String policyNum) throws InterruptedException
 	{
 		selectDropdownByValue(policyAction, valueOfPolicyActionCopyToQuote, "Policy Action");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy to Quote");
 		Thread.sleep(10000);
 		String getUpdatedPolicyNo = policyNo();
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+getUpdatedPolicyNo+"')]")));
 		click(Exit_Ok, "OK button");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click [OK]");
 		Thread.sleep(2000);
    	 	switchToParentWindowfromframe(driver);
 	}
@@ -116,6 +120,7 @@ public class Policy_Binder_Page extends commonAction {
 		waitForElementToLoad(driver, 25, selectReason);
 		selectDropdownByValue(selectReason, valueOfSelectReason, "Select Reason");
 		clickButton(driver, okBtnEndorsmentPopup, "Ok");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click the dropdown by Reason:  Select Issue Policy Forms-->Click [Ok]");
 		Thread.sleep(4000);
 	}
 	
@@ -124,14 +129,16 @@ public class Policy_Binder_Page extends commonAction {
 		waitFor(driver, 5);
 		String getTextPolicyPhase = policyPhasePolicy.getAttribute("innerText");
 		verifyTextPresent(getTextPolicyPhase,"Policy","Policy Phase");
+		ExtentReporter.logger.log(LogStatus.INFO, "Verify phase is "+getTextPolicyPhase);
 	}
 	
 	public void rateFunctionality(String policyNo) throws InterruptedException
 	{
 		Thread.sleep(3000);
 		clickButton(driver, rateBtn, "Rate Tab");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click [Rate]");
 		Thread.sleep(4000);
-		try{
+		/*try{
 			switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
 			selectDropdownByValue(productNotifyDropDown, ProductNotifyValue, "product notify");
 			Thread.sleep(1000);
@@ -140,10 +147,10 @@ public class Policy_Binder_Page extends commonAction {
 			ExtentReporter.logger.log(LogStatus.PASS, " Yes selection from Product Notify dorp down.");
 		}catch (Exception e)
 		{
-			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window is NOT dispalyed to user.");
-		}
+			ExtentReporter.logger.log(LogStatus.FAIL, "Product Notify Window is NOT dispalyed to user.");
+		}*/
 		Thread.sleep(3000);
-		switchToParentWindowfromframe(driver);
+		//switchToParentWindowfromframe(driver);
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
 		//switchToFrameUsingId(driver,"popupframe1");
 		Thread.sleep(2000);
@@ -152,6 +159,7 @@ public class Policy_Binder_Page extends commonAction {
 		switchToParentWindowfromframe(driver);
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
 		clickButton(driver, okPolicySaveAsWIPPopup, "Ok");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click [Close] click [Ok]");
 		switchToParentWindowfromframe(driver);
 	}
 	
@@ -159,12 +167,14 @@ public class Policy_Binder_Page extends commonAction {
 	{
 		Thread.sleep(2000);
 		clickButton(driver, saveOptionBtn, "Save Option");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options");
 		Thread.sleep(4000);
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
 		selectDropdownByValue(saveAsDropDown, saveAsPolicyValue, "Save Option");
 		clickButton(driver, saveOptionOkBtn, "Save");
+		ExtentReporter.logger.log(LogStatus.INFO, "Select Official Click [OK]");
 		Thread.sleep(6000);
-		try{
+		/*try{
 			switchToParentWindowfromframe(driver);
 			switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
 			selectDropdownByValue(productNotifyDropDown, ProductNotifyValue, "product notify");
@@ -174,12 +184,13 @@ public class Policy_Binder_Page extends commonAction {
 			ExtentReporter.logger.log(LogStatus.PASS, " Yes selection from Product Notify dorp down.");
 		}catch (Exception e)
 		{
-			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window is NOT dispalyed to user.");
-		}
+			ExtentReporter.logger.log(LogStatus.FAIL, "Product Notify Window is NOT dispalyed to user.");
+		}*/
 		switchToParentWindowfromframe(driver);
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
 		Thread.sleep(4000);
 		clickButton(driver, Exit_Ok, "Exit Ok");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click [OK]");
 	}
 
 }
