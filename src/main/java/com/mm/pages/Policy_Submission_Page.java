@@ -5,7 +5,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import com.mm.utils.ExtentReporter;
 import com.mm.utils.commonAction;
+import com.relevantcodes.extentreports.LogStatus;
 
 public class Policy_Submission_Page extends commonAction {
 	
@@ -31,18 +33,21 @@ public class Policy_Submission_Page extends commonAction {
 	public void copyFromActionDropDown(String policyNum) throws InterruptedException
 	{
 		selectDropdownByValue(policyAction, valueOfPolicyActionCopy, "Policy Action");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy");
 		Thread.sleep(3000);
 	}
 	
 	public void changePhaseToIndication() throws InterruptedException
 	{
 		selectDropdownByValue(policyPhase, indicationPhaseValue, "Phase");
+		ExtentReporter.logger.log(LogStatus.INFO, "Change Policy Phase to Indication");
 		Thread.sleep(3000);
 	}
 	
 	public void saveWip() throws InterruptedException
 	{
 		clickButton(driver, saveWIP, "Save WIP");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Save WIP");
 		Thread.sleep(2000);
 	}
 

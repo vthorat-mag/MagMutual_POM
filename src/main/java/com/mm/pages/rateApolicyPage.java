@@ -299,7 +299,7 @@ public class rateApolicyPage extends commonAction {
 	public void AcceptFromActionDropDown()
 	{
 		selectDropdownByValue(policyAction, valueOfPolicyActionAccept, "Policy Action");
-		ExtentReporter.logger.log(LogStatus.PASS, "Select Accept from the dropdown screen.");
+		ExtentReporter.logger.log(LogStatus.INFO, "Select Accept from the dropdown screen.");
 		
 	}
 	public void isAlertPresent() throws InterruptedException 
@@ -336,11 +336,14 @@ public class rateApolicyPage extends commonAction {
 	{
 		Thread.sleep(3000);
 		selectDropdownByValue(policyAction, billingSetup, "Policy Action");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions-->Select Billing Setup");
 		waitFor(driver, 5000);
 		switchToFrameUsingId(driver, "popupframe1");
 		selectDropdownByValue(paymentPlan, paymentPlanValue, "Payment Plan");
+		ExtentReporter.logger.log(LogStatus.INFO, "Payment plan dropdown: Select A-Monthly");
 		Thread.sleep(5000);
 		clickButton(driver, billingSetupSaveBtn, "Save Button");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click [Save]");
 		Thread.sleep(35000);
 		switchToParentWindowfromframe(driver);
 	}
@@ -361,36 +364,28 @@ public class rateApolicyPage extends commonAction {
 		{
 			if(coverageList.get(i).getAttribute("innerHTML").equals(CoverageName))
 			{
-				try{
-					clickButton(driver, coverageList.get(i),coverageList.get(i).getAttribute("innerHTML"));
-					ExtentReporter.logger.log(LogStatus.PASS, "Select"+ CoverageName +" Coverage.");
-					Thread.sleep(4000);
-					break;
-				}catch(Exception e){
-					ExtentReporter.logger.log(LogStatus.FAIL, "Can not select"+ CoverageName + "Coverage.");
-				}
+				clickButton(driver, coverageList.get(i),coverageList.get(i).getAttribute("innerHTML"));
+				ExtentReporter.logger.log(LogStatus.INFO, "Select"+ CoverageName +" Coverage.");
+				Thread.sleep(4000);
+				break;
 			}
 		}
 		clickButton(driver, optionalFormBtn, "Optional Form");
-		ExtentReporter.logger.log(LogStatus.PASS, "Click [Optional Forms]");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click [Optional Forms]");
 		Thread.sleep(4000);
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+PolicyNo+"')]")));
 		if (manuscriptList.isDisplayed())
 		{
-			try {
-				clickButton(driver, manuscriptPageDeleteBtn, "Manu script Delete");
-				driver.switchTo().alert().accept();
-				ExtentReporter.logger.log(LogStatus.PASS, "Delete the Quote form.");
-				Thread.sleep(2000);
-				clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
-				ExtentReporter.logger.log(LogStatus.PASS, "Click [Add].");
-			}catch(Exception e)
-			{
-				ExtentReporter.logger.log(LogStatus.FAIL, "Can not delete the Quote form.");
-			}
+			clickButton(driver, manuscriptPageDeleteBtn, "Manu script Delete");
+			driver.switchTo().alert().accept();
+			ExtentReporter.logger.log(LogStatus.INFO, "Delete current Indication form, Are you sure you want to delete this? Click Ok");
+			Thread.sleep(2000);
+			clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
+			ExtentReporter.logger.log(LogStatus.INFO, "Click [Add].");
+			
 		}else{
 			clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
-			ExtentReporter.logger.log(LogStatus.PASS, "Click [Add].");
+			ExtentReporter.logger.log(LogStatus.INFO, "Click [Add].");
 		}
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+PolicyNo+"')]")));
 		Thread.sleep(3000);
@@ -398,43 +393,22 @@ public class rateApolicyPage extends commonAction {
 		{
 			if(manuscriptAddListformName.get(i).getAttribute("innerHTML").equals(binderForm))
 			{
-				try{
-					clickButton(driver, manuscriptAddListformNameChkBox.get(i), "check Box for "+binderForm);
-					ExtentReporter.logger.log(LogStatus.PASS, "Select "+ binderForm +" and Click done.");
-					break;
-				}
-				catch(Exception e){
-					ExtentReporter.logger.log(LogStatus.FAIL, "Can not select "+ binderForm +".");
-				}
+				clickButton(driver, manuscriptAddListformNameChkBox.get(i), "check Box for "+binderForm);
+				ExtentReporter.logger.log(LogStatus.INFO, "Select "+ binderForm +", Click done.");
+				break;
 			}
 		}
 		clickButton(driver, manuscriptAddListDoneBtn, "Done");
 		Thread.sleep(2000);
 		switchToParentWindowfromframe(driver);
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+PolicyNo+"')]")));
-		try{
-			enterTextIn(addText, binderForm+" form added.", "Aditional Text");
-			
-			/*JavascriptExecutor executor = (JavascriptExecutor)driver;
-			executor.executeScript("arguments[0].value='admin'",addText);*/
-			
-			ExtentReporter.logger.log(LogStatus.PASS, "Enter additional text: "+ binderForm+" form added.");
-		}catch(Exception e)
-		{
-			ExtentReporter.logger.log(LogStatus.FAIL, "Can not enter additional text");
-		}
+		enterTextIn(addText, binderForm+" form added.", "Aditional Text");
 		switchToParentWindowfromframe(driver);
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+PolicyNo+"')]")));
-		
-		try{
-			clickButton(driver, manuscriptPageSaveBtn, "Manu Script page Save");
-			Thread.sleep(2000);
-			clickButton(driver, manuscriptPageCloseBtn, "Manu Script page Close");
-			ExtentReporter.logger.log(LogStatus.PASS, "Click [Save] and Click [Close]");
-		}catch(Exception e)
-		{
-			ExtentReporter.logger.log(LogStatus.FAIL, "Can not click [Save] and Click [Close]");
-		}
+		clickButton(driver, manuscriptPageSaveBtn, "Manu Script page Save");
+		Thread.sleep(2000);
+		clickButton(driver, manuscriptPageCloseBtn, "Manu Script page Close");
+		ExtentReporter.logger.log(LogStatus.INFO, "Enter additional text: "+ binderForm+" form added  Click [Save] and Click [Close].");
 		switchToParentWindowfromframe(driver);
 	}
 	
@@ -456,7 +430,7 @@ public class rateApolicyPage extends commonAction {
 			ExtentReporter.logger.log(LogStatus.FAIL, "Product Notify Window is NOT dispalyed to user.");
 		}*/
 		Thread.sleep(3000);
-		switchToParentWindowfromframe(driver);
+		//switchToParentWindowfromframe(driver);
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
 		Thread.sleep(2000);
 		clickButton(driver, closeBtnOnViewPremiumPopup, "Close");
@@ -502,7 +476,7 @@ public class rateApolicyPage extends commonAction {
 			ExtentReporter.logger.log(LogStatus.PASS, " Yes selection from Product Notify dorp down.");
 		}catch (Exception e)
 		{
-			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window is NOT dispalyed to user.");
+			ExtentReporter.logger.log(LogStatus.FAIL, "Product Notify Window is NOT dispalyed to user.");
 		}
 		Thread.sleep(5000);
 		switchToParentWindowfromframe(driver);

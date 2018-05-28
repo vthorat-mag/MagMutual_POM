@@ -3,7 +3,6 @@ import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 import java.awt.AWTException;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -34,8 +33,6 @@ import com.mm.pages.quick_Add_Organisation;
 import com.mm.pages.rateApolicyPage;
 import com.mm.utils.ExtentReporter;
 import com.mm.utils.commonUtilities;
-import com.relevantcodes.extentreports.ExtentReports;
-import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 
 
@@ -57,10 +54,9 @@ public class SmokeTestCase extends BrowserTypes {
 	endorsePolicyPage endorsepolicypage;
 	
 	@BeforeMethod
-	public void Setup(Method method) throws Exception
+	public void loginToeOasis() throws Exception
 	{
-		ExtentReporter.logger=ExtentReporter.report.startTest(method.getName());
-	//	testListeners testlist = new testListeners();
+		testListeners testlist = new testListeners();
 	}
 	
 	//@Test(description="Verify Add Organization")
@@ -69,8 +65,6 @@ public class SmokeTestCase extends BrowserTypes {
 		ExtentReporter.logger=ExtentReporter.report.startTest("TC42404");
 		loginpage = new loginPage(driver);
 		loginpage.loginToeOasis("UserName", "Password");
-		ExtentReporter.logger.log(LogStatus.INFO, "User logged into application sucessfully.");
-		ExtentReporter.logger.log(LogStatus.INFO, "Started Add org  test");
 		homepage = new homePage(driver);
 		homepage.navigateToCISPage();
 		cispage = new cisPage(driver);
@@ -83,43 +77,33 @@ public class SmokeTestCase extends BrowserTypes {
 	//@Test(description="Hospital Rate")
 	public void TC42239() throws Exception
 	{
-		String date = null;
+		ExtentReporter.logger=ExtentReporter.report.startTest("TC42239");
 		loginpage = new loginPage(driver);
 		loginpage.loginToeOasis("UserName", "Password");
-		ExtentReporter.logger.log(LogStatus.INFO, "User logged into application sucessfully.");
 		homepage = new homePage(driver);
-		homepage.verifyLogoIsAvailable();
-		ExtentReporter.logger.log(LogStatus.INFO, "Started Add rate  test");
-		
 		homepage.navigateToPolicyPage();
 		rateapolicypage = new rateApolicyPage(driver);
 		//rateapolicypage.policySearch();
 		rateapolicypage.saveRatedetails();
-		
-		String fileNamePath=rateapolicypage.startExcelExport();
-	
-		rateapolicypage.verifyFileExists(fileNamePath);
+		rateapolicypage.startExcelExport();
 	}
 	
 	//@Test(description="HPL - Binder")
-	public void TC42541() throws Exception
+	public void TC42242() throws Exception
 	{
 		ExtentReporter.logger=ExtentReporter.report.startTest("TC42541");
 		loginpage = new loginPage(driver);
 		loginpage.loginToeOasis("UserName", "Password");
-		ExtentReporter.logger.log(LogStatus.INFO, "User logged into application sucessfully.");
-		ExtentReporter.logger.log(LogStatus.INFO, "Started HPL - Binder  test");
 		homepage = new homePage(driver);
 		homepage.navigateToPolicyPage();
 		findpolicypage = new findPolicyPage(driver);
-		//String policyNo = findpolicypage.findQuotewithActiveState();
+		//String policyNo = findpolicypage.findQuotewithActiveState("Policy", "Active");
 		rateapolicypage = new rateApolicyPage(driver);
-		String searchPolicyNum = "09100275";
+		String searchPolicyNum = "Q09101597-NB17-01";
 		rateapolicypage.searchPolicy(searchPolicyNum);
 		rateapolicypage.AcceptFromActionDropDown();
 		rateapolicypage.isAlertPresent();
-		ExtentReporter.logger.log(LogStatus.INFO, "Make sure Phase is set to Binder.");
-		//rateapolicypage.identifyPhase();
+		rateapolicypage.identifyPhase();
 		rateapolicypage.billingSetup();
 		rateapolicypage.coverageDetailsSelect();
 		String policyNumber = rateapolicypage.policyNo();
@@ -131,52 +115,12 @@ public class SmokeTestCase extends BrowserTypes {
 		rateapolicypage.saveOption(policyNumber);
 	}
 	
-	//This is additional test, removed later from rally
-//	@Test(testName="VerifyExistingPolicy")
-	public void TC42536() throws Exception{
-		
-	loginpage = new loginPage(driver);
-	loginpage.loginToeOasis("UserName", "Password");
-	homepage = new homePage(driver);
-	homepage.navigateToPolicyPage();
-	rateapolicypage = new rateApolicyPage(driver);
-	String searchPolicyNum = "09100275";
-	rateapolicypage.searchPolicy(searchPolicyNum);
-	
-	}
-	
-	
-	//This is additional test, added later in rally
-	//@Test(description= "Quick_Add_Organisation")
-		public void Quick_Add() throws Exception{
-			
-			loginpage = new loginPage(driver);
-			loginpage.loginToeOasis("UserName", "Password");
-			homepage = new homePage(driver);
-			homepage.navigateToCISPage();
-			Thread.sleep(3000);
-			quick_add_orgpage=new quick_Add_Organisation(driver);
-			quick_add_orgpage.navigate_To_Add_Org_Window();
-			quick_add_orgpage.add_Org_Information();
-			quick_add_orgpage.add_Org_Address();
-			Thread.sleep(3000);
-			quick_add_orgpage.selectZipCode();
-			quick_add_orgpage.add_Phone_Number();
-			
-		}
-	
-	
-	
-	
-	
 	//@Test(description="Hospital Issue Policy Forms- Complete")
 	public void TC42665() throws Exception
 	{
 		ExtentReporter.logger=ExtentReporter.report.startTest("TC42541");
 		loginpage = new loginPage(driver);
 		loginpage.loginToeOasis("UserName", "Password");
-		ExtentReporter.logger.log(LogStatus.INFO, "User logged into application sucessfully.");
-		ExtentReporter.logger.log(LogStatus.INFO, "Started HPL - Binder  test");
 		homepage = new homePage(driver);
 		homepage.navigateToPolicyPage();
 		policybinderpage = new Policy_Binder_Page(driver);
@@ -190,14 +134,12 @@ public class SmokeTestCase extends BrowserTypes {
 		policybinderpage.saveOption(policyNumber);
 	}
 	
-	//@Test(description="Hospital Quote")
+	@Test(description="Hospital Quote")
 	public void TC42238() throws Exception
 	{
-		ExtentReporter.logger=ExtentReporter.report.startTest("TC42541");
+		ExtentReporter.logger=ExtentReporter.report.startTest("TC42238");
 		loginpage = new loginPage(driver);
 		loginpage.loginToeOasis("UserName", "Password");
-		ExtentReporter.logger.log(LogStatus.INFO, "User logged into application sucessfully.");
-		ExtentReporter.logger.log(LogStatus.INFO, "Started HPL - Binder  test");
 		homepage = new homePage(driver);
 		homepage.navigateToPolicyPage();
 		policyquotepage = new Policy_Quote_Page(driver);
@@ -213,15 +155,13 @@ public class SmokeTestCase extends BrowserTypes {
 		policyquotepage.rateFunctionality(policyNumber);
 		policyquotepage.saveOption(policyNumber);
 	}
-
+	
 	//@Test(description = "Hospital Copy to Quote")
 	public void TC42245() throws Exception
 	{
 		ExtentReporter.logger=ExtentReporter.report.startTest("TC42541");
 		loginpage = new loginPage(driver);
 		loginpage.loginToeOasis("UserName", "Password");
-		ExtentReporter.logger.log(LogStatus.INFO, "User logged into application sucessfully.");
-		ExtentReporter.logger.log(LogStatus.INFO, "Started HPL - Binder  test");
 		homepage = new homePage(driver);
 		homepage.navigateToPolicyPage();
 		policybinderpage = new Policy_Binder_Page(driver);
@@ -300,9 +240,6 @@ public class SmokeTestCase extends BrowserTypes {
 			policydetailspage.closeLimitSharingtab();
 			
 		}
-	   
-	
-	
 	
 	
 //	@Test(testName="EndorsePolicy")
@@ -317,6 +254,43 @@ public class SmokeTestCase extends BrowserTypes {
 		endorsepolicypage.findPolicy();
 		
 	}
+	
+	//This is additional test, removed later from rally
+//	@Test(testName="VerifyExistingPolicy")
+	public void TC42536() throws Exception{
+		
+	loginpage = new loginPage(driver);
+	loginpage.loginToeOasis("UserName", "Password");
+	homepage = new homePage(driver);
+	homepage.navigateToPolicyPage();
+	rateapolicypage = new rateApolicyPage(driver);
+	String searchPolicyNum = "09100275";
+	rateapolicypage.searchPolicy(searchPolicyNum);
+	
+	}
+	
+	
+	//This is additional test, added later in rally
+	//@Test(description= "Quick_Add_Organisation")
+		public void Quick_Add() throws Exception{
+			
+			loginpage = new loginPage(driver);
+			loginpage.loginToeOasis("UserName", "Password");
+			homepage = new homePage(driver);
+			homepage.navigateToCISPage();
+			Thread.sleep(3000);
+			quick_add_orgpage=new quick_Add_Organisation(driver);
+			quick_add_orgpage.navigate_To_Add_Org_Window();
+			quick_add_orgpage.add_Org_Information();
+			quick_add_orgpage.add_Org_Address();
+			Thread.sleep(3000);
+			quick_add_orgpage.selectZipCode();
+			quick_add_orgpage.add_Phone_Number();
+			
+		}
+	
+	
+	
 	
 	@AfterMethod
 	public void logoffFromAppclication(ITestResult result) throws IOException, InterruptedException
@@ -339,7 +313,6 @@ public class SmokeTestCase extends BrowserTypes {
 		//driver.close();
 	}
 	
-	
 	@AfterClass
 	public void closeBrowser()
 	{	
@@ -347,3 +320,4 @@ public class SmokeTestCase extends BrowserTypes {
 		//driver.quit();
 	}
 }
+
