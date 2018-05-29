@@ -24,6 +24,11 @@ public class commonAction implements CommonActionInterface {
 	
 	Properties pro=new Properties();
 	
+	//Integer.valueOf(properties.prop.getProperty("High"));
+	
+	int Low=10;
+	int Medium=25;
+	int High=50;
 
 	public void switchToParentWindowfromotherwindow(WebDriver driver, String parentwindow) {
 
@@ -173,9 +178,15 @@ public class commonAction implements CommonActionInterface {
 		}
 	}
 
+	
 	public String switchToWindow(WebDriver driver) {
 
 		ExtentReporter.logger.log(LogStatus.INFO, "Switching to the pop up window");
+	/*	
+		WebDriverWait wait=new WebDriverWait(driver, 10);
+		wait.until(ExpectedConditions.numberOfwindowsToBe(num));
+		*/
+		
 		Set<String> handles = driver.getWindowHandles();      //Return a set of window handle
 		 
 	    String parentWindow = driver.getWindowHandle();
@@ -266,6 +277,7 @@ public class commonAction implements CommonActionInterface {
 		wait.until(ExpectedConditions.visibilityOf(element));
 		
 	}
+	
 
 	public void waitFor(long ms) {
 		// TODO Auto-generated method stub
@@ -279,4 +291,6 @@ public class commonAction implements CommonActionInterface {
 		click(searchBtn, "Search button");
 		ExtentReporter.logger.log(LogStatus.INFO, "Enter Policy # into Policy entry box, Click Search.");
 	}
+
+	
 }
