@@ -60,7 +60,7 @@ public class SmokeTestCase extends BrowserTypes {
 	
 	}
 	
-	//@Test(description="Verify Add Organization")
+	@Test(description="Verify Add Organization")
 	public void TC42404() throws Exception
 	{
 		loginpage = new loginPage(driver);
