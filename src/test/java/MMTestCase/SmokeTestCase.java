@@ -74,7 +74,7 @@ public class SmokeTestCase extends BrowserTypes {
 		cispage.saveNewOrgDetails();
 	}
 	
-	//@Test(description="Hospital Rate")
+	@Test(description="Hospital Rate")
 	public void TC42239() throws Exception
 	{
 		loginpage = new loginPage(driver);
