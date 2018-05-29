@@ -170,8 +170,6 @@ public class SmokeTestCase extends BrowserTypes {
 		policysubmissionpage.saveWip();
 	}
 	
-	
-	
 	@Test(testName="HospitalIndication")
 	   public void TC_Indication(Method method) throws Exception{
 			
@@ -251,24 +249,20 @@ public class SmokeTestCase extends BrowserTypes {
 	}
 	
 	//This is additional test, removed later from rally
-//	@Test(testName="VerifyExistingPolicy")
+	//@Test(testName="VerifyExistingPolicy")
 	public void TC42536() throws Exception{
-		
-	loginpage = new loginPage(driver);
-	loginpage.loginToeOasis("UserName", "Password");
-	homepage = new homePage(driver);
-	homepage.navigateToPolicyPage();
-	rateapolicypage = new rateApolicyPage(driver);
-	String searchPolicyNum = "09100275";
-	rateapolicypage.searchPolicy(searchPolicyNum);
-	
+		loginpage = new loginPage(driver);
+		loginpage.loginToeOasis("UserName", "Password");
+		homepage = new homePage(driver);
+		homepage.navigateToPolicyPage();
+		rateapolicypage = new rateApolicyPage(driver);
+		String searchPolicyNum = "09100275";
+		rateapolicypage.searchPolicy(searchPolicyNum);
 	}
-	
-	
+
 	//This is additional test, added later in rally
 	//@Test(description= "Quick_Add_Organisation")
 		public void Quick_Add() throws Exception{
-			
 			loginpage = new loginPage(driver);
 			loginpage.loginToeOasis("UserName", "Password");
 			homepage = new homePage(driver);
@@ -281,11 +275,7 @@ public class SmokeTestCase extends BrowserTypes {
 			Thread.sleep(3000);
 			quick_add_orgpage.selectZipCode();
 			quick_add_orgpage.add_Phone_Number();
-			
 		}
-	
-	
-	
 	
 	@AfterMethod
 	public void logoffFromAppclication(ITestResult result) throws IOException, InterruptedException
