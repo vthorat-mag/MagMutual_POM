@@ -10,7 +10,9 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import com.mm.utils.ExtentReporter;
 import com.mm.utils.commonAction;
+import com.relevantcodes.extentreports.LogStatus;
 
 public class quick_Add_Organisation extends commonAction{
 	
@@ -78,9 +80,11 @@ public class quick_Add_Organisation extends commonAction{
 		
 		driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
 
+		clickButton(driver, Add_Org, "Add Organisation");
 		JavascriptExecutor js = (JavascriptExecutor)driver;
 		js.executeScript("arguments[0].click();", Add_Org);
-	
+		ExtentReporter.logger.log(LogStatus.INFO, "Add Organization Quick Entry window displays");
+		
 	}
 	
 	public void add_Org_Information() throws InterruptedException{
@@ -95,6 +99,9 @@ public class quick_Add_Organisation extends commonAction{
 		selectDropdownByValue(driver,classification, "HOSPITAL", "Classfication");
 		
 		enterTextIn(driver,Effe_To_Date, "12052050", "Effec_To_Date");
+		
+		
+		ExtentReporter.logger.log(LogStatus.INFO, "Organization information is added");
 		
 	}
 	
@@ -122,6 +129,7 @@ public class quick_Add_Organisation extends commonAction{
 
 		    	   click(driver,OK,"OK button");
 
+		    	   ExtentReporter.logger.log(LogStatus.INFO, "Address is entered"); 
 		    	   Thread.sleep(2000);
 	      	       switchToParentWindowfromotherwindow(driver, parentwindow); 
 	      	      
@@ -134,11 +142,13 @@ public class quick_Add_Organisation extends commonAction{
 		enterTextIn(driver,Area_Code, "789", "Area Code");
 				
 		enterTextIn(driver,Phn_Num, "1234567","Phn_num");
+		
+		ExtentReporter.logger.log(LogStatus.INFO, "Phone number is added"); 
 			 	 	
 		click(driver,Save, "Save button");
 		
+		ExtentReporter.logger.log(LogStatus.INFO, "Organization is added");
+		
 	}
-
-	
 	
 }
