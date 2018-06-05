@@ -253,7 +253,7 @@ public class Policy_Indication_Page extends commonAction {
 	public List<WebElement> open_Underwriter() throws InterruptedException {
 
 		waitForElementToLoad(driver, 10, Underwriter);
-		click(Underwriter, "Underwriter button");
+		click(driver,Underwriter, "Underwriter button");
 		Thread.sleep(4000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Underwriter window is displayed");
 
@@ -268,7 +268,7 @@ public class Policy_Indication_Page extends commonAction {
 
 		//Open Add underwriter tab 
 		waitForElementToLoad(driver, 10, Add_Underwriter);
-		click(Add_Underwriter, "Add Underwriter");
+		click(driver,Add_Underwriter, "Add Underwriter");
 		Thread.sleep(4000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Add Underwriter window displayed");
 		List<WebElement> secondName = driver.findElements(By.id("popupframe1"));
@@ -276,33 +276,33 @@ public class Policy_Indication_Page extends commonAction {
 		Thread.sleep(4000);
 		
 		//Select underwriter name from DDL
-		selectDropdownByVisibleText(Name, name, "Name");
+		selectDropdownByVisibleText(driver,Name, name, "Name");
 		ExtentReporter.logger.log(LogStatus.INFO, "Underwriter is added to list");
 		Thread.sleep(2000);
-		click(Add_Underwriter_Ok, "OK button");
+		click(driver,Add_Underwriter_Ok, "OK button");
 		driver.switchTo().defaultContent();
 		Thread.sleep(2000);
 		driver.switchTo().frame(firstName.get(0));
 		Thread.sleep(3000);
 		
 		//select underwriter info for the selected underwriter and save
-		selectDropdownByVisibleText(UnderwriterType, type, "Type");
+		selectDropdownByVisibleText(driver,UnderwriterType, type, "Type");
 		ExtentReporter.logger.log(LogStatus.INFO, "Underwriting Team Member List displays the updated type for Entity");
-		selectDropdownByVisibleText(Underwriter_name, underWriter_Name, "Underwriter Name");
+		selectDropdownByVisibleText(driver,Underwriter_name, underWriter_Name, "Underwriter Name");
 		ExtentReporter.logger.log(LogStatus.INFO, "Name is displayed");
 		Thread.sleep(2000);
-		click(Save_Underwritter, "Save button");
+		click(driver,Save_Underwritter, "Save button");
 	}
 
 	// Close 'Maintain Underwriting team' pop up and Save WIP
 	public void close_Underwriter() throws InterruptedException {
 
 		Thread.sleep(3000);
-		click(Close_Underwritter, "Close button");
+		click(driver,Close_Underwritter, "Close button");
 		ExtentReporter.logger.log(LogStatus.INFO, "Underwriter Window is closed");
 		switchToParentWindowfromframe(driver);
 		Thread.sleep(3000);
-		click(Save_WIP, "Save WIP button");
+		click(driver,Save_WIP, "Save WIP button");
 		ExtentReporter.logger.log(LogStatus.INFO, "WIP is saved");
 	}
 
@@ -311,23 +311,23 @@ public class Policy_Indication_Page extends commonAction {
 
 		Thread.sleep(3000);
 		//Select Agent from Policy Action drop down list
-		selectDropdownByVisibleText(Policy_Action, "Agent", "Policy Action");
+		selectDropdownByVisibleText(driver,Policy_Action, "Agent", "Policy Action");
 		ExtentReporter.logger.log(LogStatus.INFO, "	Agent window is open");
 		Thread.sleep(3000);
 		switchToFrameUsingId(driver, "popupframe1");
 		Thread.sleep(2000);
 		
 		//Add Agent information and save agent
-		click(Add_Agent, "Add button");
+		click(driver,Add_Agent, "Add button");
 		ExtentReporter.logger.log(LogStatus.INFO, "Producer Agent Entry window opens");
 		Thread.sleep(3000);
-		selectDropdownByVisibleText(Producer,"AB Risk Specialist, Inc. (AG00045, Med. Mal. PL, 02/17/2015 - 01/01/3000)", "Producer");
+		selectDropdownByVisibleText(driver,Producer,"AB Risk Specialist, Inc. (AG00045, Med. Mal. PL, 02/17/2015 - 01/01/3000)", "Producer");
 		ExtentReporter.logger.log(LogStatus.INFO, "Agent is selected");
-		click(Save_Agent, "Save button");
+		click(driver,Save_Agent, "Save button");
 		Thread.sleep(2000);
 		
 		//Close agent and switch to parent window
-		click(Close_Agent, "Close button");
+		click(driver,Close_Agent, "Close button");
 		ExtentReporter.logger.log(LogStatus.INFO, "Agent is saved to policy and window is closed");
 		switchToParentWindowfromframe(driver);
 
@@ -337,14 +337,14 @@ public class Policy_Indication_Page extends commonAction {
 	public void addRiskInformation() throws InterruptedException {
 
 		Thread.sleep(3000);
-		click(Risk_tab, "Risk tab");
+		click(driver,Risk_tab, "Risk tab");
 		ExtentReporter.logger.log(LogStatus.INFO, "Risk tab is displayed");
 		Thread.sleep(3000);
-		click(Risk_Type, "Risk Type");
+		click(driver,Risk_Type, "Risk Type");
 		Thread.sleep(3000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Hospital Risk is highlighted");
-		selectDropdownByVisibleText(Risk_Country, "Appling", "Risk Country");
-		selectDropdownByVisibleText(Risk_Speciality, "Acute Care - 900010", "Risk speciality");
+		selectDropdownByVisibleText(driver,Risk_Country, "Appling", "Risk Country");
+		selectDropdownByVisibleText(driver,Risk_Speciality, "Acute Care - 900010", "Risk speciality");
 		ExtentReporter.logger.log(LogStatus.INFO, "Risk information is displayed and selected");
 	}
 
@@ -352,10 +352,10 @@ public class Policy_Indication_Page extends commonAction {
 	public void addCoverage() throws InterruptedException {
 		
 		Thread.sleep(2000);
-		click(Coverage_tab, "Coverage tab");
+		click(driver,Coverage_tab, "Coverage tab");
 		ExtentReporter.logger.log(LogStatus.INFO, "Coverage tab displays with the primary defaulting in the dropdown");
 		Thread.sleep(3000);
-		click(Add_Coverage, "Add button");
+		click(driver,Add_Coverage, "Add button");
 		ExtentReporter.logger.log(LogStatus.INFO, "Select Coverage window displays");
 		Thread.sleep(3000);
 		switchToFrameUsingId(driver, "popupframe1");
@@ -388,9 +388,9 @@ public class Policy_Indication_Page extends commonAction {
 		try {
 			// Add Retro date and premium amount for the selected coverage
 			if (Retro_Date.isDisplayed()) {
-				clearTextBox(Premium, "Premium Amount");
-				enterTextIn(Premium, Amount, elementName1);
-				enterTextIn(Retro_Date, Date, elementName2);
+				clearTextBox(driver, Premium, "Premium Amount");
+				enterTextIn(driver,Premium, Amount, elementName1);
+				enterTextIn(driver,Retro_Date, Date, elementName2);
 			}
 			} catch (Exception e) {
 			e.printStackTrace();
@@ -400,7 +400,7 @@ public class Policy_Indication_Page extends commonAction {
 	// Close Select Coverage pop up
 	public void closeAddCoveragetab() {
 
-		click(Select_coverage, "Select button for coverage");
+		click(driver,Select_coverage, "Select button for coverage");
 		ExtentReporter.logger.log(LogStatus.INFO,"Information has been entered and coverage has been added to primary risk");
 		switchToParentWindowfromframe(driver);
 	}
@@ -432,14 +432,14 @@ public class Policy_Indication_Page extends commonAction {
 
 		if (Retro_Date.isDisplayed()) {
 			
-			clearTextBox(Premium, "Premium Amount");
-			enterTextIn(Premium, Amount, elementName1);
-			enterTextIn(Retro_Date, Date, elementName2);
+			clearTextBox(driver,Premium, "Premium Amount");
+			enterTextIn(driver,Premium, Amount, elementName1);
+			enterTextIn(driver,Retro_Date, Date, elementName2);
 
 		} else if (Premium.isDisplayed()) {
 
-			clearTextBox(Premium, "Premium Amount");
-			enterTextIn(Premium, Amount, elementName1);
+			clearTextBox(driver,Premium, "Premium Amount");
+			enterTextIn(driver,Premium, Amount, elementName1);
 		}
 	}
 
@@ -448,7 +448,7 @@ public class Policy_Indication_Page extends commonAction {
 	 try{
 			if (Retro_Date.isDisplayed())
 			{
-				enterTextIn(Retro_Date, Date, elementName2);
+				enterTextIn(driver,Retro_Date, Date, elementName2);
 			}
 		} catch (Exception e)
 	 		{
@@ -478,14 +478,14 @@ public class Policy_Indication_Page extends commonAction {
 			}
 		}
 		Thread.sleep(2000);
-		enterTextIn(ExposureUnit, "50");
+		enterTextIn(driver,ExposureUnit, "50");
 		
 		//Close coverage class tab and move to coverage tab
-		click(Select_CoverageClass, "Select button for Coverage class");
+		click(driver,Select_CoverageClass, "Select button for Coverage class");
 		ExtentReporter.logger.log(LogStatus.INFO, "Coverage class is saved.");
 		switchToParentWindowfromframe(driver);
 		Thread.sleep(2000);
-		click(Coverage_tab, "Coverage tab");
+		click(driver,Coverage_tab, "Coverage tab");
 	}
 
 	// Select 'Coverage' tab and add Manuscript from optional forms and Save
@@ -534,7 +534,7 @@ public class Policy_Indication_Page extends commonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Form is saved to coverage and window closes");
 		switchToParentWindowfromframe(driver);
 		Thread.sleep(2000);
-		click(Save_WIP, "Save WIP");
+		click(driver,Save_WIP, "Save WIP");
 	}
 
 	// Open Limit Sharing pop up and switch to pop up window
@@ -544,7 +544,7 @@ public class Policy_Indication_Page extends commonAction {
 		clickButton(driver, Policy_tab, "Policy tab");
 		ExtentReporter.logger.log(LogStatus.INFO, "Policy Page is displayed");
 		Thread.sleep(1000);
-		click(Limit_Sharing, "Limit Sharing button");
+		click(driver,Limit_Sharing, "Limit Sharing button");
 		Thread.sleep(2000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Limit Sharing Window Displays");
 		switchToFrameUsingElement(driver,driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
@@ -554,13 +554,13 @@ public class Policy_Indication_Page extends commonAction {
 	public void addSharedGroup(String CoverageName, String Description, String PolicyNo) throws InterruptedException {
 		// Click on 'Add' button from pop up to add shared group
 		Thread.sleep(2000);
-		click(Add_Shared_Group, "Add button for Shared group");
+		click(driver,Add_Shared_Group, "Add button for Shared group");
 		ExtentReporter.logger.log(LogStatus.INFO, "Line is added to Shared Group");
 		Thread.sleep(1000);
-		selectDropdownByVisibleText(Desc_Shared_Group, Description, "Shared group description");
+		selectDropdownByVisibleText(driver,Desc_Shared_Group, Description, "Shared group description");
 
 		// Click on 'Add' button from pop up to add shared group details
-		click(Add_Shared_Group_Details, "Add button for Shared Group details");
+		click(driver,Add_Shared_Group_Details, "Add button for Shared Group details");
 		ExtentReporter.logger.log(LogStatus.INFO, "Select Shared Group Detail window displays");
 		Thread.sleep(3000);
 		List<WebElement> firstName = driver.findElements(By.id("popupframe1"));
@@ -576,7 +576,7 @@ public class Policy_Indication_Page extends commonAction {
 			}
 		}
 		//Select Done button and switch back to first window for its closure
-		click(Done_Shared_Details, "Done button for Select Shared Group details");
+		click(driver,Done_Shared_Details, "Done button for Select Shared Group details");
 		ExtentReporter.logger.log(LogStatus.INFO, "Selected Risks are added to Shared Group Details");
 		switchToParentWindowfromframe(driver);
 		Thread.sleep(1000);
@@ -587,8 +587,8 @@ public class Policy_Indication_Page extends commonAction {
 	public void closeLimitSharingtab() throws InterruptedException {
 
 		Thread.sleep(2000);
-		click(Save_Limit_Sharing, "Save button");
-		click(Close_Limit_Sharing, "Close button");
+		click(driver,Save_Limit_Sharing, "Save button");
+		click(driver,Close_Limit_Sharing, "Close button");
 		switchToParentWindowfromframe(driver);
 		ExtentReporter.logger.log(LogStatus.INFO, "Limit Sharing Window is Closed");
 	}

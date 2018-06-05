@@ -78,11 +78,11 @@ public class Policy_Submission_Page extends commonAction {
 	public void updatePolicyDetails() throws InterruptedException{
 		
 		waitForElementToLoad(driver, 30, Phase);
-		selectDropdownByValue(Phase, "INDICATION", "Phase");
-		selectDropdownByValue(Org_Type, "HOSPITAL", "Organisation Type");
-		enterTextIn(Hosp_Disc_Period_Rating, "2");
-		enterTextIn(Quote_Description, "Automated Test");
-		click(Save_WIP, "Save WIP button");
+		selectDropdownByValue(driver, Phase, "INDICATION", "Phase");
+		selectDropdownByValue(driver, Org_Type, "HOSPITAL", "Organisation Type");
+		enterTextIn(driver, Hosp_Disc_Period_Rating, "2");
+		enterTextIn(driver, Quote_Description, "Automated Test");
+		click(driver, Save_WIP, "Save WIP button");
 		ExtentReporter.logger.log(LogStatus.INFO, "Indication saved as WIP");
 }
 	
