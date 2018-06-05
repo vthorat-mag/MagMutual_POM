@@ -39,8 +39,9 @@ public class loginPage extends commonAction{
 		ExcelUtil exlutil = new ExcelUtil();
 		driver.get("http://oasiscloud2017t:8081/oas17bts/CS/login.jsp");
 		ExtentReporter.logger.log(LogStatus.INFO, "Accessing the URL - http://oasiscloud2017t:8081/oas17bts/CS/login.jsp");
+		driver.manage().deleteAllCookies();
 		driver.manage().window().maximize();
-		
+	
 		//Entering User Name.
 		try{
 			Assert.assertTrue(userName.isDisplayed(), "User Name Field is displayed.");

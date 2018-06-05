@@ -58,7 +58,8 @@ public class rateApolicyPage extends commonAction {
 	@FindBy(id="PM_NOTIFY_CLOSE")
 	WebElement Notify_Close;
 
-	@FindBy(id="PM_VIEW_PREM_CLOSE")
+//	@FindBy(id="PM_VIEW_PREM_CLOSE")
+	@FindBy(id="PM_VIEW_VAL_ERR_CLOSE ")
 	WebElement Prem_Close;
 
 	@FindBy(name="btnSaveAsCSV")
@@ -77,6 +78,7 @@ public class rateApolicyPage extends commonAction {
 	//@FindBy(id="polPhaseCodeROSPAN")
 	@FindBy(xpath="//table[@id='formFieldsTableForHeaderFieldsSecond']//span[@id='polPhaseCodeROSPAN']")
 	WebElement policyPhaseBinder;
+	
 	@FindBy(xpath="//select[@name='paymentPlanId']")
 	WebElement paymentPlan;
 	
@@ -184,6 +186,7 @@ public class rateApolicyPage extends commonAction {
 		policySearch(policy_no,Policy_Search, Search_btn);
 		String actual=getText(pageHeaderForPolicyFolder);
 		Assert.assertEquals(actual, "Policy Folder "+policy_no, "The policy "+policy_no+" is Not available.");
+		ExtentReporter.logger.log(LogStatus.INFO, "Policy # dispalys correctly under Policy Folder");
 		Thread.sleep(3000);
 	}
 	
@@ -210,7 +213,7 @@ public class rateApolicyPage extends commonAction {
 	    Thread.sleep(3000);
 	}
 	
-	//Donwload Excel report and save in defined folder
+	//Download Excel report and save in defined folder
 	public String startExcelExport() throws InterruptedException,AWTException
 	{
 	    	 click(Export, "Export link");
@@ -235,12 +238,7 @@ public class rateApolicyPage extends commonAction {
 	    	 rob.setAutoDelay(1000);
 	    	 rob.keyPress(KeyEvent.VK_ENTER);
 	    	 rob.keyRelease(KeyEvent.VK_ENTER);
-	    	/* 
-	    	 DateFormat dateFormatter = new SimpleDateFormat("MMddyy_hhmmss");
-	 		 Date today = Calendar.getInstance().getTime();        
-	 		 String date= dateFormatter.format(today);
-	 		*/
-	    	 
+	    	    	 
 	    	 String fileDate = comUtil.getSystemDate();
 	    	 
 	    	 String fileNamePath = "C:\\MM_Testcase_Output\\"+fileDate+".xlsx";
@@ -484,4 +482,11 @@ public class rateApolicyPage extends commonAction {
 		clickButton(driver, Exit_Ok, "Exit Ok");
 		ExtentReporter.logger.log(LogStatus.PASS, "Click [OK]");
 	}
+
 }
+
+
+
+
+
+

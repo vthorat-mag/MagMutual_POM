@@ -1,51 +1,37 @@
 package com.mm.pages;
 
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.testng.Assert;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.mm.utils.ExtentReporter;
 import com.mm.utils.commonAction;
+import com.mm.utils.properties;
 import com.relevantcodes.extentreports.LogStatus;
 
-public class homePage extends commonAction{
 
+public class indicationPage extends commonAction {
 	
-	WebDriver driver;
-	String findPOlicyPageTitleActalText ="Find Policy/Quote";
-	
-	String selectPOlicyTypePageTitleActalText ="Select Policy Type";
-	
-	@FindBy(id="CIS")
-	WebElement cisTab;
-	
-	@FindBy(xpath="//li[@id='Policy']//a[@class='fNiv']")
-	WebElement Policy_Tab_Home;
-	
-	
+	 WebDriver driver;
+
+	 properties pro=new properties();
+	 
 	@FindBy(xpath="//li[@id='PM_POLICY_MENU']//a[@class='fNiv isParent']")
 	WebElement Policy_tab;
-	
-	
-	
+
 	@FindBy(xpath="//li[@id='PM_NEW_POL_QUOTE_MENU']//a[@class='subMenuLinks isParent']/span")
 	WebElement Create_New;
 
 	@FindBy(xpath="//li[@id='PM_CREATE_QUOTE']//a/span")
 	WebElement Create_Quote;
-	
-	@FindBy(name="logoff")
-	WebElement logoff;
-	
-	@FindBy(id="headerLogoTips")
-	WebElement logo;
-	
-	@FindBy(id="topnav_Policy")
-	WebElement Policy_link;
 	
 	@FindBy(name="entitySearch_lastOrOrgName")
 	WebElement Last_Org_Name;
@@ -83,88 +69,75 @@ public class homePage extends commonAction{
 	WebElement Policy_type;
 	
 	@FindBy(id="PM_CREPOL_DONE")
-	WebElement createPolicyDoneBtn;
-	
-	@FindBy(id="pageTitleForpageHeader")
-	WebElement findPolicyPageTitle;
+	WebElement CrePol_Done;
+
 	
 	
+	// create policy pop up
+
+	/*	@FindBy(xpath="//li[@id='PM_CREATE_PLC']//a/span")
+		WebElement Create_Policy;
 		
-	public homePage(WebDriver driver)
-	{
+		@FindBy(name ="entitySearch_lastOrOrgName")
+		WebElement Last_org_name;
+
+		@FindBy(name="entity_dateOfBirth")
+		WebElement DOB;
+
+		@FindBy(name="licenseProfile_licenseNo")
+		WebElement LicenseNo;*/
+
+	
+	public indicationPage(WebDriver driver){
+		
 		this.driver=driver;
 		PageFactory.initElements(driver, this);
-	}
-	
-	public void verifyLogoIsAvailable(){
 		
-		visibilityOfElement(logo, "DELPHI TECHNOLOGY");
-	}
-	
-	//Navigate to CIS page
-	public void navigateToCISPage()
-	{
-		click(cisTab,"CIS tab");
-		ExtentReporter.logger.log(LogStatus.INFO, "CIS Entity Search page opens");
 	}
 	
 	
-	//Navigate to Policy page
-	public void navigateToPolicyPage()
-	{
-		waitForElementToLoad(driver, 10, Policy_link);
-		clickButton(driver,Policy_link, "Policy link from top right corner");
-		waitForElementToLoad(driver, 10, findPolicyPageTitle);
-		verifyTextPresent(findPolicyPageTitle.getAttribute("innerHTML").trim(),findPOlicyPageTitleActalText,"Page Title");
-		ExtentReporter.logger.log(LogStatus.INFO, "Search Policy Screen is opened");
-	}
-			
-	
-	//Move to Policy tab and select Create New option from menu
 	public void create_New() throws InterruptedException{		
 		
 		Actions action = new Actions(driver);
 		action.moveToElement(Policy_tab).click().build().perform();
+	
+		
 		Thread.sleep(2000);
 		
 		JavascriptExecutor js = (JavascriptExecutor)driver;
 		js.executeScript("arguments[0].click();", Create_New);
-	//	clickButton(driver, Create_New, "Create New from Policy Menu ");
-		
+	//	ExtentReporter.logger.log(LogStatus.INFO, "");
+			
 	}
-	
-	//Select Create Quote option from POlicy tab menu 
-	public String create_Quote() throws InterruptedException{
-	
+		
+	public void create_Quote() throws InterruptedException{
+		
+		//waitForElementToLoad(driver, 10, Create_Quote);
 		Thread.sleep(2000);
+	//	click(Create_Quote, "CReate Quote");
+	//	clickButton(driver, Create_Quote, "CReate Quote");
 		
 		JavascriptExecutor js = (JavascriptExecutor)driver;
 		js.executeScript("arguments[0].click();", Create_Quote);
-			
-		//clickButton(driver, Create_Quote, "Create Quote from Policy Menu");
-		ExtentReporter.logger.log(LogStatus.INFO, "Entity Select Search window opens");
-		String parentWindow = switchToWindow(driver);
-		return parentWindow;
-	
-}
+		
+		ExtentReporter.logger.log(LogStatus.INFO, "Entity Select Search window opens​​​​​​​");
 
-	/*Entity Select Search window appears and 
-	 then we enter Organization name and search
-	 Then select the Organization name from populated list.*/
-	
-	public void search_Quote(String parentWindow)throws InterruptedException{
+		String parentWindow = switchToWindow(driver);
+		
+		
+	//	waitForElementToLoad(driver, Integer.valueOf(properties.prop.getProperty("High")));
 		
 		waitForElementToLoad(driver, 10, Last_Org_Name);
 		
-		visibilityOfElement(Last_Org_Name, "Last Org Name on Entity Select Search window");
-		
 		enterTextIn(Last_Org_Name, "Test_Automation_V1", "Last Org Name");
 		
+		
 		click(Search_Quote,"Search button");
-			
+	//	ExtentReporter.logger.log(LogStatus.INFO, "");
+		
 		waitForElementToLoad(driver, 30, Select_Entity_Checkbox);
 		
-		ExtentReporter.logger.log(LogStatus.INFO, "List is populated of risk to select Organization with today's date");
+		ExtentReporter.logger.log(LogStatus.INFO, "List is populated of risk to select Automated Hospital with today's date");
 		
 		clickButton(driver, Select_Entity_Checkbox, "Select Entity Checkbox");
 		
@@ -175,33 +148,33 @@ public class homePage extends commonAction{
 			
 		ExtentReporter.logger.log(LogStatus.INFO, "Select Policy Type Window displays");	
 		switchToParentWindowfromotherwindow(driver, parentWindow);
-		
 	}
-	
-	//Selecting Policy type by adding Effective date, Issue company,state and click done.
+		
+
 	public void selectPolicyType() throws InterruptedException{
+		
 		String Eff_Date="01012017";
 		Thread.sleep(1000);
+		
 		switchToFrameUsingId(driver, "popupframe1");
 		Thread.sleep(1000);
-		//Verify Select Policy Type window appeared, enter data and click done
-		verifyTextPresent(findPolicyPageTitle.getAttribute("innerHTML").trim(),selectPOlicyTypePageTitleActalText,"Page Title");
 		enterTextIn(Effe_Date,Eff_Date, "Effective Date");
+		
 		selectDropdownByValue(Issue_Comp,"363536755","Issue Company");
 		selectDropdownByValue(Issue_State_Code,"GA","Issue State");
+		
 		click(Policy_Search, "Search button for policy type");
 		Thread.sleep(2000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Policy Type window will display below");
-		click(Policy_type, "Policy Type");
-		click(createPolicyDoneBtn, "Done button");
+		
+		//Institution -highlight
+		
+		click(CrePol_Done, "Done button");
+				
 		ExtentReporter.logger.log(LogStatus.INFO, "Policy Folder window is opened");
 		switchToParentWindowfromframe(driver);
 
 	}
 	
 	
-	public void logoutFromeOasis()	{
-		click(logoff,"Logoff button");
-		ExtentReporter.logger.log(LogStatus.INFO, "User is logged out from application");
-	}
 }
