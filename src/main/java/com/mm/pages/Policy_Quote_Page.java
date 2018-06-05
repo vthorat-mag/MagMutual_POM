@@ -261,7 +261,7 @@ public class Policy_Quote_Page extends commonAction {
 		Thread.sleep(4000);
 		switchToFrameUsingId(driver, "popupframe1");
     getPageTitle(driver, "Save As");
-		selectDropdownByVisibleText(saveAsDropDown, saveAsPolicyValue, "Selected "+saveAsPolicyValue);
+		selectDropdownByVisibleText(driver, saveAsDropDown, saveAsPolicyValue, "Selected "+saveAsPolicyValue);
 		clickButton(driver, saveOptionOkBtn, "Save");
 		ExtentReporter.logger.log(LogStatus.INFO,  "Select "+saveAsPolicyValue+" Click [OK]");
 		switchToParentWindowfromframe(driver);
@@ -274,7 +274,7 @@ public class Policy_Quote_Page extends commonAction {
 		
 			waitForElementToLoad(driver, 10, productNotifyDropDown);
 			
-			selectDropdownByValue(productNotifyDropDown, ProductNotifyValue, "product notify");
+			selectDropdownByValue(driver, productNotifyDropDown, ProductNotifyValue, "product notify");
 			Thread.sleep(1000);
 			clickButton(driver, prodNotifyClose, "Product Notify Close");
 			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window dispalyed to user.");
@@ -316,7 +316,7 @@ public class Policy_Quote_Page extends commonAction {
 	public void select_policyAction(String policyAction_value) throws InterruptedException{
 		
 		waitForElementToLoad(driver, 15, policyAction);
-		selectDropdownByVisibleText(policyAction, policyAction_value, "Renewal");
+		selectDropdownByVisibleText(driver, policyAction, policyAction_value, "Renewal");
 		ExtentReporter.logger.log(LogStatus.INFO, "Capture Transaction Details window opens");
 		
 		Thread.sleep(3000);
@@ -339,7 +339,7 @@ public class Policy_Quote_Page extends commonAction {
 		
 		Thread.sleep(3000);
 		
-		click(capt_Tranx_Ok, "Ok button for Renewal");
+		click(driver, capt_Tranx_Ok, "Ok button for Renewal");
 		
 		switchToParentWindowfromframe(driver);
 	
