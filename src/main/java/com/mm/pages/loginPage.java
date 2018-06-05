@@ -45,7 +45,7 @@ public class loginPage extends commonAction{
 		//Entering User Name.
 		try{
 			Assert.assertTrue(userName.isDisplayed(), "User Name Field is displayed.");
-			userName.sendKeys(exlutil.getCellData("eOasis_Credentials", UserName, 2));
+			userName.sendKeys(UserName);
 			ExtentReporter.logger.log(LogStatus.PASS, " User Name is entered in to userName Field");
 		}catch(Exception e)
 		{
@@ -58,7 +58,7 @@ public class loginPage extends commonAction{
 		try{
 			Assert.assertTrue(password.isDisplayed(), "Password Field is displayed.");
 			Thread.sleep(2000);
-			password.sendKeys(exlutil.getCellData("eOasis_Credentials", PassWord, 2));
+			password.sendKeys(PassWord);
 			ExtentReporter.logger.log(LogStatus.PASS, " Password is entered in to password Field");
 		}catch(Exception e)
 		{

@@ -74,32 +74,32 @@ public class cisPage  extends commonAction{
 	
 	public void clickOnNewOrganization()
 	{
-		click(New_Org, "New Organization tab");
+		click(driver,New_Org, "New Organization tab");
 	}
 			
-	public void enterDataInNewOrgPage() throws Exception{
+	public void enterDataInNewOrgPage(String LongName,String Address_Line1,String City,String Phone_no,String Area_code, String Class_Eff_To_Date) throws Exception{
 
 		ExcelUtil exlutil = new ExcelUtil();
-   	    enterTextIn(Long_Name,exlutil.getCellData("TC42404", "LongName", 2));
+   	    enterTextIn(driver,Long_Name,LongName);
 	    
-   	    click(CIS_OrgName, "Org Name text field");				
+   	    click(driver,CIS_OrgName, "Org Name text field");				
 	    
-	    enterTextIn(Addr_Line1,exlutil.getCellData("TC42404", "Address_Line1", 2));
+	    enterTextIn(driver,Addr_Line1,Address_Line1);
 	    
-	    enterTextIn(Addr_City,exlutil.getCellData("TC42404", "City", 2));
+	    enterTextIn(driver,Addr_City,City);
 	    
-	    enterTextIn(Ph_no,exlutil.getCellData("TC42404", "Phone_no", 2));
+	    enterTextIn(driver,Ph_no,Phone_no);
 	    
-	    enterTextIn(AreaCode,exlutil.getCellData("TC42404", "Area_code", 2));
+	    enterTextIn(driver,AreaCode,Area_code);
 	    Thread.sleep(2000);
 	    
-	    enterTextIn(Eff_To_Date,exlutil.getCellData("TC42404", "Class_Eff_To_Date", 2));
+	    enterTextIn(driver,Eff_To_Date,Class_Eff_To_Date);
 	    
-	    selectDropdownByValue(Classification, "CARRIER", "Classification");
+	    selectDropdownByValue(driver,Classification, "CARRIER", "Classification");
 		
-	    selectDropdownByValue(Addr_Type, "POLICY", "Address_Type");
+	    selectDropdownByValue(driver,Addr_Type, "POLICY", "Address_Type");
 	    
-		selectDropdownByValue(State,"GA","State");
+		selectDropdownByValue(driver,State,"GA","State");
 	    Thread.sleep(3000);
 	}
 	   
@@ -109,9 +109,9 @@ public class cisPage  extends commonAction{
 	    	   Thread.sleep(2000);
 	    	  	    	   
 	    	   WebElement zipCode = driver.findElement(By.xpath("//input[@value='30004']")); 
-	    	   click(zipCode,"ZipCode");
+	    	   click(driver,zipCode,"ZipCode");
 
-	    	   click(OK,"OK button");
+	    	   click(driver,OK,"OK button");
 
 	    	   Thread.sleep(2000);
       	       switchToParentWindowfromotherwindow(driver, parentwindow); 
@@ -121,7 +121,7 @@ public class cisPage  extends commonAction{
 		public void saveNewOrgDetails() throws InterruptedException
 		{
 			Thread.sleep(3000);
-			click(Save_btn, "Save button");
+			click(driver,Save_btn, "Save button");
 		}
 	}
 	
