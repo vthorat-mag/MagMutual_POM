@@ -86,28 +86,28 @@ public class quick_Add_Organisation extends commonAction{
 	public void add_Org_Information() throws InterruptedException{
 		
 		
-		enterTextIn(Org_Name, "Vivek_Test_Organisation2", "Org Name");
+		enterTextIn(driver,Org_Name, "Vivek_Test_Organisation2", "Org Name");
 		
-		enterTextIn(DateOfBirth, "12052005", "Date");
+		enterTextIn(driver,DateOfBirth, "12052005", "Date");
 		
 		Thread.sleep(3000);
 		
-		selectDropdownByValue(classification, "HOSPITAL", "Classfication");
+		selectDropdownByValue(driver,classification, "HOSPITAL", "Classfication");
 		
-		enterTextIn(Effe_To_Date, "12052050", "Effec_To_Date");
+		enterTextIn(driver,Effe_To_Date, "12052050", "Effec_To_Date");
 		
 	}
 	
 	
 	public void add_Org_Address(){
 		
-		selectDropdownByValue(Address_Type1, "POLICY", "Add_Type1");
+		selectDropdownByValue(driver,Address_Type1, "POLICY", "Add_Type1");
 		
-		enterTextIn(Addr_Line1, "123,Off ITI Road, Aundh", "Line1");
+		enterTextIn(driver,Addr_Line1, "123,Off ITI Road, Aundh", "Line1");
 		
-		enterTextIn(City, "Atlanta", "city");
+		enterTextIn(driver,City, "Atlanta", "city");
 		
-		selectDropdownByValue(Zip_code, "GA", "state code");
+		selectDropdownByValue(driver,Zip_code, "GA", "state code");
 		
 	}
 	
@@ -118,9 +118,9 @@ public class quick_Add_Organisation extends commonAction{
 		    	   Thread.sleep(2000);
 		    	  	    	   
 		    	   WebElement zipCode = driver.findElement(By.xpath("//input[@value='30301']")); 
-		    	   click(zipCode,"ZipCode");
+		    	   click(driver,zipCode,"ZipCode");
 
-		    	   click(OK,"OK button");
+		    	   click(driver,OK,"OK button");
 
 		    	   Thread.sleep(2000);
 	      	       switchToParentWindowfromotherwindow(driver, parentwindow); 
@@ -129,13 +129,13 @@ public class quick_Add_Organisation extends commonAction{
 		
 		public void add_Phone_Number(){
 			
-		enterTextIn(Phn_Num_Type, "OFFICE", "Phone_No_Type");
+		enterTextIn(driver,Phn_Num_Type, "OFFICE", "Phone_No_Type");
 		
-		enterTextIn(Area_Code, "789", "Area Code");
+		enterTextIn(driver,Area_Code, "789", "Area Code");
 				
-		enterTextIn(Phn_Num, "1234567","Phn_num");
+		enterTextIn(driver,Phn_Num, "1234567","Phn_num");
 			 	 	
-		click(Save, "Save button");
+		click(driver,Save, "Save button");
 		
 	}
 

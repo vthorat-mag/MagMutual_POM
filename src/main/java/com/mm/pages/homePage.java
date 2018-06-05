@@ -30,36 +30,44 @@ public class homePage extends commonAction{
 	@FindBy(id="topnav_Policy")
 	WebElement Policy_link;
 	
+	@FindBy(xpath = "//a[@class='topNavCurrentApp']")
+	WebElement headerPolicyTab;
+	
 	public homePage(WebDriver driver)
 	{
 		this.driver=driver;
 		PageFactory.initElements(driver, this);
 	}
 	
+	//Verify logo is preent on page.
 	public void verifyLogoIsAvailable(){
 		
-		visibilityOfElement(logo, "DELPHI TECHNOLOGY");
-		
-		
+		visibilityOfElement(driver,logo, "DELPHI TECHNOLOGY");
 	}
 	
+	//Navigate to CIS page.
 	public void navigateToCISPage()
 	{
-		click(cisTab,"CIS tab");
+		click(driver,cisTab,"CIS tab");
 	}
 	
+	//Navigate to policy page from Policy tab.
 	public void navigateToPolicyPage()
 	{
-	//	Policy_link.isSelected();
-		
-		click(Policy_tab, "Policy tab");
-		
+		click(driver,Policy_tab, "Policy tab");
 		ExtentReporter.logger.log(LogStatus.INFO, "Search Policy Screen is opened");
 	}
+	
+	//navigate to Policy page from policy link[Header]
+	public void navigateToPolicyPageThroughPolicyTab()
+	{
+		click(driver,headerPolicyTab,"Policy tab on Header");
+	}
 		
+	//Logout from application.
 	public void logoutFromeOasis()
 	{
-		click(logoff,"Logoff button");
+		click(driver,logoff,"Logoff button");
 		ExtentReporter.logger.log(LogStatus.INFO, "User is logged out from application");
 	}
 }
