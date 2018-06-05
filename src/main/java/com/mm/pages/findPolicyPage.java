@@ -54,41 +54,43 @@ public class findPolicyPage extends commonAction{
 		PageFactory.initElements(driver, this);
 	}
 	
+	
+	//Search Policy from filter.
 	public String findQuotewithActiveState(String phase, String status) throws InterruptedException
 	{
 		
 		Thread.sleep(5000);//Need to replace with explicit wait
 		try{
 			Assert.assertTrue(paneDown.isEnabled());
-			click(paneDown, "Search Criteria");
+			click(driver,paneDown, "Search Criteria");
 			ExtentReporter.logger.log(LogStatus.INFO, "Search Criteria Section is expanded");
 		}catch (Exception e)
 		{
 			ExtentReporter.logger.log(LogStatus.INFO, "Search Criteria Section is already Expanded");
 		}
-			click(policyPhaseSearch, "Policy Phase Search Icon");
+			click(driver,policyPhaseSearch, "Policy Phase Search Icon");
 			waitFor(driver, 3);
 			for(int i=0;i<policyPhaseCheckBox.size();i++)
 			{
 				if(policyPhaseCheckBox.get(i).getAttribute("value").equals("POLICY"))
 				{
-					click(policyPhaseCheckBox.get(i), policyPhaseCheckBox.get(i).getAttribute("value")+" Check Box");
+					click(driver,policyPhaseCheckBox.get(i), policyPhaseCheckBox.get(i).getAttribute("value")+" Check Box");
 				}
 				if(policyPhaseCheckBox.get(i).getAttribute("value").equals(phase))
 				{
-					click(policyPhaseCheckBox.get(i), "Policy phase Check Box");
+					click(driver,policyPhaseCheckBox.get(i), "Policy phase Check Box");
 				}
 			}
-			click(policyStatusSearch, "Policy Status Search");
+			click(driver,policyStatusSearch, "Policy Status Search");
 			for(int i=0;i<policyStatusValues.size();i++)
 			{
 				if(policyStatusValues.get(i).getAttribute("value").equals(status))
 				{
-					click(policyStatusValues.get(i), policyStatusValues.get(i).getAttribute("value")+" Check Box");
+					click(driver,policyStatusValues.get(i), policyStatusValues.get(i).getAttribute("value")+" Check Box");
 				}
 			}
 			
-			click(searchBtn, "SearchButton");
+			click(driver,searchBtn, "SearchButton");
 			
 		waitFor(driver, 5);
 		try{

@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.RandomStringUtils;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -23,7 +24,7 @@ public class commonAction implements CommonActionInterface {
 	
 	
 	Properties pro=new Properties();
-	
+
 	//Integer.valueOf(properties.prop.getProperty("High"));
 	
 	int Low=10;
@@ -83,9 +84,11 @@ public class commonAction implements CommonActionInterface {
 
 	}
 
-	public void enterTextIn(WebElement pageElement, String text, String textField) {
+	public void enterTextIn(WebDriver driver, WebElement pageElement, String text, String textField) {
 		// TODO Auto-generated method stub
 		try {
+			WebDriverWait wait = new WebDriverWait(driver,Medium);
+			wait.until(ExpectedConditions.visibilityOf(pageElement));
 			Assert.assertTrue(pageElement.isDisplayed(), textField + " is not displayed on screen.");
 			pageElement.sendKeys(text);
 			ExtentReporter.logger.log(LogStatus.PASS, "Value entered in text box -" + textField);
@@ -99,6 +102,8 @@ public class commonAction implements CommonActionInterface {
 			// TODO Auto-generated method stub
 			try
 			{
+				WebDriverWait wait = new WebDriverWait(driver,Medium);
+				wait.until(ExpectedConditions.visibilityOf(pageElement));
 				JavascriptExecutor js = (JavascriptExecutor)driver;
 				Assert.assertTrue(pageElement.isDisplayed(), buttonName+" button is displayed on screen.");
 				js.executeScript("arguments[0].click();", pageElement);
@@ -125,20 +130,28 @@ public class commonAction implements CommonActionInterface {
 		
 	}
 
-	public String getPageTitle() {
+	public String getPageTitle(WebDriver driver, String expectedPageTitle ) {
 		// TODO Auto-generated method stub
+		String getPageTitleFromPage = driver.findElement(By.xpath("//div[@class='pageTitle']")).getAttribute("innerHTML").trim();
+		WebDriverWait wait = new WebDriverWait(driver,Medium);
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[@class='pageTitle']"))));
+		Assert.assertEquals(getPageTitleFromPage ,expectedPageTitle, "Page title is not matching.");
 		return null;
 	}
 
-	public String getText(WebElement pageElement) {
+	public String getText(WebDriver driver, WebElement pageElement) {
 		// TODO Auto-generated method stub
+		WebDriverWait wait = new WebDriverWait(driver,Medium);
+		wait.until(ExpectedConditions.visibilityOf(pageElement));
 		return pageElement.getAttribute("innerHTML");
 	}
 
-	public void clearTextBox(WebElement pageElement, String textField) {
+	public void clearTextBox(WebDriver driver, WebElement pageElement, String textField) {
 		// TODO Auto-generated method stub
 		try
 		{
+			WebDriverWait wait = new WebDriverWait(driver,Medium);
+			wait.until(ExpectedConditions.visibilityOf(pageElement));
 			Assert.assertTrue(pageElement.isDisplayed(), textField+" is displayed");
 			pageElement.clear();
 			ExtentReporter.logger.log(LogStatus.PASS, "Cleared the initial contents from " + textField);
@@ -153,9 +166,11 @@ public class commonAction implements CommonActionInterface {
 		return null;
 	}
 
-	public void click(WebElement pageElement, String ElementName) {
+	public void click(WebDriver driver, WebElement pageElement, String ElementName) {
 
 		try {
+			WebDriverWait wait = new WebDriverWait(driver,Medium);
+			wait.until(ExpectedConditions.visibilityOf(pageElement));
 			Assert.assertTrue(pageElement.isDisplayed(), ElementName + " is not displayed on screen.");
 			pageElement.click();
 			ExtentReporter.logger.log(LogStatus.PASS, "clicked on Element - " + ElementName);
@@ -166,11 +181,12 @@ public class commonAction implements CommonActionInterface {
 
 	}
 
-	public void visibilityOfElement(WebElement pageElement, String text) {
+	public void visibilityOfElement(WebDriver driver, WebElement pageElement, String text) {
 
 		try {
+			WebDriverWait wait = new WebDriverWait(driver,Medium);
+			wait.until(ExpectedConditions.visibilityOf(pageElement));
 			Assert.assertTrue(pageElement.isDisplayed(), "Logo " + text + " is not displayed on the page.");
-
 			ExtentReporter.logger.log(LogStatus.PASS, "Logo " + text + " is displayed on page after login");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -182,10 +198,6 @@ public class commonAction implements CommonActionInterface {
 	public String switchToWindow(WebDriver driver) {
 
 		ExtentReporter.logger.log(LogStatus.INFO, "Switching to the pop up window");
-	/*	
-		WebDriverWait wait=new WebDriverWait(driver, 10);
-		wait.until(ExpectedConditions.numberOfwindowsToBe(num));
-		*/
 		
 		Set<String> handles = driver.getWindowHandles();      //Return a set of window handle
 		 
@@ -201,9 +213,11 @@ public class commonAction implements CommonActionInterface {
 		 return parentWindow;
 	}
 
-	public void selectDropdownByValue(WebElement element, String DropDownOption, String label) {
+	public void selectDropdownByValue(WebDriver driver, WebElement element, String DropDownOption, String label) {
 
 		try {
+			WebDriverWait wait = new WebDriverWait(driver,Medium);
+			wait.until(ExpectedConditions.visibilityOf(element));
 			Select Sel = new Select(element);
 			Sel.selectByValue(DropDownOption);
 			ExtentReporter.logger.log(LogStatus.PASS, "Value is selected from " + label + " drop down");
@@ -215,9 +229,11 @@ public class commonAction implements CommonActionInterface {
 
 	}
 	
-	public void selectDropdownByVisibleText(WebElement element, String DropDownOption, String label) {
+	public void selectDropdownByVisibleText(WebDriver driver, WebElement element, String DropDownOption, String label) {
 
 		try {
+			WebDriverWait wait = new WebDriverWait(driver,Medium);
+			wait.until(ExpectedConditions.visibilityOf(element));
 			Select Sel = new Select(element);
 			Sel.selectByVisibleText(DropDownOption);
 			ExtentReporter.logger.log(LogStatus.PASS, "Value is selected from " + label + " drop down");
@@ -236,7 +252,6 @@ public class commonAction implements CommonActionInterface {
 
 	public void verifyTextPresent(String getTextPolicyPhase, String actualText, String fieldName) {
 		try {
-
 			Assert.assertEquals(getTextPolicyPhase, actualText, getTextPolicyPhase + " element is present");
 			ExtentReporter.logger.log(LogStatus.PASS, getTextPolicyPhase + " element is present");
 		} catch (Exception e) {
@@ -245,17 +260,6 @@ public class commonAction implements CommonActionInterface {
 		}
 	}
 
-	public void enterTextIn(WebElement pageElement, String text) {
-		try {
-
-			pageElement.sendKeys(text);
-			ExtentReporter.logger.log(LogStatus.PASS, text+" is entered in "+pageElement+"text box");
-		} catch (Exception e) {
-			e.printStackTrace();
-			ExtentReporter.logger.log(LogStatus.FAIL,
-					"Could not enter text " + text + " in" + pageElement + " text box");
-		}
-	}
 
 	//This method is called to load a page during navigation through pages
 	
@@ -283,13 +287,23 @@ public class commonAction implements CommonActionInterface {
 		// TODO Auto-generated method stub
 		
 	}
-	public void policySearch(String policyNo, WebElement policySearchTxtBox, WebElement searchBtn) 
+	public void policySearch(WebDriver driver, String policyNo, WebElement policySearchTxtBox, WebElement searchBtn) 
 	{
-		clearTextBox(policySearchTxtBox, "Enter Policy text field");
+		clearTextBox(driver, policySearchTxtBox, "Enter Policy text field");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click policy in right corner of screen");
-		enterTextIn(policySearchTxtBox, policyNo, "Enter Policy text field");
-		click(searchBtn, "Search button");
+		enterTextIn(driver, policySearchTxtBox, policyNo, "Enter Policy text field");
+		click(driver, searchBtn, "Search button");
 		ExtentReporter.logger.log(LogStatus.INFO, "Enter Policy # into Policy entry box, Click Search.");
+	}
+
+	public void enterTextIn(WebDriver driver, WebElement pageElement, String text) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void policySearch(String policyNo, WebElement policySearchTxtBox, WebElement earchBtn) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

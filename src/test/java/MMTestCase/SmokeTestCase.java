@@ -15,7 +15,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.mm.browsers.BrowserTypes;
@@ -31,7 +34,10 @@ import com.mm.pages.loginPage;
 import com.mm.pages.policyDetailsPage;
 import com.mm.pages.quick_Add_Organisation;
 import com.mm.pages.rateApolicyPage;
+import com.mm.utils.ExcelApiTest;
+import com.mm.utils.ExcelUtil;
 import com.mm.utils.ExtentReporter;
+import com.mm.utils.PDFReader;
 import com.mm.utils.commonUtilities;
 import com.relevantcodes.extentreports.LogStatus;
 
@@ -57,28 +63,27 @@ public class SmokeTestCase extends BrowserTypes {
 	public void Setup(Method method) throws Exception
 	{
 		ExtentReporter.logger=ExtentReporter.report.startTest(method.getName());
-	
 	}
 	
-	//@Test(description="Verify Add Organization")
-	public void TC42404() throws Exception
+	//@Test(description="Verify Add Organization",dataProvider = "userTestData", dataProviderClass=ExcelApiTest.class)
+	public void TC42404(String UserName, String PassWord,String LongName,String Address_Line1, String City, String Phone_no, String Area_code, String Class_Eff_To_Date) throws Exception
 	{
 		loginpage = new loginPage(driver);
-		loginpage.loginToeOasis("UserName", "Password");
+		loginpage.loginToeOasis(UserName, PassWord);
 		homepage = new homePage(driver);
 		homepage.navigateToCISPage();
 		cispage = new cisPage(driver);
 		cispage.clickOnNewOrganization();
-		cispage.enterDataInNewOrgPage();
+		cispage.enterDataInNewOrgPage(LongName,Address_Line1,City,Phone_no,Area_code, Class_Eff_To_Date);
 		cispage.selectZipCode();
 		cispage.saveNewOrgDetails();
 	}
 	
-	//@Test(description="Hospital Rate")
-	public void TC42239() throws Exception
+	//@Test(description="Hospital Rate",dataProvider = "userTestData", dataProviderClass=ExcelApiTest.class)
+	public void TC42239(String UserName, String PassWord) throws Exception
 	{
 		loginpage = new loginPage(driver);
-		loginpage.loginToeOasis("UserName", "Password");
+		loginpage.loginToeOasis(UserName, PassWord);
 		homepage = new homePage(driver);
 		homepage.navigateToPolicyPage();
 		rateapolicypage = new rateApolicyPage(driver);
@@ -87,11 +92,11 @@ public class SmokeTestCase extends BrowserTypes {
 		rateapolicypage.startExcelExport();
 	}
 	
-	//@Test(description="HPL - Binder")
-	public void TC42242() throws Exception
+	//@Test(description="HPL - Binder",dataProvider = "userTestData", dataProviderClass=ExcelApiTest.class)
+	public void TC42242(String UserName, String PassWord) throws Exception
 	{
 		loginpage = new loginPage(driver);
-		loginpage.loginToeOasis("UserName", "Password");
+		loginpage.loginToeOasis(UserName, PassWord);
 		homepage = new homePage(driver);
 		homepage.navigateToPolicyPage();
 		findpolicypage = new findPolicyPage(driver);
@@ -113,16 +118,17 @@ public class SmokeTestCase extends BrowserTypes {
 		rateapolicypage.saveOption(policyNumber);
 	}
 	
-	//@Test(description="Hospital Issue Policy Forms- Complete")
-	public void TC42665() throws Exception
+	//@Test(description="Hospital Issue Policy Forms- Complete",dataProvider = "userTestData", dataProviderClass=ExcelApiTest.class)
+	public void TC42665(String UserName, String PassWord) throws Exception
 	{
 		loginpage = new loginPage(driver);
-		loginpage.loginToeOasis("UserName", "Password");
+		loginpage.loginToeOasis(UserName, PassWord);
 		homepage = new homePage(driver);
 		homepage.navigateToPolicyPage();
 		policybinderpage = new Policy_Binder_Page(driver);
 		String searchPolicyNum = "09100275";
-		policybinderpage.searchPolicy(searchPolicyNum);
+		rateapolicypage = new rateApolicyPage(driver);
+		rateapolicypage.searchPolicy(searchPolicyNum);
 		String policyNumber = policybinderpage.policyNo();
 		policybinderpage.endorsementFromActionDropDown();
 		policybinderpage.endorsPolicy(policyNumber);
@@ -131,17 +137,18 @@ public class SmokeTestCase extends BrowserTypes {
 		policybinderpage.saveOption(policyNumber);
 	}
 	
-	@Test(description="Hospital Quote")
-	public void TC42238() throws Exception
+	@Test(description="Hospital Quote", dataProvider = "userTestData", dataProviderClass=ExcelApiTest.class)
+	public void TC42238(String UserName, String PassWord) throws Exception
 	{
 		loginpage = new loginPage(driver);
-		loginpage.loginToeOasis("UserName", "Password");
+		loginpage.loginToeOasis(UserName, PassWord);
 		homepage = new homePage(driver);
 		homepage.navigateToPolicyPage();
 		policyquotepage = new Policy_Quote_Page(driver);
-		String searchPolicyNum = "09100275";
-		policyquotepage.searchPolicy(searchPolicyNum);
-		policyquotepage.CopyOptionFromActionDropDown();
+		String searchPolicyNum = "09101645";
+		rateapolicypage = new rateApolicyPage(driver);
+		rateapolicypage.searchPolicy(searchPolicyNum);
+		/*policyquotepage.CopyOptionFromActionDropDown();
 		policyquotepage.changePhaseToQuote();
 		policyquotepage.coverageDetailsSelect();
 		String policyNumber = policyquotepage.policyNo();
@@ -149,19 +156,26 @@ public class SmokeTestCase extends BrowserTypes {
 		//policyquotepage.coverageUpdates("Quote UMB-Out", "QUOTE-UMB", policyNumber);
 		//policyquotepage.coverageUpdates("UMB PL-Ins", "INDICATION_UMB", policyNumber);
 		policyquotepage.rateFunctionality(policyNumber);
-		policyquotepage.saveOption(policyNumber);
+		policyquotepage.saveOption(policyNumber);*/
+		
+		policyquotepage.clickPreviewTab();
+		Thread.sleep(8000);
+		PDFReader pdf = new PDFReader();
+		pdf.savePDF();
+		pdf.verifyPdfContent("Binder 03 16");
 	}
 	
-	//@Test(description = "Hospital Copy to Quote")
-	public void TC42245() throws Exception
+	//@Test(description = "Hospital Copy to Quote",dataProvider = "userTestData", dataProviderClass=ExcelApiTest.class)
+	public void TC42245(String UserName, String PassWord) throws Exception
 	{
 		loginpage = new loginPage(driver);
-		loginpage.loginToeOasis("UserName", "Password");
+		loginpage.loginToeOasis(UserName, PassWord);
 		homepage = new homePage(driver);
 		homepage.navigateToPolicyPage();
 		policybinderpage = new Policy_Binder_Page(driver);
 		String searchPolicyNum = "09100200";
-		policybinderpage.searchPolicy(searchPolicyNum);
+		rateapolicypage = new rateApolicyPage(driver);
+		rateapolicypage.searchPolicy(searchPolicyNum);
 		String policyNumber = policybinderpage.policyNo();
 		policybinderpage.copyToQuoteFromActionDropDown(policyNumber);
 		policysubmissionpage = new Policy_Submission_Page(driver);
@@ -170,11 +184,11 @@ public class SmokeTestCase extends BrowserTypes {
 		policysubmissionpage.saveWip();
 	}
 	
-	@Test(testName="HospitalIndication")
-	   public void TC_Indication(Method method) throws Exception{
+	//@Test(testName="HospitalIndication",dataProvider = "userTestData", dataProviderClass=ExcelApiTest.class)
+	   public void TC_Indication(Method method,String UserName, String PassWord) throws Exception{
 			
 		   	loginpage = new loginPage(driver);
-			loginpage.loginToeOasis("UserName", "Password");
+			loginpage.loginToeOasis(UserName, PassWord);
 			homepage = new homePage(driver);
 			homepage.navigateToPolicyPage();
 			indicationpage=new indicationPage(driver);
@@ -231,28 +245,23 @@ public class SmokeTestCase extends BrowserTypes {
 			policydetailspage.addSharedGroup("Fire Dmg-Ins","PL Shared", PolicyNo);
 			policydetailspage.addSharedGroup("Loss Earn-Ins","GL Shared", PolicyNo);
 			policydetailspage.closeLimitSharingtab();
-			
 		}
 	
-	
-//	@Test(testName="EndorsePolicy")
-	public void TC42530(Method method) throws Exception{
-		
-		
+	//@Test(testName="EndorsePolicy",dataProvider = "userTestData", dataProviderClass=ExcelApiTest.class)
+	public void TC42530(Method method,String UserName, String PassWord) throws Exception{
 		loginpage = new loginPage(driver);
-		loginpage.loginToeOasis("UserName", "Password");
+		loginpage.loginToeOasis(UserName, PassWord);
 		homepage = new homePage(driver);
 		homepage.navigateToPolicyPage();
 		endorsepolicypage = new endorsePolicyPage(driver);
 		endorsepolicypage.findPolicy();
-		
 	}
 	
 	//This is additional test, removed later from rally
-	//@Test(testName="VerifyExistingPolicy")
-	public void TC42536() throws Exception{
+	//@Test(testName="VerifyExistingPolicy",dataProvider = "userTestData", dataProviderClass=ExcelApiTest.class)
+	public void TC42536(String UserName, String PassWord) throws Exception{
 		loginpage = new loginPage(driver);
-		loginpage.loginToeOasis("UserName", "Password");
+		loginpage.loginToeOasis(UserName, PassWord);
 		homepage = new homePage(driver);
 		homepage.navigateToPolicyPage();
 		rateapolicypage = new rateApolicyPage(driver);
@@ -261,10 +270,10 @@ public class SmokeTestCase extends BrowserTypes {
 	}
 
 	//This is additional test, added later in rally
-	//@Test(description= "Quick_Add_Organisation")
-		public void Quick_Add() throws Exception{
+	//@Test(description= "Quick_Add_Organisation",dataProvider = "userTestData", dataProviderClass=ExcelApiTest.class)
+		public void Quick_Add(String UserName, String PassWord) throws Exception{
 			loginpage = new loginPage(driver);
-			loginpage.loginToeOasis("UserName", "Password");
+			loginpage.loginToeOasis(UserName, PassWord);
 			homepage = new homePage(driver);
 			homepage.navigateToCISPage();
 			Thread.sleep(3000);
@@ -301,7 +310,7 @@ public class SmokeTestCase extends BrowserTypes {
 	@AfterClass
 	public void closeBrowser()
 	{	
-		ExtentReporter.report.close();
+		//ExtentReporter.report.close();
 		//driver.quit();
 	}
 }
