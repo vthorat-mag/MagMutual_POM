@@ -69,23 +69,35 @@ public class Policy_Binder_Page extends commonAction {
 	@FindBy(id="PM_NOTIFY_CLOSE")
 	WebElement prodNotifyClose;
 	
+	@FindBy(id="policyHolderNameROSPAN1")
+	WebElement policyHolderNameLink;
+	
+	@FindBy(xpath = "//iframe[@contains(id,'popupframe')]")
+	WebElement entityMiniPopupFrameId;
+	
+	@FindBy(id="entity_clientIDROSPAN")
+	WebElement clientId;
+	
+	@FindBy(id="CI_ENTITY_MINI_POP_CLS")
+	WebElement entityMiniPopupCloseBtn;
+	
 	public Policy_Binder_Page(WebDriver driver)
 	{
 		this.driver=driver;
 		PageFactory.initElements(driver, this);
 	}
 	
-	//String policy_no="09101526";
-	
-	public void searchPolicy(String policy_no) throws InterruptedException
+	public void getClientId()
 	{
-		Thread.sleep(3000);
-		policySearch(policy_no,Policy_Search, Search_btn);
-		String actual=getText(pageHeaderForPolicyFolder);
-		Assert.assertEquals(actual, "Policy Folder "+policy_no, "The policy "+policy_no+" is Not available.");
-		Thread.sleep(3000);
+		clickButton(driver, policyHolderNameLink, "Policy Holder Name");
+		switchToFrameUsingElement(driver, entityMiniPopupFrameId);
+		getPageTitle(driver, "Entity Mini Popup");
+		String getClientIdValue = clientId.getAttribute("innerHTML");
+		clickButton(driver, entityMiniPopupCloseBtn, "Entity Mini Popup Close");
+		switchToParentWindowfromframe(driver);
 	}
 	
+	//Identify Policy number from Page.
 	public String policyNo()
 	{
 		String profileNoLable = pageHeaderForPolicyFolder.getAttribute("innerHTML");
@@ -93,37 +105,43 @@ public class Policy_Binder_Page extends commonAction {
 		return portfolioNo[2];
 	}
 	
+	//Select Endorsment from "Action DropoDown".
 	public void endorsementFromActionDropDown()
 	{
-		selectDropdownByValue(policyAction, valueOfPolicyActionEndorse, "Policy Action");
+		selectDropdownByValue(driver, policyAction, valueOfPolicyActionEndorse, "Policy Action");
 		ExtentReporter.logger.log(LogStatus.PASS, "Click Policy Actions > Select value from the dropdown screen.");
 		
 	}
 	
+
+	//Select Copy To Quote from "Action DropoDown".
 	public void copyToQuoteFromActionDropDown(String policyNum) throws InterruptedException
 	{
-		selectDropdownByValue(policyAction, valueOfPolicyActionCopyToQuote, "Policy Action");
+		selectDropdownByValue(driver, policyAction, valueOfPolicyActionCopyToQuote, "Policy Action");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy to Quote");
 		Thread.sleep(10000);
 		String getUpdatedPolicyNo = policyNo();
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+getUpdatedPolicyNo+"')]")));
-		click(Exit_Ok, "OK button");
+		click(driver,Exit_Ok, "OK button");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [OK]");
 		Thread.sleep(2000);
    	 	switchToParentWindowfromframe(driver);
 	}
 	
+	//Endorse Policy Flow.
 	public void endorsPolicy(String policyNum) throws InterruptedException
 	{
 		Thread.sleep(3000);
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNum+"')]")));
 		waitForElementToLoad(driver, 25, selectReason);
-		selectDropdownByValue(selectReason, valueOfSelectReason, "Select Reason");
+		selectDropdownByValue(driver, selectReason, valueOfSelectReason, "Select Reason");
 		clickButton(driver, okBtnEndorsmentPopup, "Ok");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click the dropdown by Reason:  Select Issue Policy Forms-->Click [Ok]");
 		Thread.sleep(4000);
 	}
 	
+	
+	//Identify Phase from page.
 	public void identifyPhase() throws InterruptedException
 	{
 		waitFor(driver, 5);
@@ -132,6 +150,8 @@ public class Policy_Binder_Page extends commonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Verify phase is "+getTextPolicyPhase);
 	}
 	
+	
+	//Rate a Functionality flow.
 	public void rateFunctionality(String policyNo) throws InterruptedException
 	{
 		Thread.sleep(3000);
@@ -163,6 +183,7 @@ public class Policy_Binder_Page extends commonAction {
 		switchToParentWindowfromframe(driver);
 	}
 	
+	//Save Option functionality flow.
 	public void saveOption(String policyNo) throws InterruptedException
 	{
 		Thread.sleep(2000);
@@ -170,7 +191,7 @@ public class Policy_Binder_Page extends commonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options");
 		Thread.sleep(4000);
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
-		selectDropdownByValue(saveAsDropDown, saveAsPolicyValue, "Save Option");
+		selectDropdownByValue(driver, saveAsDropDown, saveAsPolicyValue, "Save Option");
 		clickButton(driver, saveOptionOkBtn, "Save");
 		ExtentReporter.logger.log(LogStatus.INFO, "Select Official Click [OK]");
 		Thread.sleep(6000);

@@ -48,20 +48,25 @@ public class Policy_Submission_Page extends commonAction {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
 	}
+	
+	//Select Copy from Action value from Action drop down.
 	public void copyFromActionDropDown(String policyNum) throws InterruptedException
 	{
-		selectDropdownByValue(policyAction, valueOfPolicyActionCopy, "Policy Action");
+		selectDropdownByValue(driver,policyAction, valueOfPolicyActionCopy, "Policy Action");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy");
 		Thread.sleep(3000);
 	}
 	
+	
+	//Change policy phase to indication.
 	public void changePhaseToIndication() throws InterruptedException
 	{
-		selectDropdownByValue(policyPhase, indicationPhaseValue, "Phase");
+		selectDropdownByValue(driver,policyPhase, indicationPhaseValue, "Phase");
 		ExtentReporter.logger.log(LogStatus.INFO, "Change Policy Phase to Indication");
 		Thread.sleep(3000);
 	}
 	
+	//Save policy / Quote as Work in progress.
 	public void saveWip() throws InterruptedException
 	{
 		clickButton(driver, saveWIP, "Save WIP");

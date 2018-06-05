@@ -29,6 +29,7 @@ import com.mm.utils.ExtentReporter;
 import com.mm.utils.PDFReader;
 import com.mm.utils.commonAction;
 import com.mm.utils.commonUtilities;
+import com.mongodb.client.model.ReturnDocument;
 import com.relevantcodes.extentreports.LogStatus;
 
 public class rateApolicyPage extends commonAction {
@@ -162,61 +163,37 @@ public class rateApolicyPage extends commonAction {
 		this.driver=driver;
 		PageFactory.initElements(driver, this);
 	}
+	Policy_Quote_Page policyquotepage =  new Policy_Quote_Page(this.driver);
 	
-	/*String profileNoLable = pageHeaderForPolicyFolder.getAttribute("innerHTML");
-	String[] portfolioNo = profileNoLable.split(" ",3);*/
-	/*
-	public void policySearch() throws InterruptedException, AWTException{
-		
-		String policy_no="Q09101503-NB17-01";
-		Thread.sleep(2000);
-		clearTextBox(Policy_Search, "Enter Policy text field");
-		enterTextIn(Policy_Search, policy_no, "Enter Policy text field");
-		click(Search_btn, "Search button");
-		
-		String actual=getText(pageHeaderForPolicyFolder);
-				
-		Assert.assertEquals(actual, "Policy Folder "+policy_no, "The policy "+policy_no+" is Not available.");
-		Thread.sleep(4000);
-	}*/
-	
-	public void searchPolicy( String policy_no) throws InterruptedException
+	//Search Policy from Search Policy text field.
+	public Policy_Quote_Page searchPolicy( String policy_no) throws InterruptedException
 	{
 		Thread.sleep(3000);
 		policySearch(policy_no,Policy_Search, Search_btn);
-		String actual=getText(pageHeaderForPolicyFolder);
+		String actual=getText(driver,pageHeaderForPolicyFolder);
 		Assert.assertEquals(actual, "Policy Folder "+policy_no, "The policy "+policy_no+" is Not available.");
 		ExtentReporter.logger.log(LogStatus.INFO, "Policy # dispalys correctly under Policy Folder");
 		Thread.sleep(3000);
+		return policyquotepage;
 	}
-	
-	
-/*	public void policySearch(String policyNo, WebElement policySearchTxtBox, WebElement searchBtn) 
-	
-	{
-		clearTextBox(policySearchTxtBox, "Enter Policy text field");
-		enterTextIn(policySearchTxtBox, policyNo, "Enter Policy text field");
-		click(searchBtn, "Search button");
-	}*/
-
 	
 	//Save Rate details code.
 	public void saveRatedetails() throws InterruptedException
 	{
-		click(RateBtn, "Rate button");
+		click(driver,RateBtn, "Rate button");
 		Thread.sleep(5000);
 		switchToFrameUsingId(driver,"popupframe1");
 	    Thread.sleep(1000);
-	    selectDropdownByValue(Continue_saving, "Y", "Continue saving without Quote"); 
+	    selectDropdownByValue(driver,Continue_saving, "Y", "Continue saving without Quote"); 
 	    Thread.sleep(1000);
-	    click(Notify_Close, "Close button");
+	    click(driver,Notify_Close, "Close button");
 	    Thread.sleep(3000);
 	}
 	
 	//Download Excel report and save in defined folder
 	public String startExcelExport() throws InterruptedException,AWTException
 	{
-	    	 click(Export, "Export link");
+	    	 click(driver,Export, "Export link");
 	    	 Thread.sleep(2000);
 	    	 
 	    	 Robot rob = new Robot();
@@ -255,10 +232,10 @@ public class rateApolicyPage extends commonAction {
 	    	 rob.keyPress(KeyEvent.VK_ENTER);
 	    	 rob.keyRelease(KeyEvent.VK_ENTER);
 	    	 
-	    	 click(Prem_Close,"Premium close");
+	    	 click(driver,Prem_Close,"Premium close");
 	    	 Thread.sleep(1000);
 	    	 
-	    	 click(Exit_Ok, "OK button");
+	    	 click(driver,Exit_Ok, "OK button");
 	    	 switchToParentWindowfromframe(driver);
 	    	
 	    	 rob.keyPress(KeyEvent.VK_F6);
@@ -288,18 +265,22 @@ public class rateApolicyPage extends commonAction {
 	    	 e.printStackTrace();	
 	    	}*/
 	    	 return fileNamePath;
-	    }	 	
+	    }	
+	//Verify file exist or not.
 	public void verifyFileExists(String fileNamePath){
 		
 		comUtil.downloadedFileExists(fileNamePath);
 	}
 
+	//Select Accept option from "Action Drop Down".
 	public void AcceptFromActionDropDown()
 	{
-		selectDropdownByValue(policyAction, valueOfPolicyActionAccept, "Policy Action");
+		selectDropdownByValue(driver,policyAction, valueOfPolicyActionAccept, "Policy Action");
 		ExtentReporter.logger.log(LogStatus.INFO, "Select Accept from the dropdown screen.");
 		
 	}
+	
+	//Verify Alert is present or not.
 	public void isAlertPresent() throws InterruptedException 
 	{ 
 	    try 
@@ -316,6 +297,7 @@ public class rateApolicyPage extends commonAction {
 	    }   // catch 
 	}   
 	
+	//IDentify Phase dispalyed on Page.	
 	public void identifyPhase() throws InterruptedException
 	{
 		waitFor(driver, 2);
@@ -323,6 +305,8 @@ public class rateApolicyPage extends commonAction {
 		verifyTextPresent(getTextPolicyPhase,"Binder","Policy Phase");
 		ExtentReporter.logger.log(LogStatus.PASS, "Verify Phase is changed to Binder.");
 	}
+	
+	//Identify Policy number from Page.
 	public String policyNo()
 	{
 		String profileNoLable = pageHeaderForPolicyFolder.getAttribute("innerHTML");
@@ -330,14 +314,15 @@ public class rateApolicyPage extends commonAction {
 		return portfolioNo[2];
 	}
 	
+	//Billing setup flow code.
 	public void billingSetup() throws InterruptedException
 	{
 		Thread.sleep(3000);
-		selectDropdownByValue(policyAction, billingSetup, "Policy Action");
+		selectDropdownByValue(driver,policyAction, billingSetup, "Policy Action");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions-->Select Billing Setup");
 		waitFor(driver, 5000);
 		switchToFrameUsingId(driver, "popupframe1");
-		selectDropdownByValue(paymentPlan, paymentPlanValue, "Payment Plan");
+		selectDropdownByValue(driver,paymentPlan, paymentPlanValue, "Payment Plan");
 		ExtentReporter.logger.log(LogStatus.INFO, "Payment plan dropdown: Select A-Monthly");
 		Thread.sleep(5000);
 		clickButton(driver, billingSetupSaveBtn, "Save Button");
@@ -345,6 +330,8 @@ public class rateApolicyPage extends commonAction {
 		Thread.sleep(35000);
 		switchToParentWindowfromframe(driver);
 	}
+	
+	//Coverage Details flow.
 	public void coverageDetailsSelect()
 	{
 		try{
@@ -356,6 +343,7 @@ public class rateApolicyPage extends commonAction {
 		}
 	}
 	
+	//Coverage updates flow.
 	public void coverageUpdates(String CoverageName, String binderForm, String PolicyNo) throws InterruptedException
 	{
 		for (int i = 0; i<coverageList.size();i++)
@@ -400,7 +388,7 @@ public class rateApolicyPage extends commonAction {
 		Thread.sleep(2000);
 		switchToParentWindowfromframe(driver);
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+PolicyNo+"')]")));
-		enterTextIn(addText, binderForm+" form added.", "Aditional Text");
+		enterTextIn(driver,addText, binderForm+" form added.", "Aditional Text");
 		switchToParentWindowfromframe(driver);
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+PolicyNo+"')]")));
 		clickButton(driver, manuscriptPageSaveBtn, "Manu Script page Save");
@@ -410,6 +398,8 @@ public class rateApolicyPage extends commonAction {
 		switchToParentWindowfromframe(driver);
 	}
 	
+	
+	//Rate a functionality flow.
 	public void rateFunctionality(String policyNo) throws InterruptedException
 	{
 		Thread.sleep(3000);
@@ -439,6 +429,7 @@ public class rateApolicyPage extends commonAction {
 		switchToParentWindowfromframe(driver);
 	}
 	
+	//PDF verification flow.
 	public void pdfVerify() throws Exception
 	{
 		clickButton(driver, previewBtn, "Preview");
@@ -453,6 +444,7 @@ public class rateApolicyPage extends commonAction {
 		
 	}
 	
+	//Save Option flow.
 	public void saveOption(String policyNo) throws InterruptedException
 	{
 		Thread.sleep(2000);
@@ -460,7 +452,7 @@ public class rateApolicyPage extends commonAction {
 		ExtentReporter.logger.log(LogStatus.PASS, "Click Save Options.");
 		Thread.sleep(4000);
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
-		selectDropdownByValue(saveAsDropDown, saveAsPolicyValue, "Save Option");
+		selectDropdownByValue(driver,saveAsDropDown, saveAsPolicyValue, "Save Option");
 		ExtentReporter.logger.log(LogStatus.PASS, "Select Official.");
 		clickButton(driver, saveOptionOkBtn, "Save");
 		ExtentReporter.logger.log(LogStatus.PASS, "Click [OK]");
@@ -468,7 +460,7 @@ public class rateApolicyPage extends commonAction {
 		try{
 			switchToParentWindowfromframe(driver);
 			switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
-			selectDropdownByValue(productNotifyDropDown, ProductNotifyValue, "product notify");
+			selectDropdownByValue(driver,productNotifyDropDown, ProductNotifyValue, "product notify");
 			Thread.sleep(1000);
 			clickButton(driver, prodNotifyClose, "Product Notify Close");
 			ExtentReporter.logger.log(LogStatus.PASS, " Yes selection from Product Notify dorp down.");

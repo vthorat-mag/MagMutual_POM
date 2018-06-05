@@ -30,8 +30,6 @@ public class homePage extends commonAction{
 	@FindBy(xpath="//li[@id='PM_POLICY_MENU']//a[@class='fNiv isParent']")
 	WebElement Policy_tab;
 	
-	
-	
 	@FindBy(xpath="//li[@id='PM_NEW_POL_QUOTE_MENU']//a[@class='subMenuLinks isParent']/span")
 	WebElement Create_New;
 
@@ -75,7 +73,6 @@ public class homePage extends commonAction{
 	@FindBy(name="issueStateCode")
 	WebElement Issue_State_Code;
 	
-
 	@FindBy(id="PM_CREPOL_SRCH")
 	WebElement Policy_Search;
 	
@@ -88,23 +85,25 @@ public class homePage extends commonAction{
 	@FindBy(id="pageTitleForpageHeader")
 	WebElement findPolicyPageTitle;
 	
+  @FindBy(xpath = "//a[@class='topNavCurrentApp']")
+	WebElement headerPolicyTab;
 	
-		
+
 	public homePage(WebDriver driver)
 	{
 		this.driver=driver;
 		PageFactory.initElements(driver, this);
 	}
 	
+	//Verify logo is preent on page.
 	public void verifyLogoIsAvailable(){
-		
 		visibilityOfElement(logo, "DELPHI TECHNOLOGY");
 	}
 	
 	//Navigate to CIS page
 	public void navigateToCISPage()
 	{
-		click(cisTab,"CIS tab");
+	click(driver,cisTab,"CIS tab");
 		ExtentReporter.logger.log(LogStatus.INFO, "CIS Entity Search page opens");
 	}
 	
@@ -120,6 +119,20 @@ public class homePage extends commonAction{
 	}
 			
 	
+	//navigate to Policy page from policy link[Header]
+	public void navigateToPolicyPageThroughPolicyTab()
+	{
+		click(driver,headerPolicyTab,"Policy tab on Header");
+	}
+		
+	//Logout from application.
+	public void logoutFromeOasis()
+	{
+		click(driver,logoff,"Logoff button");
+  	ExtentReporter.logger.log(LogStatus.INFO, "User is logged out from application");
+  }
+  
+  
 	//Move to Policy tab and select Create New option from menu
 	public void create_New() throws InterruptedException{		
 		
@@ -197,11 +210,5 @@ public class homePage extends commonAction{
 		ExtentReporter.logger.log(LogStatus.INFO, "Policy Folder window is opened");
 		switchToParentWindowfromframe(driver);
 
-	}
-	
-	
-	public void logoutFromeOasis()	{
-		click(logoff,"Logoff button");
-		ExtentReporter.logger.log(LogStatus.INFO, "User is logged out from application");
 	}
 }
