@@ -1,6 +1,7 @@
 package com.mm.utils;
 
 import java.awt.AWTException;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -31,6 +32,14 @@ public class commonAction implements CommonActionInterface {
 	int Medium=25;
 	int High=50;
 
+	
+	public void switchToSecondFramefromFirst(WebDriver driver,String frameID){
+		
+		List<WebElement> secondFrame = driver.findElements(By.id(frameID));
+     	driver.switchTo().frame(secondFrame.get(0));
+		
+	}
+	
 	public void switchToParentWindowfromotherwindow(WebDriver driver, String parentwindow) {
 
 		try {
@@ -188,9 +197,10 @@ public class commonAction implements CommonActionInterface {
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
 			Assert.assertTrue(pageElement.isDisplayed(), "Logo " + text + " is not displayed on the page.");
 			ExtentReporter.logger.log(LogStatus.PASS, "Logo " + text + " is displayed on page after login");
+
 		} catch (Exception e) {
 			e.printStackTrace();
-			ExtentReporter.logger.log(LogStatus.FAIL, "Logo " + text + " is not displayed on page after login");
+			ExtentReporter.logger.log(LogStatus.FAIL, text + " is not displayed on page after login");
 		}
 	}
 
@@ -250,13 +260,14 @@ public class commonAction implements CommonActionInterface {
 		ExcelUtil exlutil = new ExcelUtil();
 	}
 
-	public void verifyTextPresent(String getTextPolicyPhase, String actualText, String fieldName) {
+	public void verifyTextPresent(String getText, String actualText, String fieldName) {
 		try {
-			Assert.assertEquals(getTextPolicyPhase, actualText, getTextPolicyPhase + " element is present");
-			ExtentReporter.logger.log(LogStatus.PASS, getTextPolicyPhase + " element is present");
+			Assert.assertEquals(getText, actualText, getText + " element is present");
+			ExtentReporter.logger.log(LogStatus.PASS, getText + " element is present");
+
 		} catch (Exception e) {
 			e.printStackTrace();
-			ExtentReporter.logger.log(LogStatus.FAIL, getTextPolicyPhase + " element is NOT present");
+			ExtentReporter.logger.log(LogStatus.FAIL, getText + " element is NOT present");
 		}
 	}
 
