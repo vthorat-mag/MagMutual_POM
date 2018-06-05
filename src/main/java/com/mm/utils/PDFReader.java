@@ -27,33 +27,35 @@ import com.relevantcodes.extentreports.LogStatus;
 import bsh.Parser;
 
 public class PDFReader {
-	commonUtilities comUtil = new commonUtilities();
-	//WebDriver driver;
-	
-	public void savePDF() throws IOException 
-	{
-		String[] savePDFPath  = {System.getProperty("user.dir") +"\\src\\main\\resources\\StoredPDF\\pdfDocument.pdf"};
-		String[] executionPath = {System.getProperty("user.dir") +"\\src\\main\\java\\autoItScripts\\savePdf.exe"};
-		Runtime.getRuntime().exec(System.getProperty("user.dir") +"\\src\\main\\java\\autoItScripts\\savePdf.exe",savePDFPath);
-		//ProcessBuilder pb = new ProcessBuilder(executionPath); 
+	CommonUtilities comUtil = new CommonUtilities();
+
+	//AUTOIT script execution to save PDF.
+	public void savePDF() throws IOException {
+		String[] savePDFPath = {
+				System.getProperty("user.dir") + "\\src\\main\\resources\\StoredPDF\\pdfDocument.pdf" };
+		String[] executionPath = { System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\savePdf.exe" };
+		Runtime.getRuntime().exec(System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\savePdf.exe",
+				savePDFPath);
+		// ProcessBuilder pb = new ProcessBuilder(executionPath);
 	}
-	public boolean verifyPdfContent(String content)throws IOException, AWTException, InterruptedException
-	{
+
+	//Logic to verify PDF content.
+	public boolean verifyPdfContent(String content) throws IOException, AWTException, InterruptedException {
 		boolean flag = false;
 		PDFTextStripper pdfStripper = null;
 		PDDocument pdDoc = null;
 		COSDocument cosDoc = null;
 		String parsedText = null;
-		int noOfPDFPages =0;
-		
+		int noOfPDFPages = 0;
+
 		try {
-			File file = new File(System.getProperty("user.dir") +"\\src\\main\\resources\\StoredPDF\\pdfDocument.pdf");
-			pdDoc =  PDDocument.load(file);
+			File file = new File(System.getProperty("user.dir") + "\\src\\main\\resources\\StoredPDF\\pdfDocument.pdf");
+			pdDoc = PDDocument.load(file);
 			noOfPDFPages = pdDoc.getNumberOfPages();
 			pdfStripper = new PDFTextStripper();
 			parsedText = pdfStripper.getText(pdDoc);
 		} catch (MalformedURLException e2) {
-			System.err.println("URL string could not be parsed "+e2.getMessage());
+			System.err.println("URL string could not be parsed " + e2.getMessage());
 		} catch (IOException e) {
 			System.err.println("Unable to open PDF Parser. " + e.getMessage());
 			try {
@@ -65,11 +67,11 @@ public class PDFReader {
 				e.printStackTrace();
 			}
 		}
-		if(parsedText.contains(content)) {
-			flag=true;
-			ExtentReporter.logger.log(LogStatus.INFO, "Verify footer display '"+content+"'.");
+		if (parsedText.contains(content)) {
+			flag = true;
+			ExtentReporter.logger.log(LogStatus.INFO, "Verify footer display '" + content + "'.");
 		}
-		ExtentReporter.logger.log(LogStatus.INFO, "Footer dose not content '"+content+"'.");
+		ExtentReporter.logger.log(LogStatus.INFO, "Footer dose not content '" + content + "'.");
 		return flag;
-    }
+	}
 }
