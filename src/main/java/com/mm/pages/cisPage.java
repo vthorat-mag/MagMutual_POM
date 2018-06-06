@@ -81,38 +81,27 @@ public class cisPage  extends commonAction{
 
 		ExcelUtil exlutil = new ExcelUtil();
    	    enterTextIn(driver,Long_Name,LongName);
-	    
    	    click(driver,CIS_OrgName, "Org Name text field");				
-	    
 	    enterTextIn(driver,Addr_Line1,Address_Line1);
-	    
 	    enterTextIn(driver,Addr_City,City);
-	    
 	    enterTextIn(driver,Ph_no,Phone_no);
-	    
 	    enterTextIn(driver,AreaCode,Area_code);
 	    Thread.sleep(2000);
-	    
 	    enterTextIn(driver,Eff_To_Date,Class_Eff_To_Date);
-	    
 	    selectDropdownByValue(driver,Classification, "CARRIER", "Classification");
-		
 	    selectDropdownByValue(driver,Addr_Type, "POLICY", "Address_Type");
-	    
 		selectDropdownByValue(driver,State,"GA","State");
 	    Thread.sleep(3000);
 	}
 	   
+	//Select zip code from the 
 	    public void selectZipCode() throws InterruptedException
 	    {
 	    	   String parentwindow = switchToWindow(driver);
 	    	   Thread.sleep(2000);
-	    	  	    	   
 	    	   WebElement zipCode = driver.findElement(By.xpath("//input[@value='30004']")); 
 	    	   click(driver,zipCode,"ZipCode");
-
 	    	   click(driver,OK,"OK button");
-
 	    	   Thread.sleep(2000);
       	       switchToParentWindowfromotherwindow(driver, parentwindow); 
       	      
