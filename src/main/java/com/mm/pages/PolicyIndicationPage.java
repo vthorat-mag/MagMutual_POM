@@ -9,10 +9,10 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import com.mm.utils.ExtentReporter;
-import com.mm.utils.commonAction;
+import com.mm.utils.CommonAction;
 import com.relevantcodes.extentreports.LogStatus;
 
-public class Policy_Indication_Page extends commonAction {
+public class PolicyIndicationPage extends CommonAction {
 
 	WebDriver driver;
 
@@ -243,7 +243,7 @@ public class Policy_Indication_Page extends commonAction {
 
 	
 	// Constructor to initialize driver and page elements for Policy_Indication_Page
-	public Policy_Indication_Page(WebDriver driver) {
+	public PolicyIndicationPage(WebDriver driver) {
 
 		this.driver = driver;
 		PageFactory.initElements(driver, this);

@@ -17,21 +17,20 @@ import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
+import com.mm.utils.CommonAction;
 import com.mm.utils.ExtentReporter;
-import com.mm.utils.commonAction;
 import com.relevantcodes.extentreports.LogStatus;
 
-public class Policy_Quote_Page extends commonAction {
+public class PolicyQuotePage extends CommonAction{
 	
+	//Global Assignment/initialization of variables.
 	WebDriver driver;
-	
 	String valueOfPolicyActionCopy = "javascript:copyQuote();";
 	String saveAsPolicyValue="OFFICIAL";
 	String QuotePhaseValue="QUOTE";
 	String ProductNotifyValue="Y";
 	
-	
-	
+	//Element repository for Policy Quote page.
 	@FindBy(name="globalSearch")
 	WebElement Policy_Search;
 
@@ -107,8 +106,7 @@ public class Policy_Quote_Page extends commonAction {
 	@FindBy(name="policyPhaseCode")
 	WebElement policyPhase;
 	
-//	@FindBy(xpath="//select[contains(@name,'confirmed')]")
-	@FindBy(name="483865737.confirmed")
+	@FindBy(xpath="//select[contains(@name,'confirmed')]")
 	WebElement productNotifyDropDown;
 	
 	@FindBy(id="PM_NOTIFY_CLOSE")
@@ -126,7 +124,8 @@ public class Policy_Quote_Page extends commonAction {
 	@FindBy(xpath = "//select[@name='policyNavLevelCode']//option[@value='RISK']")
 	WebElement verifyRisk;
 	
-	public Policy_Quote_Page(WebDriver driver)
+	//Constructor to initialize elements on Policy Quote page.
+	public PolicyQuotePage(WebDriver driver)
 	{
 		this.driver=driver;
 		PageFactory.initElements(driver, this);
@@ -251,7 +250,6 @@ public class Policy_Quote_Page extends commonAction {
 		switchToParentWindowfromframe(driver);
 	}
 	
-
 	//Save a option functionality flow.
 	public void saveOption(String policyNo) throws InterruptedException
 	{
@@ -260,7 +258,7 @@ public class Policy_Quote_Page extends commonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options");
 		Thread.sleep(4000);
 		switchToFrameUsingId(driver, "popupframe1");
-    getPageTitle(driver, "Save As");
+		getPageTitle(driver, "Save As");
 		selectDropdownByVisibleText(driver, saveAsDropDown, saveAsPolicyValue, "Selected "+saveAsPolicyValue);
 		clickButton(driver, saveOptionOkBtn, "Save");
 		ExtentReporter.logger.log(LogStatus.INFO,  "Select "+saveAsPolicyValue+" Click [OK]");
@@ -299,14 +297,9 @@ public class Policy_Quote_Page extends commonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Change Phase from Indication to Quote");
 	}
 	
-	//Click preview tab.
+	//Click preview tab to open PDF.
 	public void clickPreviewTab()
 	{
-		//click(PreviewTab, "Preview");
-		//switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=09100275')]")));
-		/*ArrayList<String> tabs2 = new ArrayList<String> (driver.getWindowHandles());
-	    driver.switchTo().window(tabs2.get(1));*/
-		//click(PreviewTab, "Preview Pane");
 		clickButton(driver, PreviewTab, "Preview");
 	}
 
