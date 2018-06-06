@@ -8,7 +8,7 @@ import org.openqa.selenium.WebElement;
 public interface CommonActionInterface {
 	
 	void navigateTo(String url);
-	void enterTextIn(WebDriver driver, WebElement pageElement, String text);
+	void enterTextIn(WebDriver driver, WebElement pageElement, String text, String TextFieldName);
     void clickButton(WebDriver driver, WebElement pageElement, String buttonName);
     void waitFor(long ms);
     void close(WebDriver driver);
@@ -18,7 +18,6 @@ public interface CommonActionInterface {
     void clearTextBox(WebDriver driver, WebElement pageElement, String textfield);
     String getAttributeValue(WebElement pageElement, String attributeName);
     void click(WebDriver driver, WebElement pageElement, String elementName);
-//  void clear(WebElement pageElement);
     void switchToFrameUsingId(WebDriver driver, String uniqId);
     void switchToFrameUsingElement(WebDriver driver, WebElement element);
     void switchToParentWindowfromframe(WebDriver driver);
@@ -26,6 +25,6 @@ public interface CommonActionInterface {
     String switchToWindow(WebDriver driver);
     void selectDropdownByValue(WebDriver driver, WebElement Value,String DropDownOption, String name);
     void switchToParentWindowfromotherwindow(WebDriver driver, String parentwindow);
-    void policySearch(String policyNo, WebElement policySearchTxtBox, WebElement earchBtn);
+    void policySearch(WebDriver driver, String policyNo, WebElement policySearchTxtBox, WebElement earchBtn);
 }
 

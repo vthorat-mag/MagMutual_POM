@@ -129,10 +129,10 @@ public class indicationPage extends commonAction {
 		
 		waitForElementToLoad(driver, 10, Last_Org_Name);
 		
-		enterTextIn(Last_Org_Name, "Test_Automation_V1", "Last Org Name");
+		enterTextIn(driver, Last_Org_Name, "Test_Automation_V1", "Last Org Name");
 		
 		
-		click(Search_Quote,"Search button");
+		click(driver, Search_Quote,"Search button");
 	//	ExtentReporter.logger.log(LogStatus.INFO, "");
 		
 		waitForElementToLoad(driver, 30, Select_Entity_Checkbox);
@@ -142,9 +142,9 @@ public class indicationPage extends commonAction {
 		clickButton(driver, Select_Entity_Checkbox, "Select Entity Checkbox");
 		
 		ExtentReporter.logger.log(LogStatus.INFO, "Risk is selected");	
-		click(Select_Entity_Checkbox, "Check box");
+		click(driver, Select_Entity_Checkbox, "Check box");
 		
-		click(Select_Entity, "Select button");
+		click(driver, Select_Entity, "Select button");
 			
 		ExtentReporter.logger.log(LogStatus.INFO, "Select Policy Type Window displays");	
 		switchToParentWindowfromotherwindow(driver, parentWindow);
@@ -158,18 +158,18 @@ public class indicationPage extends commonAction {
 		
 		switchToFrameUsingId(driver, "popupframe1");
 		Thread.sleep(1000);
-		enterTextIn(Effe_Date,Eff_Date, "Effective Date");
+		enterTextIn(driver, Effe_Date,Eff_Date, "Effective Date");
 		
-		selectDropdownByValue(Issue_Comp,"363536755","Issue Company");
-		selectDropdownByValue(Issue_State_Code,"GA","Issue State");
+		selectDropdownByValue(driver, Issue_Comp,"363536755","Issue Company");
+		selectDropdownByValue(driver, Issue_State_Code,"GA","Issue State");
 		
-		click(Policy_Search, "Search button for policy type");
+		click(driver, Policy_Search, "Search button for policy type");
 		Thread.sleep(2000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Policy Type window will display below");
 		
 		//Institution -highlight
 		
-		click(CrePol_Done, "Done button");
+		click(driver, CrePol_Done, "Done button");
 				
 		ExtentReporter.logger.log(LogStatus.INFO, "Policy Folder window is opened");
 		switchToParentWindowfromframe(driver);

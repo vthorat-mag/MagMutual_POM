@@ -5,17 +5,18 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import com.mm.utils.CommonAction;
 import com.mm.utils.ExtentReporter;
-import com.mm.utils.commonAction;
 import com.relevantcodes.extentreports.LogStatus;
 
-public class Policy_Submission_Page extends commonAction {
+public class PolicySubmissionPage extends CommonAction {
 	
+	//Global Assignment/initialization of variables.
 	WebDriver driver;
-	
 	String indicationPhaseValue="INDICATION";
 	String valueOfPolicyActionCopy = "javascript:copyQuote();";
 	
+	//Element repository for Policy Submission page.
 	@FindBy(id="PM_COMMON_TABS_SAVEWIP")
 	WebElement saveWIP;
 	
@@ -24,7 +25,6 @@ public class Policy_Submission_Page extends commonAction {
 	
 	@FindBy(xpath="//div[@id='globalDropdownActionItems']//select[@class='globalActionItemList']")
 	WebElement policyAction;
-	
 	
 	@FindBy(name="policyPhaseCode")
 	WebElement Phase;
@@ -41,9 +41,8 @@ public class Policy_Submission_Page extends commonAction {
 	@FindBy(id="PM_COMMON_TABS_SAVEWIP")
 	WebElement Save_WIP;
 	
-	
-	
-	public Policy_Submission_Page(WebDriver driver)
+	//Constructor to initialize elements on policy submission page.
+	public PolicySubmissionPage(WebDriver driver)
 	{
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
@@ -78,16 +77,13 @@ public class Policy_Submission_Page extends commonAction {
 	public void updatePolicyDetails() throws InterruptedException{
 		
 		waitForElementToLoad(driver, 30, Phase);
-		selectDropdownByValue(Phase, "INDICATION", "Phase");
-		selectDropdownByValue(Org_Type, "HOSPITAL", "Organisation Type");
-		enterTextIn(Hosp_Disc_Period_Rating, "2");
-		enterTextIn(Quote_Description, "Automated Test");
-		click(Save_WIP, "Save WIP button");
+		selectDropdownByValue(driver, Phase, "INDICATION", "Phase");
+		selectDropdownByValue(driver, Org_Type, "HOSPITAL", "Organisation Type");
+		enterTextIn(driver, Hosp_Disc_Period_Rating, "2");
+		enterTextIn(driver, Quote_Description, "Automated Test");
+		click(driver, Save_WIP, "Save WIP button");
 		ExtentReporter.logger.log(LogStatus.INFO, "Indication saved as WIP");
-}
-	
-	
-	
-	
+	}
+
 
 }
