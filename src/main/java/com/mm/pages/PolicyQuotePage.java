@@ -1,6 +1,9 @@
 package com.mm.pages;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -8,21 +11,26 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
+import com.mm.utils.CommonAction;
 import com.mm.utils.ExtentReporter;
-import com.mm.utils.commonAction;
 import com.relevantcodes.extentreports.LogStatus;
 
-public class Policy_Quote_Page extends commonAction {
+public class PolicyQuotePage extends CommonAction{
 	
+	//Global Assignment/initialization of variables.
 	WebDriver driver;
-	
 	String valueOfPolicyActionCopy = "javascript:copyQuote();";
 	String saveAsPolicyValue="OFFICIAL";
 	String QuotePhaseValue="QUOTE";
 	String ProductNotifyValue="Y";
 	
+	//Element repository for Policy Quote page.
 	@FindBy(name="globalSearch")
 	WebElement Policy_Search;
 
@@ -35,6 +43,9 @@ public class Policy_Quote_Page extends commonAction {
 	@FindBy(xpath="//div[@id='globalDropdownActionItems']//select[@class='globalActionItemList']")
 	WebElement policyAction;
 	
+	@FindBy(id="PM_CPT_TRAN_OK")
+	WebElement capt_Tranx_Ok;
+	
 	@FindBy(xpath="//a[@id='PM_PT_VIEWCVG']//span[@class='tabWithNoDropDownImage']")
 	WebElement coverageTab;
 	
@@ -46,6 +57,9 @@ public class Policy_Quote_Page extends commonAction {
 	
 	@FindBy(xpath = "//table[@id='maintainManuscriptListGrid']")
 	WebElement 	manuscriptList;
+	
+	@FindBy(xpath="//table[@id='maintainManuscriptListGrid']//div[@id='CFORMTYPECODELOVLABEL']")
+	WebElement manuscriptPageFirstItem;
 	
 	@FindBy(id="PM_MANU_DELETE")
 	WebElement manuscriptPageDeleteBtn;
@@ -101,21 +115,23 @@ public class Policy_Quote_Page extends commonAction {
 	@FindBy(name="additionalText")
 	WebElement addText;
 	
-	public Policy_Quote_Page(WebDriver driver)
+	@FindBy(id="PM_COMMON_TABS_PREVIEW")
+	WebElement PreviewTab;
+	
+	@FindBy(xpath="//div[@aria-describedby='newpopup1']")
+	WebElement pdfPane;
+	
+	@FindBy(xpath = "//select[@name='policyNavLevelCode']//option[@value='RISK']")
+	WebElement verifyRisk;
+	
+	//Constructor to initialize elements on Policy Quote page.
+	public PolicyQuotePage(WebDriver driver)
 	{
 		this.driver=driver;
 		PageFactory.initElements(driver, this);
 	}
 	
-	public void searchPolicy(String policy_no) throws InterruptedException
-	{
-		Thread.sleep(3000);
-		policySearch(policy_no,Policy_Search, Search_btn);
-		String actual=getText(pageHeaderForPolicyFolder);
-		Assert.assertEquals(actual, "Policy Folder "+policy_no, "The policy "+policy_no+" is Not available.");
-		Thread.sleep(3000);
-	}
-	
+	//Identify Policy number from page.
 	public String policyNo()
 	{
 		String profileNoLable = pageHeaderForPolicyFolder.getAttribute("innerHTML");
@@ -123,20 +139,25 @@ public class Policy_Quote_Page extends commonAction {
 		return portfolioNo[2];
 	}
 	
+	//Select Copy to action from "Action DropDown".
 	public void CopyOptionFromActionDropDown() throws InterruptedException
 	{
 		Thread.sleep(4000);
-		selectDropdownByValue(policyAction, valueOfPolicyActionCopy, "Policy Action");
+		selectDropdownByValue(driver, policyAction, valueOfPolicyActionCopy, "Policy Action");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy>Ok");
 	}
+	
+	//Coverage details flow.
 	public void coverageDetailsSelect() throws InterruptedException
 	{
 		Thread.sleep(3000);
 		clickButton(driver, coverageTab, "Coverage");
+		Assert.assertEquals(coverageList.get(0).getAttribute("innerHTML"), "Primary", "Coverage for Primary Risk is NOT displayed");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Coverage tab");
 		Thread.sleep(3000);
 	}
 	
+	//Coverage Update flow.
 	public void coverageUpdates(String CoverageName, String binderForm, String PolicyNo) throws InterruptedException
 	{
 		for (int i = 0; i<coverageList.size();i++)
@@ -150,13 +171,17 @@ public class Policy_Quote_Page extends commonAction {
 			}
 		}
 		clickButton(driver, optionalFormBtn, "Optional Form");
+		getPageTitle(driver,"Manuscript Information");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Optional Forms]");
 		Thread.sleep(4000);
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+PolicyNo+"')]")));
 		if (manuscriptList.isDisplayed())
 		{
+			String firstManuScriptInfoName = manuscriptPageFirstItem.getAttribute("innerHTML");
 			clickButton(driver, manuscriptPageDeleteBtn, "Manu script Delete");
 			driver.switchTo().alert().accept();
+			//Verify first item displayed in manu script list is not displayed in list.
+			Assert.assertEquals(manuscriptPageFirstItem.getAttribute("innerHTML"),firstManuScriptInfoName,"Manuscript lsit first item "+firstManuScriptInfoName+" is not deleted.");
 			ExtentReporter.logger.log(LogStatus.INFO, "Delete current Indication form, Are you sure you want to delete this? Click Ok");
 			Thread.sleep(2000);
 			clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
@@ -181,7 +206,7 @@ public class Policy_Quote_Page extends commonAction {
 		Thread.sleep(2000);
 		switchToParentWindowfromframe(driver);
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+PolicyNo+"')]")));
-		enterTextIn(addText, binderForm+" form added.", "Aditional Text");
+		enterTextIn(driver, addText, binderForm+" form added.", "Aditional Text");
 		switchToParentWindowfromframe(driver);
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+PolicyNo+"')]")));
 		clickButton(driver, manuscriptPageSaveBtn, "Manu Script page Save");
@@ -191,6 +216,7 @@ public class Policy_Quote_Page extends commonAction {
 		switchToParentWindowfromframe(driver);
 	}
 	
+	//Rate A functionality flow.
 	public void rateFunctionality(String policyNo) throws InterruptedException
 	{
 		Thread.sleep(3000);
@@ -208,11 +234,13 @@ public class Policy_Quote_Page extends commonAction {
 		{
 			ExtentReporter.logger.log(LogStatus.FAIL, "Product Notify Window is NOT dispalyed to user.");
 		}*/
-		Thread.sleep(3000);
+		Thread.sleep(2000);
 		//switchToParentWindowfromframe(driver);
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
 		//switchToFrameUsingId(driver,"popupframe1");
 		Thread.sleep(2000);
+		//Verify page title for View Premium[Rate Btn.]
+		getPageTitle(driver, "View Premium");
 		clickButton(driver, closeBtnOnViewPremiumPopup, "Close");
 		Thread.sleep(2000);
 		switchToParentWindowfromframe(driver);
@@ -222,41 +250,103 @@ public class Policy_Quote_Page extends commonAction {
 		switchToParentWindowfromframe(driver);
 	}
 	
+	//Save a option functionality flow.
 	public void saveOption(String policyNo) throws InterruptedException
 	{
-		Thread.sleep(2000);
+		waitForElementToLoad(driver, 15, saveOptionBtn);
 		clickButton(driver, saveOptionBtn, "Save Option");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options");
 		Thread.sleep(4000);
-		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
-		selectDropdownByValue(saveAsDropDown, saveAsPolicyValue, "Save Option");
+		switchToFrameUsingId(driver, "popupframe1");
+		getPageTitle(driver, "Save As");
+		selectDropdownByVisibleText(driver, saveAsDropDown, saveAsPolicyValue, "Selected "+saveAsPolicyValue);
 		clickButton(driver, saveOptionOkBtn, "Save");
-		ExtentReporter.logger.log(LogStatus.INFO, "Select Official Click [OK]");
-		Thread.sleep(6000);
-		/*try{
-			switchToParentWindowfromframe(driver);
-			switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
-			selectDropdownByValue(productNotifyDropDown, ProductNotifyValue, "product notify");
+		ExtentReporter.logger.log(LogStatus.INFO,  "Select "+saveAsPolicyValue+" Click [OK]");
+		switchToParentWindowfromframe(driver);
+		Thread.sleep(3000);
+}
+
+	public void product_Notify() throws InterruptedException{
+		
+			switchToFrameUsingId(driver, "popupframe1");
+		
+			waitForElementToLoad(driver, 10, productNotifyDropDown);
+			
+			selectDropdownByValue(driver, productNotifyDropDown, ProductNotifyValue, "product notify");
 			Thread.sleep(1000);
 			clickButton(driver, prodNotifyClose, "Product Notify Close");
 			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window dispalyed to user.");
-			ExtentReporter.logger.log(LogStatus.PASS, " Yes selection from Product Notify dorp down.");
-		}catch (Exception e)
+			ExtentReporter.logger.log(LogStatus.PASS, " Yes selected from Product Notify drop down list.");
+		//	switchToParentWindowfromframe(driver);
+			
+	/*	}catch(Exception e)
 		{
-			ExtentReporter.logger.log(LogStatus.FAIL, "Product Notify Window is NOT dispalyed to user.");
+			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window is NOT dispalyed to user.");
+		//	switchToParentWindowfromframe(driver);
 		}*/
-		switchToParentWindowfromframe(driver);
-		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
+			
+		
+		
+	}
+	
+	//Change phase to Quote.
+	public void changePhaseToQuote() throws InterruptedException
+	{
 		Thread.sleep(4000);
+		selectDropdownByValue(driver, policyPhase, QuotePhaseValue, "Phase");
+		ExtentReporter.logger.log(LogStatus.INFO, "Change Phase from Indication to Quote");
+	}
+	
+	//Click preview tab to open PDF.
+	public void clickPreviewTab()
+	{
+		clickButton(driver, PreviewTab, "Preview");
+	}
+
+	
+		
+	//Select the policy Action from DDL
+	public void select_policyAction(String policyAction_value) throws InterruptedException{
+		
+		waitForElementToLoad(driver, 15, policyAction);
+		selectDropdownByVisibleText(driver, policyAction, policyAction_value, "Renewal");
+		ExtentReporter.logger.log(LogStatus.INFO, "Capture Transaction Details window opens");
+		
+		Thread.sleep(3000);
+		
+		switchToFrameUsingId(driver, "popupframe1");
+	}
+		
+	
+	public void switchToNextFrame() throws InterruptedException{
+		
+		//switchToParentWindowfromframe(driver);
+		
+		List<WebElement> secondFrame = driver.findElements(By.id("popupframe2"));
+     	driver.switchTo().frame(secondFrame.get(0));
+	
+	}
+	
+	
+	public void save_CaptureTransactionDetails () throws InterruptedException{
+		
+		Thread.sleep(3000);
+		
+		click(driver, capt_Tranx_Ok, "Ok button for Renewal");
+		
+		switchToParentWindowfromframe(driver);
+	
+	}
+		
+	
+	public void exit_SaveOption() throws InterruptedException{
+			
+		waitForElementToLoad(driver, 10, Exit_Ok);
+
 		clickButton(driver, Exit_Ok, "Exit Ok");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [OK]");
 	}
 	
-	public void changePhaseToQuote() throws InterruptedException
-	{
-		Thread.sleep(4000);
-		selectDropdownByValue(policyPhase, QuotePhaseValue, "Phase");
-		ExtentReporter.logger.log(LogStatus.INFO, "Change Phase from Indication to Quote");
-	}
-
+	
+	
 }

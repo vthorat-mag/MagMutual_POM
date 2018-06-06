@@ -5,9 +5,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-import com.mm.utils.commonAction;
+import com.mm.utils.CommonAction;
 
-public class endorsePolicyPage extends commonAction{
+public class EndorsePolicyPage extends CommonAction{
 
 WebDriver driver;
 	
@@ -30,7 +30,7 @@ WebElement Binder_checkbox;
 @FindBy(id="PM_SPOL_SEARCH")
 WebElement Search_Policy;
 
-public endorsePolicyPage(WebDriver driver){
+public EndorsePolicyPage(WebDriver driver){
 	
 	this.driver=driver;
 	PageFactory.initElements(driver, this);
