@@ -5,8 +5,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-import com.mm.utils.ExtentReporter;
 import com.mm.utils.CommonAction;
+import com.mm.utils.ExtentReporter;
 import com.relevantcodes.extentreports.LogStatus;
 
 public class PolicySubmissionPage extends CommonAction {
@@ -25,6 +25,21 @@ public class PolicySubmissionPage extends CommonAction {
 	
 	@FindBy(xpath="//div[@id='globalDropdownActionItems']//select[@class='globalActionItemList']")
 	WebElement policyAction;
+	
+	@FindBy(name="policyPhaseCode")
+	WebElement Phase;
+	
+	@FindBy(name="organizationTypeCode")
+	WebElement Org_Type;
+	
+	@FindBy(name="discoveryPeriodRating")
+	WebElement Hosp_Disc_Period_Rating;
+	
+	@FindBy(name="termDesc")
+	WebElement Quote_Description;
+	
+	@FindBy(id="PM_COMMON_TABS_SAVEWIP")
+	WebElement Save_WIP;
 	
 	//Constructor to initialize elements on policy submission page.
 	public PolicySubmissionPage(WebDriver driver)
@@ -57,5 +72,18 @@ public class PolicySubmissionPage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Save WIP");
 		Thread.sleep(2000);
 	}
+	
+	// Update policy details for a policy and change policy phase from Submission to Indication.
+	public void updatePolicyDetails() throws InterruptedException{
+		
+		waitForElementToLoad(driver, 30, Phase);
+		selectDropdownByValue(driver, Phase, "INDICATION", "Phase");
+		selectDropdownByValue(driver, Org_Type, "HOSPITAL", "Organisation Type");
+		enterTextIn(driver, Hosp_Disc_Period_Rating, "2");
+		enterTextIn(driver, Quote_Description, "Automated Test");
+		click(driver, Save_WIP, "Save WIP button");
+		ExtentReporter.logger.log(LogStatus.INFO, "Indication saved as WIP");
+	}
+
 
 }
