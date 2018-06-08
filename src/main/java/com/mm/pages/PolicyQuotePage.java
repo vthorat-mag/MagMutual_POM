@@ -158,7 +158,7 @@ public class PolicyQuotePage extends CommonAction{
 	}
 	
 	//Coverage Update flow.
-	public void coverageUpdates(String CoverageName, String binderForm, String PolicyNo) throws InterruptedException
+	public void coverageUpdates(String CoverageName, String binderForm, String PolicyNo) throws Exception
 	{
 		for (int i = 0; i<coverageList.size();i++)
 		{
@@ -217,7 +217,7 @@ public class PolicyQuotePage extends CommonAction{
 	}
 	
 	//Rate A functionality flow.
-	public void rateFunctionality(String policyNo) throws InterruptedException
+	public void rateFunctionality(String policyNo) throws Exception
 	{
 		Thread.sleep(3000);
 		clickButton(driver, rateBtn, "Rate Tab");

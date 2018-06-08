@@ -79,8 +79,8 @@ public class PolicySubmissionPage extends CommonAction {
 		waitForElementToLoad(driver, 30, Phase);
 		selectDropdownByValue(driver, Phase, "INDICATION", "Phase");
 		selectDropdownByValue(driver, Org_Type, "HOSPITAL", "Organisation Type");
-		enterTextIn(driver, Hosp_Disc_Period_Rating, "2");
-		enterTextIn(driver, Quote_Description, "Automated Test");
+		enterTextIn(driver, Hosp_Disc_Period_Rating, "2","Hospital Disc period rating");
+		enterTextIn(driver, Quote_Description, "Automated Test","Quote Description");
 		click(driver, Save_WIP, "Save WIP button");
 		ExtentReporter.logger.log(LogStatus.INFO, "Indication saved as WIP");
 	}
