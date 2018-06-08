@@ -82,13 +82,19 @@ public class HomePage extends CommonAction {
 	@FindBy(id="pageTitleForpageHeader")
 	WebElement findPolicyPageTitle;
 	
-  @FindBy(xpath = "//a[@class='topNavCurrentApp']")
+  @FindBy(xpath = "//a[@id='topnav_Policy']")
 	WebElement headerPolicyTab;
 
 	//Constructor to initialize elements on Home page.
 	public HomePage(WebDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
+	}
+	
+	//Verify user Navigated to Policy page when clicked on Policy tab present on Header.
+	public void headerPolicyTab()
+	{
+		clickButton(driver, headerPolicyTab, "Policy (from header");
 	}
 
 	// Verify logo is preent on page.
@@ -157,5 +163,10 @@ public class HomePage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Policy Folder window is opened");
 		switchToParentWindowfromframe(driver);
 
+	}
+
+	public String create_Quote() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

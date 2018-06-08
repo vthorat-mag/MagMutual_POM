@@ -27,12 +27,12 @@ import org.testng.Assert;
 
 import com.mm.utils.ExtentReporter;
 import com.mm.utils.PDFReader;
-import com.mm.utils.commonAction;
-import com.mm.utils.commonUtilities;
+import com.mm.utils.CommonAction;
+import com.mm.utils.CommonUtilities;
 import com.mongodb.client.model.ReturnDocument;
 import com.relevantcodes.extentreports.LogStatus;
 
-public class rateApolicyPage extends commonAction {
+public class RateApolicyPage extends CommonAction {
 	
 	WebDriver driver;
 	String valueOfPolicyActionAccept = "javascript:acceptQuote();";
@@ -40,7 +40,7 @@ public class rateApolicyPage extends commonAction {
 	String paymentPlanValue = "659689385";
 	String saveAsPolicyValue="OFFICIAL";
 	String ProductNotifyValue="Y";
-	commonUtilities comUtil = new commonUtilities();
+	CommonUtilities comUtil = new CommonUtilities();
 	PDFReader pdfread = new PDFReader();
 	//Object repository for all elements on rate A policy page.
 	
@@ -158,18 +158,18 @@ public class rateApolicyPage extends commonAction {
 	@FindBy(name="additionalText")
 	WebElement addText;
 	
-	public rateApolicyPage(WebDriver driver)
+	public RateApolicyPage(WebDriver driver)
 	{
 		this.driver=driver;
 		PageFactory.initElements(driver, this);
 	}
-	Policy_Quote_Page policyquotepage =  new Policy_Quote_Page(this.driver);
+	PolicyQuotePage policyquotepage =  new PolicyQuotePage(this.driver);
 	
 	//Search Policy from Search Policy text field.
-	public Policy_Quote_Page searchPolicy( String policy_no) throws InterruptedException
+	public PolicyQuotePage searchPolicy( String policy_no) throws InterruptedException
 	{
 		Thread.sleep(3000);
-		policySearch(policy_no,Policy_Search, Search_btn);
+		policySearch(driver, policy_no,Policy_Search, Search_btn);
 		String actual=getText(driver,pageHeaderForPolicyFolder);
 		Assert.assertEquals(actual, "Policy Folder "+policy_no, "The policy "+policy_no+" is Not available.");
 		ExtentReporter.logger.log(LogStatus.INFO, "Policy # dispalys correctly under Policy Folder");
@@ -216,7 +216,7 @@ public class rateApolicyPage extends commonAction {
 	    	 rob.keyPress(KeyEvent.VK_ENTER);
 	    	 rob.keyRelease(KeyEvent.VK_ENTER);
 	    	    	 
-	    	 String fileDate = comUtil.getSystemDate();
+	    	 String fileDate = comUtil.getSystemDateMMddyy_hhmmss();
 	    	 
 	    	 String fileNamePath = "C:\\MM_Testcase_Output\\"+fileDate+".xlsx";
 	    	 StringSelection fileName = new StringSelection(fileNamePath);
@@ -344,7 +344,7 @@ public class rateApolicyPage extends commonAction {
 	}
 	
 	//Coverage updates flow.
-	public void coverageUpdates(String CoverageName, String binderForm, String PolicyNo) throws InterruptedException
+	public void coverageUpdates(String CoverageName, String binderForm, String PolicyNo) throws Exception
 	{
 		for (int i = 0; i<coverageList.size();i++)
 		{
@@ -400,7 +400,7 @@ public class rateApolicyPage extends commonAction {
 	
 	
 	//Rate a functionality flow.
-	public void rateFunctionality(String policyNo) throws InterruptedException
+	public void rateFunctionality(String policyNo) throws Exception
 	{
 		Thread.sleep(3000);
 		clickButton(driver, rateBtn, "Rate Tab");
@@ -445,7 +445,7 @@ public class rateApolicyPage extends commonAction {
 	}
 	
 	//Save Option flow.
-	public void saveOption(String policyNo) throws InterruptedException
+	public void saveOption(String policyNo) throws Exception
 	{
 		Thread.sleep(2000);
 		clickButton(driver, saveOptionBtn, "Save Option");

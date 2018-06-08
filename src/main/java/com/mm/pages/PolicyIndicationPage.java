@@ -478,7 +478,7 @@ public class PolicyIndicationPage extends CommonAction {
 			}
 		}
 		Thread.sleep(2000);
-		enterTextIn(driver,ExposureUnit, "50");
+		enterTextIn(driver,ExposureUnit, "50","Exposure Unit");
 		
 		//Close coverage class tab and move to coverage tab
 		click(driver,Select_CoverageClass, "Select button for Coverage class");
@@ -489,7 +489,7 @@ public class PolicyIndicationPage extends CommonAction {
 	}
 
 	// Select 'Coverage' tab and add Manuscript from optional forms and Save
-	public void coverageUpdates(String CoverageName, String binderForm, String PolicyNo) throws InterruptedException {
+	public void coverageUpdates(String CoverageName, String binderForm, String PolicyNo) throws Exception {
 		Thread.sleep(2000);
 		
 		//Select Coverage from coverage list 
@@ -538,7 +538,7 @@ public class PolicyIndicationPage extends CommonAction {
 	}
 
 	// Open Limit Sharing pop up and switch to pop up window
-	public void openLimitSharingTab(String PolicyNo) throws InterruptedException {
+	public void openLimitSharingTab(String PolicyNo) throws Exception {
 
 		Thread.sleep(2000);
 		clickButton(driver, Policy_tab, "Policy tab");

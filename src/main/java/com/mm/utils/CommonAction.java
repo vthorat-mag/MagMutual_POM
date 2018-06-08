@@ -22,14 +22,15 @@ import com.relevantcodes.extentreports.LogStatus;
 import BaseClass.CommonActionInterface;
 
 public class CommonAction implements CommonActionInterface {
+	
+	
+	Properties pro=new Properties();
 
-	//Global Assignment/initialization of variables.
-	Properties pro = new Properties();
-
-	//Time for IMplicit and explicit wait.
-	int Low = 10;
-	int Medium = 25;
-	int High = 50;
+	//Integer.valueOf(properties.prop.getProperty("High"));
+	
+	int Low=10;
+	int Medium=25;
+	int High=50;
 
 	
 	public void switchToSecondFramefromFirst(WebDriver driver,String frameID){
@@ -62,8 +63,10 @@ public class CommonAction implements CommonActionInterface {
 
 	}
 	
-	public void switchToFrameUsingElement(WebDriver driver, WebElement element)
+	public void switchToFrameUsingElement(WebDriver driver, WebElement element) throws Exception
 	{
+		waitFor(driver, 15);
+		Thread.sleep(5000);
 		try {
 			driver.switchTo().frame(element);
 			ExtentReporter.logger.log(LogStatus.PASS, "Control switched Switched to frame.");
@@ -72,6 +75,7 @@ public class CommonAction implements CommonActionInterface {
 			ExtentReporter.logger.log(LogStatus.FAIL, "Error while switching to frame.");
 		}
 	}
+	
 
 	public void switchToParentWindowfromframe(WebDriver driver) {
 		try {
@@ -105,19 +109,20 @@ public class CommonAction implements CommonActionInterface {
 		}
 	}
 
-	public void clickButton(WebDriver driver, WebElement pageElement, String buttonName) {
-		// TODO Auto-generated method stub
-		try {
-			WebDriverWait wait = new WebDriverWait(driver, Medium);
-			wait.until(ExpectedConditions.visibilityOf(pageElement));
-			JavascriptExecutor js = (JavascriptExecutor) driver;
-			Assert.assertTrue(pageElement.isDisplayed(), buttonName + " button is displayed on screen.");
-			js.executeScript("arguments[0].click();", pageElement);
-			ExtentReporter.logger.log(LogStatus.PASS, "clicked on button - " + buttonName);
-		} catch (Exception e) {
-			ExtentReporter.logger.log(LogStatus.FAIL, buttonName + " element is not found.");
+		public void clickButton(WebDriver driver, WebElement pageElement, String buttonName) {
+			try
+			{
+				WebDriverWait wait = new WebDriverWait(driver,Medium);
+				wait.until(ExpectedConditions.visibilityOf(pageElement));
+				JavascriptExecutor js = (JavascriptExecutor)driver;
+				Assert.assertTrue(pageElement.isDisplayed(), buttonName+" button is displayed on screen.");
+				js.executeScript("arguments[0].click();", pageElement);
+				ExtentReporter.logger.log(LogStatus.PASS, "clicked on button - "+buttonName);
+			}catch(Exception e)
+			{
+				ExtentReporter.logger.log(LogStatus.FAIL, buttonName+ " element is not found.");
+			}
 		}
-	}
 
 	public void waitFor(WebDriver driver, long time) {
 		// TODO Auto-generated method stub
@@ -132,11 +137,11 @@ public class CommonAction implements CommonActionInterface {
 
 	public void takeScreenShot(String pageTitle) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
-	public String getPageTitle(WebDriver driver, String expectedPageTitle) {
-		// TODO Auto-generated method stub
+	public String getPageTitle(WebDriver driver, String expectedPageTitle ) throws InterruptedException {
+		Thread.sleep(5000);
 		String getPageTitleFromPage = driver.findElement(By.xpath("//div[@class='pageTitle']")).getAttribute("innerHTML").trim();
 		WebDriverWait wait = new WebDriverWait(driver,Medium);
 		wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[@class='pageTitle']"))));
@@ -146,7 +151,7 @@ public class CommonAction implements CommonActionInterface {
 
 	public String getText(WebDriver driver, WebElement pageElement) {
 		// TODO Auto-generated method stub
-		WebDriverWait wait = new WebDriverWait(driver, Medium);
+		WebDriverWait wait = new WebDriverWait(driver,Medium);
 		wait.until(ExpectedConditions.visibilityOf(pageElement));
 		return pageElement.getAttribute("innerHTML");
 	}
@@ -167,7 +172,7 @@ public class CommonAction implements CommonActionInterface {
 	}
 
 	public String getAttributeValue(WebElement pageElement, String attributeName) {
-
+		
 		return null;
 	}
 
@@ -191,36 +196,40 @@ public class CommonAction implements CommonActionInterface {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver,Medium);
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
-			Assert.assertTrue(pageElement.isDisplayed(), "Logo " + text + " is not displayed on the page.");
-			ExtentReporter.logger.log(LogStatus.PASS, "Logo " + text + " is displayed on page after login");
+			Assert.assertTrue(pageElement.isDisplayed(), "Logo / text" + text + " is not displayed on the page.");
+			ExtentReporter.logger.log(LogStatus.PASS, "Logo / text" + text + " is displayed on page after login");
+
 		} catch (Exception e) {
 			e.printStackTrace();
-			ExtentReporter.logger.log(LogStatus.FAIL, "Logo " + text + " is not displayed on page after login");
+			ExtentReporter.logger.log(LogStatus.FAIL, text + " is not displayed on page after login");
 		}
 	}
 
-	public String switchToWindow(WebDriver driver) {
+	
+	public String switchToWindow(WebDriver driver) throws InterruptedException {
 
 		ExtentReporter.logger.log(LogStatus.INFO, "Switching to the pop up window");
-
-		Set<String> handles = driver.getWindowHandles(); // Return a set of
-															// window handle
-
-		String parentWindow = driver.getWindowHandle();
-
-		for (String currentWindow : handles) {
-			if (!currentWindow.equals(parentWindow)) {
-				driver.switchTo().window(currentWindow);
-				ExtentReporter.logger.log(LogStatus.INFO, "Control is switched to pop up window");
-			}
-		}
-		return parentWindow;
+		
+		Set<String> handles = driver.getWindowHandles();      //Return a set of window handle
+		 
+	    String parentWindow = driver.getWindowHandle();
+	   
+	    Thread.sleep(5000);
+		 for(String currentWindow : handles){
+	    	   if(!currentWindow.equals(parentWindow))
+	    	  {
+	    	   driver.switchTo().window(currentWindow);
+	    	   ExtentReporter.logger.log(LogStatus.INFO, "Control is switched to pop up window");
+	    	  }
+		 }
+		 Thread.sleep(5000);
+		 return parentWindow;
 	}
 
 	public void selectDropdownByValue(WebDriver driver, WebElement element, String DropDownOption, String label) {
 
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, Medium);
+			WebDriverWait wait = new WebDriverWait(driver,Medium);
 			wait.until(ExpectedConditions.visibilityOf(element));
 			Select Sel = new Select(element);
 			Sel.selectByValue(DropDownOption);
@@ -232,11 +241,11 @@ public class CommonAction implements CommonActionInterface {
 		}
 
 	}
-
+	
 	public void selectDropdownByVisibleText(WebDriver driver, WebElement element, String DropDownOption, String label) {
 
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, Medium);
+			WebDriverWait wait = new WebDriverWait(driver,Medium);
 			wait.until(ExpectedConditions.visibilityOf(element));
 			Select Sel = new Select(element);
 			Sel.selectByVisibleText(DropDownOption);
@@ -248,6 +257,7 @@ public class CommonAction implements CommonActionInterface {
 		}
 
 	}
+	
 
 	public void excelRead() throws Exception {
 		ExcelUtil exlutil = new ExcelUtil();
@@ -264,8 +274,9 @@ public class CommonAction implements CommonActionInterface {
 		}
 	}
 
-	// This method is called to load a page during navigation through pages
 
+	//This method is called to load a page during navigation through pages
+	
 	public void waitForPageLoad(WebDriver driver, int Timeout) {
 		ExpectedCondition<Boolean> pageLoadCondition = new ExpectedCondition<Boolean>()
 		{ public Boolean apply(WebDriver driver)
@@ -285,11 +296,6 @@ public class CommonAction implements CommonActionInterface {
 		
 	}
 	
-
-	public void waitFor(long ms) {
-		// TODO Auto-generated method stub
-		
-	}
 	public void policySearch(WebDriver driver, String policyNo, WebElement policySearchTxtBox, WebElement searchBtn) 
 	{
 		clearTextBox(driver, policySearchTxtBox, "Enter Policy text field");
@@ -299,15 +305,5 @@ public class CommonAction implements CommonActionInterface {
 		ExtentReporter.logger.log(LogStatus.INFO, "Enter Policy # into Policy entry box, Click Search.");
 	}
 
-	public void enterTextIn(WebDriver driver, WebElement pageElement, String text) {
-		// TODO Auto-generated method stub
-		
-	}
 
-	public void policySearch(String policyNo, WebElement policySearchTxtBox, WebElement earchBtn) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	
 }

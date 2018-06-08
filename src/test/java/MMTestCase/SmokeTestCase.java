@@ -30,9 +30,8 @@ import com.mm.pages.CISPage;
 import com.mm.pages.EndorsePolicyPage;
 import com.mm.pages.FindPolicyPage;
 import com.mm.pages.HomePage;
-import com.mm.pages.IndicationPage;
 import com.mm.pages.LoginPage;
-import com.mm.pages.PolicyDetailsPage;
+import com.mm.pages.PolicyIndicationPage;
 import com.mm.pages.QuickAddOrganisation;
 import com.mm.pages.RateApolicyPage;
 import com.mm.utils.ExcelApiTest;
@@ -54,10 +53,9 @@ public class SmokeTestCase extends BrowserTypes {
 	PolicyBinderPage policybinderpage;
 	PolicyQuotePage policyquotepage;
 	PolicySubmissionPage policysubmissionpage;
-	IndicationPage indicationpage;
 	QuickAddOrganisation quick_add_orgpage;
-	PolicyDetailsPage policydetailspage;
 	EndorsePolicyPage endorsepolicypage;
+	PolicyIndicationPage policyindicationpage;
 
 	// List of coverage and Phases for Coverage Update flow.
 	List<String> coverages = Arrays.asList("Prof Liab-Out", "Prof Liab-Out", "UMB PL-Ins");
@@ -106,7 +104,6 @@ public class SmokeTestCase extends BrowserTypes {
 		homepage.navigateToPolicyPage();
 		findpolicypage = new FindPolicyPage(driver);
 		//String policyNo = findpolicypage.findQuotewithActiveState("Policy", "Active");
-		
 		rateapolicypage = new RateApolicyPage(driver);
 		String searchPolicyNum = "Q09101597-NB17-01";
 		rateapolicypage.searchPolicy(searchPolicyNum);
@@ -154,8 +151,26 @@ public class SmokeTestCase extends BrowserTypes {
 		// TODO - Add PDF verification.
 		policybinderpage.saveOption(policyNumber);
 	}
+	
+	@Test(description = "Hospital Create Claim", groups = { "Smoke Test" })
+	public void TC43666() throws Exception
+	{
+		loginpage = new LoginPage(driver);
+		loginpage.loginToeOasis("vthorat", "M@G580746");
+		homepage = new HomePage(driver);
+		Thread.sleep(5000);
+		String searchPolicyNum = "Q09101675-NB16-01";
+		homepage.headerPolicyTab();
+		rateapolicypage = new RateApolicyPage(driver);
+		rateapolicypage.searchPolicy(searchPolicyNum);
+		policybinderpage = new PolicyBinderPage(driver);
+		String clientID = policybinderpage.getClientId();
+		policybinderpage.navigatetoClaimsPage();
+		policybinderpage.getPaitentDetails(clientID);
+	}
+	
 
-	@Test(description = "Hospital Quote", dataProvider = "userTestData", dataProviderClass = ExcelApiTest.class,groups = { "Smoke Test" })
+//	/@Test(description = "Hospital Quote", dataProvider = "userTestData", dataProviderClass = ExcelApiTest.class,groups = { "Smoke Test" })
 	public void TC42238(String UserName, String PassWord) throws Exception {
 		loginpage = new LoginPage(driver);
 		loginpage.loginToeOasis(UserName, PassWord);
@@ -205,64 +220,65 @@ public class SmokeTestCase extends BrowserTypes {
 	public void TC_Indication(Method method, String UserName, String PassWord) throws Exception {
 
 		loginpage = new LoginPage(driver);
-		loginpage.loginToeOasis(UserName, PassWord);
+		loginpage.loginToeOasis("UserName", "Password");
 		homepage = new HomePage(driver);
 		homepage.navigateToPolicyPage();
-		indicationpage = new IndicationPage(driver);
-		indicationpage.create_New();
-		indicationpage.create_Quote();
-		indicationpage.selectPolicyType();
-		policydetailspage = new PolicyDetailsPage(driver);
-		policydetailspage.updatePolicyDetails();
+		homepage.create_Quote();
+		String ParentWindow = homepage.create_Quote();
+		homepage.search_Quote(ParentWindow);
+		homepage.selectPolicyType();
+		policysubmissionpage = new PolicySubmissionPage(driver);
+		policysubmissionpage.updatePolicyDetails();
 
-		List<WebElement> FirstName = policydetailspage.open_Underwriter();
-		policydetailspage.add_Underwriter(FirstName, "Arwood, Ruth", "Claims Rep", "Angelly, Sandy");
-		policydetailspage.add_Underwriter(FirstName, "Arwood, Ruth", "Risk Mgmt", "Civali, Karen");
-		policydetailspage.close_Underwriter();
-		policydetailspage.addAgent();
-		policydetailspage.addRiskInformation();
-		policydetailspage.addCoverage();
+		policyindicationpage = new PolicyIndicationPage(driver);
+		List<WebElement> FirstName = policyindicationpage.open_Underwriter();
+		policyindicationpage.add_Underwriter(FirstName, "Arwood, Ruth", "Claims Rep", "Angelly, Sandy");
+		policyindicationpage.add_Underwriter(FirstName, "Arwood, Ruth", "Risk Mgmt", "Civali, Karen");
+		policyindicationpage.close_Underwriter();
+		policyindicationpage.addAgent();
+		policyindicationpage.addRiskInformation();
+		policyindicationpage.addCoverage();
 
-		policydetailspage.selectCoverageFromPopupList("01012014", "5000", "Excess Liab-Out", "Claims Made",
+		policyindicationpage.selectCoverageFromPopupList("01012014", "5000", "Excess Liab-Out", "Claims Made",
 				"Premium text box", "Retro Date");
-		policydetailspage.closeAddCoveragetab();
+		policyindicationpage.closeAddCoveragetab();
 
-		policydetailspage.selectCoverageFromGridList("Prof Liab-Out");
-		policydetailspage.addDataInCoverage("01012014", "5000", "Retro Date", "Premium text box");
+		policyindicationpage.selectCoverageFromGridList("Prof Liab-Out");
+		policyindicationpage.addDataInCoverage("01012014", "5000", "Retro Date", "Premium text box");
 
-		policydetailspage.selectCoverageFromGridList("Gen Liab-Out");
-		policydetailspage.addDataInCoverage("01012014", "5000", "Retro Date", "Premium text box");
+		policyindicationpage.selectCoverageFromGridList("Gen Liab-Out");
+		policyindicationpage.addDataInCoverage("01012014", "5000", "Retro Date", "Premium text box");
 
-		policydetailspage.selectCoverageFromGridList("UMB PL-Ins");
-		policydetailspage.addDataInCoverage("01012014", "5000", "Retro Date", "Premium text box");
+		policyindicationpage.selectCoverageFromGridList("UMB PL-Ins");
+		policyindicationpage.addDataInCoverage("01012014", "5000", "Retro Date", "Premium text box");
 
-		policydetailspage.selectCoverageFromGridList("Emp Benefit-Out");
-		policydetailspage.addRetroDateInCoverage("01012014", "Retro Date");
+		policyindicationpage.selectCoverageFromGridList("Emp Benefit-Out");
+		policyindicationpage.addRetroDateInCoverage("01012014", "Retro Date");
 
-		policydetailspage.selectCoverageFromGridList("Adm/Reg-Ins");
-		policydetailspage.addRetroDateInCoverage("01012014", "Retro Date");
+		policyindicationpage.selectCoverageFromGridList("Adm/Reg-Ins");
+		policyindicationpage.addRetroDateInCoverage("01012014", "Retro Date");
 
-		policydetailspage.selectCoverageFromGridList("First Aid-Ins");
-		policydetailspage.addRetroDateInCoverage("01012014", "Retro Date");
+		policyindicationpage.selectCoverageFromGridList("First Aid-Ins");
+		policyindicationpage.addRetroDateInCoverage("01012014", "Retro Date");
 
-		policydetailspage.selectCoverageFromGridList("Evacuation-Ins");
-		policydetailspage.addRetroDateInCoverage("01012014", "Retro Date");
+		policyindicationpage.selectCoverageFromGridList("Evacuation-Ins");
+		policyindicationpage.addRetroDateInCoverage("01012014", "Retro Date");
 
-		policydetailspage.selectCoverageFromGridList("Loss Earn-Ins");
-		policydetailspage.addRetroDateInCoverage("01012014", "Retro Date");
+		policyindicationpage.selectCoverageFromGridList("Loss Earn-Ins");
+		policyindicationpage.addRetroDateInCoverage("01012014", "Retro Date");
 
-		policydetailspage.selectCoverageFromGridList("Prof Liab-Out");
-		policydetailspage.addCoverageClass();
+		policyindicationpage.selectCoverageFromGridList("Prof Liab-Out");
+		policyindicationpage.addCoverageClass();
 
-		String PolicyNo = policydetailspage.policyNo();
-		policydetailspage.coverageUpdates("Prof Liab-Out", "INDICATION", PolicyNo);
-		policydetailspage.coverageUpdates("Excess Liab-Out", "INDICATION-EXCESS", PolicyNo);
-		policydetailspage.coverageUpdates("UMB PL-Ins", "INDICATION-UMB", PolicyNo);
+		String PolicyNo = policyindicationpage.policyNo();
+		policyindicationpage.coverageUpdates("Prof Liab-Out", "INDICATION", PolicyNo);
+		policyindicationpage.coverageUpdates("Excess Liab-Out", "INDICATION-EXCESS", PolicyNo);
+		policyindicationpage.coverageUpdates("UMB PL-Ins", "INDICATION-UMB", PolicyNo);
 
-		policydetailspage.openLimitSharingTab(PolicyNo);
-		policydetailspage.addSharedGroup("Fire Dmg-Ins", "PL Shared", PolicyNo);
-		policydetailspage.addSharedGroup("Loss Earn-Ins", "GL Shared", PolicyNo);
-		policydetailspage.closeLimitSharingtab();
+		policyindicationpage.openLimitSharingTab(PolicyNo);
+		policyindicationpage.addSharedGroup("Fire Dmg-Ins", "PL Shared", PolicyNo);
+		policyindicationpage.addSharedGroup("Loss Earn-Ins", "GL Shared", PolicyNo);
+		policyindicationpage.closeLimitSharingtab();
 	}
 
 	// @Test(testName="EndorsePolicy",dataProvider = "userTestData",
