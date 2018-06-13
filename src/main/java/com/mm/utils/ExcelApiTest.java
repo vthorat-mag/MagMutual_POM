@@ -5,6 +5,8 @@ import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.ss.usermodel.CellType;
@@ -73,9 +75,11 @@ public class ExcelApiTest {
 	}
 
 	@DataProvider(name = "userTestData")
-	public static Object[][] userTestData(Method method) throws Exception {
+	public static HashMap<String, List<String>> userTestData(Method method) throws Exception {
 		ExcelUtil exldata = new ExcelUtil();
-		Object[][] data = exldata.testData(method.getName());
+		HashMap<String, List<String>> data = exldata.testData(method.getName());
 		return data;
+		
+		// changed string to hashmap for testing
 	}
 }

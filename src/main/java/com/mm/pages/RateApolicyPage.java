@@ -25,6 +25,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
+import com.mm.dto.RateAPolicyPageDTO;
+import com.mm.utils.CommonAction;
+import com.mm.utils.CommonUtilities;
 import com.mm.utils.ExtentReporter;
 import com.mm.utils.PDFReader;
 import com.mm.utils.CommonAction;
@@ -35,6 +38,9 @@ import com.relevantcodes.extentreports.LogStatus;
 public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 	
 	WebDriver driver;
+	
+	RateAPolicyPageDTO rateApolicyPageDTO;
+	
 	String valueOfPolicyActionAccept = "javascript:acceptQuote();";
 	String billingSetup = "javascript:billingSetup();";
 	String paymentPlanValue = "659689385";
@@ -42,6 +48,7 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 	String ProductNotifyValue="Y";
 	CommonUtilities comUtil = new CommonUtilities();
 	PDFReader pdfread = new PDFReader();
+	
 	//Object repository for all elements on rate A policy page.
 	
 	@FindBy(name="globalSearch")
@@ -74,7 +81,6 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 	
 	@FindBy(id="pageTitleForpageHeaderForPolicyFolder")
 	WebElement pageHeaderForPolicyFolder;
-	
 	
 	//@FindBy(id="polPhaseCodeROSPAN")
 	@FindBy(xpath="//table[@id='formFieldsTableForHeaderFieldsSecond']//span[@id='polPhaseCodeROSPAN']")
@@ -158,10 +164,13 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 	@FindBy(name="additionalText")
 	WebElement addText;
 	
-	public RateApolicyPage(WebDriver driver)
+	
+	//Constructor to initialize driver, page elements and DTO PageObject for CISPage
+	public RateApolicyPage(WebDriver driver) throws Exception
 	{
 		this.driver=driver;
 		PageFactory.initElements(driver, this);
+		rateApolicyPageDTO = new RateAPolicyPageDTO();
 	}
 	PolicyQuotePage policyquotepage =  new PolicyQuotePage(this.driver);
 	
@@ -172,7 +181,6 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 		policySearch(driver, policy_no,Policy_Search, Search_btn);
 		String actual=getText(driver,pageHeaderForPolicyFolder);
 		Assert.assertEquals(actual, "Policy Folder "+policy_no, "The policy "+policy_no+" is Not available.");
-		ExtentReporter.logger.log(LogStatus.INFO, "Policy # dispalys correctly under Policy Folder");
 		Thread.sleep(3000);
 		return new RateApolicyPage(driver);
 	}
@@ -276,10 +284,9 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 	//Select Accept option from "Action Drop Down".
 	public RateApolicyPage AcceptFromActionDropDown()
 	{
-		selectDropdownByValue(driver,policyAction, valueOfPolicyActionAccept, "Policy Action");
 		ExtentReporter.logger.log(LogStatus.INFO, "Select Accept from the dropdown screen.");
+		selectDropdownByValue(driver,policyAction, valueOfPolicyActionAccept, "Policy Action");
 		return new RateApolicyPage(driver);
-		
 	}
 	
 	//Verify Alert is present or not.
@@ -299,8 +306,8 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 	    }   // catch 
 	    return new RateApolicyPage(driver);
 	}   
-	
-	//IDentify Phase dispalyed on Page.	
+  
+	//Identify Phase displayed on Page.	
 	public RateApolicyPage identifyPhase() throws InterruptedException
 	{
 		waitFor(driver, 2);
@@ -326,15 +333,15 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 	public RateApolicyPage billingSetup() throws InterruptedException
 	{
 		Thread.sleep(3000);
-		selectDropdownByValue(driver,policyAction, billingSetup, "Policy Action");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions-->Select Billing Setup");
+		selectDropdownByValue(driver,policyAction, billingSetup, "Policy Action");
 		waitFor(driver, 5000);
 		switchToFrameUsingId(driver, "popupframe1");
-		selectDropdownByValue(driver,paymentPlan, paymentPlanValue, "Payment Plan");
 		ExtentReporter.logger.log(LogStatus.INFO, "Payment plan dropdown: Select A-Monthly");
+		selectDropdownByValue(driver,paymentPlan, paymentPlanValue, "Payment Plan");
 		Thread.sleep(5000);
-		clickButton(driver, billingSetupSaveBtn, "Save Button");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Save]");
+		clickButton(driver, billingSetupSaveBtn, "Save Button");
 		Thread.sleep(35000);
 		switchToParentWindowfromframe(driver);
 		return new RateApolicyPage(driver);
@@ -366,22 +373,22 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 				break;
 			}
 		}
-		clickButton(driver, optionalFormBtn, "Optional Form");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Optional Forms]");
+		clickButton(driver, optionalFormBtn, "Optional Form");
 		Thread.sleep(4000);
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+PolicyNo+"')]")));
 		if (manuscriptList.isDisplayed())
 		{
+			ExtentReporter.logger.log(LogStatus.INFO, "Delete current Indication form, Are you sure you want to delete this? Click Ok");
 			clickButton(driver, manuscriptPageDeleteBtn, "Manu script Delete");
 			driver.switchTo().alert().accept();
-			ExtentReporter.logger.log(LogStatus.INFO, "Delete current Indication form, Are you sure you want to delete this? Click Ok");
 			Thread.sleep(2000);
-			clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
 			ExtentReporter.logger.log(LogStatus.INFO, "Click [Add].");
+			clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
 			
 		}else{
-			clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
 			ExtentReporter.logger.log(LogStatus.INFO, "Click [Add].");
+			clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
 		}
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+PolicyNo+"')]")));
 		Thread.sleep(3000);
@@ -403,8 +410,8 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+PolicyNo+"')]")));
 		clickButton(driver, manuscriptPageSaveBtn, "Manu Script page Save");
 		Thread.sleep(2000);
-		clickButton(driver, manuscriptPageCloseBtn, "Manu Script page Close");
 		ExtentReporter.logger.log(LogStatus.INFO, "Enter additional text: "+ binderForm+" form added  Click [Save] and Click [Close].");
+		clickButton(driver, manuscriptPageCloseBtn, "Manu Script page Close");
 		switchToParentWindowfromframe(driver);
 	}
 	
