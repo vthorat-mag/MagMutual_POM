@@ -98,7 +98,7 @@ public class CommonAction implements CommonActionInterface {
 	public void enterTextIn(WebDriver driver, WebElement pageElement, String text, String textField) {
 		// TODO Auto-generated method stub
 		try {
-			WebDriverWait wait = new WebDriverWait(driver,Medium);
+			WebDriverWait wait = new WebDriverWait(driver,High);
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
 			Assert.assertTrue(pageElement.isDisplayed(), textField + " is not displayed on screen.");
 			pageElement.sendKeys(text);
@@ -112,7 +112,7 @@ public class CommonAction implements CommonActionInterface {
 		public void clickButton(WebDriver driver, WebElement pageElement, String buttonName) {
 			try
 			{
-				WebDriverWait wait = new WebDriverWait(driver,Medium);
+				WebDriverWait wait = new WebDriverWait(driver,High);
 				wait.until(ExpectedConditions.visibilityOf(pageElement));
 				JavascriptExecutor js = (JavascriptExecutor)driver;
 				Assert.assertTrue(pageElement.isDisplayed(), buttonName+" button is displayed on screen.");
@@ -143,24 +143,22 @@ public class CommonAction implements CommonActionInterface {
 	public String getPageTitle(WebDriver driver, String expectedPageTitle ) throws InterruptedException {
 		Thread.sleep(5000);
 		String getPageTitleFromPage = driver.findElement(By.xpath("//div[@class='pageTitle']")).getAttribute("innerHTML").trim();
-		WebDriverWait wait = new WebDriverWait(driver,Medium);
+		WebDriverWait wait = new WebDriverWait(driver,High);
 		wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[@class='pageTitle']"))));
 		Assert.assertEquals(getPageTitleFromPage ,expectedPageTitle, "Page title is not matching.");
 		return null;
 	}
 
 	public String getText(WebDriver driver, WebElement pageElement) {
-		// TODO Auto-generated method stub
-		WebDriverWait wait = new WebDriverWait(driver,Medium);
+		WebDriverWait wait = new WebDriverWait(driver,High);
 		wait.until(ExpectedConditions.visibilityOf(pageElement));
 		return pageElement.getAttribute("innerHTML");
 	}
 
 	public void clearTextBox(WebDriver driver, WebElement pageElement, String textField) {
-		// TODO Auto-generated method stub
 		try
 		{
-			WebDriverWait wait = new WebDriverWait(driver,Medium);
+			WebDriverWait wait = new WebDriverWait(driver,High);
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
 			Assert.assertTrue(pageElement.isDisplayed(), textField+" is displayed");
 			pageElement.clear();
@@ -179,7 +177,7 @@ public class CommonAction implements CommonActionInterface {
 	public void click(WebDriver driver, WebElement pageElement, String ElementName) {
 
 		try {
-			WebDriverWait wait = new WebDriverWait(driver,Medium);
+			WebDriverWait wait = new WebDriverWait(driver,High);
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
 			Assert.assertTrue(pageElement.isDisplayed(), ElementName + " is not displayed on screen.");
 			pageElement.click();
@@ -194,7 +192,7 @@ public class CommonAction implements CommonActionInterface {
 	public void visibilityOfElement(WebDriver driver, WebElement pageElement, String text) {
 
 		try {
-			WebDriverWait wait = new WebDriverWait(driver,Medium);
+			WebDriverWait wait = new WebDriverWait(driver,High);
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
 			Assert.assertTrue(pageElement.isDisplayed(), "Logo / text" + text + " is not displayed on the page.");
 			ExtentReporter.logger.log(LogStatus.PASS, "Logo / text" + text + " is displayed on page after login");
@@ -229,7 +227,7 @@ public class CommonAction implements CommonActionInterface {
 	public void selectDropdownByValue(WebDriver driver, WebElement element, String DropDownOption, String label) {
 
 		try {
-			WebDriverWait wait = new WebDriverWait(driver,Medium);
+			WebDriverWait wait = new WebDriverWait(driver,High);
 			wait.until(ExpectedConditions.visibilityOf(element));
 			Select Sel = new Select(element);
 			Sel.selectByValue(DropDownOption);
@@ -245,7 +243,7 @@ public class CommonAction implements CommonActionInterface {
 	public void selectDropdownByVisibleText(WebDriver driver, WebElement element, String DropDownOption, String label) {
 
 		try {
-			WebDriverWait wait = new WebDriverWait(driver,Medium);
+			WebDriverWait wait = new WebDriverWait(driver,High);
 			wait.until(ExpectedConditions.visibilityOf(element));
 			Select Sel = new Select(element);
 			Sel.selectByVisibleText(DropDownOption);

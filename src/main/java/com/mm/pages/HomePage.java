@@ -1,5 +1,6 @@
 package com.mm.pages;
 
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -92,9 +93,11 @@ public class HomePage extends CommonAction {
 	}
 	
 	//Verify user Navigated to Policy page when clicked on Policy tab present on Header.
-	public void headerPolicyTab()
+	public RateApolicyPage headerPolicyTab() throws InterruptedException
 	{
+		Thread.sleep(5000);
 		clickButton(driver, headerPolicyTab, "Policy (from header");
+		return new RateApolicyPage(driver);
 	}
 
 	// Verify logo is preent on page.
@@ -104,21 +107,24 @@ public class HomePage extends CommonAction {
 	}
 
 	// Navigate to CIS page.
-	public void navigateToCISPage() {
+	public CISPage navigateToCISPage() {
 		click(driver, cisTab, "CIS tab");
+		return new CISPage(driver);
 	}
 
 	// Navigate to policy page from Policy tab.
-	public void navigateToPolicyPage() {
+	public RateApolicyPage navigateToPolicyPage() {
+		clickButton(driver, headerPolicyTab, "Header Policy Tab");
 		click(driver, Policy_tab, "Policy tab");
 		ExtentReporter.logger.log(LogStatus.INFO, "Search Policy Screen is opened");
+		return new RateApolicyPage(driver);
 	}
 
 	/*Entity Select Search window appears and 
 	 then we enter Organization name and search
 	 Then select the Organization name from populated list.*/
 	
-	public void search_Quote(String parentWindow)throws InterruptedException{
+	public HomePage search_Quote(String parentWindow)throws InterruptedException{
 		
 		waitForElementToLoad(driver, 10, Last_Org_Name);
 		
@@ -142,10 +148,12 @@ public class HomePage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Select Policy Type Window displays");	
 		switchToParentWindowfromotherwindow(driver, parentWindow);
 		
+		return new HomePage(driver);
+		
 	}
 	
 	//Selecting Policy type by adding Effective date, Issue company,state and click done.
-	public void selectPolicyType() throws InterruptedException{
+	public PolicySubmissionPage selectPolicyType() throws InterruptedException{
 		String Eff_Date="01012017";
 		Thread.sleep(1000);
 		switchToFrameUsingId(driver, "popupframe1");
@@ -162,11 +170,17 @@ public class HomePage extends CommonAction {
 		click(driver,createPolicyDoneBtn, "Done button");
 		ExtentReporter.logger.log(LogStatus.INFO, "Policy Folder window is opened");
 		switchToParentWindowfromframe(driver);
+		return new PolicySubmissionPage(driver);
 
 	}
 
-	public String create_Quote() {
-		// TODO Auto-generated method stub
-		return null;
+	public String create_Quote() throws InterruptedException {
+		Thread.sleep(2000);
+		ExtentReporter.logger.log(LogStatus.INFO, "Entity Select Search window opens");
+		JavascriptExecutor js = (JavascriptExecutor)driver;
+		js.executeScript("arguments[0].click();", Create_Quote);
+		//clickButton(driver, Create_Quote, "Create Quote from Policy Menu");
+		String parentWindow = switchToWindow(driver);
+		return parentWindow;
 	}
 }

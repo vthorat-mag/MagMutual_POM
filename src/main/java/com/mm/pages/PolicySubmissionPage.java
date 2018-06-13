@@ -49,20 +49,22 @@ public class PolicySubmissionPage extends CommonAction {
 	}
 	
 	//Select Copy from Action value from Action drop down.
-	public void copyFromActionDropDown(String policyNum) throws InterruptedException
+	public PolicySubmissionPage copyFromActionDropDown(String policyNum) throws InterruptedException
 	{
 		selectDropdownByValue(driver,policyAction, valueOfPolicyActionCopy, "Policy Action");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy");
 		Thread.sleep(3000);
+		return new PolicySubmissionPage(driver);
 	}
 	
 	
 	//Change policy phase to indication.
-	public void changePhaseToIndication() throws InterruptedException
+	public PolicySubmissionPage changePhaseToIndication() throws InterruptedException
 	{
 		selectDropdownByValue(driver,policyPhase, indicationPhaseValue, "Phase");
 		ExtentReporter.logger.log(LogStatus.INFO, "Change Policy Phase to Indication");
 		Thread.sleep(3000);
+		return new PolicySubmissionPage(driver);
 	}
 	
 	//Save policy / Quote as Work in progress.
@@ -74,7 +76,7 @@ public class PolicySubmissionPage extends CommonAction {
 	}
 	
 	// Update policy details for a policy and change policy phase from Submission to Indication.
-	public void updatePolicyDetails() throws InterruptedException{
+	public PolicyIndicationPage updatePolicyDetails() throws InterruptedException{
 		
 		waitForElementToLoad(driver, 30, Phase);
 		selectDropdownByValue(driver, Phase, "INDICATION", "Phase");
@@ -83,6 +85,7 @@ public class PolicySubmissionPage extends CommonAction {
 		enterTextIn(driver, Quote_Description, "Automated Test","Quote Description");
 		click(driver, Save_WIP, "Save WIP button");
 		ExtentReporter.logger.log(LogStatus.INFO, "Indication saved as WIP");
+		return new PolicyIndicationPage(driver);
 	}
 
 
