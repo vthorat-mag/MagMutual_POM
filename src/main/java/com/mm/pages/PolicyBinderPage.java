@@ -322,7 +322,7 @@ public class PolicyBinderPage extends CommonAction {
 	}
 
 	// Save Option functionality flow.
-	public void saveOption(String policyNo) throws Exception {
+	public PolicyQuotePage saveOption(String policyNo) throws Exception {
 		Thread.sleep(2000);
 		clickButton(driver, saveOptionBtn, "Save Option");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options");
@@ -353,6 +353,7 @@ public class PolicyBinderPage extends CommonAction {
 		Thread.sleep(4000);
 		clickButton(driver, Exit_Ok, "Exit Ok");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [OK]");
+		return new PolicyQuotePage(driver);
 	}
 
 }
