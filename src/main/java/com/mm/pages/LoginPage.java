@@ -41,7 +41,7 @@ public class LoginPage extends CommonAction{
 	}
 
 	//Code to login to eOasis application.
-	public void loginToeOasis(String UserName, String PassWord) throws Exception
+	public HomePage loginToeOasis(String UserName, String PassWord) throws Exception
 	{
 		ExcelUtil exlutil = new ExcelUtil();
 		driver.get("http://oasiscloud2017t:8081/oas17bts/CS/login.jsp");
@@ -79,5 +79,6 @@ public class LoginPage extends CommonAction{
 			{
 				ExtentReporter.logger.log(LogStatus.FAIL, "Issue with login button.");
 			}
+		return new HomePage(driver);
 	}
 }

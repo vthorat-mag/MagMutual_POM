@@ -68,19 +68,17 @@ public class QuickAddOrganisation extends CommonAction {
 
 	}
 
-	public void navigate_To_Add_Org_Window() {
-
+	public QuickAddOrganisation navigate_To_Add_Org_Window() throws InterruptedException {
+		Thread.sleep(3000);
 		Actions action = new Actions(driver);
 		action.moveToElement(Quick_Add).build().perform();
-
 		driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
-
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("arguments[0].click();", Add_Org);
-
+		return new QuickAddOrganisation(driver);
 	}
 
-	public void add_Org_Information() throws InterruptedException {
+	public QuickAddOrganisation add_Org_Information() throws InterruptedException {
 
 		enterTextIn(driver, Org_Name, "Vivek_Test_Organisation2", "Org Name");
 
@@ -91,10 +89,11 @@ public class QuickAddOrganisation extends CommonAction {
 		selectDropdownByValue(driver, classification, "HOSPITAL", "Classfication");
 
 		enterTextIn(driver, Effe_To_Date, "12052050", "Effec_To_Date");
-
+		
+		return new QuickAddOrganisation(driver);
 	}
 
-	public void add_Org_Address() {
+	public QuickAddOrganisation add_Org_Address() {
 
 		selectDropdownByValue(driver, Address_Type1, "POLICY", "Add_Type1");
 
@@ -103,21 +102,21 @@ public class QuickAddOrganisation extends CommonAction {
 		enterTextIn(driver, City, "Atlanta", "city");
 
 		selectDropdownByValue(driver, Zip_code, "GA", "state code");
+		
+		return new QuickAddOrganisation(driver);
 
 	}
 
-	public void selectZipCode() throws InterruptedException {
+	public QuickAddOrganisation selectZipCode() throws InterruptedException {
+		Thread.sleep(3000);
 		String parentwindow = switchToWindow(driver);
 		Thread.sleep(2000);
-
 		WebElement zipCode = driver.findElement(By.xpath("//input[@value='30301']"));
 		click(driver, zipCode, "ZipCode");
-
 		click(driver, OK, "OK button");
-
 		Thread.sleep(2000);
 		switchToParentWindowfromotherwindow(driver, parentwindow);
-
+		return new QuickAddOrganisation(driver);
 	}
 
 	public void add_Phone_Number() {

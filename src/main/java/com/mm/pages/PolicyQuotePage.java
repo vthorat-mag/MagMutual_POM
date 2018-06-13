@@ -148,6 +148,18 @@ public class PolicyQuotePage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy>Ok");
 	}
 	
+	//Search Policy from Search Policy text field.
+	public RateApolicyPage searchPolicy( String policy_no) throws InterruptedException
+	{
+		Thread.sleep(3000);
+		policySearch(driver, policy_no,Policy_Search, Search_btn);
+		String actual=getText(driver,pageHeaderForPolicyFolder);
+		Assert.assertEquals(actual, "Policy Folder "+policy_no, "The policy "+policy_no+" is Not available.");
+		ExtentReporter.logger.log(LogStatus.INFO, "Policy # dispalys correctly under Policy Folder");
+		Thread.sleep(3000);
+		return new RateApolicyPage(driver);
+	}
+	
 	//Coverage details flow.
 	public void coverageDetailsSelect() throws InterruptedException
 	{
@@ -159,7 +171,7 @@ public class PolicyQuotePage extends CommonAction {
 	}
 	
 	//Coverage Update flow.
-	public void coverageUpdates(String CoverageName, String binderForm, String PolicyNo) throws InterruptedException
+	public void coverageUpdates(String CoverageName, String binderForm, String PolicyNo) throws Exception
 	{
 		for (int i = 0; i<coverageList.size();i++)
 		{
@@ -218,7 +230,7 @@ public class PolicyQuotePage extends CommonAction {
 	}
 	
 	//Rate A functionality flow.
-	public void rateFunctionality(String policyNo) throws InterruptedException
+	public void rateFunctionality(String policyNo) throws Exception
 	{
 		Thread.sleep(3000);
 		clickButton(driver, rateBtn, "Rate Tab");

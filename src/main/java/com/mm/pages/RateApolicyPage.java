@@ -30,10 +30,12 @@ import com.mm.utils.CommonAction;
 import com.mm.utils.CommonUtilities;
 import com.mm.utils.ExtentReporter;
 import com.mm.utils.PDFReader;
+import com.mm.utils.CommonAction;
+import com.mm.utils.CommonUtilities;
 import com.mongodb.client.model.ReturnDocument;
 import com.relevantcodes.extentreports.LogStatus;
 
-public class RateApolicyPage extends CommonAction {
+public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 	
 	WebDriver driver;
 	
@@ -173,19 +175,18 @@ public class RateApolicyPage extends CommonAction {
 	PolicyQuotePage policyquotepage =  new PolicyQuotePage(this.driver);
 	
 	//Search Policy from Search Policy text field.
-	public PolicyQuotePage searchPolicy( String policy_no) throws InterruptedException
+	public RateApolicyPage searchPolicy( String policy_no) throws InterruptedException
 	{
 		Thread.sleep(3000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Policy # dispalys correctly under Policy Folder");
-		policySearch(driver,policy_no,Policy_Search, Search_btn);
+		policySearch(driver, policy_no,Policy_Search, Search_btn);
 		String actual=getText(driver,pageHeaderForPolicyFolder);
 		Assert.assertEquals(actual, "Policy Folder "+policy_no, "The policy "+policy_no+" is Not available.");
 		Thread.sleep(3000);
-		return policyquotepage;
+		return new RateApolicyPage(driver);
 	}
 	
 	//Save Rate details code.
-	public void saveRatedetails() throws InterruptedException
+	public RateApolicyPage saveRatedetails() throws InterruptedException
 	{
 		click(driver,RateBtn, "Rate button");
 		Thread.sleep(5000);
@@ -195,12 +196,13 @@ public class RateApolicyPage extends CommonAction {
 	    Thread.sleep(1000);
 	    click(driver,Notify_Close, "Close button");
 	    Thread.sleep(3000);
+	    return new RateApolicyPage(driver);
 	}
 	
 	//Download Excel report and save in defined folder
 	public String startExcelExport() throws InterruptedException,AWTException
 	{
-	    	 click(driver,Export, "Export link");
+	    	 clickButton(driver,Export, "Export link");
 	    	 Thread.sleep(2000);
 	    	 
 	    	 Robot rob = new Robot();
@@ -223,7 +225,7 @@ public class RateApolicyPage extends CommonAction {
 	    	 rob.keyPress(KeyEvent.VK_ENTER);
 	    	 rob.keyRelease(KeyEvent.VK_ENTER);
 	    	    	 
-	    	 String fileDate = comUtil.getSystemDate();
+	    	 String fileDate = comUtil.getSystemDateMMddyy_hhmmss();
 	    	 
 	    	 String fileNamePath = "C:\\MM_Testcase_Output\\"+fileDate+".xlsx";
 	    	 StringSelection fileName = new StringSelection(fileNamePath);
@@ -280,15 +282,15 @@ public class RateApolicyPage extends CommonAction {
 	}
 
 	//Select Accept option from "Action Drop Down".
-	public void AcceptFromActionDropDown()
+	public RateApolicyPage AcceptFromActionDropDown()
 	{
 		ExtentReporter.logger.log(LogStatus.INFO, "Select Accept from the dropdown screen.");
 		selectDropdownByValue(driver,policyAction, valueOfPolicyActionAccept, "Policy Action");
-		
+		return new RateApolicyPage(driver);
 	}
 	
 	//Verify Alert is present or not.
-	public void isAlertPresent() throws InterruptedException 
+	public RateApolicyPage isAlertPresent() throws InterruptedException 
 	{ 
 	    try 
 	    { 
@@ -302,27 +304,33 @@ public class RateApolicyPage extends CommonAction {
 	    { 
 	    	ExtentReporter.logger.log(LogStatus.INFO, "Alert is not displayed for Same policy exist.");
 	    }   // catch 
+	    return new RateApolicyPage(driver);
 	}   
-	
+  
 	//Identify Phase displayed on Page.	
-	public void identifyPhase() throws InterruptedException
+	public RateApolicyPage identifyPhase() throws InterruptedException
 	{
 		waitFor(driver, 2);
+		Thread.sleep(3000);
 		String getTextPolicyPhase = policyPhaseBinder.getAttribute("innerText");
+		//String getTextPolicyPhase = getText(driver, policyPhaseBinder);
 		verifyTextPresent(getTextPolicyPhase,"Binder","Policy Phase");
 		ExtentReporter.logger.log(LogStatus.PASS, "Verify Phase is changed to Binder.");
+		return new RateApolicyPage(driver);
 	}
 	
 	//Identify Policy number from Page.
-	public String policyNo()
+	public String policyNo() throws InterruptedException
 	{
-		String profileNoLable = pageHeaderForPolicyFolder.getAttribute("innerHTML");
+		Thread.sleep(3000);
+		//String profileNoLable = pageHeaderForPolicyFolder.getAttribute("innerHTML");
+		String profileNoLable = getText(driver, pageHeaderForPolicyFolder);
 		String[] portfolioNo = profileNoLable.split(" ",3);
 		return portfolioNo[2];
 	}
 	
 	//Billing setup flow code.
-	public void billingSetup() throws InterruptedException
+	public RateApolicyPage billingSetup() throws InterruptedException
 	{
 		Thread.sleep(3000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions-->Select Billing Setup");
@@ -336,10 +344,11 @@ public class RateApolicyPage extends CommonAction {
 		clickButton(driver, billingSetupSaveBtn, "Save Button");
 		Thread.sleep(35000);
 		switchToParentWindowfromframe(driver);
+		return new RateApolicyPage(driver);
 	}
 	
 	//Coverage Details flow.
-	public void coverageDetailsSelect()
+	public RateApolicyPage coverageDetailsSelect()
 	{
 		try{
 			clickButton(driver,coverageTab, "Coverage");
@@ -348,10 +357,11 @@ public class RateApolicyPage extends CommonAction {
 		{
 			ExtentReporter.logger.log(LogStatus.FAIL, "Can not click on Coverage tab.");
 		}
+		return new RateApolicyPage(driver);
 	}
 	
 	//Coverage updates flow.
-	public void coverageUpdates(String CoverageName, String binderForm, String PolicyNo) throws InterruptedException
+	public void coverageUpdates(String CoverageName, String binderForm, String PolicyNo) throws Exception
 	{
 		for (int i = 0; i<coverageList.size();i++)
 		{
@@ -407,7 +417,7 @@ public class RateApolicyPage extends CommonAction {
 	
 	
 	//Rate a functionality flow.
-	public void rateFunctionality(String policyNo) throws InterruptedException
+	public void rateFunctionality(String policyNo) throws Exception
 	{
 		Thread.sleep(3000);
 		clickButton(driver, rateBtn, "Rate Tab");
@@ -452,7 +462,7 @@ public class RateApolicyPage extends CommonAction {
 	}
 	
 	//Save Option flow.
-	public void saveOption(String policyNo) throws InterruptedException
+	public void saveOption(String policyNo) throws Exception
 	{
 		Thread.sleep(2000);
 		clickButton(driver, saveOptionBtn, "Save Option");

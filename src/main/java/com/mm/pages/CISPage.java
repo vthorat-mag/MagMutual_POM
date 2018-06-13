@@ -75,13 +75,14 @@ public class CISPage  extends CommonAction{
 	}
 
 	//Navigate to Add Organization details page
-	public void clickOnNewOrganization()
+	public CISPage clickOnNewOrganization()
 	{
 		click(driver,New_Org, "New Organization tab");
+		return new CISPage(driver);
 	}
-	
+
 	//Enter data in fields for new organization
-	public void enterDataInNewOrgPage() throws Exception{
+	public CISPage enterDataInNewOrgPage() throws Exception{
 
    	    enterTextIn(driver,Long_Name,oCISPageDTO.LongName,"Long Name");
    	    click(driver,CIS_OrgName, "Org Name text field");				
@@ -95,11 +96,13 @@ public class CISPage  extends CommonAction{
 	    selectDropdownByValue(driver,Addr_Type, oCISPageDTO.Addr_Type, "Address_Type");
 		selectDropdownByValue(driver,State,oCISPageDTO.State,"State");
 	    Thread.sleep(3000);
+	    
+	    return new CISPage(driver);
 	}
 	   
-	//Select zip code for the new organization from the new pop up window using window handle
-	//And close the zip code window and navigate back to parent window
-	    public void selectZipCode() throws InterruptedException
+    	//Select zip code for the new organization from the new pop up window using window handle
+	    //And close the zip code window and navigate back to parent window
+	    public CISPage selectZipCode() throws InterruptedException
 	    {
 	    	   String parentwindow = switchToWindow(driver);
 	    	   Thread.sleep(2000);
@@ -107,11 +110,11 @@ public class CISPage  extends CommonAction{
 	    	   click(driver,zipCodeValue,"ZipCode");
 	    	   click(driver,OK,"OK button");
 	    	   Thread.sleep(2000);
-      	       switchToParentWindowfromotherwindow(driver, parentwindow); 
-      	       waitForElementToLoad(driver, 10, zipCode);
-      	       //Verify that selected zip code is added to zipcode field.  	       
-      	       Assert.assertTrue(zipCode.getText().trim()==oCISPageDTO.zipCode);
-      	      
+      	   switchToParentWindowfromotherwindow(driver, parentwindow); 
+      	    waitForElementToLoad(driver, 10, zipCode);
+      	     //Verify that selected zip code is added to zipcode field.  	       
+      	     Assert.assertTrue(zipCode.getText().trim()==oCISPageDTO.zipCode);
+      	     return new CISPage(driver);
 		}
 		
 	    //Save the details for new organization
