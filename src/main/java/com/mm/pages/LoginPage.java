@@ -12,6 +12,7 @@ import org.testng.Assert;
 
 import com.mm.utils.ExcelUtil;
 import com.mm.utils.ExtentReporter;
+import com.mm.dto.LoginPageDTO;
 import com.mm.utils.CommonAction;
 import com.relevantcodes.extentreports.LogStatus;
 
@@ -19,6 +20,7 @@ public class LoginPage extends CommonAction{
 	
 	//Global Assignment/initialization of variables.
 	WebDriver driver;
+	
 	
 	//Element repository for Login page.
 	@FindBy(name="j_username")
@@ -31,10 +33,11 @@ public class LoginPage extends CommonAction{
 	WebElement loginBtn;
 	
 	//Constructor to initialize elements on Login page.
-	public LoginPage(WebDriver driver)
+	public LoginPage(WebDriver driver) throws IllegalArgumentException, IllegalAccessException, SecurityException
 	{
 		this.driver=driver;
 		PageFactory.initElements(driver, this);
+		
 	}
 
 	//Code to login to eOasis application.
