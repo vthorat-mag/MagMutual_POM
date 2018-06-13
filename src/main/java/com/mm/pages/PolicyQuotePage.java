@@ -149,7 +149,7 @@ public class PolicyQuotePage extends CommonAction {
 	}
 	
 	//Search Policy from Search Policy text field.
-	public RateApolicyPage searchPolicy( String policy_no) throws InterruptedException
+	public RateApolicyPage searchPolicy( String policy_no) throws Exception
 	{
 		Thread.sleep(3000);
 		policySearch(driver, policy_no,Policy_Search, Search_btn);

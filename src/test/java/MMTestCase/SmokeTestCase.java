@@ -110,14 +110,14 @@ public class SmokeTestCase extends BrowserTypes {
 		rateapolicypage.identifyPhase();
 		rateapolicypage.billingSetup();
 		rateapolicypage.coverageDetailsSelect();*/
-		rateapolicypage = new RateApolicyPage(driver);
-		String policyNumber = rateapolicypage.policyNo();
+		rateapolicyPage = new RateApolicyPage(driver);
+		String policyNumber = rateapolicyPage.policyNo();
 		// Below code will run same test steps based on number of coverage you want to update.
 		//Refer List coverage and phase defined on this page for values.
 		for (int i = 0; i < coverages.size(); i++) {
 			rateapolicyPage.coverageUpdates(coverages.get(i), phase.get(i), policyNumber);
 		}
-		rateapolicypage.rateFunctionality(policyNumber);
+		rateapolicyPage.rateFunctionality(policyNumber);
 		// TODO - Add PDF verification.
 		rateapolicyPage.saveOption(policyNumber);
 	}
@@ -139,13 +139,13 @@ public class SmokeTestCase extends BrowserTypes {
 		policybinderpage = new PolicyBinderPage(driver);
 		String policyNumber = policybinderpage.policyNo();
 		
-		policybinderpage.endorsementFromActionDropDown().endorsPolicy(policyNumber).identifyPhase().rateFunctionality(policyNumber).saveOption(policyNumber);
+		policybinderpage.endorsementFromActionDropDown().endorsPolicy(policyNumber).identifyPhase().rateFunctionality(policyNumber).saveOption(policyNumber).exit_SaveOption();
 		/*policybinderpage.endorsPolicy(policyNumber);
 		policybinderpage.identifyPhase();
 		policybinderpage.rateFunctionality(policyNumber);
 		// TODO - Add PDF verification.
 		policybinderpage.saveOption(policyNumber);
-		policyquotepage.exit_SaveOption();
+		policyquotepage.exit_SaveOption();*/
 	}
 	
 	//@Test(description = "Hospital Create Claim", groups = { "Smoke Test" })
@@ -197,8 +197,8 @@ public class SmokeTestCase extends BrowserTypes {
 		homepage = new HomePage(driver);
 		homepage.navigateToPolicyPage();
 		policyquotepage = new PolicyQuotePage(driver);
-		rateapolicypage = new RateApolicyPage(driver);
-		rateapolicypage.searchPolicy(searchPolicyNum);
+		rateapolicyPage = new RateApolicyPage(driver);
+		rateapolicyPage.searchPolicy(searchPolicyNum);
 		/*
 		policyquotepage.CopyOptionFromActionDropDown();
 		policyquotepage.changePhaseToQuote();
@@ -299,8 +299,8 @@ public class SmokeTestCase extends BrowserTypes {
 		loginpage.loginToeOasis(UserName, PassWord).navigateToCISPage();
 		/*homepage = new HomePage(driver);
 		homepage.navigateToCISPage();*/
-		quick_add_orgpage = new QuickAddOrganisation(driver);
-		quick_add_orgpage.navigate_To_Add_Org_Window().add_Org_Information().add_Org_Address().selectZipCode().add_Phone_Number();
+		quickaddorganisation = new QuickAddOrganisation(driver);
+		quickaddorganisation.navigate_To_Add_Org_Window().add_Org_Information().add_Org_Address().selectZipCode().add_Phone_Number();
 		/*quick_add_orgpage.add_Org_Information();
 		quick_add_orgpage.add_Org_Address();
 		quick_add_orgpage.selectZipCode();

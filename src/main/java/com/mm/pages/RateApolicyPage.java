@@ -175,7 +175,7 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 	PolicyQuotePage policyquotepage =  new PolicyQuotePage(this.driver);
 	
 	//Search Policy from Search Policy text field.
-	public RateApolicyPage searchPolicy( String policy_no) throws InterruptedException
+	public RateApolicyPage searchPolicy( String policy_no) throws Exception
 	{
 		Thread.sleep(3000);
 		policySearch(driver, policy_no,Policy_Search, Search_btn);
@@ -186,7 +186,7 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 	}
 	
 	//Save Rate details code.
-	public RateApolicyPage saveRatedetails() throws InterruptedException
+	public RateApolicyPage saveRatedetails() throws Exception
 	{
 		click(driver,RateBtn, "Rate button");
 		Thread.sleep(5000);
@@ -282,7 +282,7 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 	}
 
 	//Select Accept option from "Action Drop Down".
-	public RateApolicyPage AcceptFromActionDropDown()
+	public RateApolicyPage AcceptFromActionDropDown() throws Exception
 	{
 		ExtentReporter.logger.log(LogStatus.INFO, "Select Accept from the dropdown screen.");
 		selectDropdownByValue(driver,policyAction, valueOfPolicyActionAccept, "Policy Action");
@@ -290,7 +290,7 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 	}
 	
 	//Verify Alert is present or not.
-	public RateApolicyPage isAlertPresent() throws InterruptedException 
+	public RateApolicyPage isAlertPresent() throws Exception 
 	{ 
 	    try 
 	    { 
@@ -308,7 +308,7 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 	}   
   
 	//Identify Phase displayed on Page.	
-	public RateApolicyPage identifyPhase() throws InterruptedException
+	public RateApolicyPage identifyPhase() throws Exception
 	{
 		waitFor(driver, 2);
 		Thread.sleep(3000);
@@ -330,7 +330,7 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 	}
 	
 	//Billing setup flow code.
-	public RateApolicyPage billingSetup() throws InterruptedException
+	public RateApolicyPage billingSetup() throws Exception
 	{
 		Thread.sleep(3000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions-->Select Billing Setup");
@@ -348,7 +348,7 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 	}
 	
 	//Coverage Details flow.
-	public RateApolicyPage coverageDetailsSelect()
+	public RateApolicyPage coverageDetailsSelect() throws Exception
 	{
 		try{
 			clickButton(driver,coverageTab, "Coverage");

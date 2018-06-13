@@ -54,7 +54,7 @@ public class PolicySubmissionPage extends CommonAction {
 	}
 	
 	//Select Copy from Action value from Action drop down.
-	public PolicySubmissionPage copyFromActionDropDown(String policyNum) throws InterruptedException
+	public PolicySubmissionPage copyFromActionDropDown(String policyNum) throws Exception
 	{
 		selectDropdownByValue(driver,policyAction, valueOfPolicyActionCopy, "Policy Action");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy");
@@ -64,7 +64,7 @@ public class PolicySubmissionPage extends CommonAction {
 	
 	
 	//Change policy phase to indication.
-	public PolicySubmissionPage changePhaseToIndication() throws InterruptedException
+	public PolicySubmissionPage changePhaseToIndication() throws Exception
 	{
 		selectDropdownByValue(driver,policyPhase, indicationPhaseValue, "Phase");
 		ExtentReporter.logger.log(LogStatus.INFO, "Change Policy Phase to Indication");
@@ -81,7 +81,7 @@ public class PolicySubmissionPage extends CommonAction {
 	}
 	
 	// Update policy details for a policy and change policy phase from Submission to Indication.
-	public PolicyIndicationPage updatePolicyDetails() throws InterruptedException{
+	public PolicyIndicationPage updatePolicyDetails() throws Exception{
 		waitForPageLoad(driver, 40);
 		waitForElementToLoad(driver, 40, Phase);
 		selectDropdownByValue(driver, Phase,policysubmissionpageDTO.policyPhase,"Phase");
