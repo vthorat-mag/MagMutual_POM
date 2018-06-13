@@ -32,6 +32,23 @@ public class CommonAction implements CommonActionInterface {
 	int High = 50;
 
 	
+	public void selectValue(WebDriver driver, WebElement pageElement, String value) {
+		// TODO Auto-generated method stub
+		
+		try {
+			WebDriverWait wait = new WebDriverWait(driver, Medium);
+			wait.until(ExpectedConditions.visibilityOf(pageElement));
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			Assert.assertTrue(pageElement.isDisplayed(),  pageElement+ " is Not displayed on screen.");
+			js.executeScript("arguments[0].click();", pageElement);
+			ExtentReporter.logger.log(LogStatus.PASS, "Selected value " + value);
+		} catch (Exception e) {
+			ExtentReporter.logger.log(LogStatus.FAIL, value + " element is not found.");
+		}
+		
+		
+	}
+	
 	public void switchToSecondFramefromFirst(WebDriver driver,String frameID){
 		
 		List<WebElement> secondFrame = driver.findElements(By.id(frameID));
@@ -91,6 +108,7 @@ public class CommonAction implements CommonActionInterface {
 
 	}
 
+	//Enter text values in the text field
 	public void enterTextIn(WebDriver driver, WebElement pageElement, String text, String textField) {
 		// TODO Auto-generated method stub
 		try {
@@ -105,6 +123,31 @@ public class CommonAction implements CommonActionInterface {
 		}
 	}
 
+	
+	//Enter the data values which are not text, like date and amount.
+	public void enterDataIn(WebDriver driver, WebElement pageElement,String text, String textField) {
+		// TODO Auto-generated method stub
+		try {
+			WebDriverWait wait = new WebDriverWait(driver,Medium);
+			wait.until(ExpectedConditions.visibilityOf(pageElement));
+			Assert.assertTrue(pageElement.isDisplayed(), textField + " is not displayed on screen.");
+			pageElement.sendKeys(text);
+		//	driver.executeScript("arguments[0].setAttribute(value, arguments[1]);", pageElement, text);
+			
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			js.executeScript("arguments[0].value=text;", pageElement);
+			
+			
+			ExtentReporter.logger.log(LogStatus.PASS, "Value entered in text box -" + textField);
+		} catch (Exception e) {
+			e.printStackTrace();
+			ExtentReporter.logger.log(LogStatus.FAIL, textField + " element is not found.");
+		}
+	}
+	
+	
+	
+	
 	public void clickButton(WebDriver driver, WebElement pageElement, String buttonName) {
 		// TODO Auto-generated method stub
 		try {
@@ -304,10 +347,6 @@ public class CommonAction implements CommonActionInterface {
 		
 	}
 
-	public void policySearch(String policyNo, WebElement policySearchTxtBox, WebElement earchBtn) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	
 }
