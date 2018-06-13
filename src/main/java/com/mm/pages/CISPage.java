@@ -72,12 +72,13 @@ public class CISPage  extends CommonAction{
 	}
 
 	
-	public void clickOnNewOrganization()
+	public CISPage clickOnNewOrganization()
 	{
 		click(driver,New_Org, "New Organization tab");
+		return new CISPage(driver);
 	}
 			
-	public void enterDataInNewOrgPage(String LongName,String Address_Line1,String City,String Phone_no,String Area_code, String Class_Eff_To_Date) throws Exception{
+	public CISPage enterDataInNewOrgPage(String LongName,String Address_Line1,String City,String Phone_no,String Area_code, String Class_Eff_To_Date) throws Exception{
 
 		ExcelUtil exlutil = new ExcelUtil();
    	    enterTextIn(driver,Long_Name,LongName,"Long Name");
@@ -101,9 +102,11 @@ public class CISPage  extends CommonAction{
 	    
 		selectDropdownByValue(driver,State,"GA","State");
 	    Thread.sleep(3000);
+	    
+	    return new CISPage(driver);
 	}
 	   
-	    public void selectZipCode() throws InterruptedException
+	    public CISPage selectZipCode() throws InterruptedException
 	    {
 	    	   String parentwindow = switchToWindow(driver);
 	    	   Thread.sleep(2000);
@@ -115,6 +118,8 @@ public class CISPage  extends CommonAction{
 
 	    	   Thread.sleep(2000);
       	       switchToParentWindowfromotherwindow(driver, parentwindow); 
+      	       
+      	       return new CISPage(driver);
       	      
 		}
 		

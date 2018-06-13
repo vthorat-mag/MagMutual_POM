@@ -158,10 +158,11 @@ public class PolicyBinderPage extends CommonAction {
 	}
 	
 	//Navigate to Claims page.
-	public void navigatetoClaimsPage() throws InterruptedException
+	public PolicyBinderPage navigatetoClaimsPage() throws InterruptedException
 	{
 		clickButton(driver, headerClaimsTab, "Header CIS");
 		getPageTitle(driver, FileSearchPageTitle);
+		return new PolicyBinderPage(driver);
 	}
 	
 	//Select Patient.
@@ -240,13 +241,14 @@ public class PolicyBinderPage extends CommonAction {
 	}
 
 	// Select Endorsement from "Action DropoDown".
-	public void endorsementFromActionDropDown() {
+	public PolicyBinderPage endorsementFromActionDropDown() {
 		selectDropdownByValue(driver, policyAction, valueOfPolicyActionEndorse, "Policy Action");
 		ExtentReporter.logger.log(LogStatus.PASS, "Click Policy Actions > Select value from the dropdown screen.");
+		return new PolicyBinderPage(driver);
 	}
 
 	// Select Copy To Quote from "Action DropoDown".
-	public void copyToQuoteFromActionDropDown(String policyNum) throws Exception {
+	public PolicySubmissionPage copyToQuoteFromActionDropDown(String policyNum) throws Exception {
 		selectDropdownByValue(driver, policyAction, valueOfPolicyActionCopyToQuote, "Policy Action");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy to Quote");
 		Thread.sleep(10000);
@@ -257,10 +259,11 @@ public class PolicyBinderPage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [OK]");
 		Thread.sleep(2000);
 		switchToParentWindowfromframe(driver);
+		return new PolicySubmissionPage(driver);
 	}
 
 	// Endorse Policy Flow.
-	public void endorsPolicy(String policyNum) throws Exception {
+	public PolicyBinderPage endorsPolicy(String policyNum) throws Exception {
 		Thread.sleep(3000);
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNum + "')]")));
@@ -270,18 +273,20 @@ public class PolicyBinderPage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Click the dropdown by Reason:  Select Issue Policy Forms-->Click [Ok]");
 		Thread.sleep(4000);
+		return new PolicyBinderPage(driver);
 	}
 
 	// Identify Phase from page.
-	public void identifyPhase() throws InterruptedException {
+	public PolicyBinderPage identifyPhase() throws InterruptedException {
 		waitFor(driver, 5);
 		String getTextPolicyPhase = policyPhasePolicy.getAttribute("innerText");
 		verifyTextPresent(getTextPolicyPhase, "Policy", "Policy Phase");
 		ExtentReporter.logger.log(LogStatus.INFO, "Verify phase is " + getTextPolicyPhase);
+		return new PolicyBinderPage(driver);
 	}
 
 	// Rate a Functionality flow.
-	public void rateFunctionality(String policyNo) throws Exception {
+	public PolicyBinderPage rateFunctionality(String policyNo) throws Exception {
 		Thread.sleep(3000);
 		clickButton(driver, rateBtn, "Rate Tab");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Rate]");
@@ -313,6 +318,7 @@ public class PolicyBinderPage extends CommonAction {
 		clickButton(driver, okPolicySaveAsWIPPopup, "Ok");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Close] click [Ok]");
 		switchToParentWindowfromframe(driver);
+		return new PolicyBinderPage (driver);
 	}
 
 	// Save Option functionality flow.
