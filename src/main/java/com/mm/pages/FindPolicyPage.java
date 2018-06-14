@@ -62,8 +62,8 @@ public class FindPolicyPage extends CommonAction {
 		Thread.sleep(5000);// Need to replace with explicit wait
 		try {
 			Assert.assertTrue(paneDown.isEnabled());
-			click(driver, paneDown, "Search Criteria");
 			ExtentReporter.logger.log(LogStatus.INFO, "Search Criteria Section is expanded");
+			click(driver, paneDown, "Search Criteria");
 		} catch (Exception e) {
 			ExtentReporter.logger.log(LogStatus.INFO, "Search Criteria Section is already Expanded");
 		}

@@ -35,6 +35,7 @@ import com.mm.utils.CommonUtilities;
 import com.mongodb.client.model.ReturnDocument;
 import com.relevantcodes.extentreports.LogStatus;
 
+@SuppressWarnings("rawtypes")
 public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 	
 	WebDriver driver;
@@ -175,14 +176,32 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 	PolicyQuotePage policyquotepage =  new PolicyQuotePage(this.driver);
 	
 	//Search Policy from Search Policy text field.
-	public RateApolicyPage searchPolicy( String policy_no) throws Exception
+	public Object searchPolicy( String policy_no) throws Exception
 	{
 		Thread.sleep(3000);
 		policySearch(driver, policy_no,Policy_Search, Search_btn);
 		String actual=getText(driver,pageHeaderForPolicyFolder);
 		Assert.assertEquals(actual, "Policy Folder "+policy_no, "The policy "+policy_no+" is Not available.");
 		Thread.sleep(3000);
+		return null;
+	}
+	
+	public RateApolicyPage searchPolicyRateAPolicyPage(String policy_no) throws Exception
+	{
+		searchPolicy(policy_no);
 		return new RateApolicyPage(driver);
+	}
+	
+	public PolicyBinderPage searchPolicyPolicyBinderPage(String policy_no) throws Exception
+	{
+		searchPolicy(policy_no);
+		return new PolicyBinderPage(driver);
+	}
+	
+	public PolicyQuotePage searchPolicyPolicyQuotePage(String policy_no) throws Exception
+	{
+		searchPolicy(policy_no);
+		return new PolicyQuotePage(driver);
 	}
 	
 	//Save Rate details code.
@@ -314,8 +333,8 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 		Thread.sleep(3000);
 		String getTextPolicyPhase = policyPhaseBinder.getAttribute("innerText");
 		//String getTextPolicyPhase = getText(driver, policyPhaseBinder);
-		verifyTextPresent(getTextPolicyPhase,"Binder","Policy Phase");
 		ExtentReporter.logger.log(LogStatus.PASS, "Verify Phase is changed to Binder.");
+		verifyTextPresent(getTextPolicyPhase,"Binder","Policy Phase");
 		return new RateApolicyPage(driver);
 	}
 	
