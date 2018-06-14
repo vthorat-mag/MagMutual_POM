@@ -110,11 +110,11 @@ public class CISPage  extends CommonAction{
 	    	   click(driver,zipCodeValue,"ZipCode");
 	    	   click(driver,OK,"OK button");
 	    	   Thread.sleep(2000);
-      	   switchToParentWindowfromotherwindow(driver, parentwindow); 
-      	    waitForElementToLoad(driver, 10, zipCode);
-      	     //Verify that selected zip code is added to zipcode field.  	       
-      	     Assert.assertTrue(zipCode.getText().trim()==oCISPageDTO.zipCode);
-      	     return new CISPage(driver);
+	    	   switchToParentWindowfromotherwindow(driver, parentwindow); 
+	    	   waitForElementToLoad(driver, 10, zipCode);
+      	       //Verify that selected zip code is added to zipcode field.  	       
+      	       Assert.assertTrue(zipCode.getText().trim()==oCISPageDTO.zipCode);
+      	       return new CISPage(driver);
 		}
 		
 	    //Save the details for new organization
