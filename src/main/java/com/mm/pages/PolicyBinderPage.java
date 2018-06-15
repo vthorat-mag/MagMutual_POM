@@ -242,21 +242,21 @@ public class PolicyBinderPage extends CommonAction {
 
 	// Select Endorsement from "Action DropoDown".
 	public PolicyBinderPage endorsementFromActionDropDown() {
-		selectDropdownByValue(driver, policyAction, valueOfPolicyActionEndorse, "Policy Action");
 		ExtentReporter.logger.log(LogStatus.PASS, "Click Policy Actions > Select value from the dropdown screen.");
+		selectDropdownByValue(driver, policyAction, valueOfPolicyActionEndorse, "Policy Action");
 		return new PolicyBinderPage(driver);
 	}
 
 	// Select Copy To Quote from "Action DropoDown".
 	public PolicySubmissionPage copyToQuoteFromActionDropDown(String policyNum) throws Exception {
-		selectDropdownByValue(driver, policyAction, valueOfPolicyActionCopyToQuote, "Policy Action");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy to Quote");
+		selectDropdownByValue(driver, policyAction, valueOfPolicyActionCopyToQuote, "Policy Action");
 		Thread.sleep(10000);
 		String getUpdatedPolicyNo = policyNo();
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + getUpdatedPolicyNo + "')]")));
-		click(driver, Exit_Ok, "OK button");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [OK]");
+		click(driver, Exit_Ok, "OK button");
 		Thread.sleep(2000);
 		switchToParentWindowfromframe(driver);
 		return new PolicySubmissionPage(driver);
@@ -269,9 +269,9 @@ public class PolicyBinderPage extends CommonAction {
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNum + "')]")));
 		waitForElementToLoad(driver, 25, selectReason);
 		selectDropdownByValue(driver, selectReason, valueOfSelectReason, "Select Reason");
-		clickButton(driver, okBtnEndorsmentPopup, "Ok");
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Click the dropdown by Reason:  Select Issue Policy Forms-->Click [Ok]");
+		clickButton(driver, okBtnEndorsmentPopup, "Ok");
 		Thread.sleep(4000);
 		return new PolicyBinderPage(driver);
 	}
@@ -280,16 +280,16 @@ public class PolicyBinderPage extends CommonAction {
 	public PolicyBinderPage identifyPhase() throws InterruptedException {
 		waitFor(driver, 5);
 		String getTextPolicyPhase = policyPhasePolicy.getAttribute("innerText");
-		verifyTextPresent(getTextPolicyPhase, "Policy", "Policy Phase");
 		ExtentReporter.logger.log(LogStatus.INFO, "Verify phase is " + getTextPolicyPhase);
+		verifyTextPresent(getTextPolicyPhase, "Policy", "Policy Phase");
 		return new PolicyBinderPage(driver);
 	}
 
 	// Rate a Functionality flow.
 	public PolicyBinderPage rateFunctionality(String policyNo) throws Exception {
 		Thread.sleep(3000);
-		clickButton(driver, rateBtn, "Rate Tab");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Rate]");
+		clickButton(driver, rateBtn, "Rate Tab");
 		Thread.sleep(4000);
 		/*
 		 * try{ switchToFrameUsingElement(driver,
@@ -310,13 +310,13 @@ public class PolicyBinderPage extends CommonAction {
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]")));
 		// switchToFrameUsingId(driver,"popupframe1");
 		Thread.sleep(2000);
+		ExtentReporter.logger.log(LogStatus.INFO, "Click [Close] click [Ok]");
 		clickButton(driver, closeBtnOnViewPremiumPopup, "Close");
 		Thread.sleep(2000);
 		switchToParentWindowfromframe(driver);
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]")));
 		clickButton(driver, okPolicySaveAsWIPPopup, "Ok");
-		ExtentReporter.logger.log(LogStatus.INFO, "Click [Close] click [Ok]");
 		switchToParentWindowfromframe(driver);
 		return new PolicyBinderPage (driver);
 	}
@@ -324,14 +324,14 @@ public class PolicyBinderPage extends CommonAction {
 	// Save Option functionality flow.
 	public PolicyQuotePage saveOption(String policyNo) throws Exception {
 		Thread.sleep(2000);
-		clickButton(driver, saveOptionBtn, "Save Option");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options");
+		clickButton(driver, saveOptionBtn, "Save Option");
 		Thread.sleep(4000);
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]")));
 		selectDropdownByValue(driver, saveAsDropDown, saveAsPolicyValue, "Save Option");
-		clickButton(driver, saveOptionOkBtn, "Save");
 		ExtentReporter.logger.log(LogStatus.INFO, "Select Official Click [OK]");
+		clickButton(driver, saveOptionOkBtn, "Save");
 		Thread.sleep(6000);
 		/*
 		 * try{ switchToParentWindowfromframe(driver);
@@ -351,8 +351,8 @@ public class PolicyBinderPage extends CommonAction {
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]")));
 		Thread.sleep(4000);
-		clickButton(driver, Exit_Ok, "Exit Ok");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [OK]");
+		clickButton(driver, Exit_Ok, "Exit Ok");
 		return new PolicyQuotePage(driver);
 	}
 

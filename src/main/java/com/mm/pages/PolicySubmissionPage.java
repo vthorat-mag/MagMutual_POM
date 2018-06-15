@@ -54,20 +54,21 @@ public class PolicySubmissionPage extends CommonAction {
 	}
 	
 	//Select Copy from Action value from Action drop down.
-	public PolicySubmissionPage copyFromActionDropDown(String policyNum) throws Exception
+	public PolicySubmissionPage copyFromActionDropDown(String policyNum) throws IllegalArgumentException, IllegalAccessException, SecurityException, InterruptedException
 	{
-		selectDropdownByValue(driver,policyAction, valueOfPolicyActionCopy, "Policy Action");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy");
+		selectDropdownByValue(driver,policyAction, valueOfPolicyActionCopy, "Policy Action");
 		Thread.sleep(3000);
 		return new PolicySubmissionPage(driver);
+		
 	}
 	
 	
 	//Change policy phase to indication.
-	public PolicySubmissionPage changePhaseToIndication() throws Exception
+	public PolicySubmissionPage changePhaseToIndication() throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException
 	{
-		selectDropdownByValue(driver,policyPhase, indicationPhaseValue, "Phase");
 		ExtentReporter.logger.log(LogStatus.INFO, "Change Policy Phase to Indication");
+		selectDropdownByValue(driver,policyPhase, indicationPhaseValue, "Phase");
 		Thread.sleep(3000);
 		return new PolicySubmissionPage(driver);
 	}
@@ -76,7 +77,6 @@ public class PolicySubmissionPage extends CommonAction {
 	public void saveWip() throws InterruptedException
 	{
 		clickButton(driver, saveWIP, "Save WIP");
-		ExtentReporter.logger.log(LogStatus.INFO, "Click Save WIP");
 		Thread.sleep(2000);
 	}
 	
@@ -89,8 +89,8 @@ public class PolicySubmissionPage extends CommonAction {
 		Thread.sleep(2000);
 		enterTextIn(driver, Hosp_Disc_Period_Rating,policysubmissionpageDTO.discoveryPeriodRating, "Discovery_Period Rating");
 		enterTextIn(driver, Quote_Description, policysubmissionpageDTO.quoteDescription, "Quote Description");
-		click(driver, Save_WIP, "Save WIP button");
 		ExtentReporter.logger.log(LogStatus.INFO, "Indication saved as WIP");
+		click(driver, Save_WIP, "Save WIP button");
 		return new PolicyIndicationPage(driver);
 	}
 
