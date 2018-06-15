@@ -30,13 +30,14 @@ public class PDFReader {
 	CommonUtilities comUtil = new CommonUtilities();
 
 	//AUTOIT script execution to save PDF.
-	public void savePDF() throws IOException {
+	public PDFReader savePDF() throws IOException {
 		String[] savePDFPath = {
 				System.getProperty("user.dir") + "\\src\\main\\resources\\StoredPDF\\pdfDocument.pdf" };
 		String[] executionPath = { System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\savePdf.exe" };
 		Runtime.getRuntime().exec(System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\savePdf.exe",
 				savePDFPath);
 		// ProcessBuilder pb = new ProcessBuilder(executionPath);
+		return new PDFReader();
 	}
 
 	//Logic to verify PDF content.

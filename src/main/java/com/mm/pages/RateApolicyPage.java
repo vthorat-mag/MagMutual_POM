@@ -99,7 +99,7 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 	@FindBy(xpath = "//table[@id='coverageListGrid']//tbody//td//div[@id='CPRODUCTCOVERAGEDESC']")
 	List<WebElement> coverageList;
 	
-	@FindBy(xpath = "//div[@class='horizontalButtonCollection']//span[@class='leftGrayButtonArea']//input[@id='PM_MANU_PUP']")
+	@FindBy(xpath = "//input[@id='PM_MANU_PUP']")
 	WebElement optionalFormBtn;
 	
 	@FindBy(xpath = "//table[@id='maintainManuscriptListGrid']")

@@ -87,7 +87,7 @@ public class HomePage extends CommonAction{
 	@FindBy(id="pageTitleForpageHeader")
 	WebElement findPolicyPageTitle;
 	
-	@FindBy(xpath = "//a[@class='topNavCurrentApp']")
+	@FindBy(xpath = "//a[@id='topnav_Policy']")
 	WebElement headerPolicyTab;
 	
 	// Constructor to initialize driver, page elements and DTO PageObject for HomePage

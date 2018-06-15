@@ -168,8 +168,8 @@ public class PolicyQuotePage extends CommonAction {
 		Thread.sleep(3000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Coverage tab");
 		clickButton(driver, coverageTab, "Coverage");
-		Assert.assertEquals(coverageList.get(0).getAttribute("innerHTML"), "Primary", "Coverage for Primary Risk is NOT displayed");
 		Thread.sleep(3000);
+		Assert.assertEquals(coverageList.get(0).getAttribute("innerHTML"), "Primary", "Coverage for Primary Risk is NOT displayed");
 	}
 	
 	//Coverage Update flow.

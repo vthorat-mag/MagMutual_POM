@@ -157,10 +157,9 @@ public class SmokeTestCase extends BrowserTypes {
 				.product_Notify().exit_SaveOption();
 	}
 
-	// @Test(description = "Hospital Quote", dataProvider = "userTestData",
-	// dataProviderClass = ExcelApiTest.class,groups = { "Smoke Test" })
-	public void TC42238(String UserName, String PassWord) throws Exception {
-		String searchPolicyNum = "09101645";
+	@Test(description = "Hospital Quote",groups = { "Smoke Test" })
+	public void TC42238() throws Exception {
+		String searchPolicyNum = "Q09101742-NB16-01";
 		lpDTO = new LoginPageDTO();
 		List<String> coverages1 = Arrays.asList("Prof Liab-Out", "Quote UMB-Out", "UMB PL-Ins");
 		List<String> phase1 = Arrays.asList("QUOTE-EXCESS", "QUOTE-UMB", "INDICATION_UMB");
@@ -174,6 +173,7 @@ public class SmokeTestCase extends BrowserTypes {
 		String policyNumber = policyquotepage.policyNo();
 
 		for (int i = 0; i < coverages1.size(); i++) {
+			rateapolicyPage = new RateApolicyPage(driver);
 			rateapolicyPage.coverageUpdates(coverages1.get(i), phase1.get(i), policyNumber);
 		}
 
@@ -185,7 +185,6 @@ public class SmokeTestCase extends BrowserTypes {
 	// "userTestData", dataProviderClass=ExcelApiTest.class,groups = { "Smoke
 	// Test" })
 	public void TC42245(String UserName, String PassWord) throws Exception {
-		LoginPageDTO lpDTO;
 		lpDTO = new LoginPageDTO();
 		loginpage = new LoginPage(driver);
 		String searchPolicyNum = "09100200";
