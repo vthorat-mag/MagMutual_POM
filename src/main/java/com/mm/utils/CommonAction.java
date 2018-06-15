@@ -146,7 +146,6 @@ public class CommonAction implements CommonActionInterface {
 	
 	
 	public void clickButton(WebDriver driver, WebElement pageElement, String buttonName) {
-		// TODO Auto-generated method stub
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, Medium);
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
@@ -160,12 +159,10 @@ public class CommonAction implements CommonActionInterface {
 	}
 
 	public void waitFor(WebDriver driver, long time) {
-		// TODO Auto-generated method stub
 		driver.manage().timeouts().implicitlyWait(time, TimeUnit.SECONDS);
 	}
 
 	public void close(WebDriver driver) {
-		// TODO Auto-generated method stub
 		driver.quit();
 		ExtentReporter.logger.log(LogStatus.PASS, "Browser is closed.");
 	}

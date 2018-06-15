@@ -19,7 +19,6 @@ public class PolicySubmissionPage extends CommonAction {
 	PolicySubmissionPageDTO policysubmissionpageDTO;
 	
 	
-	
 	//Element repository for Policy Submission page.
 	@FindBy(id="PM_COMMON_TABS_SAVEWIP")
 	WebElement saveWIP;
