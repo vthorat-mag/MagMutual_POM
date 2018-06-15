@@ -268,8 +268,7 @@ public class PolicyIndicationPage extends CommonAction {
 	}
 
 	// Select under writer button from policy page, Add Underwriters info to create underwriters and Save underwriter
-	public void add_Underwriter(List<WebElement> firstFrame)
-			throws InterruptedException {
+	public PolicyIndicationPage add_Underwriter(List<WebElement> firstFrame) throws Exception {
 
 		int count=0;
 		//Open Add underwriter tab 
@@ -303,10 +302,11 @@ public class PolicyIndicationPage extends CommonAction {
 		Thread.sleep(2000);
 		click(driver,Save_Underwritter, "Save button");
 		}
+		return new PolicyIndicationPage(driver);
 	}
 
 	// Close 'Maintain Underwriting team' pop up and Save WIP
-	public void close_Underwriter() throws InterruptedException {
+	public PolicyIndicationPage close_Underwriter() throws Exception {
 
 		Thread.sleep(3000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Underwriter Window closes");
@@ -315,10 +315,11 @@ public class PolicyIndicationPage extends CommonAction {
 		Thread.sleep(3000);
 		ExtentReporter.logger.log(LogStatus.INFO, "WIP is saved");
 		click(driver,Save_WIP, "Save WIP button");
+		return new PolicyIndicationPage(driver);
 	}
 
 	// Select Agent from Policy Action drop down and Add Agent info in pop up, save Agent and move to parent window
-	public void addAgent() throws InterruptedException {
+	public PolicyIndicationPage addAgent() throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
 
 		Thread.sleep(3000);
 		//Select Agent from Policy Action drop down list
@@ -342,11 +343,12 @@ public class PolicyIndicationPage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Agent is saved to policy and window is closed");
 		click(driver,Close_Agent, "Close button");
 		switchToParentWindowfromframe(driver);
+		return new PolicyIndicationPage(driver);
 
 	}
 
 	// Select Risk tab, select Risk type and fill the Risk Information
-	public void addRiskInformation() throws InterruptedException {
+	public PolicyIndicationPage addRiskInformation() throws Exception {
 
 		Thread.sleep(3000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Risk tab displays");
@@ -358,10 +360,11 @@ public class PolicyIndicationPage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Risk information is displayed and selected");
 		selectDropdownByVisibleText(driver,Risk_Country, hospitalIndicationDTO.riskCountry, "Risk Country");
 		selectDropdownByVisibleText(driver,Risk_Speciality,hospitalIndicationDTO.riskSpeciality, "Risk speciality");
+		return new PolicyIndicationPage(driver);
 	}
 
 	// Select Coverage tab, click on Add button and switch to pop up window
-	public void addCoverage() throws InterruptedException {
+	public PolicyIndicationPage addCoverage() throws Exception {
 		
 		Thread.sleep(2000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Coverage tab displays with the primary defaulting in the dropdown");
@@ -371,10 +374,11 @@ public class PolicyIndicationPage extends CommonAction {
 		click(driver,Add_Coverage, "Add button");
 		Thread.sleep(3000);
 		switchToFrameUsingId(driver, "popupframe1");
+		return new PolicyIndicationPage(driver);
 	}
 
 	// Select Coverage from the pop up List appearing after 'Add' button on coverage tab
-	public void selectCoverageFromPopupListAddDatePremium() throws InterruptedException {
+	public PolicyIndicationPage selectCoverageFromPopupListAddDatePremium() throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
 
 		Thread.sleep(2000);
 		for (int i = 0; i < selectCoverageChkBox.size(); i++)
@@ -425,16 +429,18 @@ public class PolicyIndicationPage extends CommonAction {
 				break;
 			}
 		}
+		return new PolicyIndicationPage(driver);
 	}
 	
 	
 
 	// Close Select Coverage pop up
-	public void closeAddCoveragetab() {
+	public PolicyIndicationPage closeAddCoveragetab() throws Exception{
 
 		ExtentReporter.logger.log(LogStatus.INFO,"Information has been entered and coverage has been added to primary risk");
 		click(driver,Select_coverage, "Select button for coverage");
 		switchToParentWindowfromframe(driver);
+		return new PolicyIndicationPage(driver);
 	}
 
 	// Select and return the policy# from source of a frame to be utilized for switching to frame
@@ -446,7 +452,7 @@ public class PolicyIndicationPage extends CommonAction {
 	}
 
 	// Select Coverage from the List given in Grid on Coverage tab
-	public void selectCoverageFromGridList() throws InterruptedException {
+	public PolicyIndicationPage selectCoverageFromGridList() throws Exception {
 
 		//Select coverage from Grid List, add Retro Date and Premium
 		for(int coverageCount = 0; coverageCount<hospitalIndicationDTO.coverage.size();coverageCount++)
@@ -474,6 +480,7 @@ public class PolicyIndicationPage extends CommonAction {
 				
 			}
 		}
+		
 	}
 
 	
@@ -502,6 +509,7 @@ public class PolicyIndicationPage extends CommonAction {
 			}
 		}
 	}
+		return new PolicyIndicationPage(driver);
 }
 
 	
@@ -537,7 +545,7 @@ public class PolicyIndicationPage extends CommonAction {
 	}
 
 	// Select 'Coverage' tab and add Manuscript from optional forms and Save
-	public void coverageUpdates(String PolicyNo) throws Exception {
+	public PolicyIndicationPage coverageUpdates(String PolicyNo) throws Exception {
 		Thread.sleep(4000);
 		for(int coverageNameCount = 0; coverageNameCount<hospitalIndicationDTO.coverageName.size()/2;coverageNameCount++)
 		{
@@ -586,10 +594,11 @@ public class PolicyIndicationPage extends CommonAction {
 		click(driver,Save_WIP, "Save WIP");
 		Thread.sleep(2000);
 	}
+		return new PolicyIndicationPage(driver);
 }
 
 	// Open Limit Sharing pop up and switch to pop up window
-	public void openLimitSharingTab(String PolicyNo) throws Exception {
+	public PolicyIndicationPage openLimitSharingTab(String PolicyNo) throws Exception {
 		Thread.sleep(2000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Policy Page is displayed");
 		clickButton(driver, Policy_tab, "Policy tab");
@@ -598,10 +607,11 @@ public class PolicyIndicationPage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Limit Sharing Window Displays");
 		Thread.sleep(2000);
 		switchToFrameUsingElement(driver,driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
+		return new PolicyIndicationPage(driver);
 	}
 
 	// Add Shared group from the limit sharing tab
-	public void addSharedGroup(String PolicyNo) throws InterruptedException {
+	public PolicyIndicationPage addSharedGroup(String PolicyNo) throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
 		
 		for(int sharedGroupCoverageCount = 0; sharedGroupCoverageCount<hospitalIndicationDTO.sharedGroupCoverage.size()/3;sharedGroupCoverageCount++)
 		{
@@ -636,6 +646,7 @@ public class PolicyIndicationPage extends CommonAction {
 		Thread.sleep(1000);
 		switchToFrameUsingId(driver, "popupframe1");
 	}
+		return new PolicyIndicationPage(driver);
 }
 	// Close Limit Sharing pop up and switch to parent window
 	public void closeLimitSharingtab() throws InterruptedException {

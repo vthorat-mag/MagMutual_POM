@@ -34,20 +34,15 @@ public class CommonAction implements CommonActionInterface {
 
 	
 	public void selectValue(WebDriver driver, WebElement pageElement, String value) {
-		// TODO Auto-generated method stub
-		
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, Medium);
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
-			JavascriptExecutor js = (JavascriptExecutor) driver;
 			Assert.assertTrue(pageElement.isDisplayed(),  pageElement+ " is Not displayed on screen.");
-			js.executeScript("arguments[0].click();", pageElement);
 			ExtentReporter.logger.log(LogStatus.PASS, "Selected value " + value);
+			clickButton(driver, pageElement, value);
 		} catch (Exception e) {
 			ExtentReporter.logger.log(LogStatus.FAIL, value + " element is not found.");
 		}
-		
-		
 	}
 	
 	public void switchToSecondFramefromFirst(WebDriver driver,String frameID){
@@ -151,7 +146,6 @@ public class CommonAction implements CommonActionInterface {
 	
 	
 	public void clickButton(WebDriver driver, WebElement pageElement, String buttonName) {
-		// TODO Auto-generated method stub
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, Medium);
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
@@ -163,14 +157,12 @@ public class CommonAction implements CommonActionInterface {
 			ExtentReporter.logger.log(LogStatus.FAIL, buttonName + " element is not found.");
 		}
 	}
-	
+
 	public void waitFor(WebDriver driver, long time) {
-		// TODO Auto-generated method stub
 		driver.manage().timeouts().implicitlyWait(time, TimeUnit.SECONDS);
 	}
 
 	public void close(WebDriver driver) {
-		// TODO Auto-generated method stub
 		driver.quit();
 		ExtentReporter.logger.log(LogStatus.PASS, "Browser is closed.");
 	}

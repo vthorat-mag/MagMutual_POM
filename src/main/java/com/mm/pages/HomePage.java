@@ -119,14 +119,32 @@ public class HomePage extends CommonAction{
 	}
 
 	// Navigate to policy page from Policy tab.
-	public RateApolicyPage navigateToPolicyPage() throws Exception {
-	//	clickButton(driver, headerPolicyTab, "Header Policy Tab");
+	public HomePage navigateToPolicyPage() throws Exception {
+		ExtentReporter.logger.log(LogStatus.INFO, "Search Policy Screen is opened");
 		waitForElementToLoad(driver, 10, Policy_Tab_Home);
 		click(driver, Policy_Tab_Home, "Policy tab");
-		ExtentReporter.logger.log(LogStatus.INFO, "Search Policy Screen is opened");
-		return new RateApolicyPage(driver);
+		return new HomePage(driver);
 	}
-			
+		
+	
+	// Navigate to policy page using Policy tab from EndorsePolicyPage.
+		public EndorsePolicyPage navigateToPolicyPageFromEndorsePolicyPage() throws Exception {
+			navigateToPolicyPage();
+			return new EndorsePolicyPage(driver);
+		}
+		
+	// Navigate to policy page using Policy tab from rateApolicyPage.
+		public RateApolicyPage navigateToPolicyPageFromrateApolicyPage () throws Exception {
+			navigateToPolicyPage();
+			return new RateApolicyPage(driver);
+		}
+		
+	// Navigate to policy page using Policy tab from rateApolicyPage.
+		public RateApolicyPage navigateToPolicyPageFromPolicyBinderPage() throws Exception {
+			navigateToPolicyPage();
+			return new RateApolicyPage(driver);
+		}
+		
 	//Navigate to Policy page from policy link[Header]
 	public void navigateToPolicyPageThroughPolicyTab()
 	{
@@ -142,17 +160,13 @@ public class HomePage extends CommonAction{
   
   
 	//Move to Policy tab and select Create New option from menu
-	public void create_New() throws InterruptedException{		
+	public HomePage create_New() throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException{		
 		waitForElementToLoad(driver, 20, Policy_tab);
-		
 		Actions action = new Actions(driver);
 		action.moveToElement(Policy_tab).click().build().perform();
 		Thread.sleep(2000);
-		
-		JavascriptExecutor js = (JavascriptExecutor)driver;
-		js.executeScript("arguments[0].click();", Create_New);
-	//	clickButton(driver, Create_New, "Create New from Policy Menu ");
-		
+		clickButton(driver, Create_New, "Create New from Policy Menu ");
+		return new HomePage(driver);
 	}
 	
 	/*Entity Select Search window appears and then we enter Organization name and search
@@ -201,9 +215,7 @@ public class HomePage extends CommonAction{
 	public String create_Quote() throws InterruptedException {
 		Thread.sleep(2000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Entity Select Search window opens");
-		JavascriptExecutor js = (JavascriptExecutor)driver;
-		js.executeScript("arguments[0].click();", Create_Quote);
-		//clickButton(driver, Create_Quote, "Create Quote from Policy Menu");
+		clickButton(driver, Create_Quote, "Create Quote from Policy Menu");
 		String parentWindow = switchToWindow(driver);
 		return parentWindow;
 	}

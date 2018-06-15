@@ -7,46 +7,41 @@ import org.openqa.selenium.support.PageFactory;
 
 import com.mm.utils.CommonAction;
 
-public class EndorsePolicyPage extends CommonAction{
+public class EndorsePolicyPage extends CommonAction {
 
-WebDriver driver;
-	
-@FindBy(linkText="Policy ")
-WebElement Policy_tab;
+	WebDriver driver;
 
-@FindBy(linkText="Find Policy")
-//link//a[@onclick='doMenuItem('PM_FIND_POLICY','~/policymgr/findPolicy.do?')']
-WebElement Find_Policy;
+	@FindBy(linkText = "Policy ")
+	WebElement Policy_tab;
 
-@FindBy(name="policyPhaseCodeMultiSelectText") // not needed
-WebElement Policy_Phase;
+	@FindBy(linkText = "Find Policy")
+	// link//a[@onclick='doMenuItem('PM_FIND_POLICY','~/policymgr/findPolicy.do?')']
+	WebElement Find_Policy;
 
-@FindBy(name="AFD_policyPhaseCode")
-WebElement PolicyPhase_Search;
+	@FindBy(name = "policyPhaseCodeMultiSelectText") // not needed
+	WebElement Policy_Phase;
 
-@FindBy(xpath="//input[@type='checkbox' and @value='BINDER']")
-WebElement Binder_checkbox;
+	@FindBy(name = "AFD_policyPhaseCode")
+	WebElement PolicyPhase_Search;
 
-@FindBy(id="PM_SPOL_SEARCH")
-WebElement Search_Policy;
+	@FindBy(xpath = "//input[@type='checkbox' and @value='BINDER']")
+	WebElement Binder_checkbox;
 
-public EndorsePolicyPage(WebDriver driver){
-	
-	this.driver=driver;
-	PageFactory.initElements(driver, this);
+	@FindBy(id = "PM_SPOL_SEARCH")
+	WebElement Search_Policy;
 
-}
+	public EndorsePolicyPage(WebDriver driver) {
 
-public void findPolicy(){
+		this.driver = driver;
+		PageFactory.initElements(driver, this);
+	}
 
+	public void findPolicy() {
+		Find_Policy.click();
+	}
 
-	Find_Policy.click();
-	
-}
+	public void selectBinder() {
 
-public void selectBinder(){
-	
-	
-}
+	}
 
 }
