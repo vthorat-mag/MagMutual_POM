@@ -32,6 +32,12 @@ public class HomePage extends CommonAction{
 	@FindBy(xpath="//li[@id='PM_POLICY_MENU']//a[@class='fNiv isParent']")
 	WebElement Policy_tab;
 	
+	@FindBy(id="headerLogoTips")
+	WebElement logo;
+	
+	@FindBy(id="topnav_Policy")
+	WebElement Policy_link;
+	
 	@FindBy(xpath="//li[@id='PM_NEW_POL_QUOTE_MENU']//a[@class='subMenuLinks isParent']/span")
 	WebElement Create_New;
 
@@ -40,13 +46,7 @@ public class HomePage extends CommonAction{
 	
 	@FindBy(name="logoff")
 	WebElement logoff;
-	
-	@FindBy(id="headerLogoTips")
-	WebElement logo;
-	
-	@FindBy(id="topnav_Policy")
-	WebElement Policy_link;
-	
+
 	@FindBy(name="entitySearch_lastOrOrgName")
 	WebElement Last_Org_Name;
 
@@ -120,9 +120,9 @@ public class HomePage extends CommonAction{
 
 	// Navigate to policy page from Policy tab.
 	public HomePage navigateToPolicyPage() throws Exception {
-		clickButton(driver, headerPolicyTab, "Header Policy Tab");
 		ExtentReporter.logger.log(LogStatus.INFO, "Search Policy Screen is opened");
-		click(driver, Policy_tab, "Policy tab");
+		waitForElementToLoad(driver, 10, Policy_Tab_Home);
+		click(driver, Policy_Tab_Home, "Policy tab");
 		return new HomePage(driver);
 	}
 		
