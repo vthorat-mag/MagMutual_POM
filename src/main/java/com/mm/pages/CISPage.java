@@ -75,7 +75,7 @@ public class CISPage  extends CommonAction{
 	}
 
 	//Navigate to Add Organization details page
-	public CISPage clickOnNewOrganization()
+	public CISPage clickOnNewOrganization() throws Exception
 	{
 		click(driver,New_Org, "New Organization tab");
 		return new CISPage(driver);
@@ -102,7 +102,7 @@ public class CISPage  extends CommonAction{
 	   
     	//Select zip code for the new organization from the new pop up window using window handle
 	    //And close the zip code window and navigate back to parent window
-	    public CISPage selectZipCode() throws InterruptedException
+	    public CISPage selectZipCode() throws Exception
 	    {
 	    	   String parentwindow = switchToWindow(driver);
 	    	   Thread.sleep(2000);

@@ -162,7 +162,8 @@ public class CommonAction implements CommonActionInterface {
 		} catch (Exception e) {
 			ExtentReporter.logger.log(LogStatus.FAIL, buttonName + " element is not found.");
 		}
-
+	}
+	
 	public void waitFor(WebDriver driver, long time) {
 		// TODO Auto-generated method stub
 		driver.manage().timeouts().implicitlyWait(time, TimeUnit.SECONDS);

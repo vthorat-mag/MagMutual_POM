@@ -8,6 +8,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
+import com.mm.dto.PolicyBinderPageDTO;
 import com.mm.utils.CommonAction;
 import com.mm.utils.CommonUtilities;
 import com.mm.utils.ExtentReporter;
@@ -17,6 +18,8 @@ public class PolicyBinderPage extends CommonAction {
 
 	// Global Variable assignment.
 	WebDriver driver;
+	PolicyBinderPageDTO policybinderpageDTO;
+	
 	CommonUtilities comUtil = new CommonUtilities();
 	String valueOfPolicyActionEndorse = "javascript:endorseTransaction('oosendorse');";
 	String saveAsPolicyValue = "OFFICIAL";
@@ -158,56 +161,57 @@ public class PolicyBinderPage extends CommonAction {
 	}
 	
 	//Navigate to Claims page.
-	public PolicyBinderPage navigatetoClaimsPage() throws InterruptedException
+	public PolicyBinderPage navigatetoClaimsPage() throws Exception
 	{
 		clickButton(driver, headerClaimsTab, "Header CIS");
-		getPageTitle(driver, FileSearchPageTitle);
+		getPageTitle(driver, policybinderpageDTO.FileSearchPageTitle);
+		policybinderpageDTO = new PolicyBinderPageDTO();
 		return new PolicyBinderPage(driver);
 	}
 	
 	//Select Patient.
-	public void getPaitentDetails(String clinetIdValue) throws Exception
+	public void getPatientDetails(String clientIdValue) throws Exception
 	{
 		Thread.sleep(2000);
 		Actions builder = new Actions(driver);
 		builder.moveToElement(filesMenuTab).build().perform();
 		clickButton(driver, fileAddMenuOption, "Add File Menu");
-		getPageTitle(driver, addFilePageTitle);
+		getPageTitle(driver, policybinderpageDTO.addFilePageTitle);
 		clickButton(driver, patientSearchIcon, "Patient Search");
 		waitFor(driver, 10);
 		String parentWindowId = switchToWindow(driver);
-		getPageTitle(driver, entitySearchListPageTitle);
-		String LastName = "ABNEY";
-		String FirstName = "DARYL";
+		getPageTitle(driver, policybinderpageDTO.entitySearchListPageTitle);
+		/*String LastName = "ABNEY";
+		String FirstName = "DARYL";*/
 		//TODO - need to store above 2  values in Excel sheet.
-		enterTextIn(driver, lastNameEntitySearchPage,LastName,"Last Name");
-		enterTextIn(driver, firstNameEntitySearchPage, FirstName,"First Name");
+		enterTextIn(driver, lastNameEntitySearchPage,policybinderpageDTO.lastName,"Last Name");
+		enterTextIn(driver, firstNameEntitySearchPage, policybinderpageDTO.firstName,"First Name");
 		click(driver, searchBtnOnEntitySearchPage, "Entity Search Page's Search");
-		Assert.assertEquals(resultOnEntityListPage.getAttribute("innerHTML").trim(),LastName+", "+FirstName+",", "Data displayed after search is not correct");
+		Assert.assertEquals(resultOnEntityListPage.getAttribute("innerHTML").trim(),policybinderpageDTO.lastName+", "+policybinderpageDTO.firstName+",", "Data displayed after search is not correct");
 		waitFor(driver,5);
 		click(driver, selectEntityChkBox, "Select Entity Check Box");
 		clickButton(driver, selectBtnOnEntitySelectListPage, "Entity Select List Page's Select");
 		switchToParentWindowfromotherwindow(driver, parentWindowId);
-		Assert.assertEquals(patientSelectedValue.getAttribute("value").trim(), LastName+", "+FirstName+",", "Patient selected is NOT displayed correctly");
-		selectDropdownByValue(driver, FileTypeDropDown, fileTypeDropDownValue, "File Type");
-		selectDropdownByValue(driver, lobDropDown, lobDropDownValue, "LOB");
-		enterTextIn(driver, descriptionTextBox, "Test","Description");
-		selectDropdownByValue(driver, fileHandlerDorpDown, fileHandlerDropDownValue, "File Handler");
-		selectDropdownByValue(driver, stateOfLossDorpDown, stateOfLossDropDownValue, "State Of Loss");
+		Assert.assertEquals(patientSelectedValue.getAttribute("value").trim(), policybinderpageDTO.lastName+", "+policybinderpageDTO.firstName+",", "Patient selected is NOT displayed correctly");
+		selectDropdownByValue(driver, FileTypeDropDown, policybinderpageDTO.fileTypeDropDownValue, "File Type");
+		selectDropdownByValue(driver, lobDropDown, policybinderpageDTO.lobDropDownValue, "LOB");
+		enterTextIn(driver, descriptionTextBox, policybinderpageDTO.description,"Description");
+		selectDropdownByValue(driver, fileHandlerDorpDown, policybinderpageDTO.fileHandlerDropDownValue, "File Handler");
+		selectDropdownByValue(driver, stateOfLossDorpDown, policybinderpageDTO.stateOfLossDropDownValue, "State Of Loss");
 		enterTextIn(driver, accidentDateTextBox, comUtil.getSystemDatemmddyyyy(),"Accident Date");
 		clickButton(driver, insuredSearchIcon, "Insured Search Icon");
 		String parentWindowIdSearchEntity = switchToWindow(driver);
 		//switchToFrameUsingElement(driver, entityMiniPopupFrameId);
-		String searchEntityTitle = getPageTitle(driver, searchEntityPageTitle);
+		String searchEntityTitle = getPageTitle(driver, policybinderpageDTO.searchEntityPageTitle);
 		//enterTextIn(driver, entityClientId,clinetIdValue , "Clent Id");
-		enterTextIn(driver, entityClientId,clinetIdValue , "Clent Id");
+		enterTextIn(driver, entityClientId,clientIdValue , "Client Id");
 		clickButton(driver, searchBtnOnEntitySearchPage,"Entity Search Page's Search");
 		waitFor(driver, 10);
 		Assert.assertTrue(resultOnEntityListPage.isDisplayed(), "Insured Name is not populated on 'Entity Select List' page.");
 		click(driver, selectEntityChkBox, "Insured Name");
 		clickButton(driver, selectBtnOnEntitySelectListPage, "Select");
 		
-		//TOD0 - Need To add below steps once got confirmaiton on query - Cant see policy No from Policy No drop down field.
+		//TODO - Need To add below steps once got confirmaiton on query - Cant see policy No from Policy No drop down field.
 		/*In the filter criteria section, click the Policy No dropdown and 
 		Select [Policy number entered in step 3]
 		Click the checkbox next the Prof Liab coverage 
@@ -242,14 +246,14 @@ public class PolicyBinderPage extends CommonAction {
 
 	// Select Endorsement from "Action DropoDown".
 	public PolicyBinderPage endorsementFromActionDropDown() {
-		selectDropdownByValue(driver, policyAction, valueOfPolicyActionEndorse, "Policy Action");
+		selectDropdownByValue(driver, policyAction, policybinderpageDTO.valueOfPolicyActionEndorse, "Policy Action");
 		ExtentReporter.logger.log(LogStatus.PASS, "Click Policy Actions > Select value from the dropdown screen.");
 		return new PolicyBinderPage(driver);
 	}
 
 	// Select Copy To Quote from "Action DropoDown".
 	public PolicySubmissionPage copyToQuoteFromActionDropDown(String policyNum) throws Exception {
-		selectDropdownByValue(driver, policyAction, valueOfPolicyActionCopyToQuote, "Policy Action");
+		selectDropdownByValue(driver, policyAction, policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy to Quote");
 		Thread.sleep(10000);
 		String getUpdatedPolicyNo = policyNo();
@@ -268,7 +272,7 @@ public class PolicyBinderPage extends CommonAction {
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNum + "')]")));
 		waitForElementToLoad(driver, 25, selectReason);
-		selectDropdownByValue(driver, selectReason, valueOfSelectReason, "Select Reason");
+		selectDropdownByValue(driver, selectReason, policybinderpageDTO.valueOfSelectReason, "Select Reason");
 		clickButton(driver, okBtnEndorsmentPopup, "Ok");
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Click the dropdown by Reason:  Select Issue Policy Forms-->Click [Ok]");
@@ -322,14 +326,14 @@ public class PolicyBinderPage extends CommonAction {
 	}
 
 	// Save Option functionality flow.
-	public void saveOption(String policyNo) throws Exception {
+	public PolicyQuotePage saveOption(String policyNo) throws Exception {
 		Thread.sleep(2000);
 		clickButton(driver, saveOptionBtn, "Save Option");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options");
 		Thread.sleep(4000);
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]")));
-		selectDropdownByValue(driver, saveAsDropDown, saveAsPolicyValue, "Save Option");
+		selectDropdownByValue(driver, saveAsDropDown, policybinderpageDTO.saveAsPolicyValue, "Save Option");
 		clickButton(driver, saveOptionOkBtn, "Save");
 		ExtentReporter.logger.log(LogStatus.INFO, "Select Official Click [OK]");
 		Thread.sleep(6000);
@@ -353,6 +357,7 @@ public class PolicyBinderPage extends CommonAction {
 		Thread.sleep(4000);
 		clickButton(driver, Exit_Ok, "Exit Ok");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [OK]");
+		return new PolicyQuotePage(driver);
 	}
 
 }

@@ -5,7 +5,6 @@ import MMTestCase.SmokeTestCase;
 public class PolicyQuotePageDTO {
 
 	
-	
 public PolicyQuotePageDTO() throws IllegalArgumentException, IllegalAccessException, SecurityException{
 		
 		for (int iFC=0; iFC < HomePageDTO.class.getFields().length; iFC++)

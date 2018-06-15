@@ -527,8 +527,6 @@ public class PolicyIndicationPage extends CommonAction {
 			}
 		}
 		Thread.sleep(2000);
-		enterTextIn(driver,ExposureUnit,indicationDTO.exposureUnit);
-		
 		enterDataIn(driver, ExposureUnit, hospitalIndicationDTO.exposureUnit, "Exposure Unit");
 		//Close coverage class tab and move to coverage tab
 		ExtentReporter.logger.log(LogStatus.INFO, "Coverage class is saved.");
@@ -539,7 +537,7 @@ public class PolicyIndicationPage extends CommonAction {
 	}
 
 	// Select 'Coverage' tab and add Manuscript from optional forms and Save
-	public void coverageUpdates(String PolicyNo) throws InterruptedException {
+	public void coverageUpdates(String PolicyNo) throws Exception {
 		Thread.sleep(4000);
 		for(int coverageNameCount = 0; coverageNameCount<hospitalIndicationDTO.coverageName.size()/2;coverageNameCount++)
 		{

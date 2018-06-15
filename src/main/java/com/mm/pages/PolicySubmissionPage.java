@@ -19,7 +19,6 @@ public class PolicySubmissionPage extends CommonAction {
 	PolicySubmissionPageDTO policysubmissionpageDTO;
 	
 	
-	
 	//Element repository for Policy Submission page.
 	@FindBy(id="PM_COMMON_TABS_SAVEWIP")
 	WebElement saveWIP;
@@ -54,7 +53,7 @@ public class PolicySubmissionPage extends CommonAction {
 	}
 	
 	//Select Copy from Action value from Action drop down.
-	public PolicySubmissionPage copyFromActionDropDown(String policyNum) throws InterruptedException
+	public PolicySubmissionPage copyFromActionDropDown(String policyNum) throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException
 	{
 		selectDropdownByValue(driver,policyAction, valueOfPolicyActionCopy, "Policy Action");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy");
@@ -64,7 +63,7 @@ public class PolicySubmissionPage extends CommonAction {
 	
 	
 	//Change policy phase to indication.
-	public PolicySubmissionPage changePhaseToIndication() throws InterruptedException
+	public PolicySubmissionPage changePhaseToIndication() throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException
 	{
 		selectDropdownByValue(driver,policyPhase, indicationPhaseValue, "Phase");
 		ExtentReporter.logger.log(LogStatus.INFO, "Change Policy Phase to Indication");
@@ -81,7 +80,7 @@ public class PolicySubmissionPage extends CommonAction {
 	}
 	
 	// Update policy details for a policy and change policy phase from Submission to Indication.
-	public PolicyIndicationPage updatePolicyDetails() throws InterruptedException{
+	public PolicyIndicationPage updatePolicyDetails() throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException{
 		waitForPageLoad(driver, 40);
 		waitForElementToLoad(driver, 40, Phase);
 		selectDropdownByValue(driver, Phase,policysubmissionpageDTO.policyPhase,"Phase");

@@ -175,7 +175,7 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 	PolicyQuotePage policyquotepage =  new PolicyQuotePage(this.driver);
 	
 	//Search Policy from Search Policy text field.
-	public RateApolicyPage searchPolicy( String policy_no) throws InterruptedException
+	public RateApolicyPage searchPolicy( String policy_no) throws Exception
 	{
 		Thread.sleep(3000);
 		policySearch(driver, policy_no,Policy_Search, Search_btn);
@@ -186,13 +186,13 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 	}
 	
 	//Save Rate details code.
-	public RateApolicyPage saveRatedetails() throws InterruptedException
+	public RateApolicyPage saveRatedetails() throws Exception
 	{
 		click(driver,RateBtn, "Rate button");
 		Thread.sleep(5000);
 		switchToFrameUsingId(driver,"popupframe1");
 	    Thread.sleep(1000);
-	    selectDropdownByValue(driver,Continue_saving, "Y", "Continue saving without Quote"); 
+	    selectDropdownByValue(driver,Continue_saving, rateApolicyPageDTO.productNotifyValue, "Continue saving without Quote"); 
 	    Thread.sleep(1000);
 	    click(driver,Notify_Close, "Close button");
 	    Thread.sleep(3000);
@@ -282,15 +282,15 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 	}
 
 	//Select Accept option from "Action Drop Down".
-	public RateApolicyPage AcceptFromActionDropDown()
+	public RateApolicyPage AcceptFromActionDropDown()throws Exception
 	{
 		ExtentReporter.logger.log(LogStatus.INFO, "Select Accept from the dropdown screen.");
-		selectDropdownByValue(driver,policyAction, valueOfPolicyActionAccept, "Policy Action");
+		selectDropdownByValue(driver,policyAction, rateApolicyPageDTO.valueOfPolicyActionAccept, "Policy Action");
 		return new RateApolicyPage(driver);
 	}
 	
 	//Verify Alert is present or not.
-	public RateApolicyPage isAlertPresent() throws InterruptedException 
+	public RateApolicyPage isAlertPresent() throws Exception
 	{ 
 	    try 
 	    { 
@@ -308,7 +308,7 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 	}   
   
 	//Identify Phase displayed on Page.	
-	public RateApolicyPage identifyPhase() throws InterruptedException
+	public RateApolicyPage identifyPhase() throws Exception
 	{
 		waitFor(driver, 2);
 		Thread.sleep(3000);
@@ -330,15 +330,15 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 	}
 	
 	//Billing setup flow code.
-	public RateApolicyPage billingSetup() throws InterruptedException
+	public RateApolicyPage billingSetup() throws Exception
 	{
 		Thread.sleep(3000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions-->Select Billing Setup");
-		selectDropdownByValue(driver,policyAction, billingSetup, "Policy Action");
+		selectDropdownByValue(driver,policyAction, rateApolicyPageDTO.billingSetup, "Policy Action");
 		waitFor(driver, 5000);
 		switchToFrameUsingId(driver, "popupframe1");
 		ExtentReporter.logger.log(LogStatus.INFO, "Payment plan dropdown: Select A-Monthly");
-		selectDropdownByValue(driver,paymentPlan, paymentPlanValue, "Payment Plan");
+		selectDropdownByValue(driver,paymentPlan, rateApolicyPageDTO.paymentPlanValue, "Payment Plan");
 		Thread.sleep(5000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Save]");
 		clickButton(driver, billingSetupSaveBtn, "Save Button");
@@ -348,7 +348,7 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 	}
 	
 	//Coverage Details flow.
-	public RateApolicyPage coverageDetailsSelect()
+	public RateApolicyPage coverageDetailsSelect() throws Exception
 	{
 		try{
 			clickButton(driver,coverageTab, "Coverage");
@@ -426,7 +426,7 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 		
 		/*try{
 			switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
-			selectDropdownByValue(productNotifyDropDown, ProductNotifyValue, "product notify");
+			selectDropdownByValue(productNotifyDropDown, rateApolicyPageDTO.productNotifyValue, "product notify");
 			Thread.sleep(1000);
 			clickButton(driver, prodNotifyClose, "Product Notify Close");
 			ExtentReporter.logger.log(LogStatus.PASS, " Yes selected from Product Notify dorp down.");
@@ -469,7 +469,7 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.PASS, "Click Save Options.");
 		Thread.sleep(4000);
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
-		selectDropdownByValue(driver,saveAsDropDown, saveAsPolicyValue, "Save Option");
+		selectDropdownByValue(driver,saveAsDropDown, rateApolicyPageDTO.saveAsPolicyValue, "Save Option");
 		ExtentReporter.logger.log(LogStatus.PASS, "Select Official.");
 		clickButton(driver, saveOptionOkBtn, "Save");
 		ExtentReporter.logger.log(LogStatus.PASS, "Click [OK]");
@@ -477,7 +477,7 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 		try{
 			switchToParentWindowfromframe(driver);
 			switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
-			selectDropdownByValue(driver,productNotifyDropDown, ProductNotifyValue, "product notify");
+			selectDropdownByValue(driver,productNotifyDropDown, rateApolicyPageDTO.productNotifyValue, "product notify");
 			Thread.sleep(1000);
 			clickButton(driver, prodNotifyClose, "Product Notify Close");
 			ExtentReporter.logger.log(LogStatus.PASS, " Yes selection from Product Notify dorp down.");

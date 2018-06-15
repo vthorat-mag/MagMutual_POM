@@ -1,8 +1,20 @@
 package com.mm.dto;
 
+import java.util.List;
+
 import MMTestCase.SmokeTestCase;
 
 public class RateAPolicyPageDTO {
+	
+	public  List<String> coverage;
+	public  List<String> phase;
+	public String valueOfPolicyActionAccept;
+	public String billingSetup;
+	public String paymentPlanValue;
+	public String saveAsPolicyValue;
+	public String productNotifyValue;
+	
+	
 	
 public RateAPolicyPageDTO() throws IllegalArgumentException, IllegalAccessException, SecurityException{
 		

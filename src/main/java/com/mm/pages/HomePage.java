@@ -32,6 +32,12 @@ public class HomePage extends CommonAction{
 	@FindBy(xpath="//li[@id='PM_POLICY_MENU']//a[@class='fNiv isParent']")
 	WebElement Policy_tab;
 	
+	@FindBy(id="headerLogoTips")
+	WebElement logo;
+	
+	@FindBy(id="topnav_Policy")
+	WebElement Policy_link;
+	
 	@FindBy(xpath="//li[@id='PM_NEW_POL_QUOTE_MENU']//a[@class='subMenuLinks isParent']/span")
 	WebElement Create_New;
 
@@ -40,13 +46,7 @@ public class HomePage extends CommonAction{
 	
 	@FindBy(name="logoff")
 	WebElement logoff;
-	
-	@FindBy(id="headerLogoTips")
-	WebElement logo;
-	
-	@FindBy(id="topnav_Policy")
-	WebElement Policy_link;
-	
+
 	@FindBy(name="entitySearch_lastOrOrgName")
 	WebElement Last_Org_Name;
 
@@ -104,7 +104,7 @@ public class HomePage extends CommonAction{
 	}
 	
 	//Verify user Navigated to Policy page when clicked on Policy tab present on Header.
-	public RateApolicyPage headerPolicyTab() throws InterruptedException
+	public RateApolicyPage headerPolicyTab() throws Exception
 	{
 		Thread.sleep(5000);
 		clickButton(driver, headerPolicyTab, "Policy (from header");
@@ -113,15 +113,16 @@ public class HomePage extends CommonAction{
 
 
 	// Navigate to CIS page.
-	public CISPage navigateToCISPage() {
+	public CISPage navigateToCISPage() throws Exception {
 		click(driver, cisTab, "CIS tab");
 		return new CISPage(driver);
 	}
 
 	// Navigate to policy page from Policy tab.
-	public RateApolicyPage navigateToPolicyPage() {
-		clickButton(driver, headerPolicyTab, "Header Policy Tab");
-		click(driver, Policy_tab, "Policy tab");
+	public RateApolicyPage navigateToPolicyPage() throws Exception {
+	//	clickButton(driver, headerPolicyTab, "Header Policy Tab");
+		waitForElementToLoad(driver, 10, Policy_Tab_Home);
+		click(driver, Policy_Tab_Home, "Policy tab");
 		ExtentReporter.logger.log(LogStatus.INFO, "Search Policy Screen is opened");
 		return new RateApolicyPage(driver);
 	}
@@ -154,22 +155,9 @@ public class HomePage extends CommonAction{
 		
 	}
 	
-	//Select Create Quote option from POlicy tab menu 
-	public String create_Quote() throws InterruptedException{
-	
-		Thread.sleep(2000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Entity Select Search window opens");
-		JavascriptExecutor js = (JavascriptExecutor)driver;
-		js.executeScript("arguments[0].click();", Create_Quote);
-		//clickButton(driver, Create_Quote, "Create Quote from Policy Menu");
-		String parentWindow = switchToWindow(driver);
-		return parentWindow;
-	
-}
-
 	/*Entity Select Search window appears and then we enter Organization name and search
 	 Then select the Organization name from populated list.*/
-	public void search_Quote(String parentWindow)throws InterruptedException{
+	public HomePage search_Quote(String parentWindow)throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException{
 		
 		waitForElementToLoad(driver, 30, Last_Org_Name);
 		visibilityOfElement(driver, Last_Org_Name, "Last Org Name on Entity Select Search window");
@@ -188,7 +176,7 @@ public class HomePage extends CommonAction{
 	}
 	
 	//Selecting Policy type by adding Effective date, Issue company,state and click done.
-	public PolicySubmissionPage selectPolicyType() throws InterruptedException{
+	public PolicySubmissionPage selectPolicyType() throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException{
 		String Eff_Date="01012017";
 		Thread.sleep(1000);
 		switchToFrameUsingId(driver, "popupframe1");
@@ -209,6 +197,7 @@ public class HomePage extends CommonAction{
 
 	}
 
+	//Select Create Quote option from POlicy tab menu 
 	public String create_Quote() throws InterruptedException {
 		Thread.sleep(2000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Entity Select Search window opens");
