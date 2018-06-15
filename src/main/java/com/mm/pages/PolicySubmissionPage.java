@@ -56,12 +56,7 @@ public class PolicySubmissionPage extends CommonAction {
 	public PolicySubmissionPage copyFromActionDropDown(String policyNum) throws IllegalArgumentException, IllegalAccessException, SecurityException, InterruptedException
 	{
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy");
-		try {
-			selectDropdownByValue(driver,policyAction, valueOfPolicyActionCopy, "Policy Action");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		selectDropdownByValue(driver,policyAction, valueOfPolicyActionCopy, "Policy Action");
 		Thread.sleep(3000);
 		return new PolicySubmissionPage(driver);
 		
