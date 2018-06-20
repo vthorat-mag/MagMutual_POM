@@ -1,11 +1,18 @@
 package com.mm.pages;
 
+import java.util.List;
+
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 import com.mm.dto.PolicyBinderPageDTO;
@@ -19,14 +26,11 @@ public class PolicyBinderPage extends CommonAction {
 	// Global Variable assignment.
 	WebDriver driver;
 	PolicyBinderPageDTO policybinderpageDTO;
-	
-	CommonUtilities comUtil = new CommonUtilities();
 	String valueOfPolicyActionEndorse = "javascript:endorseTransaction('oosendorse');";
 	String saveAsPolicyValue = "OFFICIAL";
 	String ProductNotifyValue = "Y";
 	String valueOfSelectReason = "END009";
 	String valueOfPolicyActionCopyToQuote = "javascript:copyToQuote();";
-	String FileSearchPageTitle = "File Search";
 	String addFilePageTitle = "Add File";
 	String entitySelectListPageTitle = "Entity Select List";
 	String entitySearchListPageTitle = "Entity Select Search";
@@ -38,10 +42,7 @@ public class PolicyBinderPage extends CommonAction {
 
 	// Element repository for the page Policy Binder page.
 	@FindBy(name = "globalSearch")
-	WebElement Policy_Search;
-
-	@FindBy(name = "search")
-	WebElement Search_btn;
+	WebElement claimOrPolicy_Search;
 
 	@FindBy(id = "pageTitleForpageHeaderForPolicyFolder")
 	WebElement pageHeaderForPolicyFolder;
@@ -78,7 +79,7 @@ public class PolicyBinderPage extends CommonAction {
 
 	@FindBy(name = "workflowExit_Ok")
 	WebElement Exit_Ok;
-
+	
 	@FindBy(xpath = "//select[contains(@name,'confirmed')]")
 	WebElement productNotifyDropDown;
 
@@ -100,129 +101,20 @@ public class PolicyBinderPage extends CommonAction {
 	@FindBy(id = "topnav_Claims")
 	WebElement headerClaimsTab;
 	
-	@FindBy(xpath="//a[@class='selectedMenu fNiv isParent']//span")
-	WebElement filesMenuTab;
-	
-	@FindBy(xpath= "//li[@id='CM_ADD_CLAIM_MI']//a")
-	WebElement fileAddMenuOption;
-	
-	@FindBy(id="btnFind_claimantFullName")
-	WebElement patientSearchIcon;
-	
-	@FindBy(xpath= "//input[@name='entitySearch_lastOrOrgName']")
-	WebElement lastNameEntitySearchPage;
-	
-	@FindBy(xpath= "//input[@name='entity_firstName']")
-	WebElement firstNameEntitySearchPage;
-	
-	@FindBy(id="CI_ENTITY_SELECT_SCH_SCH")
-	WebElement searchBtnOnEntitySearchPage;
-	
-	@FindBy(id="CCLIENT_NAME")
-	WebElement resultOnEntityListPage;
-	
-	@FindBy(xpath="//input[@name='chkCSELECTIND']")
-	WebElement selectEntityChkBox;	
-	
-	@FindBy(id="CI_ENT_SEL_LST_FORM_SEL")
-	WebElement selectBtnOnEntitySelectListPage;
-	
-	@FindBy(xpath = "//select[@name ='claimType']")
-	WebElement FileTypeDropDown;
-	
-	@FindBy(xpath = "//select[@name ='cmLobCode']")
-	WebElement lobDropDown;
-	
-	@FindBy(xpath = "//textarea[@class='oasis_formfieldreq']")
-	WebElement descriptionTextBox;
-	
-	@FindBy(xpath = "//input[@name='claimantFullName']")
-	WebElement patientSelectedValue;
-	
-	@FindBy(xpath = "//select[@name='entityExaminerId']")
-	WebElement fileHandlerDorpDown;
-	
-	@FindBy(xpath = "//select[@name='claimStateCode']")
-	WebElement stateOfLossDorpDown;
-	
-	@FindBy(xpath = "//input[@name='lossDate']")
-	WebElement accidentDateTextBox;
-	
-	@FindBy(xpath = "//img[@id='btnFind_insuredFullName']")
-	WebElement insuredSearchIcon;
-	
-	@FindBy(xpath = "//input[@name = 'entity_clientID']")
-	WebElement entityClientId;
-	
 	// Constructor to initialize variables on policy binder page.
-	public PolicyBinderPage(WebDriver driver) {
+	public PolicyBinderPage(WebDriver driver) throws IllegalArgumentException, IllegalAccessException, SecurityException {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
+		policybinderpageDTO = new PolicyBinderPageDTO();
 	}
 	
 	//Navigate to Claims page.
-	public PolicyBinderPage navigatetoClaimsPage() throws Exception
+	public Claims navigatetoClaimsPage() throws Exception
 	{
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Claims in right corner of screen");
 		clickButton(driver, headerClaimsTab, "Header CIS");
 		getPageTitle(driver, policybinderpageDTO.FileSearchPageTitle);
-		policybinderpageDTO = new PolicyBinderPageDTO();
-		return new PolicyBinderPage(driver);
-	}
-	
-	//Select Patient.
-	public void getPatientDetails(String clientIdValue) throws Exception
-	{
-		Thread.sleep(2000);
-		Actions builder = new Actions(driver);
-		builder.moveToElement(filesMenuTab).build().perform();
-		clickButton(driver, fileAddMenuOption, "Add File Menu");
-		getPageTitle(driver, policybinderpageDTO.addFilePageTitle);
-		clickButton(driver, patientSearchIcon, "Patient Search");
-		waitFor(driver, 10);
-		String parentWindowId = switchToWindow(driver);
-		getPageTitle(driver, policybinderpageDTO.entitySearchListPageTitle);
-		/*String LastName = "ABNEY";
-		String FirstName = "DARYL";*/
-		//TODO - need to store above 2  values in Excel sheet.
-		enterTextIn(driver, lastNameEntitySearchPage,policybinderpageDTO.lastName,"Last Name");
-		enterTextIn(driver, firstNameEntitySearchPage, policybinderpageDTO.firstName,"First Name");
-		click(driver, searchBtnOnEntitySearchPage, "Entity Search Page's Search");
-		Assert.assertEquals(resultOnEntityListPage.getAttribute("innerHTML").trim(),policybinderpageDTO.lastName+", "+policybinderpageDTO.firstName+",", "Data displayed after search is not correct");
-		waitFor(driver,5);
-		click(driver, selectEntityChkBox, "Select Entity Check Box");
-		clickButton(driver, selectBtnOnEntitySelectListPage, "Entity Select List Page's Select");
-		switchToParentWindowfromotherwindow(driver, parentWindowId);
-		Assert.assertEquals(patientSelectedValue.getAttribute("value").trim(), policybinderpageDTO.lastName+", "+policybinderpageDTO.firstName+",", "Patient selected is NOT displayed correctly");
-		selectDropdownByValue(driver, FileTypeDropDown, policybinderpageDTO.fileTypeDropDownValue, "File Type");
-		selectDropdownByValue(driver, lobDropDown, policybinderpageDTO.lobDropDownValue, "LOB");
-		enterTextIn(driver, descriptionTextBox, policybinderpageDTO.description,"Description");
-		selectDropdownByValue(driver, fileHandlerDorpDown, policybinderpageDTO.fileHandlerDropDownValue, "File Handler");
-		selectDropdownByValue(driver, stateOfLossDorpDown, policybinderpageDTO.stateOfLossDropDownValue, "State Of Loss");
-		enterTextIn(driver, accidentDateTextBox, comUtil.getSystemDatemmddyyyy(),"Accident Date");
-		clickButton(driver, insuredSearchIcon, "Insured Search Icon");
-		String parentWindowIdSearchEntity = switchToWindow(driver);
-		//switchToFrameUsingElement(driver, entityMiniPopupFrameId);
-		String searchEntityTitle = getPageTitle(driver, policybinderpageDTO.searchEntityPageTitle);
-		//enterTextIn(driver, entityClientId,clinetIdValue , "Clent Id");
-		enterTextIn(driver, entityClientId,clientIdValue , "Client Id");
-		clickButton(driver, searchBtnOnEntitySearchPage,"Entity Search Page's Search");
-		waitFor(driver, 10);
-		Assert.assertTrue(resultOnEntityListPage.isDisplayed(), "Insured Name is not populated on 'Entity Select List' page.");
-		click(driver, selectEntityChkBox, "Insured Name");
-		clickButton(driver, selectBtnOnEntitySelectListPage, "Select");
-		
-		//TODO - Need To add below steps once got confirmaiton on query - Cant see policy No from Policy No drop down field.
-		/*In the filter criteria section, click the Policy No dropdown and 
-		Select [Policy number entered in step 3]
-		Click the checkbox next the Prof Liab coverage 
-		Click Save as Claim
-		Possible duplicate claim screen displays
-		Click Save as Claim 
-		Claim No displays in the upper left corner. 
-		Note (and save for later input) the claim number:  ****add ###########
-		Click [Close]*/
-
-		
+		return new Claims(driver);
 	}
 
 	// Get Client Id from Entity menu popup flow.
@@ -245,7 +137,7 @@ public class PolicyBinderPage extends CommonAction {
 	}
 
 	// Select Endorsement from "Action DropoDown".
-	public PolicyBinderPage endorsementFromActionDropDown() {
+	public PolicyBinderPage endorsementFromActionDropDown() throws IllegalArgumentException, IllegalAccessException, SecurityException {
 		ExtentReporter.logger.log(LogStatus.PASS, "Click Policy Actions > Select value from the dropdown screen.");
 		selectDropdownByValue(driver, policyAction, policybinderpageDTO.valueOfPolicyActionEndorse, "Policy Action");
 		return new PolicyBinderPage(driver);
@@ -281,11 +173,12 @@ public class PolicyBinderPage extends CommonAction {
 	}
 
 	// Identify Phase from page.
-	public PolicyBinderPage identifyPhase() throws InterruptedException {
+	public PolicyBinderPage identifyPhase() throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
 		waitFor(driver, 5);
 		String getTextPolicyPhase = policyPhasePolicy.getAttribute("innerText");
 		ExtentReporter.logger.log(LogStatus.INFO, "Verify phase is " + getTextPolicyPhase);
-		verifyTextPresent(getTextPolicyPhase, "Policy", "Policy Phase");
+		//verifyTextPresent(getTextPolicyPhase, "Policy", "Policy Phase");
+		verifyValueFromField(driver, policyPhasePolicy, "Policy", "innerHTML");
 		return new PolicyBinderPage(driver);
 	}
 

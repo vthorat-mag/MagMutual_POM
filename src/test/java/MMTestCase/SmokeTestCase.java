@@ -52,11 +52,10 @@ public class SmokeTestCase extends BrowserTypes {
 	QuickAddOrganisation quickaddorganisation;
 	PolicyIndicationPage policyindicationpage;
 	EndorsePolicyPage endorsepolicypage;
-	//DTO page objects
+	// DTO page objects
 	PolicyBinderPageDTO policybinderpageDTO;
 	RateAPolicyPageDTO rateApolicyPageDTO;
 	LoginPageDTO lpDTO;
-
 
 	// Extent report initialization before every test case.
 	@BeforeMethod
@@ -68,8 +67,9 @@ public class SmokeTestCase extends BrowserTypes {
 		ExcelUtil excelUtil = new ExcelUtil();
 		testDataMap = excelUtil.testData(method.getName());
 	}
-	//DTO done
-	@Test(description = "Verify Add Organization", groups = { "Smoke Test" })
+
+	// DTO done
+	// @Test(description = "Verify Add Organization", groups = { "Smoke Test" })
 	public void TC42404() throws Exception {
 		lpDTO = new LoginPageDTO();
 		loginpage = new LoginPage(driver);
@@ -77,8 +77,7 @@ public class SmokeTestCase extends BrowserTypes {
 				.enterDataInNewOrgPage().selectZipCode().saveNewOrgDetails();
 	}
 
-	// @Test(description="Hospital Rate",dataProvider = "userTestData",
-	// dataProviderClass=ExcelApiTest.class,groups = { "Smoke Test" })
+	// @Test(description="Hospital Rate",groups = { "Smoke Test" })
 	public void TC42239(String UserName, String PassWord) throws Exception {
 		lpDTO = new LoginPageDTO();
 		loginpage = new LoginPage(driver);
@@ -86,31 +85,45 @@ public class SmokeTestCase extends BrowserTypes {
 				.searchPolicyRateAPolicyPage("09101711").saveRatedetails().startExcelExport();
 	}
 
-	//DTO done
+	// DTO done
 	// @Test(description="HPL - Binder", groups = { "Smoke Test" })
-		public void TC42242() throws Exception {
-			String searchPolicyNum = "Q09101726-NB16-01";
-			lpDTO = new LoginPageDTO();
-			loginpage = new LoginPage(driver);
-			loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageFromrateApolicyPage()
-					.searchPolicyRateAPolicyPage(searchPolicyNum).AcceptFromActionDropDown().isAlertPresent()
-					.identifyPhase().billingSetup().coverageDetailsSelect();
+	public void TC42242() throws Exception {
+		String searchPolicyNum = "Q09101726-NB16-01";
+		lpDTO = new LoginPageDTO();
+		loginpage = new LoginPage(driver);
+		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageFromrateApolicyPage()
+				.searchPolicyRateAPolicyPage(searchPolicyNum).AcceptFromActionDropDown().isAlertPresent()
+				.identifyPhase().billingSetup().coverageDetailsSelect();
 
-			rateapolicyPage = new RateApolicyPage(driver);
-			String policyNumber = rateapolicyPage.policyNo();
+		rateapolicyPage = new RateApolicyPage(driver);
+		String policyNumber = rateapolicyPage.policyNo();
 
-			// Below code will run same test steps based on number of coverage you want to update.
-			for (int i = 0; i < rateApolicyPageDTO.coverage.size(); i++) {
-				rateapolicyPage.coverageUpdates(rateApolicyPageDTO.coverage.get(i), rateApolicyPageDTO.phase.get(i), policyNumber);
-			}
-			rateapolicyPage.rateFunctionality(policyNumber);
-			// TODO - Add PDF verification.
-			rateapolicyPage.saveOption(policyNumber);
+		// Below code will run same test steps based on number of coverage you
+		// want to update.
+		for (int i = 0; i < rateApolicyPageDTO.coverage.size(); i++) {
+			rateapolicyPage.coverageUpdates(rateApolicyPageDTO.coverage.get(i), rateApolicyPageDTO.phase.get(i),
+					policyNumber);
 		}
-	
+		rateapolicyPage.rateFunctionality(policyNumber).clickPreviewTab().savePDF().verifyPdfContent("ASD")
+				.saveOption(policyNumber);
+	}
 
-	//DTO done
-	//@Test(description="Hospital Issue Policy Forms- Complete",dataProvider = "userTestData", dataProviderClass=ExcelApiTest.class,groups = { "Smoke Test" })
+	// DTO Implemented
+	// @Test(description="Hospital Claim - Verify Change Claim Status", groups =
+	// { "Smoke Test" })
+	public void TC42405() throws Exception {
+		lpDTO = new LoginPageDTO();
+		loginpage = new LoginPage(driver);
+		loginpage.loginToeOasis(lpDTO.username, lpDTO.password);
+		String claimNo = "7683S";
+		policybinderpage = new PolicyBinderPage(driver);
+		policybinderpage.navigatetoClaimsPage().searchClaim(claimNo).statusChange(claimNo);
+	}
+
+	// DTO done
+	// @Test(description="Hospital Issue Policy Forms",dataProvider =
+	// "userTestData", dataProviderClass=ExcelApiTest.class,groups = { "Smoke
+	// Test" })
 	public void TC42665(String UserName, String PassWord) throws Exception {
 		lpDTO = new LoginPageDTO();
 		loginpage = new LoginPage(driver);
@@ -122,30 +135,27 @@ public class SmokeTestCase extends BrowserTypes {
 		String policyNumber = policybinderpage.policyNo();
 
 		policybinderpage.endorsementFromActionDropDown().endorsPolicy(policyNumber).identifyPhase()
-				.rateFunctionality(policyNumber).saveOption(policyNumber).exit_SaveOption();
-
-		// TODO - Add PDF code before saveOPtion method.
-
+				.rateFunctionality(policyNumber).saveOption(policyNumber).exit_SaveOption().clickPreviewTab().savePDF()
+				.verifyPdfContent("ASD");
 	}
-	
-	//DTO Done
-	//@Test(description = "Hospital Create Claim", groups = { "Smoke Test" })
-	public void TC43666() throws Exception
-	{
+
+	// DTO Done
+	// @Test(description = "Hospital Create Claim", groups = { "Smoke Test" })
+	public void TC43666() throws Exception {
 		String searchPolicyNum = "Q09101675-NB16-01";
 		lpDTO = new LoginPageDTO();
 		loginpage = new LoginPage(driver);
-		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).headerPolicyTab().searchPolicyRateAPolicyPage(searchPolicyNum);
+		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).headerPolicyTab()
+				.searchPolicyRateAPolicyPage(searchPolicyNum);
 
 		policybinderpage = new PolicyBinderPage(driver);
 		String clientID = policybinderpage.getClientId();
-		
+
 		policybinderpage.navigatetoClaimsPage().getPatientDetails(clientID);
 	}
 
-	// @Test(description="Hospital Renewal - Complete", dataProvider
-	// ="userTestData", dataProviderClass = ExcelApiTest.class,groups = {"Smoke
-	// Test" })
+	// @Test(description="Hospital Renewal", groups = {"Smoke Test"
+	// })
 	public void TC42400() throws Exception {
 
 		String policy_no = "09101673";
@@ -157,15 +167,15 @@ public class SmokeTestCase extends BrowserTypes {
 				.product_Notify().exit_SaveOption();
 	}
 
-	@Test(description = "Hospital Quote",groups = { "Smoke Test" })
+	@Test(description = "Hospital Quote", groups = { "Smoke Test" })
 	public void TC42238() throws Exception {
-		String searchPolicyNum = "Q09101742-NB16-01";
-		lpDTO = new LoginPageDTO();
+		String searchPolicyNum = "09100274";
+		// lpDTO = new LoginPageDTO();
 		List<String> coverages1 = Arrays.asList("Prof Liab-Out", "Quote UMB-Out", "UMB PL-Ins");
 		List<String> phase1 = Arrays.asList("QUOTE-EXCESS", "QUOTE-UMB", "INDICATION_UMB");
 
 		loginpage = new LoginPage(driver);
-		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageFromrateApolicyPage()
+		loginpage.loginToeOasis("vthorat", "M@G580746").navigateToPolicyPageFromrateApolicyPage()
 				.searchPolicyPolicyQuotePage(searchPolicyNum).CopyOptionFromActionDropDown().changePhaseToQuote()
 				.coverageDetailsSelect();
 
@@ -177,13 +187,12 @@ public class SmokeTestCase extends BrowserTypes {
 			rateapolicyPage.coverageUpdates(coverages1.get(i), phase1.get(i), policyNumber);
 		}
 
-		policyquotepage.rateFunctionality(policyNumber).saveOption("Official").exit_SaveOption().exit_SaveOption()
-				.clickPreviewTab().savePDF().verifyPdfContent("Binder 03 16");
+		policyquotepage.rateFunctionality(policyNumber).saveOption("Official").exit_SaveOption()
+
+				.clickPreviewTab().savePDF().verifyPdfContent("asd");
 	}
 
-	// @Test(description = "Hospital Copy to Quote",dataProvider =
-	// "userTestData", dataProviderClass=ExcelApiTest.class,groups = { "Smoke
-	// Test" })
+	// @Test(description = "Hospital Copy to Quote",groups = { "Smoke Test" })
 	public void TC42245(String UserName, String PassWord) throws Exception {
 		lpDTO = new LoginPageDTO();
 		loginpage = new LoginPage(driver);
@@ -193,15 +202,13 @@ public class SmokeTestCase extends BrowserTypes {
 
 		policybinderpage = new PolicyBinderPage(driver);
 		String policyNumber = policybinderpage.policyNo();
-		
-		policybinderpage.copyToQuoteFromActionDropDown(policyNumber).copyFromActionDropDown(policyNumber)
-				.changePhaseToIndication().saveWip();
 
-		// TODO - Add PDF verification.
+		policybinderpage.copyToQuoteFromActionDropDown(policyNumber).copyFromActionDropDown(policyNumber)
+				.changePhaseToIndication().saveWip().clickPreviewTab().savePDF().verifyPdfContent("ASD");
 	}
 
-	//DTO done
-	//@Test(testName="HospitalIndication",groups = { "Smoke Test" })
+	// DTO done
+	// @Test(testName="HospitalIndication",groups = { "Smoke Test" })
 	public void TC_Indication() throws Exception {
 		lpDTO = new LoginPageDTO();
 		loginpage = new LoginPage(driver);
@@ -225,23 +232,19 @@ public class SmokeTestCase extends BrowserTypes {
 				.closeLimitSharingtab();
 	}
 
-	//DTO code is not implemented as this is not part of scope.
-	// @Test(testName="EndorsePolicy",dataProvider = "userTestData",
-	// dataProviderClass=ExcelApiTest.class,groups = { "Smoke Test" })
+	// DTO code is not implemented as this is not part of scope.
+	// @Test(testName="EndorsePolicy",groups = { "Smoke Test" })
 	public void TC42530(Method method, String UserName, String PassWord) throws Exception {
 		loginpage = new LoginPage(driver);
 		String PolicyNo = "9865321";
 		loginpage.loginToeOasis(UserName, PassWord).navigateToPolicyPageFromPolicyBinderPage()
 				.searchPolicyPolicyBinderPage(PolicyNo).endorsPolicy(PolicyNo).rateFunctionality(PolicyNo)
-				.saveOption(PolicyNo);
-		// TODO - add PDF verification method. before saveOption method.
-
+				.saveOption(PolicyNo).clickPreviewTab().savePDF().verifyPdfContent("ASD");
 	}
 
-	//DTO code is not implemented as this is not part of scope.
+	// DTO code is not implemented as this is not part of scope.
 	// This is additional test, removed later from rally
-	// @Test(testName="VerifyExistingPolicy",dataProvider = "userTestData",
-	// dataProviderClass=ExcelApiTest.class,groups = { "Smoke Test" })
+	// @Test(testName="VerifyExistingPolicy",groups = { "Smoke Test" })
 	public void TC42536(String UserName, String PassWord) throws Exception {
 		loginpage = new LoginPage(driver);
 		String searchPolicyNum = "09100275";
@@ -249,10 +252,8 @@ public class SmokeTestCase extends BrowserTypes {
 				.searchPolicyRateAPolicyPage(searchPolicyNum);
 	}
 
-	//DTO code is not implemented as this is not part of scope.
-	// @Test(description= "Quick_Add_Organisation",dataProvider =
-	// "userTestData", dataProviderClass=ExcelApiTest.class,groups = { "Smoke
-	// Test" })
+	// DTO code is not implemented as this is not part of scope.
+	// @Test(description= "Quick_Add_Organisation",groups = { "Smoke Test" })
 	public void Quick_Add(String UserName, String PassWord) throws Exception {
 		loginpage = new LoginPage(driver);
 		loginpage.loginToeOasis(UserName, PassWord).navigateToCISPage();

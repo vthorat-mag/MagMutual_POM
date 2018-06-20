@@ -99,7 +99,7 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 	@FindBy(xpath = "//table[@id='coverageListGrid']//tbody//td//div[@id='CPRODUCTCOVERAGEDESC']")
 	List<WebElement> coverageList;
 	
-	@FindBy(xpath = "//input[@id='PM_MANU_PUP']")
+	@FindBy(xpath = "//input[@id='PM_QT_MANU_PUP']")
 	WebElement optionalFormBtn;
 	
 	@FindBy(xpath = "//table[@id='maintainManuscriptListGrid']")
@@ -164,6 +164,9 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 	
 	@FindBy(name="additionalText")
 	WebElement addText;
+	
+	@FindBy(xpath="//span[@class='txtOrange']")
+	WebElement PageloaderSymbol;
 	
 	
 	//Constructor to initialize driver, page elements and DTO PageObject for CISPage
@@ -334,7 +337,7 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 		String getTextPolicyPhase = policyPhaseBinder.getAttribute("innerText");
 		//String getTextPolicyPhase = getText(driver, policyPhaseBinder);
 		ExtentReporter.logger.log(LogStatus.PASS, "Verify Phase is changed to Binder.");
-		verifyTextPresent(getTextPolicyPhase,"Binder","Policy Phase");
+		verifyValueFromField(driver, policyPhaseBinder, "Binder", "innerHTML");
 		return new RateApolicyPage(driver);
 	}
 	
@@ -371,6 +374,7 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 	{
 		try{
 			clickButton(driver,coverageTab, "Coverage");
+			invisibilityOfLoader(driver, PageloaderSymbol);
 			ExtentReporter.logger.log(LogStatus.PASS, "Click Coverage tab.");
 		}catch(Exception e)
 		{
@@ -388,13 +392,13 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 			{
 				clickButton(driver, coverageList.get(i),coverageList.get(i).getAttribute("innerHTML"));
 				ExtentReporter.logger.log(LogStatus.INFO, "Select"+ CoverageName +" Coverage.");
-				Thread.sleep(4000);
 				break;
 			}
 		}
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Optional Forms]");
-		clickButton(driver, optionalFormBtn, "Optional Form");
 		Thread.sleep(4000);
+		clickButton(driver, optionalFormBtn, "Optional Form");
+		//invisibilityOfLoader(driver, PageloaderSymbol);
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+PolicyNo+"')]")));
 		if (manuscriptList.isDisplayed())
 		{
@@ -413,15 +417,21 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 		Thread.sleep(3000);
 		for(int i=0;i<manuscriptAddListformName.size();i++)
 		{
-			if(manuscriptAddListformName.get(i).getAttribute("innerHTML").equals(binderForm))
+			try {
+				Assert.assertEquals(manuscriptAddListformName.get(i).getAttribute("innerHTML"), binderForm,"ManuScript type is not displayed in Manuscript list.");
+				if(manuscriptAddListformName.get(i).getAttribute("innerHTML").equals(binderForm))
+				{
+					clickButton(driver, manuscriptAddListformNameChkBox.get(i), "check Box for "+binderForm);
+					ExtentReporter.logger.log(LogStatus.INFO, "Select "+ binderForm +", Click done.");
+					break;
+				}
+			}catch (Exception e)
 			{
-				clickButton(driver, manuscriptAddListformNameChkBox.get(i), "check Box for "+binderForm);
-				ExtentReporter.logger.log(LogStatus.INFO, "Select "+ binderForm +", Click done.");
-				break;
+				ExtentReporter.logger.log(LogStatus.FAIL, "Required ("+binderForm+") ManuScript type is not displayed in Manuscript list.");
 			}
 		}
 		clickButton(driver, manuscriptAddListDoneBtn, "Done");
-		Thread.sleep(2000);
+		Thread.sleep(4000);
 		switchToParentWindowfromframe(driver);
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+PolicyNo+"')]")));
 		enterTextIn(driver,addText, binderForm+" form added.", "Aditional Text");
@@ -436,7 +446,7 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 	
 	
 	//Rate a functionality flow.
-	public void rateFunctionality(String policyNo) throws Exception
+	public PolicyQuotePage rateFunctionality(String policyNo) throws Exception
 	{
 		Thread.sleep(3000);
 		clickButton(driver, rateBtn, "Rate Tab");
@@ -463,6 +473,7 @@ public class RateApolicyPage<returnMultipleValues> extends CommonAction {
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
 		clickButton(driver, okPolicySaveAsWIPPopup, "Ok");
 		switchToParentWindowfromframe(driver);
+		return new PolicyQuotePage(driver);
 	}
 	
 	//PDF verification flow.
