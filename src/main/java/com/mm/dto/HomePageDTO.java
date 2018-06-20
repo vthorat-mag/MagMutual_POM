@@ -13,7 +13,7 @@ public class HomePageDTO {
 	
 public HomePageDTO() throws IllegalArgumentException, IllegalAccessException, SecurityException{
 		
-		for (int iFC=0; iFC < HomePageDTO.class.getFields().length; iFC++)
+		/*for (int iFC=0; iFC < HomePageDTO.class.getFields().length; iFC++)
 		{
 			try{
 			HomePageDTO.class.getFields()[iFC].set(this, SmokeTestCase.testDataMap.get(HomePageDTO.class.getFields()[iFC].getName().toLowerCase()).get(0));
@@ -22,6 +22,6 @@ public HomePageDTO() throws IllegalArgumentException, IllegalAccessException, Se
 				 e.printStackTrace();
 				 System.out.println(SmokeTestCase.testDataMap.get(HomePageDTO.class.getFields()[iFC].getName()));
 				}
-		}
+		}*/
 	}
 }
