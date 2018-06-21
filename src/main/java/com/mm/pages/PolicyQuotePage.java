@@ -168,8 +168,8 @@ public class PolicyQuotePage extends CommonAction {
 		Thread.sleep(3000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Coverage tab");
 		clickButton(driver, coverageTab, "Coverage");
-		Assert.assertEquals(coverageList.get(0).getAttribute("innerHTML"), "Primary", "Coverage for Primary Risk is NOT displayed");
 		Thread.sleep(3000);
+		Assert.assertEquals(coverageList.get(0).getAttribute("innerHTML"), "Primary", "Coverage for Primary Risk is NOT displayed");
 	}
 	
 	//Coverage Update flow.
@@ -240,7 +240,7 @@ public class PolicyQuotePage extends CommonAction {
 		Thread.sleep(4000);
 		/*try{
 			switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
-			selectDropdownByValue(productNotifyDropDown, ProductNotifyValue, "product notify");
+			selectDropdownByValue(driver, productNotifyDropDown, ProductNotifyValue, "product notify");
 			Thread.sleep(1000);
 			clickButton(driver, prodNotifyClose, "Product Notify Close");
 			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window dispalyed to user.");
@@ -317,11 +317,6 @@ public class PolicyQuotePage extends CommonAction {
 	//Click preview tab.
 	public PDFReader clickPreviewTab() throws InterruptedException
 	{
-		//click(PreviewTab, "Preview");
-		//switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=09100275')]")));
-		/*ArrayList<String> tabs2 = new ArrayList<String> (driver.getWindowHandles());
-	    driver.switchTo().window(tabs2.get(1));*/
-		//click(PreviewTab, "Preview Pane");
 		clickButton(driver, PreviewTab, "Preview");
 		Thread.sleep(8000);
 		return new PDFReader();

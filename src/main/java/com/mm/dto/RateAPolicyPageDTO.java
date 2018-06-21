@@ -25,7 +25,6 @@ public RateAPolicyPageDTO() throws IllegalArgumentException, IllegalAccessExcept
 			
 			}catch(Exception e){
 				 e.printStackTrace();
-				 System.out.println(SmokeTestCase.testDataMap.get(RateAPolicyPageDTO.class.getFields()[iFC].getName()));
 				}
 		}
 	}

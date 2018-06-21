@@ -21,26 +21,36 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.PageFactory;
+import org.testng.Assert;
 
+import com.mm.pages.PolicyBinderPage;
+import com.mm.pages.RateApolicyPage;
 import com.relevantcodes.extentreports.LogStatus;
 
 import bsh.Parser;
 
 public class PDFReader {
 	CommonUtilities comUtil = new CommonUtilities();
-
+	WebDriver driver;
 	//AUTOIT script execution to save PDF.
-	public void savePDF() throws IOException {
-		String[] savePDFPath = {
-				System.getProperty("user.dir") + "\\src\\main\\resources\\StoredPDF\\pdfDocument.pdf" };
-		String[] executionPath = { System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\savePdf.exe" };
-		Runtime.getRuntime().exec(System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\savePdf.exe",
-				savePDFPath);
-		// ProcessBuilder pb = new ProcessBuilder(executionPath);
+	public PDFReader savePDF() throws IOException {
+		String[] savePDFPath = 
+				{System.getProperty("user.dir") + "\\src\\main\\resources\\StoredPDF\\pdfDocument.pdf"};
+		String[] executionPath = {System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\savePdf.exe"};
+		Runtime.getRuntime().exec(executionPath);
+		//ProcessBuilder pb = new ProcessBuilder(executionPath);
+		return new PDFReader();
+	}
+	
+	public void PDFReader(WebDriver driver)
+	{
+		this.driver = driver;
+		PageFactory.initElements(driver, this);
 	}
 
 	//Logic to verify PDF content.
-	public boolean verifyPdfContent(String content) throws IOException, AWTException, InterruptedException {
+	public PolicyBinderPage verifyPdfContent(String content) throws IOException, AWTException, InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
 		boolean flag = false;
 		PDFTextStripper pdfStripper = null;
 		PDDocument pdDoc = null;
@@ -49,7 +59,7 @@ public class PDFReader {
 		int noOfPDFPages = 0;
 
 		try {
-			File file = new File(System.getProperty("user.dir") + "\\src\\main\\resources\\StoredPDF\\pdfDocument.pdf");
+			File file = new File(System.getProperty("user.dir")+"\\src\\main\\resources\\pdfDocument.pdf");
 			pdDoc = PDDocument.load(file);
 			noOfPDFPages = pdDoc.getNumberOfPages();
 			pdfStripper = new PDFTextStripper();
@@ -67,11 +77,14 @@ public class PDFReader {
 				e.printStackTrace();
 			}
 		}
-		if (parsedText.contains(content)) {
-			flag = true;
+		try {
+			Assert.assertTrue(parsedText.contains(content), "Footer dose not content '" + content + "'.");
+			if (parsedText.contains(content)) {
 			ExtentReporter.logger.log(LogStatus.INFO, "Verify footer display '" + content + "'.");
+			}
+		}catch (Exception e){
+			ExtentReporter.logger.log(LogStatus.FAIL, "Footer dose not content '" + content + "'.");
 		}
-		ExtentReporter.logger.log(LogStatus.INFO, "Footer dose not content '" + content + "'.");
-		return flag;
+		return new PolicyBinderPage(driver);
 	}
 }

@@ -22,36 +22,34 @@ import com.relevantcodes.extentreports.LogStatus;
 import BaseClass.CommonActionInterface;
 
 public class CommonAction implements CommonActionInterface {
-	
-	
-	Properties pro=new Properties();
 
-	//Integer.valueOf(properties.prop.getProperty("High"));
-	
-	int Low=10;
-	int Medium=25;
-	int High=50;
+	Properties pro = new Properties();
 
-	
+	// Integer.valueOf(properties.prop.getProperty("High"));
+
+	int Low = 10;
+	int Medium = 25;
+	int High = 50;
+
 	public void selectValue(WebDriver driver, WebElement pageElement, String value) {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, Medium);
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
-			Assert.assertTrue(pageElement.isDisplayed(),  pageElement+ " is Not displayed on screen.");
+			Assert.assertTrue(pageElement.isDisplayed(), pageElement + " is Not displayed on screen.");
 			ExtentReporter.logger.log(LogStatus.PASS, "Selected value " + value);
 			clickButton(driver, pageElement, value);
 		} catch (Exception e) {
 			ExtentReporter.logger.log(LogStatus.FAIL, value + " element is not found.");
 		}
 	}
-	
-	public void switchToSecondFramefromFirst(WebDriver driver,String frameID){
-		
+
+	public void switchToSecondFramefromFirst(WebDriver driver, String frameID) {
+
 		List<WebElement> secondFrame = driver.findElements(By.id(frameID));
-     	driver.switchTo().frame(secondFrame.get(0));
-		
+		driver.switchTo().frame(secondFrame.get(0));
+
 	}
-	
+
 	public void switchToParentWindowfromotherwindow(WebDriver driver, String parentwindow) {
 
 		try {
@@ -74,9 +72,8 @@ public class CommonAction implements CommonActionInterface {
 		}
 
 	}
-	
-	public void switchToFrameUsingElement(WebDriver driver, WebElement element) throws Exception
-	{
+
+	public void switchToFrameUsingElement(WebDriver driver, WebElement element) throws Exception {
 		waitFor(driver, 15);
 		Thread.sleep(5000);
 		try {
@@ -87,7 +84,6 @@ public class CommonAction implements CommonActionInterface {
 			ExtentReporter.logger.log(LogStatus.FAIL, "Error while switching to frame.");
 		}
 	}
-	
 
 	public void switchToParentWindowfromframe(WebDriver driver) {
 		try {
@@ -107,11 +103,10 @@ public class CommonAction implements CommonActionInterface {
 
 	}
 
-	//Enter text values in the text field
+	// Enter text values in the text field
 	public void enterTextIn(WebDriver driver, WebElement pageElement, String text, String textField) {
-		// TODO Auto-generated method stub
 		try {
-			WebDriverWait wait = new WebDriverWait(driver,High);
+			WebDriverWait wait = new WebDriverWait(driver, High);
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
 			Assert.assertTrue(pageElement.isDisplayed(), textField + " is not displayed on screen.");
 			pageElement.sendKeys(text);
@@ -122,33 +117,30 @@ public class CommonAction implements CommonActionInterface {
 		}
 	}
 
-	
-	//Enter the data values which are not text, like date and amount.
-	public void enterDataIn(WebDriver driver, WebElement pageElement,String text, String textField) {
-		// TODO Auto-generated method stub
+	// Enter the data values which are not text, like date and amount.
+	public void enterDataIn(WebDriver driver, WebElement pageElement, String text, String textField) {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver,Medium);
+			WebDriverWait wait = new WebDriverWait(driver, Medium);
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
 			Assert.assertTrue(pageElement.isDisplayed(), textField + " is not displayed on screen.");
 			pageElement.sendKeys(text);
-		//	driver.executeScript("arguments[0].setAttribute(value, arguments[1]);", pageElement, text);
-			
+			// driver.executeScript("arguments[0].setAttribute(value,
+			// arguments[1]);", pageElement, text);
+
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			js.executeScript("arguments[0].value=text;", pageElement);
-			
-			
+
 			ExtentReporter.logger.log(LogStatus.PASS, "Value entered in text box -" + textField);
 		} catch (Exception e) {
 			e.printStackTrace();
 			ExtentReporter.logger.log(LogStatus.FAIL, textField + " element is not found.");
 		}
 	}
-	
-	
+
 	public void clickButton(WebDriver driver, WebElement pageElement, String buttonName) {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, Medium);
-			wait.until(ExpectedConditions.visibilityOf(pageElement));
+			wait.until(ExpectedConditions.elementToBeClickable(pageElement));
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			Assert.assertTrue(pageElement.isDisplayed(), buttonName + " button is displayed on screen.");
 			js.executeScript("arguments[0].click();", pageElement);
@@ -169,30 +161,33 @@ public class CommonAction implements CommonActionInterface {
 
 	public void takeScreenShot(String pageTitle) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	public String getPageTitle(WebDriver driver, String expectedPageTitle ) throws InterruptedException {
+	public String getPageTitle(WebDriver driver, String expectedPageTitle) throws InterruptedException {
 		Thread.sleep(5000);
-		String getPageTitleFromPage = driver.findElement(By.xpath("//div[@class='pageTitle']")).getAttribute("innerHTML").trim();
-		WebDriverWait wait = new WebDriverWait(driver,High);
-		wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[@class='pageTitle']"))));
-		Assert.assertEquals(getPageTitleFromPage ,expectedPageTitle, "Page title is not matching.");
+		String getPageTitleFromPage = driver.findElement(By.xpath("//div[@class='pageTitle']"))
+				.getAttribute("innerHTML").trim();
+		WebDriverWait wait = new WebDriverWait(driver, High);
+		// WebDriverWait wait=new WebDriverWait(driver, 40);
+		WebElement pageLoader = driver.findElement(By.xpath("//span[@class='txtOrange']"));
+		wait.until(ExpectedConditions.invisibilityOf(pageLoader));
+		// wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[@class='pageTitle']"))));
+		Assert.assertEquals(getPageTitleFromPage, expectedPageTitle, "Page title is not matching.");
 		return null;
 	}
 
 	public String getText(WebDriver driver, WebElement pageElement) {
-		WebDriverWait wait = new WebDriverWait(driver,High);
+		WebDriverWait wait = new WebDriverWait(driver, High);
 		wait.until(ExpectedConditions.visibilityOf(pageElement));
 		return pageElement.getAttribute("innerHTML");
 	}
 
 	public void clearTextBox(WebDriver driver, WebElement pageElement, String textField) {
-		try
-		{
-			WebDriverWait wait = new WebDriverWait(driver,High);
+		try {
+			WebDriverWait wait = new WebDriverWait(driver, High);
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
-			Assert.assertTrue(pageElement.isDisplayed(), textField+" is displayed");
+			Assert.assertTrue(pageElement.isDisplayed(), textField + " is displayed");
 			pageElement.clear();
 			ExtentReporter.logger.log(LogStatus.PASS, "Cleared the initial contents from " + textField);
 		} catch (Exception e) {
@@ -202,14 +197,14 @@ public class CommonAction implements CommonActionInterface {
 	}
 
 	public String getAttributeValue(WebElement pageElement, String attributeName) {
-		
+
 		return null;
 	}
 
 	public void click(WebDriver driver, WebElement pageElement, String ElementName) {
 
 		try {
-			WebDriverWait wait = new WebDriverWait(driver,High);
+			WebDriverWait wait = new WebDriverWait(driver, High);
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
 			Assert.assertTrue(pageElement.isDisplayed(), ElementName + " is not displayed on screen.");
 			pageElement.click();
@@ -224,7 +219,7 @@ public class CommonAction implements CommonActionInterface {
 	public void visibilityOfElement(WebDriver driver, WebElement pageElement, String text) {
 
 		try {
-			WebDriverWait wait = new WebDriverWait(driver,High);
+			WebDriverWait wait = new WebDriverWait(driver, High);
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
 			Assert.assertTrue(pageElement.isDisplayed(), "Logo / text" + text + " is not displayed on the page.");
 			ExtentReporter.logger.log(LogStatus.PASS, "Logo / text" + text + " is displayed on page after login");
@@ -235,31 +230,32 @@ public class CommonAction implements CommonActionInterface {
 		}
 	}
 
-	
 	public String switchToWindow(WebDriver driver) throws InterruptedException {
 
 		ExtentReporter.logger.log(LogStatus.INFO, "Switching to the pop up window");
-		
-		Set<String> handles = driver.getWindowHandles();      //Return a set of window handle
-		 
-	    String parentWindow = driver.getWindowHandle();
-	   
-	    Thread.sleep(5000);
-		 for(String currentWindow : handles){
-	    	   if(!currentWindow.equals(parentWindow))
-	    	  {
-	    	   driver.switchTo().window(currentWindow);
-	    	   ExtentReporter.logger.log(LogStatus.INFO, "Control is switched to pop up window");
-	    	  }
-		 }
-		 Thread.sleep(5000);
-		 return parentWindow;
+
+		Set<String> handles = driver.getWindowHandles(); // Return a set of
+															// window handle
+
+		String parentWindow = driver.getWindowHandle();
+
+		Thread.sleep(5000);
+		for (String currentWindow : handles) {
+			if (!currentWindow.equals(parentWindow)) {
+				driver.switchTo().window(currentWindow);
+				ExtentReporter.logger.log(LogStatus.INFO, "Control is switched to pop up window");
+			}
+		}
+		Thread.sleep(5000);
+		return parentWindow;
 	}
 
+	// Select drop down value based on passed parameter driver, element locator
+	// for drop down, DropDown Option and lable of drop down.
 	public void selectDropdownByValue(WebDriver driver, WebElement element, String DropDownOption, String label) {
 
 		try {
-			WebDriverWait wait = new WebDriverWait(driver,High);
+			WebDriverWait wait = new WebDriverWait(driver, High);
 			wait.until(ExpectedConditions.visibilityOf(element));
 			Select Sel = new Select(element);
 			Sel.selectByValue(DropDownOption);
@@ -271,11 +267,11 @@ public class CommonAction implements CommonActionInterface {
 		}
 
 	}
-	
+
 	public void selectDropdownByVisibleText(WebDriver driver, WebElement element, String DropDownOption, String label) {
 
 		try {
-			WebDriverWait wait = new WebDriverWait(driver,High);
+			WebDriverWait wait = new WebDriverWait(driver, High);
 			wait.until(ExpectedConditions.visibilityOf(element));
 			Select Sel = new Select(element);
 			Sel.selectByVisibleText(DropDownOption);
@@ -287,51 +283,68 @@ public class CommonAction implements CommonActionInterface {
 		}
 
 	}
-	
 
 	public void excelRead() throws Exception {
 		ExcelUtil exlutil = new ExcelUtil();
 	}
 
-	public void verifyTextPresent(String getText, String actualText, String fieldName) {
-		try {
-			Assert.assertEquals(getText, actualText, getText + " element is present");
-			ExtentReporter.logger.log(LogStatus.PASS, getText + " element is present");
+	public void verifyValueFromField(WebDriver driver, WebElement pageElement, String expectedValue,
+			String attributeName) {
 
+		try {
+			WebDriverWait wait = new WebDriverWait(driver, High);
+			wait.until(ExpectedConditions.visibilityOf(pageElement));
+			Assert.assertEquals(pageElement.getAttribute("\"" + attributeName + "\"").trim(), expectedValue,
+					pageElement.getAttribute("\"" + attributeName + "\"").trim()
+							+ " value is not matched with the selected/Entered Value.");
+			ExtentReporter.logger.log(LogStatus.PASS, expectedValue,
+					pageElement.getAttribute("\"" + attributeName + "\"").trim()
+							+ " value is same as selected or entered value.");
 		} catch (Exception e) {
 			e.printStackTrace();
-			ExtentReporter.logger.log(LogStatus.FAIL, getText + " element is NOT present");
+			ExtentReporter.logger.log(LogStatus.FAIL, expectedValue,
+					pageElement.getAttribute("\"" + attributeName + "\"").trim()
+							+ " value is NOT same as selected or entered value.");
 		}
+
 	}
 
+	// This method is called to load a page during navigation through pages
 
-	//This method is called to load a page during navigation through pages
-	
 	public void waitForPageLoad(WebDriver driver, int Timeout) {
-		ExpectedCondition<Boolean> pageLoadCondition = new ExpectedCondition<Boolean>()
-		{ public Boolean apply(WebDriver driver)
-			{
+		ExpectedCondition<Boolean> pageLoadCondition = new ExpectedCondition<Boolean>() {
+			public Boolean apply(WebDriver driver) {
 				return ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete");
 			}
 		};
 		WebDriverWait wait = new WebDriverWait(driver, Timeout);
 		wait.until(pageLoadCondition);
-			
+
 	}
 
-	public void waitForElementToLoad(WebDriver driver, int time, WebElement element){
-		
-		WebDriverWait wait=new WebDriverWait(driver, time);
+	public void waitForElementToLoad(WebDriver driver, int time, WebElement element) {
+
+		WebDriverWait wait = new WebDriverWait(driver, time);
 		wait.until(ExpectedConditions.visibilityOf(element));
-		
+
 	}
-	
-	public void policySearch(WebDriver driver, String policyNo, WebElement policySearchTxtBox, WebElement searchBtn) 
-	{
+
+	public void policySearch(WebDriver driver, String policyNo, WebElement policySearchTxtBox, WebElement searchBtn) {
 		clearTextBox(driver, policySearchTxtBox, "Enter Policy text field");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click policy in right corner of screen");
 		enterTextIn(driver, policySearchTxtBox, policyNo, "Enter Policy text field");
 		click(driver, searchBtn, "Search button");
 		ExtentReporter.logger.log(LogStatus.INFO, "Enter Policy # into Policy entry box, Click Search.");
+	}
+	
+	public void invisibilityOfLoader(WebDriver driver, WebElement element)
+	{
+		try {
+			WebDriverWait wait = new WebDriverWait(driver, Medium);
+			wait.until(ExpectedConditions.invisibilityOf(element));
+			ExtentReporter.logger.log(LogStatus.PASS, "Loader disappeared sucessfully.");
+		} catch (Exception e) {
+			ExtentReporter.logger.log(LogStatus.FAIL, "Page is still loading.");
+		}
 	}
 }
