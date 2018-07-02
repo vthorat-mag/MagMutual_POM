@@ -12,8 +12,15 @@ public class RateAPolicyPageDTO {
 	public String valueOfPolicyActionAccept;
 	public String billingSetup;
 	public String paymentPlanValue;
-	public String saveAsPolicyValue;
 	public String productNotifyValue;
+	public String footerContent;
+	public String policyAction;
+	public String endorsementReason;
+	public String policyNum;
+	public String optionValue;
+	public String optionName;
+	public String saveAsPolicyValue;
+	public String listDDLValue;
 	public String coverageFromCoverageTabGrid;
 	public String manuscriptForm;
 	public String endorsementReason;
@@ -25,14 +32,28 @@ public class RateAPolicyPageDTO {
 	
 public RateAPolicyPageDTO() throws IllegalArgumentException, IllegalAccessException, SecurityException{
 		
-		for (int iFC=0; iFC < RateAPolicyPageDTO.class.getFields().length; iFC++)
-		{
-			try{
-				RateAPolicyPageDTO.class.getFields()[iFC].set(this, SmokeTestCase.testDataMap.get(RateAPolicyPageDTO.class.getFields()[iFC].getName().toLowerCase()).get(0));
-			
-			}catch(Exception e){
-				 e.printStackTrace();
-				}
+	for (int iFC = 0; iFC < RateAPolicyPageDTO.class.getFields().length; iFC++) {
+		
+		if (RateAPolicyPageDTO.class.getFields()[iFC].getType().toString().toLowerCase().contains("java.util.list")) {
+			try {
+				RateAPolicyPageDTO.class.getFields()[iFC].set(this,
+						SmokeTestCase.testDataMap.get(RateAPolicyPageDTO.class.getFields()[iFC].getName().toLowerCase()));
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println(SmokeTestCase.testDataMap.get(RateAPolicyPageDTO.class.getFields()[iFC].getName()));
+			}
+
+		} else {
+			try {
+				RateAPolicyPageDTO.class.getFields()[iFC].set(this, SmokeTestCase.testDataMap
+						.get(RateAPolicyPageDTO.class.getFields()[iFC].getName().toLowerCase()).get(0));
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println(SmokeTestCase.testDataMap.get(RateAPolicyPageDTO.class.getFields()[iFC].getName()));
+			}
 		}
 	}
+}
 }

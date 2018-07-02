@@ -137,6 +137,7 @@ public class HomePage extends CommonAction {
 	// on Header.
 	public RateApolicyPage headerPolicyTab() throws Exception {
 		Thread.sleep(5000);
+		ExtentReporter.logger.log(LogStatus.INFO, "Click policy in right corner of screen");
 		clickButton(driver, headerPolicyTab, "Policy (from header");
 		return new RateApolicyPage(driver);
 	}
@@ -288,7 +289,6 @@ public class HomePage extends CommonAction {
 		switchToFrameUsingId(driver, "popupframe1");
 		Thread.sleep(1000);
 		getPageTitle(driver, selectPolicyTypePageTitle);
-
 		//Verify Select Policy Type window appeared, enter Effective date,Issue company,state and click Search
 		enterTextIn(driver, Effe_Date,homepageDTO.effectiveFromDate, "Effective Date");
 		selectDropdownByValue(driver,Issue_Comp,homepageDTO.issueCompany,"Issue Company");

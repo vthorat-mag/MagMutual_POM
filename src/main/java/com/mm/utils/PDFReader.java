@@ -91,8 +91,8 @@ public class PDFReader extends CommonAction {
 		try {
 			  for (i =0;i<pdfreaderdto.verifyPDFcontent.size();i++)
 				{
-				Assert.assertTrue(parsedText.contains(pdfreaderdto.verifyPDFcontent.get(i)), "PDF pages does not contain '" + pdfreaderdto.verifyPDFcontent.get(i) + "'.");
-				ExtentReporter.logger.log(LogStatus.PASS, "Verify footer display '" + pdfreaderdto.verifyPDFcontent/*.get(i)*/ + "'.");
+				Assert.assertTrue(parsedText.contains(pdfreaderdto.verifyPDFcontent.get(i)), "Footer dose not content '" + pdfreaderdto.verifyPDFcontent.get(i) + "'.");
+				ExtentReporter.logger.log(LogStatus.INFO, "Verify footer display '" + pdfreaderdto.verifyPDFcontent.get(i) + "'.");
 				break;
 			}
 		}catch (Exception e){

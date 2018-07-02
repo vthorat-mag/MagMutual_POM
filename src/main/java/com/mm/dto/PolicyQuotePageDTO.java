@@ -5,6 +5,10 @@ import java.util.List;
 import MMTestCase.SmokeTestCase;
 
 public class PolicyQuotePageDTO {
+	
+	public String policyactionvalue;
+	public String saveAsPolicyDDLValue;
+	public String secondSaveAsPolicyDDLValue;
 
 	public String valueOfPolicyActionCopy;
 	public String quotePhaseValue;

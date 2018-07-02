@@ -32,6 +32,7 @@ public class PolicyQuotePage extends CommonAction {
 //	String saveAsPolicyValue="OFFICIAL";
 	String QuotePhaseValue="QUOTE";
 	String ProductNotifyValue="Y";
+	PolicyQuotePageDTO policyquotedto;
 	
 	
 	
@@ -132,13 +133,12 @@ public class PolicyQuotePage extends CommonAction {
 	@FindBy(xpath="//span[@class='txtOrange']")
 	WebElement loader;
 	
-	
-	
-	
-	public PolicyQuotePage(WebDriver driver)
+  // This is a constructor for PolicyQuotePage class to initialize page elments and DTO object
+	public PolicyQuotePage(WebDriver driver) Exception
 	{
 		this.driver=driver;
 		PageFactory.initElements(driver, this);
+		policyquotedto = new PolicyQuotePageDTO();
 	}
 	
 	//Identify Policy number from page.
@@ -150,7 +150,7 @@ public class PolicyQuotePage extends CommonAction {
 	}
 	
 	//Select Copy to action from "Action DropDown".
-	public PolicyQuotePage CopyOptionFromActionDropDown() throws InterruptedException
+	public PolicyQuotePage CopyOptionFromActionDropDown() throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException
 	{
 		Thread.sleep(4000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy>Ok");
@@ -277,9 +277,9 @@ public class PolicyQuotePage extends CommonAction {
 
 	//Save option functionality flow.
 	//We need to call multiple times with different values, so we are passing values in test case call 
-	public PolicyQuotePage saveOption(String saveAsPolicyValue) throws InterruptedException
+	public PolicyQuotePage saveOption(String saveAsPolicyValue) throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException
 	{
-		Thread.sleep(5000);
+		/*Thread.sleep(5000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options");
 		waitForElementToLoad(driver, 15, saveOptionBtn);
 		clickButton(driver, saveOptionBtn, "Save Option");
@@ -292,11 +292,13 @@ public class PolicyQuotePage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO,  "Select "+saveAsPolicyValue+" Click [OK]");
 		clickButton(driver, saveOptionOkBtn, "Save");
 		switchToParentWindowfromframe(driver);
-		Thread.sleep(3000);
+		Thread.sleep(3000);*/
+		
+		saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn, saveOption);
 		return new PolicyQuotePage(driver);
 }
 
-	public PolicyQuotePage product_Notify() throws InterruptedException{
+	public PolicyQuotePage product_Notify() throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException{
 		
 			switchToFrameUsingId(driver, "popupframe1");
 			waitForElementToLoad(driver, 10, productNotifyDropDown);
@@ -319,7 +321,7 @@ public class PolicyQuotePage extends CommonAction {
 	}
 	
 	//Change phase to Quote.
-	public PolicyQuotePage changePhaseToQuote() throws InterruptedException
+	public PolicyQuotePage changePhaseToQuote() throws Exception
 	{
 		Thread.sleep(4000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Change Phase from Indication to Quote");
@@ -332,24 +334,23 @@ public class PolicyQuotePage extends CommonAction {
 	//Click preview tab.
 	public PDFReader clickPreviewTab() throws InterruptedException
 	{
-		invisibilityOfLoader(driver, loader); 
+		invisibilityOfLoader(driver); 
 		Thread.sleep(3000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Verify CHG 08 form is displayed and information that was entered is on form");
+    	ExtentReporter.logger.log(LogStatus.INFO, "Click [Preview]");
+	//	ExtentReporter.logger.log(LogStatus.INFO, "Verify CHG 08 form is displayed and information that was entered is on form");
 		clickButton(driver, PreviewTab, "Preview");
-		invisibilityOfLoader(driver, loader);
+		invisibilityOfLoader(driver);
 		Thread.sleep(8000);
-		
 		return new PDFReader(driver);
 	}
 
 		
 	//Select the policy Action from DDL
-	public PolicyQuotePage select_policyAction() throws InterruptedException{
-		
+	public PolicyQuotePage select_policyAction() throws Exception{
 	//	waitForElementToLoad(driver, 15, policyAction);
 		Thread.sleep(5000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Capture Transaction Details window opens");
-		selectDropdownByVisibleText(driver, policyAction, policyquotepageDTO.policyActionValue, "Renewal");
+		selectDropdownByVisibleText(driver, policyAction, policyquotepageDTO.policyActionValue, "Policy Action");
 		Thread.sleep(3000);
 		switchToFrameUsingId(driver, "popupframe1");
 		return new PolicyQuotePage(driver);
@@ -358,7 +359,7 @@ public class PolicyQuotePage extends CommonAction {
 	}
 		
 	//Switch to second frame from first frame
-	public PolicyQuotePage switchToNextFrame() throws InterruptedException{
+	public PolicyQuotePage switchToNextFrame() throws Exception{
 		
 		//switchToParentWindowfromframe(driver);
 		
@@ -368,7 +369,7 @@ public class PolicyQuotePage extends CommonAction {
 	}
 	
 	//Save the Transaction details and switch to parent window
-	public PolicyQuotePage save_CaptureTransactionDetails () throws InterruptedException{
+	public PolicyQuotePage save_CaptureTransactionDetails () throws Exception{
 		
 		Thread.sleep(3000);
 		click(driver, capt_Tranx_Ok, "Ok button for Renewal");
@@ -377,7 +378,7 @@ public class PolicyQuotePage extends CommonAction {
 	}
 		
 	//Close the exit window 
-	public PolicyQuotePage exit_SaveOption() throws InterruptedException{
+	public PolicyQuotePage exit_SaveOption() throws Exception{
 			
 		waitForElementToLoad(driver, 10, Exit_Ok);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [OK]");
