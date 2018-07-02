@@ -35,6 +35,7 @@ public class ExcelUtil {
 			//Read All rows
 			for (int i = 1; i < rows; i++) {
 				listRowData.add(eat.getCellData(sheetName, j, i));
+				//ToDo- Check if the field is blank, don't add in list
 			}			
 			//Populate the HashMap
 			

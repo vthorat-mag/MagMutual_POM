@@ -26,6 +26,7 @@ import com.relevantcodes.extentreports.LogStatus;
 public class PolicyQuotePage extends CommonAction {
 	
 	WebDriver driver;
+	PolicyQuotePageDTO policyquotepageDTO;
 	
 	String valueOfPolicyActionCopy = "javascript:copyQuote();";
 //	String saveAsPolicyValue="OFFICIAL";
@@ -129,7 +130,11 @@ public class PolicyQuotePage extends CommonAction {
 	@FindBy(xpath = "//select[@name='policyNavLevelCode']//option[@value='RISK']")
 	WebElement verifyRisk;
 	
-	public PolicyQuotePage(WebDriver driver) throws IllegalArgumentException, IllegalAccessException, SecurityException
+	@FindBy(xpath="//span[@class='txtOrange']")
+	WebElement loader;
+	
+  // This is a constructor for PolicyQuotePage class to initialize page elments and DTO object
+	public PolicyQuotePage(WebDriver driver) Exception
 	{
 		this.driver=driver;
 		PageFactory.initElements(driver, this);
@@ -149,7 +154,7 @@ public class PolicyQuotePage extends CommonAction {
 	{
 		Thread.sleep(4000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy>Ok");
-		selectDropdownByValue(driver, policyAction, valueOfPolicyActionCopy, "Policy Action");
+		selectDropdownByValue(driver, policyAction, policyquotepageDTO.valueOfPolicyActionCopy, "Policy Action");
 		return new PolicyQuotePage(driver);
 	}
 	
@@ -171,8 +176,8 @@ public class PolicyQuotePage extends CommonAction {
 		Thread.sleep(3000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Coverage tab");
 		clickButton(driver, coverageTab, "Coverage");
+		Assert.assertEquals(coverageList.get(0).getAttribute("innerHTML"),policyquotepageDTO.riskType, "Coverage for Primary Risk is NOT displayed");
 		Thread.sleep(3000);
-		Assert.assertEquals(coverageList.get(0).getAttribute("innerHTML"), "Primary", "Coverage for Primary Risk is NOT displayed");
 	}
 	
 	//Coverage Update flow.
@@ -271,7 +276,8 @@ public class PolicyQuotePage extends CommonAction {
 	
 
 	//Save option functionality flow.
-	public PolicyQuotePage saveOption(String saveOption) throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException
+	//We need to call multiple times with different values, so we are passing values in test case call 
+	public PolicyQuotePage saveOption(String saveAsPolicyValue) throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException
 	{
 		/*Thread.sleep(5000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options");
@@ -280,8 +286,10 @@ public class PolicyQuotePage extends CommonAction {
 		Thread.sleep(4000);
 		switchToFrameUsingId(driver, "popupframe1");
 		getPageTitle(driver, "Save As");
-		selectDropdownByVisibleText(driver, saveAsDropDown, saveOption, "Selected "+saveOption);
-		ExtentReporter.logger.log(LogStatus.INFO,  "Select "+saveOption+" Click [OK]");
+		selectDropdownByVisibleText(driver, saveAsDropDown, policyquotepageDTO.saveAsPolicyValue, "Selected "+saveAsPolicyValue);
+		//Verify Save as value selected from DDL is correct
+		//verifyValueFromField(driver, saveAsDropDown, policyquotepageDTO.saveAsPolicyValue,"value");
+		ExtentReporter.logger.log(LogStatus.INFO,  "Select "+saveAsPolicyValue+" Click [OK]");
 		clickButton(driver, saveOptionOkBtn, "Save");
 		switchToParentWindowfromframe(driver);
 		Thread.sleep(3000);*/
@@ -294,7 +302,9 @@ public class PolicyQuotePage extends CommonAction {
 		
 			switchToFrameUsingId(driver, "popupframe1");
 			waitForElementToLoad(driver, 10, productNotifyDropDown);
-			selectDropdownByValue(driver, productNotifyDropDown, ProductNotifyValue, "product notify");
+			selectDropdownByValue(driver, productNotifyDropDown, policyquotepageDTO.productNotifyValue, "product notify");
+			//Verify Notify value selected from DDL is correct
+		//	verifyValueFromField(driver, productNotifyDropDown, policyquotepageDTO.productNotifyValue,"value");
 			Thread.sleep(1000);
 			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window dispalyed to user.");
 			clickButton(driver, prodNotifyClose, "Product Notify Close");
@@ -315,31 +325,37 @@ public class PolicyQuotePage extends CommonAction {
 	{
 		Thread.sleep(4000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Change Phase from Indication to Quote");
-		selectDropdownByValue(driver, policyPhase, QuotePhaseValue, "Phase");
+		selectDropdownByValue(driver, policyPhase, policyquotepageDTO.quotePhaseValue, "Phase");
+		//Verify phase value  selected from DDL is correct
+	//	verifyValueFromField(driver, policyPhase, policyquotepageDTO.quotePhaseValue,"value");
 		return new PolicyQuotePage(driver);
 	}
 	
 	//Click preview tab.
 	public PDFReader clickPreviewTab() throws InterruptedException
 	{
-		invisibilityOfLoader(driver);
-		Thread.sleep(4000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Click [Preview]");
+		invisibilityOfLoader(driver); 
+		Thread.sleep(3000);
+    	ExtentReporter.logger.log(LogStatus.INFO, "Click [Preview]");
+	//	ExtentReporter.logger.log(LogStatus.INFO, "Verify CHG 08 form is displayed and information that was entered is on form");
 		clickButton(driver, PreviewTab, "Preview");
+		invisibilityOfLoader(driver);
+		Thread.sleep(8000);
 		return new PDFReader(driver);
 	}
 
 		
 	//Select the policy Action from DDL
 	public PolicyQuotePage select_policyAction() throws Exception{
-		
 	//	waitForElementToLoad(driver, 15, policyAction);
 		Thread.sleep(5000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Capture Transaction Details window opens");
-		selectDropdownByVisibleText(driver, policyAction, policyquotedto.policyactionvalue, "Policy Action");
+		selectDropdownByVisibleText(driver, policyAction, policyquotepageDTO.policyActionValue, "Policy Action");
 		Thread.sleep(3000);
 		switchToFrameUsingId(driver, "popupframe1");
 		return new PolicyQuotePage(driver);
+		
+		//ToDo- Enter Quote Description- Renewal
 	}
 		
 	//Switch to second frame from first frame
@@ -352,7 +368,7 @@ public class PolicyQuotePage extends CommonAction {
      	return new PolicyQuotePage(driver);
 	}
 	
-	//Save the Transaction details
+	//Save the Transaction details and switch to parent window
 	public PolicyQuotePage save_CaptureTransactionDetails () throws Exception{
 		
 		Thread.sleep(3000);
@@ -369,6 +385,4 @@ public class PolicyQuotePage extends CommonAction {
 		clickButton(driver, Exit_Ok, "Exit Ok");
 		return new PolicyQuotePage(driver);
 	}
-	
-	
 }

@@ -6,6 +6,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
@@ -24,8 +25,18 @@ public class CommonUtilities {
 		Sel.selectByValue(value);
 		
 		}
-	
+	public void verifyFormIsAdded(List<WebElement> pageElement,String formValue){
+		
+			if(pageElement.get(pageElement.size()-1).getAttribute("innerHTML").trim().equals(formValue.trim())){
+				
+				ExtentReporter.logger.log(LogStatus.PASS, formValue+"is added successfully unedr Manuscript List");
+			}else{
+				
+				ExtentReporter.logger.log(LogStatus.FAIL, formValue+"is Not added unedr Manuscript List");
+			}
+		}
 
+	
 	public String getSystemDateMMddyy_hhmmss(){
 		
 		 DateFormat dateFormatter = new SimpleDateFormat("MMddyy_hhmmss");

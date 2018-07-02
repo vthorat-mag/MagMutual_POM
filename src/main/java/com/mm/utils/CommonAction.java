@@ -27,15 +27,18 @@ import com.relevantcodes.extentreports.LogStatus;
 import BaseClass.CommonActionInterface;
 
 public class CommonAction implements CommonActionInterface {
+	
+	
+	Properties pro=new Properties();
 
-	Properties pro = new Properties();
+	//Integer.valueOf(properties.prop.getProperty("High"));
+	
+	int Low=10;
+	int Medium=30;
+	int High=50;
+	String findPolicyQuotePage = "Find Policy/Quote";
 
-	// Integer.valueOf(properties.prop.getProperty("High"));
-
-	int Low = 10;
-	int Medium = 25;
-	int High = 50;
-
+	
 	public void selectValue(WebDriver driver, WebElement pageElement, String value) {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, Medium);
@@ -100,6 +103,16 @@ public class CommonAction implements CommonActionInterface {
 		}
 	}
 
+	
+	public String getSelectedTextFromDropDown(WebDriver driver,WebElement dropDownElement){
+		
+		 Select dropDownList = new Select(dropDownElement);
+		 String  selectedDDLValue = dropDownList.getFirstSelectedOption().getText();
+		
+		 return selectedDDLValue;
+	}
+	
+	
 	public String randomNoGenerator() {
 		return RandomStringUtils.random(2, "1234567890");
 	}
@@ -166,10 +179,10 @@ public class CommonAction implements CommonActionInterface {
 
 	public void takeScreenShot(String pageTitle) {
 		// TODO Auto-generated method stub
-
 	}
-
-	public String  getPageTitle(WebDriver driver, String expectedPageTitle) throws InterruptedException {
+  
+  
+public String  getPageTitle(WebDriver driver, String expectedPageTitle) throws InterruptedException {
 		invisibilityOfLoader(driver);
 		Thread.sleep(3000);
 		List<WebElement> getPageTitleFromPage = driver.findElements(By.xpath("//div[@class='pageTitle']"));
@@ -197,6 +210,29 @@ public class CommonAction implements CommonActionInterface {
 		}
 		return "true";
 	}
+		
+	public String getPageTitleWithPolicyNumber(WebDriver driver, String policyNum) throws InterruptedException {
+		Thread.sleep(5000);
+		
+		List<WebElement> pageheaders = driver.findElements(By.xpath("//div[@class='pageTitle']"));
+		WebElement pageLoader = driver.findElement(By.xpath("//span[@class='txtOrange']"));
+		WebDriverWait wait = new WebDriverWait(driver, 40);
+		wait.until(ExpectedConditions.invisibilityOf(pageLoader));
+		Assert.assertEquals(pageheaders.get(1).getAttribute("innerHTML").trim(), "Policy Folder " + policyNum,
+				"Page title is not matching.");
+		
+		
+		/*String getPageTitleFromPage = driver.findElement(By.xpath("//div[@class='pageTitle']"))
+				.getAttribute("innerHTML").trim();
+		WebDriverWait wait = new WebDriverWait(driver, High);
+		// WebDriverWait wait=new WebDriverWait(driver, 40);
+		WebElement pageLoader = driver.findElement(By.xpath("//span[@class='txtOrange']"));
+		wait.until(ExpectedConditions.invisibilityOf(pageLoader));
+		// wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[@class='pageTitle']"))));
+		Assert.assertEquals(getPageTitleFromPage, expectedPageTitle, "Page title is not matching.");*/
+		return null;
+	}
+	
 
 	public String getText(WebDriver driver, WebElement pageElement) {
 		WebDriverWait wait = new WebDriverWait(driver, High);
@@ -357,8 +393,8 @@ public class CommonAction implements CommonActionInterface {
 		WebElement pageLoader = driver.findElement(By.xpath("//span[@class='txtOrange']"));
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, Medium);
-			wait.until(ExpectedConditions.invisibilityOf(pageLoader));
-			ExtentReporter.logger.log(LogStatus.PASS, "Loader disappeared sucessfully.");
+			wait.until(ExpectedConditions.invisibilityOf(element));
+			ExtentReporter.logger.log(LogStatus.PASS, "Page Loader disappeared sucessfully.");
 		} catch (Exception e) {
 			ExtentReporter.logger.log(LogStatus.FAIL, "Page is still loading.");
 		}
@@ -379,6 +415,4 @@ public class CommonAction implements CommonActionInterface {
 		switchToParentWindowfromframe(driver);
 		Thread.sleep(3000);
 }
-	
-	
 }
