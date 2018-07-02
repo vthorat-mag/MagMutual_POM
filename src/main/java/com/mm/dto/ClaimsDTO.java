@@ -14,13 +14,32 @@ public class ClaimsDTO {
 	public static String stateOfLossDropDownValue;
 	public static String searchEntityPageTitle;
 	public static String description;
+	public  String FileSearchPageTitle;
+	public String claimNum;
 	
 	public ClaimsDTO() throws Exception{
 		
-		for (int iFC=0; iFC < ClaimsDTO.class.getFields().length; iFC++)
+		for (int iFC=0; iFC < ClaimsDTO.class.getFields().length; iFC++) 
 		{
-			ClaimsDTO.class.getFields()[iFC].set(this, SmokeTestCase.testDataMap.get(ClaimsDTO.class.getFields()[iFC].getName().toLowerCase()).get(0));
+			if(ClaimsDTO.class.getFields()[iFC].getType().toString().toLowerCase().contains("java.util.list"))
+			{
+				try{
+					ClaimsDTO.class.getFields()[iFC].set(this, SmokeTestCase.testDataMap.get(ClaimsDTO.class.getFields()[iFC].getName().toLowerCase()));
 			
+				}catch(Exception e){
+				 e.printStackTrace();
+				}
+				
+			}else				
+			{
+				try{
+					ClaimsDTO.class.getFields()[iFC].set(this, SmokeTestCase.testDataMap.get(ClaimsDTO.class.getFields()[iFC].getName().toLowerCase()).get(0));
+				
+				}catch(Exception e){
+					 e.printStackTrace();
+						}
+				
+				}
 		}
 	}
-}
+	}

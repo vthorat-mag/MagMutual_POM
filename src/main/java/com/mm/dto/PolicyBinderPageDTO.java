@@ -37,7 +37,6 @@ public PolicyBinderPageDTO() throws IllegalArgumentException, IllegalAccessExcep
 		
 			}catch(Exception e){
 			 e.printStackTrace();
-			 System.out.println(SmokeTestCase.testDataMap.get(PolicyBinderPageDTO.class.getFields()[iFC].getName()));
 			}
 			
 		}else				
@@ -47,7 +46,6 @@ public PolicyBinderPageDTO() throws IllegalArgumentException, IllegalAccessExcep
 			
 			}catch(Exception e){
 				 e.printStackTrace();
-				 System.out.println(SmokeTestCase.testDataMap.get(PolicyBinderPageDTO.class.getFields()[iFC].getName()));
 					}
 			
 			}

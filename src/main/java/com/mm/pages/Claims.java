@@ -123,19 +123,13 @@ public class Claims extends CommonAction {
 
 	// method to search claims from 'Enter Text #' text box(Top right corner of
 	// the screen)
-	public Claims searchClaim(String claimNo) throws Exception {
+	public Claims searchClaim() throws Exception {
+		
+		getPageTitle(driver, claimsdto.FileSearchPageTitle);
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Enter Claim # from Hospital Create Claim Test Case(Example 66429) & Click Search.");
-		policySearch(driver, claimNo, claim_Search, Search_btn);
-
-		// As File Search Page (Claims) having 2 headers Hence instead of using
-		// getPageTitle method below logic is written to verify page title.
-		List<WebElement> pageheaders = driver.findElements(By.xpath("//div[@class='pageTitle']"));
-		WebElement pageLoader = driver.findElement(By.xpath("//span[@class='txtOrange']"));
-		WebDriverWait wait = new WebDriverWait(driver, 40);
-		wait.until(ExpectedConditions.invisibilityOf(pageLoader));
-		Assert.assertEquals(pageheaders.get(1).getAttribute("innerHTML").trim(), "Claim Folder " + claimNo,
-				"Page title is not matching.");
+		policySearch(driver, claimsdto.claimNum, claim_Search, Search_btn);
+		getPageTitle(driver, "Claim Folder " + claimsdto.claimNum);
 
 		return new Claims(driver);
 	}
@@ -184,16 +178,8 @@ public class Claims extends CommonAction {
 		Thread.sleep(5000);
 		switchToParentWindowfromframe(driver);
 
-		// As File Search Page (Claims) having 2 headers Hence instead of using
-		// getPageTitle method below logic is written to verify page title.
-		List<WebElement> pageheaders1 = driver.findElements(By.xpath("//div[@class='pageTitle']"));
-		WebElement pageLoader1 = driver.findElement(By.xpath("//span[@class='txtOrange']"));
-		WebDriverWait wait1 = new WebDriverWait(driver, 40);
-		wait.until(ExpectedConditions.invisibilityOf(pageLoader));
-		Assert.assertEquals(pageheaders.get(1).getAttribute("innerHTML").trim(), "Claim Folder " + claimNo,
-				"Page title is not matching.");
-
-		verifyValueFromField(driver, fileStatusOnClaimFolderPage, verifyFileStatusValue, "innerHTML");
+		getPageTitle(driver, "Claim Folder " + claimNo);
+		verifyValueFromField(driver, fileStatusOnClaimFolderPage, verifyFileStatusValue, "innerHTML","File Status");
 	}
 
 	// Select Patient.
