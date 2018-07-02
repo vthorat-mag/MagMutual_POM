@@ -1,9 +1,22 @@
 package com.mm.dto;
 
+import java.util.List;
+
 import MMTestCase.SmokeTestCase;
 
 public class PolicyQuotePageDTO {
 
+	public String valueOfPolicyActionCopy;
+	public String quotePhaseValue;
+	public String riskType;
+	public String binderForm;
+	public String saveAsPolicyValue;
+	public String saveAsPolicyValueRenewal;
+	public String saveAsPolicyValueOfficial;
+	public String policyActionValue;
+	public String productNotifyValue;
+	public List <String> coverages;
+	public List <String> phases;
 	
 public PolicyQuotePageDTO() throws IllegalArgumentException, IllegalAccessException, SecurityException{
 		

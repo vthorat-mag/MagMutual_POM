@@ -19,7 +19,6 @@ import com.mm.dto.LoginPageDTO;
 import com.mm.dto.PolicyBinderPageDTO;
 import com.mm.dto.PolicyQuotePageDTO;
 import com.mm.dto.RateAPolicyPageDTO;
-import com.mm.dto.pdfReaderDTO;
 import com.mm.pages.CISPage;
 import com.mm.pages.EndorsePolicyPage;
 import com.mm.pages.FindPolicyPage;
@@ -245,7 +244,7 @@ public class SmokeTestCase extends BrowserTypes {
 		}
 
 		policyquotepage.rateFunctionality(policyNumber).saveOption(policyquotepageDTO.saveAsPolicyValue).exit_SaveOption()
-				.clickPreviewTab().savePDF().verifyPdfContent(pdfReaderDTO.footerContent);
+				.clickPreviewTab().savePDF().verifyPdfContent("ABCD");
 	}
 
 	//DTO done

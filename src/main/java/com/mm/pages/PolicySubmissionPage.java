@@ -1,9 +1,12 @@
 package com.mm.pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.mm.dto.PolicySubmissionPageDTO;
 import com.mm.utils.CommonAction;
@@ -57,7 +60,7 @@ public class PolicySubmissionPage extends CommonAction {
 	public PolicySubmissionPage copyFromActionDropDown(String policyNum)
 			throws IllegalArgumentException, IllegalAccessException, SecurityException, InterruptedException {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy");
-		selectDropdownByValue(driver, policyAction, valueOfPolicyActionCopy, "Policy Action");
+		selectDropdownByValue(driver,policyAction, policysubmissionpageDTO.valueOfPolicyActionCopy, "Policy Action");
 		Thread.sleep(3000);
 		return new PolicySubmissionPage(driver);
 
@@ -67,13 +70,14 @@ public class PolicySubmissionPage extends CommonAction {
 	public PolicySubmissionPage changePhaseToIndication()
 			throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
 		ExtentReporter.logger.log(LogStatus.INFO, "Change Policy Phase to Indication");
-		selectDropdownByValue(driver, policyPhase, indicationPhaseValue, "Phase");
+		selectDropdownByValue(driver,policyPhase, policysubmissionpageDTO.indicationPhaseValue, "Phase");
 		Thread.sleep(3000);
 		return new PolicySubmissionPage(driver);
 	}
-
-	// Save policy Quote as Work in progress.
-	public PolicyQuotePage saveWip() throws InterruptedException {
+	
+	//Save policy / Quote as Work in progress.
+	public PolicyQuotePage saveWip() throws Exception
+	{
 		clickButton(driver, saveWIP, "Save WIP");
 		Thread.sleep(2000);
 		return new PolicyQuotePage(driver);
@@ -82,13 +86,16 @@ public class PolicySubmissionPage extends CommonAction {
 	// Update policy details for a policy and change policy phase from
 	// Submission to Indication.
 	public PolicyIndicationPage updatePolicyDetails() throws Exception {
-		waitForPageLoad(driver, 40);
-		waitForElementToLoad(driver, 40, Phase);
+	
+		WebDriverWait wait=new WebDriverWait(driver, 40);
+		wait.until(ExpectedConditions.invisibilityOf(driver.findElement(By.xpath("//span[@class='txtOrange']"))));
+		waitForElementToLoad(driver, 20, Phase);
+	    //Change policy type to Indication and add organization type as Hospital from DDL
 		selectDropdownByValue(driver, Phase, policysubmissionpageDTO.policyPhase, "Phase");
 		selectDropdownByValue(driver, Org_Type, policysubmissionpageDTO.organisationType, "Organisation Type");
 		Thread.sleep(2000);
-		enterTextIn(driver, Hosp_Disc_Period_Rating, policysubmissionpageDTO.discoveryPeriodRating,
-				"Discovery_Period Rating");
+		//Add Discovery period rating, Quote Description and save as WIP
+		enterTextIn(driver, Hosp_Disc_Period_Rating,policysubmissionpageDTO.discoveryPeriodRating, "Discovery_Period Rating");
 		enterTextIn(driver, Quote_Description, policysubmissionpageDTO.quoteDescription, "Quote Description");
 		ExtentReporter.logger.log(LogStatus.INFO, "Indication saved as WIP");
 		click(driver, Save_WIP, "Save WIP button");

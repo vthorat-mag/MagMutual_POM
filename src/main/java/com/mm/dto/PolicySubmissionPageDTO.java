@@ -8,7 +8,8 @@ public class PolicySubmissionPageDTO {
 	public String organisationType;
 	public String discoveryPeriodRating;
 	public String quoteDescription;
-	
+	public String valueOfPolicyActionCopy;
+	public String indicationPhaseValue;
 	
 	
 public PolicySubmissionPageDTO() throws IllegalArgumentException, IllegalAccessException, SecurityException{
