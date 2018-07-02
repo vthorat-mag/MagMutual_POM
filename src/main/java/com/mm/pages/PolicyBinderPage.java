@@ -113,7 +113,6 @@ public class PolicyBinderPage extends CommonAction {
 	{
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Claims in right corner of screen");
 		clickButton(driver, headerClaimsTab, "Header CIS");
-		getPageTitle(driver, policybinderpageDTO.FileSearchPageTitle);
 		return new Claims(driver);
 	}
 
@@ -178,7 +177,7 @@ public class PolicyBinderPage extends CommonAction {
 		String getTextPolicyPhase = policyPhasePolicy.getAttribute("innerText");
 		ExtentReporter.logger.log(LogStatus.INFO, "Verify phase is " + getTextPolicyPhase);
 		//verifyTextPresent(getTextPolicyPhase, "Policy", "Policy Phase");
-		verifyValueFromField(driver, policyPhasePolicy, "Policy", "innerHTML");
+		verifyValueFromField(driver, policyPhasePolicy, "Policy", "innerHTML","Policy Phase");
 		return new PolicyBinderPage(driver);
 	}
 
@@ -219,7 +218,8 @@ public class PolicyBinderPage extends CommonAction {
 	}
 
 	// Save Option functionality flow.
-	public PolicyQuotePage saveOption(String policyNo) throws Exception {
+	public PolicyQuotePage saveOption() throws Exception {
+		/*
 		Thread.sleep(2000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options");
 		clickButton(driver, saveOptionBtn, "Save Option");
@@ -230,7 +230,7 @@ public class PolicyBinderPage extends CommonAction {
 		selectDropdownByValue(driver, saveAsDropDown, policybinderpageDTO.saveAsPolicyValue, "Save Option");
 		clickButton(driver, saveOptionOkBtn, "Save");
 		Thread.sleep(6000);
-		/*
+		
 		 * try{ switchToParentWindowfromframe(driver);
 		 * switchToFrameUsingElement(driver,
 		 * driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+
@@ -243,14 +243,16 @@ public class PolicyBinderPage extends CommonAction {
 		 * " Yes selection from Product Notify dorp down."); }catch (Exception
 		 * e) { ExtentReporter.logger.log(LogStatus.FAIL,
 		 * "Product Notify Window is NOT dispalyed to user."); }
-		 */
+		
 		switchToParentWindowfromframe(driver);
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]")));
 		Thread.sleep(4000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [OK]");
 		clickButton(driver, Exit_Ok, "Exit Ok");
-		return new PolicyQuotePage(driver);
+		*/
+		saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn, policybinderpageDTO.saveAsPolicyValue);
+		return new PolicyQuotePage(driver); 
 	}
 
 }

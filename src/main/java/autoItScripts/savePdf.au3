@@ -15,7 +15,7 @@ Func Example()
 	send("{SHIFTUP}")
 	send("{s up}")
 	ControlFocus("Save As","","Edit1")
-	ControlSend("Save As","","Edit1",$CmdLine[1]);
+	ControlSend("Save As","","Edit1","C:\savePDF\verifyPDF.pdf");
 	ControlClick("Save As","&Save","Button1")
 	Sleep(3000)
 	if WinExists("Confirm Save As")then

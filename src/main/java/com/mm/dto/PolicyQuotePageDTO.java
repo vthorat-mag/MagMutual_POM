@@ -3,6 +3,10 @@ package com.mm.dto;
 import MMTestCase.SmokeTestCase;
 
 public class PolicyQuotePageDTO {
+	
+	public String policyactionvalue;
+	public String saveAsPolicyDDLValue;
+	public String secondSaveAsPolicyDDLValue;
 
 	
 public PolicyQuotePageDTO() throws IllegalArgumentException, IllegalAccessException, SecurityException{

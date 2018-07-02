@@ -73,7 +73,7 @@ public class PolicySubmissionPage extends CommonAction {
 	}
 
 	// Save policy Quote as Work in progress.
-	public PolicyQuotePage saveWip() throws InterruptedException {
+	public PolicyQuotePage saveWip() throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
 		clickButton(driver, saveWIP, "Save WIP");
 		Thread.sleep(2000);
 		return new PolicyQuotePage(driver);

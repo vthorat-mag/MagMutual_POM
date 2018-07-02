@@ -10,23 +10,26 @@ import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
 import com.mm.utils.ExtentReporter;
+import com.mm.dto.FindPolicyPageDTO;
 import com.mm.utils.CommonAction;
 import com.relevantcodes.extentreports.LogStatus;
 
 public class FindPolicyPage extends CommonAction {
-	
-	//Global Assignment/initialization of variables.
+
+	// Global Assignment/initialization of variables.
 	WebDriver driver;
 	String policyNo;
+	String selectedPhaseValue = "Policy";
+	String selectedStatusValue = "Active";
 
-	//Element repository for Find a policy page.
+	// Element repository for Find a policy page.
 	@FindBy(xpath = "//input[@name='policyPhaseCodeMultiSelectText']")
 	WebElement policyPhaseTextBox;
 
 	@FindBy(xpath = "//a[@class='panelDownTitle']")
 	WebElement paneDown;
 
-	@FindBy(xpath = "//a[@id='AFD_policyStatus']")
+	@FindBy(xpath = "//a[@id='AFD_policyStatus']//img[@id='btnFind']")
 	WebElement policyStatusSearch;
 
 	@FindBy(xpath = "//table[@class='popupcontent']//input[@name='chkMultiSelectpolicyStatus']")
@@ -38,7 +41,7 @@ public class FindPolicyPage extends CommonAction {
 	@FindBy(xpath = "//table[@class='popupcontent']//td[2]")
 	List<WebElement> policyPhaseValues;
 
-	@FindBy(xpath = "//table[@class='popupcontent']//td//input[@name='chkMultiSelectpolicyPhaseCode']")
+	@FindBy(name = "chkMultiSelectpolicyPhaseCode")
 	List<WebElement> policyPhaseCheckBox;
 
 	@FindBy(xpath = "//div[@class='horizontalButtonCollection']//input[@value='Search']")
@@ -50,16 +53,22 @@ public class FindPolicyPage extends CommonAction {
 	@FindBy(xpath = "//table[@class='clsGrid']//tbody//input[@name='chkCSELECT_IND']")
 	List<WebElement> policyListChkBox;
 
-	//COnstructor to initialize elements on Find a policy page.
-	public FindPolicyPage(WebDriver driver) {
+	@FindBy(id = "polPhaseCodeLOVLABELSPAN")
+	WebElement selectedPhaseValueEle;
+
+	@FindBy(id = "termStatusLOVLABELSPAN")
+	WebElement selectedStatusValueEle;
+
+	// Constructor to initialize elements on Find a policy page.
+	public FindPolicyPage(WebDriver driver) throws Exception {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
+		FindPolicyPageDTO findpolicypagedto = new FindPolicyPageDTO();
 	}
 
 	// Search Policy from filter.
 	public String findQuotewithActiveState(String phase, String status) throws InterruptedException {
-
-		Thread.sleep(5000);// Need to replace with explicit wait
+		invisibilityOfLoader(driver);
 		try {
 			Assert.assertTrue(paneDown.isEnabled());
 			ExtentReporter.logger.log(LogStatus.INFO, "Search Criteria Section is expanded");
@@ -101,6 +110,72 @@ public class FindPolicyPage extends CommonAction {
 			ExtentReporter.logger.log(LogStatus.FAIL, "No Policy available for this Criteria.");
 		}
 		return policyNo;
+	}
+
+	public RateApolicyPage searchFromFindPolicyPage() throws Exception {
+		invisibilityOfLoader(driver);
+		ExtentReporter.logger.log(LogStatus.INFO, "click Policy>Find Policy Select Status: Active Click [Search]");
+		// Below code will verify if search pane is expanded or not.
+		try {
+			Assert.assertTrue(paneDown.isEnabled());
+			click(driver, paneDown, "Search Criteria");
+		} catch (Exception e) {
+			ExtentReporter.logger.log(LogStatus.PASS, "Search Criteria Section is already expanded.");
+		}
+
+		// below code will select phase from Policy Phase drop down.
+		click(driver, policyPhaseSearch, "Policy Phase Search Icon");
+		waitFor(driver, 3);
+		for (int i = 0; i < policyPhaseCheckBox.size(); i++) {
+			if (policyPhaseCheckBox.get(i).getAttribute("value").equals("POLICY")) {
+				clickButton(driver, policyPhaseCheckBox.get(i), FindPolicyPageDTO.phase + " Check Box");
+			}
+		}
+		for (int i = 0; i < policyPhaseCheckBox.size(); i++) {
+			if (policyPhaseValues.get(i).getAttribute("innerHTML").equals(FindPolicyPageDTO.phase )) {
+				clickButton(driver, policyPhaseCheckBox.get(i), FindPolicyPageDTO.phase  + " Check Box");
+				ExtentReporter.logger.log(LogStatus.PASS, FindPolicyPageDTO.phase  + " is  selected from Policy phase drop down");
+				break;
+			}
+		}
+
+		// below code will select Status from Status drop down.
+		Thread.sleep(2000);
+		clickButton(driver, policyStatusSearch, "Policy Status Search");
+		for (int i = 0; i < policyStatusValues.size(); i++) {
+			if (policyStatusValues.get(i).getAttribute("value").equals(FindPolicyPageDTO.status)) {
+				click(driver, policyStatusValues.get(i),
+						policyStatusValues.get(i).getAttribute("value") + " Check Box");
+				ExtentReporter.logger.log(LogStatus.PASS, FindPolicyPageDTO.status + " is  selected from Status drop down");
+			}
+		}
+		click(driver, searchBtn, "SearchButton");
+		invisibilityOfLoader(driver);
+
+		// Below code will check if policies are displayed after filter.search
+		// and will open/select policy.
+		try {
+			if (policyList.size() > 0) {
+				for (int i = 0; i < policyList.size(); i++) {
+					ExtentReporter.logger.log(LogStatus.INFO, "Select Policy with Policy No." +policyList.get(i).getAttribute("innerHTML"));
+					clickButton(driver, policyList.get(i), "Policy Name");
+					break;
+				}
+			}
+		} catch (Exception e) {
+			ExtentReporter.logger.log(LogStatus.FAIL, "No Policy available for this Criteria.");
+		}
+
+		invisibilityOfLoader(driver);
+
+		// Below line of code will verify Selected phase value is correct or
+		// not.
+		verifyValueFromField(driver, selectedPhaseValueEle, selectedPhaseValue, "innerHTML","Phase Value");
+
+		// Below line of code will verify Selected status value is correct or
+		// not.
+		verifyValueFromField(driver, selectedStatusValueEle, selectedStatusValue, "innerHTML","Status Value");
+		return new RateApolicyPage(driver);
 	}
 
 }
