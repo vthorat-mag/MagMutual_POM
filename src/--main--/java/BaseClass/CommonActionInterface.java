@@ -27,6 +27,6 @@ public interface CommonActionInterface {
     void selectDropdownByValue(WebDriver driver, WebElement Value,String DropDownOption, String name);
     void switchToParentWindowfromotherwindow(WebDriver driver, String parentwindow);
     void policySearch(WebDriver driver, String policyNo, WebElement policySearchTxtBox, WebElement earchBtn);
-    void invisibilityOfLoader(WebDriver driver);
+    void invisibilityOfLoader(WebDriver driver, WebElement element);
 }
 
