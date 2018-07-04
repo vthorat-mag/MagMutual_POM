@@ -134,7 +134,7 @@ public class PolicyQuotePage extends CommonAction {
 	WebElement loader;
 	
   // This is a constructor for PolicyQuotePage class to initialize page elments and DTO object
-	public PolicyQuotePage(WebDriver driver) Exception
+	public PolicyQuotePage(WebDriver driver) throws IllegalArgumentException, IllegalAccessException, SecurityException 
 	{
 		this.driver=driver;
 		PageFactory.initElements(driver, this);
@@ -294,7 +294,7 @@ public class PolicyQuotePage extends CommonAction {
 		switchToParentWindowfromframe(driver);
 		Thread.sleep(3000);*/
 		
-		saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn, saveOption);
+		saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn, "saveOption");
 		return new PolicyQuotePage(driver);
 }
 

@@ -182,7 +182,7 @@ public class CommonAction implements CommonActionInterface {
 	}
   
   
-public String  getPageTitle(WebDriver driver, String expectedPageTitle) throws InterruptedException {
+public String  getPageTitle(WebDriver driver, String expectedPageTitle) throws InterruptedException  {
 		invisibilityOfLoader(driver);
 		Thread.sleep(3000);
 		List<WebElement> getPageTitleFromPage = driver.findElements(By.xpath("//div[@class='pageTitle']"));
@@ -393,7 +393,7 @@ public String  getPageTitle(WebDriver driver, String expectedPageTitle) throws I
 		WebElement pageLoader = driver.findElement(By.xpath("//span[@class='txtOrange']"));
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, Medium);
-			wait.until(ExpectedConditions.invisibilityOf(element));
+			wait.until(ExpectedConditions.invisibilityOf(pageLoader));
 			ExtentReporter.logger.log(LogStatus.PASS, "Page Loader disappeared sucessfully.");
 		} catch (Exception e) {
 			ExtentReporter.logger.log(LogStatus.FAIL, "Page is still loading.");
