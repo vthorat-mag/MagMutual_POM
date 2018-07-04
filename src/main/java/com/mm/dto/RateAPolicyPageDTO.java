@@ -15,9 +15,6 @@ public class RateAPolicyPageDTO {
 	public String paymentPlanValue;
 	public String productNotifyValue;
 	public String footerContent;
-	public String policyAction;
-	public String endorsementReason;
-	public String policyNum;
 	public String optionValue;
 	public String optionName;
 	public String saveAsPolicyValue;

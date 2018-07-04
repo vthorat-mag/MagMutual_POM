@@ -423,6 +423,7 @@ public class PolicyIndicationPage extends CommonAction {
 						clearTextBox(driver, Premium, "Premium Amount");
 						enterDataIn(driver,Premium, hospitalIndicationDTO.premiumAmount.get(retroDateCount), "Premium text box");
 						//Verify that premium amount is entered and it is correct
+						verifyValueFromField(driver, Premium, hospitalIndicationDTO.premiumAmount.get(retroDateCount),"value","Premium Amount");
 						enterDataIn(driver,Retro_Date, hospitalIndicationDTO.retroDate.get(retroDateCount),  "Retro Date");
 						break;
 					}

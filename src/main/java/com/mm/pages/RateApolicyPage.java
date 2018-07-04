@@ -180,8 +180,23 @@ public class RateApolicyPage extends CommonAction {
 	@FindBy(id = "PM_COMMON_TABS_PREVIEW")
 	WebElement previewBtn;
 
-	@FindBy(xpath = "//span[@class='txtOrange']")
-	WebElement loader;
+	@FindBy(xpath = "//div[@id='spellchecker-content']")
+	WebElement spellchkBox;
+
+	@FindBy(xpath = "//span[@class='dragbox_main_head_class']")
+	WebElement spellchkBoxHeading;
+
+	@FindBy(name = "IgnoreAllBtn")
+	WebElement ignoreAllBtn;
+
+	@FindBy(xpath="//input[contains(@id,'delopt')]")
+	WebElement DelOptions;
+	
+	@FindBy(id = "Deliver")
+	WebElement deliverBtn;
+	
+	@FindBy(xpath="//div[@class='noerror']")
+	WebElement sucessMsg;
 
 	@FindBy(xpath = "//button[contains(@class,'titlebar-close')]")
 	WebElement closePdf;
@@ -235,6 +250,38 @@ public class RateApolicyPage extends CommonAction {
 
 	@FindBy(id = "CFORMCODELOVLABEL")
 	List<WebElement> manuscriptAddedForm;
+  
+	@FindBy(xpath = "//iframe[@class ='cover']")
+	WebElement checkSpellIframe;
+	
+	@FindBy(id ="policyPhaseCode_VALUE_CONTAINER")
+	WebElement phaseNonEditableField;
+	
+	// For policy add forms TC42399
+	
+		@FindBy(name="policyViewMode")
+		WebElement viewMode;
+		
+		@FindBy(id="PM_POLICY_FOLDER_AG")
+		WebElement policyActionDDL;
+		
+		@FindBy(id="CPRODUCTCOVERAGEDESC")
+		WebElement coverage;
+		
+		@FindBy(id="PM_COMMON_TABS_SAVEWIP")
+		WebElement saveWIP;
+		
+		@FindBy(xpath = "//a[@id='PM_PT_VIEWPOL']//span")
+		WebElement policyTab;
+		
+		@FindBy(name="endorsementCode")
+		WebElement endorsementReason;
+		
+		@FindBy(id="PM_ENDORSE_OK")
+		WebElement endorsePolicyOK;
+		
+		@FindBy(id="CFORMCODELOVLABEL")
+		List <WebElement> manuscriptAddedForm;
 
 	// Constructor to initialize driver, page elements and DTO PageObject for
 	// CISPage
@@ -654,7 +701,7 @@ public class RateApolicyPage extends CommonAction {
 		}
 	}
 
-	public void cincomFlow(String PolicyNo) throws Exception {
+	public RateApolicyPage cincomFlow(String PolicyNo) throws Exception {
 		for (int j = 0; j < rateApolicyPageDTO.coverage.size(); j++) {
 			for (int i = 0; i < coverageList.size(); i++) {
 				if (coverageList.get(i).getAttribute("innerHTML").equals(rateApolicyPageDTO.coverage.get(j))) {
@@ -699,20 +746,49 @@ public class RateApolicyPage extends CommonAction {
 			clickButton(driver, dataEntryBtn, "Data Entry");
 			Thread.sleep(4000);
 			String parentWindowId = switchToWindow(driver);
+			titleHFLHPLCHGGE.clear();
 			enterTextIn(driver, titleHFLHPLCHGGE, "Automated Test CHGGE", " Cincom Title");
 			clickButton(driver, freeFormCHGGEBeginChkBox, "freeFormCHGGEBeginChkBox");
 			Thread.sleep(2000);
 			JavascriptExecutor executor = (JavascriptExecutor) driver;
-			executor.executeScript("tinyMCE.activeEditor.setContent('<p>Automated Test Case {"
-					+ comUtil.getSystemDatemmddyyyy() + "}</p>This test is to')");
-			// executor.executeScript("tinyMCE.activeEditor.setContent('<h1>Native
-			// API text</h1> TinyMCE')")
-			executor.executeScript("<p>This test is to</p>");
-			executor.executeScript("<p></p>");
-			executor.executeScript("<p>Adds the form </p>");
-			executor.executeScript("<p>Enter data entry</p>");
-			executor.executeScript("<p>VVerify Bulletpoints display as entered.'</p>)");
+			executor.executeScript("tinyMCE.activeEditor.setContent('<p>Automated Test Case {"+comUtil.getSystemDatemmddyyyy()+"}</p>This test is to <ul><li>Adds the form</li><li>Enter data entry </li><li>Verify Bulletpoints display as entered</li></ul>')");
+			executor.executeScript("document.getElementById('mceu_43-open').innerHTML = 'Arial';");
+			executor.executeScript("document.getElementById('mceu_44-open').innerHTML = '10pt';", "");
+			driver.switchTo().defaultContent();
+			clickButton(driver, DelOptions, "Delivery Options");
+			boolean chkspellpopupvalue = verifyCheckSpellingPopup();
+			if (chkspellpopupvalue == true) {
+				do {
+					clickButton(driver, ignoreAllBtn, "Ignore All");
+					Thread.sleep(1000);
+				} while (verifyCheckSpellingPopup() == true);
+			}
+			clickButton(driver, DelOptions, "Delivery Options");
+			clickButton(driver, deliverBtn, "deliver button");
+			visibilityOfElement(driver, sucessMsg,"Sucess Message");
+			driver.close();
+			switchToParentWindowfromotherwindow(driver, parentWindowId);
+			
+			switchToFrameUsingElement(driver,
+			driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
+			
+			clickButton(driver, manuscriptPageSaveBtn, "Manu Script page Save");
+			Thread.sleep(2000);
+			clickButton(driver, manuscriptPageCloseBtn, "Manu Script page Close");
+			switchToParentWindowfromframe(driver);
+		}
+		return new RateApolicyPage(driver);
+	}
 
+	public boolean verifyCheckSpellingPopup() throws InterruptedException {
+		try {
+			WebDriverWait wait = new WebDriverWait(driver, 20);
+			if (wait.until(ExpectedConditions.visibilityOf(spellchkBoxHeading)) != null)
+				ExtentReporter.logger.log(LogStatus.INFO, "Spell check pop up window displayed..");
+			return true;
+		} catch (Exception e) {
+			ExtentReporter.logger.log(LogStatus.INFO, "Spell check pop up window is NOT displayed..");
+			return false;
 		}
 	}
 
