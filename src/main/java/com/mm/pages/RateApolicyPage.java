@@ -178,8 +178,23 @@ public class RateApolicyPage extends CommonAction {
 	@FindBy(id = "PM_COMMON_TABS_PREVIEW")
 	WebElement previewBtn;
 
-	@FindBy(xpath = "//span[@class='txtOrange']")
-	WebElement loader;
+	@FindBy(xpath = "//div[@id='spellchecker-content']")
+	WebElement spellchkBox;
+
+	@FindBy(xpath = "//span[@class='dragbox_main_head_class']")
+	WebElement spellchkBoxHeading;
+
+	@FindBy(name = "IgnoreAllBtn")
+	WebElement ignoreAllBtn;
+
+	@FindBy(xpath="//input[contains(@id,'delopt')]")
+	WebElement DelOptions;
+	
+	@FindBy(id = "Deliver")
+	WebElement deliverBtn;
+	
+	@FindBy(xpath="//div[@class='noerror']")
+	WebElement sucessMsg;
 
 	@FindBy(xpath = "//button[contains(@class,'titlebar-close')]")
 	WebElement closePdf;
@@ -202,16 +217,13 @@ public class RateApolicyPage extends CommonAction {
 	@FindBy(name = "additionalText")
 	WebElement addText;
 
-	@FindBy(id = "PM_QT_POLICY_FOLDER_AG")
-	WebElement policyActionDDL;
-
-	@FindBy(name = "endorsementCode")
-	WebElement endorsementReason;
-
 	@FindBy(name = "transactionComment")
 	WebElement CommentsTxtBoxOnEndorsePolicyPopup;
-  
-  @FindBy(id ="policyPhaseCode_VALUE_CONTAINER")
+
+	@FindBy(xpath = "//iframe[@class ='cover']")
+	WebElement checkSpellIframe;
+	
+	@FindBy(id ="policyPhaseCode_VALUE_CONTAINER")
 	WebElement phaseNonEditableField;
 	
 	// For policy add forms TC42399
@@ -278,8 +290,8 @@ public class RateApolicyPage extends CommonAction {
 		Thread.sleep(3000);
 		return null;
 	}
-  
-  	public String checkPolicyViewModeAndUpdateCoverage(String policyNo) throws Exception{
+
+public String checkPolicyViewModeAndUpdateCoverage(String policyNo) throws Exception{
 		
 		Thread.sleep(3000);
 		String currentViewMode= getSelectedTextFromDropDown(driver, viewMode);
@@ -316,8 +328,8 @@ public class RateApolicyPage extends CommonAction {
 		
 		return policyNo;
 }
-  
-  //Select 'Coverage' tab and add Manuscript from optional forms and Save
+
+//Select 'Coverage' tab and add Manuscript from optional forms and Save
 	public RateApolicyPage coverageUpdatesForSingleCoverage(String PolicyNo) throws Exception {
 		Thread.sleep(3000);
 		//Get Coverage count from list on coverage page
@@ -373,7 +385,6 @@ public class RateApolicyPage extends CommonAction {
 
 	return new RateApolicyPage(driver);
 }
-
 	public RateApolicyPage searchPolicyRateAPolicyPage() throws Exception {
 		searchPolicy(rateApolicyPageDTO.policyNum);
 		Thread.sleep(3000);
@@ -489,7 +500,7 @@ public class RateApolicyPage extends CommonAction {
 	public RateApolicyPage AcceptFromActionDropDown() throws Exception {
 		ExtentReporter.logger.log(LogStatus.INFO, "Select Accept from the dropdown screen.");
 		selectDropdownByValue(driver, policyAction, rateApolicyPageDTO.valueOfPolicyActionAccept, "Policy Action");
-    Assert.assertTrue(policyPhaseBinder.isEnabled(),"Policy"+policyNo()+"is NOT Editable.");
+		Assert.assertTrue(policyPhaseBinder.isEnabled(),"Policy"+policyNo()+"is NOT Editable.");
 		return new RateApolicyPage(driver);
 	}
 
@@ -520,7 +531,7 @@ public class RateApolicyPage extends CommonAction {
 		//String getTextPolicyPhase = policyPhaseBinder.getAttribute("innerText");
 		//String getTextPolicyPhase = getText(driver, policyPhaseBinder);
 		ExtentReporter.logger.log(LogStatus.PASS, "Verify Phase is changed to Binder.");
-		verifyValueFromField(driver, policyPhaseBinder, policyPhaseValue, innerText);
+		verifyValueFromField(driver, policyPhaseBinder, policyPhaseValue, innerText,"Phase");
 		return new RateApolicyPage(driver);
 	}
 
@@ -551,13 +562,12 @@ public class RateApolicyPage extends CommonAction {
 		switchToParentWindowfromframe(driver);
 		return new RateApolicyPage(driver);
 	}
-	
-	//Coverage Details flow.
-	public RateApolicyPage coverageDetailsSelect() throws Exception
-	{
-		try{
+
+	// Coverage Details flow.
+	public RateApolicyPage coverageDetailsSelect() throws Exception {
+		try {
 			clickButton(driver,coverageTab, "Coverage");
-			invisibilityOfLoader(driver, pageLoader);
+			invisibilityOfLoader(driver);
 			ExtentReporter.logger.log(LogStatus.PASS, "Click Coverage tab.");
 			clickButton(driver, coverageTab, "Coverage");
 			invisibilityOfLoader(driver);
@@ -646,7 +656,7 @@ public class RateApolicyPage extends CommonAction {
 		}
 	}
 
-	public void cincomFlow(String PolicyNo) throws Exception {
+	public RateApolicyPage cincomFlow(String PolicyNo) throws Exception {
 		for (int j = 0; j < rateApolicyPageDTO.coverage.size(); j++) {
 			for (int i = 0; i < coverageList.size(); i++) {
 				if (coverageList.get(i).getAttribute("innerHTML").equals(rateApolicyPageDTO.coverage.get(j))) {
@@ -691,18 +701,49 @@ public class RateApolicyPage extends CommonAction {
 			clickButton(driver, dataEntryBtn, "Data Entry");
 			Thread.sleep(4000);
 			String parentWindowId = switchToWindow(driver);
+			titleHFLHPLCHGGE.clear();
 			enterTextIn(driver, titleHFLHPLCHGGE, "Automated Test CHGGE", " Cincom Title");
 			clickButton(driver, freeFormCHGGEBeginChkBox, "freeFormCHGGEBeginChkBox");
 			Thread.sleep(2000);
 			JavascriptExecutor executor = (JavascriptExecutor) driver;
-			executor.executeScript("tinyMCE.activeEditor.setContent('<p>Automated Test Case {"+comUtil.getSystemDatemmddyyyy()+"}</p>This test is to')");
-			//executor.executeScript("tinyMCE.activeEditor.setContent('<h1>Native API text</h1> TinyMCE')")
-			executor.executeScript("<p>This test is to</p>");
-			executor.executeScript("<p></p>");
-			executor.executeScript("<p>Adds the form </p>");
-			executor.executeScript("<p>Enter data entry</p>");
-			executor.executeScript("<p>VVerify Bulletpoints display as entered.'</p>)");
+			executor.executeScript("tinyMCE.activeEditor.setContent('<p>Automated Test Case {"+comUtil.getSystemDatemmddyyyy()+"}</p>This test is to <ul><li>Adds the form</li><li>Enter data entry </li><li>Verify Bulletpoints display as entered</li></ul>')");
+			executor.executeScript("document.getElementById('mceu_43-open').innerHTML = 'Arial';");
+			executor.executeScript("document.getElementById('mceu_44-open').innerHTML = '10pt';", "");
+			driver.switchTo().defaultContent();
+			clickButton(driver, DelOptions, "Delivery Options");
+			boolean chkspellpopupvalue = verifyCheckSpellingPopup();
+			if (chkspellpopupvalue == true) {
+				do {
+					clickButton(driver, ignoreAllBtn, "Ignore All");
+					Thread.sleep(1000);
+				} while (verifyCheckSpellingPopup() == true);
+			}
+			clickButton(driver, DelOptions, "Delivery Options");
+			clickButton(driver, deliverBtn, "deliver button");
+			visibilityOfElement(driver, sucessMsg,"Sucess Message");
+			driver.close();
+			switchToParentWindowfromotherwindow(driver, parentWindowId);
+			
+			switchToFrameUsingElement(driver,
+			driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
+			
+			clickButton(driver, manuscriptPageSaveBtn, "Manu Script page Save");
+			Thread.sleep(2000);
+			clickButton(driver, manuscriptPageCloseBtn, "Manu Script page Close");
+			switchToParentWindowfromframe(driver);
+		}
+		return new RateApolicyPage(driver);
+	}
 
+	public boolean verifyCheckSpellingPopup() throws InterruptedException {
+		try {
+			WebDriverWait wait = new WebDriverWait(driver, 20);
+			if (wait.until(ExpectedConditions.visibilityOf(spellchkBoxHeading)) != null)
+				ExtentReporter.logger.log(LogStatus.INFO, "Spell check pop up window displayed..");
+			return true;
+		} catch (Exception e) {
+			ExtentReporter.logger.log(LogStatus.INFO, "Spell check pop up window is NOT displayed..");
+			return false;
 		}
 	}
 
@@ -746,7 +787,7 @@ public class RateApolicyPage extends CommonAction {
 		Thread.sleep(2000);
     ExtentReporter.logger.log(LogStatus.INFO, "Click [Close]");
     clickButton(driver, closeBtnOnViewPremiumPopup, "Close");
-		invisibilityOfLoader(driver, loader);
+		invisibilityOfLoader(driver);
 		switchToParentWindowfromframe(driver);
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]")));

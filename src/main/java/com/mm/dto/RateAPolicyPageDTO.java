@@ -9,14 +9,12 @@ public class RateAPolicyPageDTO {
 	public List<String> coverageNames;
 	public List<String> binderForms;
 	public List<String> phase;
+	public List<String> coverage;
 	public String valueOfPolicyActionAccept;
 	public String billingSetup;
 	public String paymentPlanValue;
 	public String productNotifyValue;
 	public String footerContent;
-	public String policyAction;
-	public String endorsementReason;
-	public String policyNum;
 	public String optionValue;
 	public String optionName;
 	public String saveAsPolicyValue;
