@@ -16,6 +16,9 @@ public class ClaimsDTO {
 	public static String description;
 	public  String FileSearchPageTitle;
 	public String claimNum;
+	public String clientIDValue;
+	
+	public String clientNameValue;
 	
 	public ClaimsDTO() throws Exception{
 		
