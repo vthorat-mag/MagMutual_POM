@@ -171,12 +171,12 @@ public class PolicyBinderPage extends CommonAction {
 	}
 	
 	//Navigate to Claims page.
-	public Claims navigatetoClaimsPage() throws Exception
+	public ClaimsPage navigatetoClaimsPage() throws Exception
 	{
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Claims in right corner of screen");
 		clickButton(driver, headerClaimsTab, "Header CIS");
 	//	getPageTitle(driver, policybinderpageDTO.fileSearchPageTitle);
-		return new Claims(driver);
+		return new ClaimsPage(driver);
 	}
 	
 	//Select Patient.

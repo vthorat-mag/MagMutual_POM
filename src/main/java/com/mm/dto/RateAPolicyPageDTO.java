@@ -9,6 +9,7 @@ public class RateAPolicyPageDTO {
 	public List<String> coverageNames;
 	public List<String> binderForms;
 	public List<String> phase;
+	public List<String> coverage;
 	public String valueOfPolicyActionAccept;
 	public String billingSetup;
 	public String paymentPlanValue;
@@ -23,9 +24,6 @@ public class RateAPolicyPageDTO {
 	public String listDDLValue;
 	public String coverageFromCoverageTabGrid;
 	public String manuscriptForm;
-	public String endorsementReason;
-	public String policyAction;
-	public String policyNum;
 	public String viewModeOfficial;
 	public String viewModeWIP;
 	

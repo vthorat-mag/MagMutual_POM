@@ -225,7 +225,7 @@ public class CISPage extends CommonAction {
 					executor1.executeScript("arguments[0].click();", selectedMainTab);
 					ExtentReporter.logger.log(LogStatus.INFO, oCISPageDTO.allMenuOptions.get(k)+" window opens");
 					executor1.executeScript("arguments[0].click();", tabMenuOption1.get(j));
-					invisibilityOfLoader(driver, pageLoader);
+					invisibilityOfLoader(driver);
 					Thread.sleep(1000);
 					//verifying the page title of an open window
 					verifyPageTitleForTheOpenWindow(displayedWindowTitle,
@@ -238,7 +238,7 @@ public class CISPage extends CommonAction {
 					//click on tab menu option (when main tab is not in selected mode) 
 					ExtentReporter.logger.log(LogStatus.INFO, oCISPageDTO.allMenuOptions.get(k)+" window opens");
 					executor.executeScript("arguments[0].click();", tabMenuOption.get(j));
-					invisibilityOfLoader(driver, pageLoader);
+					invisibilityOfLoader(driver);
 					//verifying the page title of an open window
 					verifyPageTitleForTheOpenWindow(displayedWindowTitle,oCISPageDTO.windowTitlesForSubMenuTabs.get(k) + " " + oCISPageDTO.clientNameValue,
 							oCISPageDTO.allMenuOptions.get(k));

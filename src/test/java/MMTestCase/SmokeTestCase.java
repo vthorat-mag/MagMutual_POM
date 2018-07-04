@@ -21,6 +21,7 @@ import com.mm.dto.PolicyQuotePageDTO;
 import com.mm.dto.RateAPolicyPageDTO;
 import com.mm.dto.pdfReaderDTO;
 import com.mm.pages.CISPage;
+import com.mm.pages.ClaimsPage;
 import com.mm.pages.EndorsePolicyPage;
 import com.mm.pages.FindPolicyPage;
 import com.mm.pages.HomePage;
@@ -43,27 +44,6 @@ public class SmokeTestCase extends BrowserTypes {
 	WebDriver driver = BrowserTypes.getDriver();
 	public static HashMap<String, List<String>> testDataMap;
 
-	//Page variables should be local to test case
-	
-	LoginPage loginpage;
-	CISPage cispage;
-	HomePage homepage;
-	RateApolicyPage rateapolicyPage;
-	FindPolicyPage findpolicypage;
-	PolicyBinderPage policybinderpage;
-	PolicyQuotePage policyquotepage;
-	PolicySubmissionPage policysubmissionpage;
-	QuickAddOrganisation quickaddorganisation;
-	PolicyIndicationPage policyindicationpage;
-	EndorsePolicyPage endorsepolicypage;
-	// DTO page objects
-	PolicyBinderPageDTO policybinderpageDTO;
-	RateAPolicyPageDTO rateApolicyPageDTO;
-	PolicyQuotePageDTO policyquotepageDTO;
-//	PDFReaderDTO pdfReaderDTO;
-	LoginPageDTO lpDTO;
-
-  
   	@BeforeClass(alwaysRun = true)
 	public void beforeClass() throws IOException {
 		// Runtime.getRuntime().exec("taskkill /F /IM iexplorer.exe");
@@ -86,45 +66,41 @@ public class SmokeTestCase extends BrowserTypes {
 	}
 
 	
+	//@Test(description = "Claims - Available Test Case", groups = { "Smoke Test" })
+	public void TC42252() throws Exception {
+			LoginPageDTO lpDTO = new LoginPageDTO();
+			LoginPage loginpage = new LoginPage(driver);
+				loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToClaimsPageFromHomePageLink().addFile();
+				ClaimsPage claimsPage = new ClaimsPage(driver);
+	}
+	
+	
 	//DTO done
 	//@Test(description = "Verify CIS Page Displays", groups = { "Smoke Test" })
 	 public void TC42253() throws Exception {
-			lpDTO = new LoginPageDTO();
-			loginpage = new LoginPage(driver);
+		 LoginPageDTO lpDTO = new LoginPageDTO();
+		 LoginPage loginpage = new LoginPage(driver);
 			loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToCISPage().searchAndSelectAClientName()
 			.verifyPagesHavingMenuOnPersonPageAreDisplayed().verifyPagesWithoutSubMenu();
 			
 		}
 	
 
-	// DTO done
+	//DTO done
 	//@Test(description="Hospital Rate", groups = { "Smoke Test" })
 	public void TC42239() throws Exception {
-		lpDTO = new LoginPageDTO();
-		loginpage = new LoginPage(driver);
+		LoginPageDTO lpDTO = new LoginPageDTO();
+		LoginPage loginpage = new LoginPage(driver);
+		RateApolicyPage rateapolicyPage = new RateApolicyPage(driver);
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPage();
-		homepage= new HomePage(driver);   
+		HomePage homepage= new HomePage(driver);   
 		String policyNum=homepage.policySearchUsingSearchCriteria();
-		rateapolicyPage = new RateApolicyPage(driver);
 		rateapolicyPage.rateFunctionality(policyNum);
 				
 	}
 
-	//DTO done.- 
-  //TODO-This may be Rate a policy test, need to verify
-	// @Test(description="Hospital Rate",groups = { "Smoke Test" })
-	public void TC42239(String UserName, String PassWord) throws Exception {
-		LoginPageDTO lpDTO;
-		LoginPage loginpage;
-		lpDTO = new LoginPageDTO();
-		loginpage = new LoginPage(driver);
-		loginpage.loginToeOasis(UserName, PassWord).navigateToPolicyPageFromrateApolicyPage()
-				.searchPolicyRateAPolicyPage().saveRatedetails().startExcelExport();
-	}
-
-	
 	//DTO done
-	@Test(description = "Hospital Verify Interactive Form", groups = { "Smoke Test" })
+	//@Test(description = "Hospital Verify Interactive Form", groups = { "Smoke Test" })
 	public void TC42247() throws Exception
 	{
 		LoginPageDTO lpDTO = new LoginPageDTO();
@@ -136,15 +112,15 @@ public class SmokeTestCase extends BrowserTypes {
   }
 
     //DTO done
-	//@Test(description="Hospital Verify Attach Form", groups = { "Smoke Test" })
+	@Test(description="Hospital Verify Attach Form", groups = { "Smoke Test" })
 	public void TC42399() throws Exception {
 		
-		lpDTO = new LoginPageDTO();
-		loginpage = new LoginPage(driver);
+		LoginPageDTO lpDTO = new LoginPageDTO();
+		LoginPage loginpage = new LoginPage(driver);
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPage();
-		homepage= new HomePage(driver);   
+		HomePage homepage= new HomePage(driver);   
 		String policyNum=homepage.policySearchUsingSearchCriteria();
-		rateapolicyPage = new RateApolicyPage(driver);
+		RateApolicyPage rateapolicyPage = new RateApolicyPage(driver);
 		String policyNumber =rateapolicyPage.checkPolicyViewModeAndUpdateCoverage(policyNum);
 										rateapolicyPage.rateFunctionality(policyNumber).clickPreviewTab().savePDF().verifyPdfContent(policyNumber);
 		
@@ -154,12 +130,12 @@ public class SmokeTestCase extends BrowserTypes {
 	// DTO done
 	// @Test(description = "Verify Add Organization", groups = { "Smoke Test" })
 	public void TC42404() throws Exception {
-			lpDTO = new LoginPageDTO();
-			loginpage = new LoginPage(driver);
+		LoginPageDTO lpDTO = new LoginPageDTO();
+		LoginPage loginpage = new LoginPage(driver);
 			loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToCISPage().clickOnNewOrganization()
 					.enterDataInNewOrgPage().selectZipCode().saveNewOrgDetails();
 			
-			//ToDo - Need to change test case according to updated test steps
+			//TODO - Need to change test case according to updated test steps
 		}
 	
 
@@ -174,35 +150,12 @@ public class SmokeTestCase extends BrowserTypes {
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageFromrateApolicyPage()
 				.searchPolicyRateAPolicyPage().AcceptFromActionDropDown().isAlertPresent().identifyPhase()
 				.billingSetup().coverageDetailsSelect();
-
 		String policyNumber = rateapolicyPage.policyNo();
-
 		rateapolicyPage.coverageUpdates(policyNumber);
 		rateapolicyPage.rateFunctionality(policyNumber).clickPreviewTab().savePDF().verifyPdfContent(policyNumber)
 				.saveOption();
 	}
 
-	// DTO Implemented
-	//@Test(priority=1, description="Hospital Claim - Verify Change Claim Status", groups ={ "Smoke Test" })
-			String searchPolicyNum = "Q09101726-NB16-01";
-			lpDTO = new LoginPageDTO();
-			loginpage = new LoginPage(driver);
-			loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageFromrateApolicyPage()
-					.searchPolicyRateAPolicyPage(searchPolicyNum).AcceptFromActionDropDown().isAlertPresent()
-					.identifyPhase().billingSetup().coverageDetailsSelect();
-
-			rateapolicyPage = new RateApolicyPage(driver);
-			String policyNumber = rateapolicyPage.policyNo();
-
-		// Below code will run same test steps based on number of coverage you
-		// want to update.
-		for (int i = 0; i < rateApolicyPageDTO.coverageNames.size(); i++) {
-			rateapolicyPage.coverageUpdates(rateApolicyPageDTO.coverageNames.get(i), rateApolicyPageDTO.phase.get(i),
-					policyNumber);
-		}
-		rateapolicyPage.rateFunctionality(policyNumber).clickPreviewTab().savePDF().verifyPdfContent("HC")
-				.saveOption(policyNumber);
-	}
 
 	// DTO Implemented
 	// @Test(description="Hospital Claim - Verify Change Claim Status", groups ={ "Smoke Test" })
@@ -221,15 +174,12 @@ public class SmokeTestCase extends BrowserTypes {
 	// @Test(description="Hospital Issue Policy Forms", groups = { "Smoke Test"
 	// })
 	public void TC42665(String UserName, String PassWord) throws Exception {
-		LoginPageDTO lpDTO;
-		LoginPage loginpage;
-		PolicyBinderPage policybinderpage;
-		lpDTO = new LoginPageDTO();
-		loginpage = new LoginPage(driver);
+		LoginPageDTO lpDTO = new LoginPageDTO();
+		LoginPage loginpage = new LoginPage(driver);
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageFromPolicyBinderPage()
 				.searchPolicyPolicyBinderPage();
 
-		policybinderpage = new PolicyBinderPage(driver);
+		PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
 		String policyNumber = policybinderpage.policyNo();
 
 		policybinderpage.endorsementFromActionDropDown().endorsPolicy(policyNumber).identifyPhase()
@@ -286,17 +236,14 @@ public class SmokeTestCase extends BrowserTypes {
 	}
 
 	//DTO done
-	// @Test(description="Hospital Renewal", groups = {"Smoke Test"
-	// })
+	// @Test(description="Hospital Renewal", groups = {"Smoke Test"})
 	public void TC42400() throws Exception {
-		LoginPageDTO lpDTO;
-		LoginPage loginpage;
 		// String policy_no = " ";
-		lpDTO = new LoginPageDTO();
-		loginpage = new LoginPage(driver);
-		policyquotepageDTO = new PolicyQuotePageDTO();
+		LoginPageDTO lpDTO = new LoginPageDTO();
+		LoginPage loginpage = new LoginPage(driver);
+		PolicyQuotePageDTO policyquotepageDTO = new PolicyQuotePageDTO();
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageFromrateApolicyPage()
-				.searchPolicyPolicyQuotePage(policy_no).select_policyAction().save_CaptureTransactionDetails()
+				.searchPolicyPolicyQuotePage().select_policyAction().save_CaptureTransactionDetails()
 				.saveOption(policyquotepageDTO.saveAsPolicyValueRenewal).switchToNextFrame().save_CaptureTransactionDetails().saveOption(policyquotepageDTO.saveAsPolicyValueOfficial)
 				.product_Notify().exit_SaveOption();
 		
@@ -347,16 +294,16 @@ public class SmokeTestCase extends BrowserTypes {
 	// DTO done
 	// @Test(testName="HospitalIndication",groups = { "Smoke Test" })
 	public void TC42249() throws Exception {
-		lpDTO = new LoginPageDTO();
-		loginpage = new LoginPage(driver);
+		LoginPageDTO lpDTO = new LoginPageDTO();
+		LoginPage loginpage = new LoginPage(driver);
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPage().create_New();
 
-		homepage = new HomePage(driver);
+		HomePage homepage = new HomePage(driver);
 		String ParentWindow = homepage.create_Quote();
 
 		homepage.search_Quote(ParentWindow).selectPolicyType().updatePolicyDetails();
 
-		policyindicationpage = new PolicyIndicationPage(driver);
+		PolicyIndicationPage policyindicationpage = new PolicyIndicationPage(driver);
 		List<WebElement> firstFrame = policyindicationpage.open_Underwriter();
 
 		policyindicationpage.add_Underwriter(firstFrame).close_Underwriter().addAgent().addRiskInformation()
@@ -368,9 +315,22 @@ public class SmokeTestCase extends BrowserTypes {
 		policyindicationpage.coverageUpdates(PolicyNo).openLimitSharingTab(PolicyNo).addSharedGroup(PolicyNo)
 				.closeLimitSharingtab();
 		
-		// TODO - Add PDF verification.
+		// TODO - Add PDF verification steps.
 	}
 
+	
+	//DTO done
+	//TODO-This may be Rate a policy test, need to verify
+	// @Test(description="Hospital Rate",groups = { "Smoke Test" })
+	public void TC42239(String UserName, String PassWord) throws Exception {
+		LoginPageDTO lpDTO = new LoginPageDTO();
+		LoginPage loginpage = new LoginPage(driver);
+		loginpage.loginToeOasis(UserName, PassWord).navigateToPolicyPageFromrateApolicyPage()
+				.searchPolicyRateAPolicyPage().saveRatedetails().startExcelExport();
+	}
+	
+	
+	
 	// DTO code is not implemented as this is not part of scope.
 	// @Test(testName="EndorsePolicy",groups = { "Smoke Test" })
 	public void TC42530(Method method, String UserName, String PassWord) throws Exception {

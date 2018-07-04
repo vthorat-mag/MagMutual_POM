@@ -196,6 +196,7 @@ public String  getPageTitle(WebDriver driver, String expectedPageTitle) throws I
 					ExtentReporter.logger.log(LogStatus.PASS,
 							getPageTitleFromPage.get(i).getAttribute("innerHTML").trim()
 									+ " is sucessfully displayed.");
+					System.out.println("Page title is correct");
 					break;
 				}
 			}
@@ -392,8 +393,8 @@ public String  getPageTitle(WebDriver driver, String expectedPageTitle) throws I
 	public void invisibilityOfLoader(WebDriver driver) {
 		WebElement pageLoader = driver.findElement(By.xpath("//span[@class='txtOrange']"));
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, Medium);
-			wait.until(ExpectedConditions.invisibilityOf(element));
+			WebDriverWait wait = new WebDriverWait(driver, High);
+			wait.until(ExpectedConditions.invisibilityOf(pageLoader));
 			ExtentReporter.logger.log(LogStatus.PASS, "Page Loader disappeared sucessfully.");
 		} catch (Exception e) {
 			ExtentReporter.logger.log(LogStatus.FAIL, "Page is still loading.");
