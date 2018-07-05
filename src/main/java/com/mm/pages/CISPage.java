@@ -1,6 +1,8 @@
 package com.mm.pages;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -15,6 +17,7 @@ import org.testng.Assert;
 import com.mm.utils.ExcelUtil;
 import com.mm.utils.ExtentReporter;
 import com.relevantcodes.extentreports.LogStatus;
+import com.relevantcodes.extentreports.model.ExceptionInfo;
 import com.mm.dto.CISPageDTO;
 import com.mm.utils.CommonAction;
 import com.mm.utils.CommonUtilities;
@@ -176,19 +179,27 @@ public class CISPage extends CommonAction {
 		Thread.sleep(3000);
 
 		// Searching the client using client name and matching id
-		for (int i = 0; i < clientNameEntityList.size(); i++) {
+		int i = 0;
+	//	try{
+		for (i = 0; i < clientNameEntityList.size(); i++) {
 
 			// compare the client name with the client id and select client name whose id matches
 			if (clientNameEntityList.get(i).getAttribute("innerHTML").trim().equals(oCISPageDTO.clientNameValue)
 					&& clientIDEntityList.get(i).getAttribute("innerHTML").trim().equals(oCISPageDTO.clientIDValue)) {
 				ExtentReporter.logger.log(LogStatus.INFO, "CIS Demographic Client screen opens");
 				selectValue(driver, clientNameEntityList.get(i), oCISPageDTO.clientNameValue);
-			} else {
-
 				break;
 			}
+			//TODO-check if the client is not available
 		}
-
+	/*	if(clientNameEntityList.size()==i+1)
+		{
+			System.out.println("this is the msg.");
+		}
+		}catch(Exception exception){
+			ExtentReporter.logger.log(LogStatus.FAIL, "Client name with matching ID is not available in the Entity List");
+		}*/
+		
 		return new CISPage(driver);
 	}
 
@@ -226,7 +237,7 @@ public class CISPage extends CommonAction {
 					ExtentReporter.logger.log(LogStatus.INFO, oCISPageDTO.allMenuOptions.get(k)+" window opens");
 					executor1.executeScript("arguments[0].click();", tabMenuOption1.get(j));
 					invisibilityOfLoader(driver);
-					Thread.sleep(1000);
+					Thread.sleep(2000);
 					//verifying the page title of an open window
 					verifyPageTitleForTheOpenWindow(displayedWindowTitle,
 							oCISPageDTO.windowTitlesForSubMenuTabs.get(k) + " " + oCISPageDTO.clientNameValue,

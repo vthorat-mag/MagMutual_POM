@@ -1,55 +1,87 @@
 package MMTestCase;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
-import java.util.Arrays;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import org.testng.annotations.BeforeClass;
+
 import com.mm.browsers.BrowserTypes;
-import com.mm.dto.FindPolicyPageDTO;
 import com.mm.dto.LoginPageDTO;
-import com.mm.dto.PolicyBinderPageDTO;
 import com.mm.dto.PolicyQuotePageDTO;
-import com.mm.dto.RateAPolicyPageDTO;
-import com.mm.dto.pdfReaderDTO;
-import com.mm.pages.CISPage;
 import com.mm.pages.ClaimsPage;
-import com.mm.pages.EndorsePolicyPage;
 import com.mm.pages.FindPolicyPage;
 import com.mm.pages.HomePage;
 import com.mm.pages.LoginPage;
 import com.mm.pages.PolicyBinderPage;
 import com.mm.pages.PolicyIndicationPage;
 import com.mm.pages.PolicyQuotePage;
-import com.mm.pages.PolicySubmissionPage;
 import com.mm.pages.QuickAddOrganisation;
 import com.mm.pages.RateApolicyPage;
-import com.mm.utils.ExcelApiTest;
 import com.mm.utils.ExcelUtil;
 import com.mm.utils.ExtentReporter;
-import com.mm.utils.PDFReader;
+import com.mm.utils.IntegrateRallyRestAPI;
 import com.relevantcodes.extentreports.LogStatus;
 
 public class SmokeTestCase extends BrowserTypes {
 
 	// Global Assignment/initialization of variables.
+	IntegrateRallyRestAPI iR;
 	WebDriver driver = BrowserTypes.getDriver();
 	public static HashMap<String, List<String>> testDataMap;
 
+	String serverURL = ""; 
+	String username = "";  
+	String password = "";  
+	String workspace = ""; 	
+	String project = ""; 
+	String testcaseFormattedID = ""; //method.getName();
+	String buildNumber = ""; 
+	String notes = ""; 
+	double duration = 0.0; //get from extent test
+	String verdict = "Pass";
+	String userRef = "";
+	
   	@BeforeClass(alwaysRun = true)
-	public void beforeClass() throws IOException {
+	public void beforeClass() throws IOException, URISyntaxException {
 		// Runtime.getRuntime().exec("taskkill /F /IM iexplorer.exe");
 
+		Properties configProperties = new Properties();		
+		InputStream inputFile = new FileInputStream("config.properties");		
+		configProperties.load(inputFile);
+		
+		//Temporary variables declared, this would be fetched from properties file.
+		serverURL = configProperties.getProperty("ServerURL"); 
+		username = configProperties.getProperty("Username");  
+		password = configProperties.getProperty("Password");  
+		workspace = configProperties.getProperty("Workspace"); 	
+		project = configProperties.getProperty("Project"); 
+		testcaseFormattedID = "TC42249"; //method.getName();
+		buildNumber = configProperties.getProperty("BuildNumber"); 
+		notes = configProperties.getProperty("DefaultNote"); 
+		duration = 0.0; //get from extent test
+		//	"Blocked", "Deferred", "Enhancement", "Error", "Fail", "Hold", "In Progress", "Inconclusive", "Invalid", "Out of Scope", "Pass", "Waiting for Policy"
+		verdict = "Pass";
+		
+		iR = new IntegrateRallyRestAPI();
+		password = iR.decodeString(password);
+		//This should go in Before Suite method
+		userRef = iR.getRallyUserDetails(serverURL, username, password);
 	}
 
+  	
 	// Extent report initialization before every test case.
 	@BeforeMethod(alwaysRun = true)
 	public void Setup(Method method) throws Exception {
@@ -57,7 +89,7 @@ public class SmokeTestCase extends BrowserTypes {
 		System.out.println("==============================================");
 		System.out.println(method.getName() + " test case execution started.");
 		System.out.println("==============================================");
-
+		testcaseFormattedID = method.getName();
 		// Code to populate HashMap from excel
 		// Instantiate ExcelUtil and call testData and fill a HashMap
 		// testDataMap
@@ -66,12 +98,23 @@ public class SmokeTestCase extends BrowserTypes {
 	}
 
 	
+	@Test(description = "Claims - Verify that user is allowed to change Billing Parameter for an Existing Account", groups = { "Smoke Test" })
+	public void TC42403() throws Exception {
+				LoginPageDTO lpDTO = new LoginPageDTO();
+				LoginPage loginpage = new LoginPage(driver);
+					loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToFinancePageFromHeaderLink().maintainAccount();
+				
+					
+		}
+	
+	
+	//Blocked - need updated steps
 	//@Test(description = "Claims - Available Test Case", groups = { "Smoke Test" })
 	public void TC42252() throws Exception {
 			LoginPageDTO lpDTO = new LoginPageDTO();
 			LoginPage loginpage = new LoginPage(driver);
 				loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToClaimsPageFromHomePageLink().addFile();
-				ClaimsPage claimsPage = new ClaimsPage(driver);
+				//ClaimsPage claimsPage = new ClaimsPage(driver);
 	}
 	
 	
@@ -80,9 +123,10 @@ public class SmokeTestCase extends BrowserTypes {
 	 public void TC42253() throws Exception {
 		 LoginPageDTO lpDTO = new LoginPageDTO();
 		 LoginPage loginpage = new LoginPage(driver);
-			loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToCISPage().searchAndSelectAClientName()
-			.verifyPagesHavingMenuOnPersonPageAreDisplayed().verifyPagesWithoutSubMenu();
-			
+			loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToCISPage()
+			.searchAndSelectAClientName()
+			.verifyPagesHavingMenuOnPersonPageAreDisplayed()
+			.verifyPagesWithoutSubMenu();
 		}
 	
 
@@ -96,7 +140,6 @@ public class SmokeTestCase extends BrowserTypes {
 		HomePage homepage= new HomePage(driver);   
 		String policyNum=homepage.policySearchUsingSearchCriteria();
 		rateapolicyPage.rateFunctionality(policyNum);
-				
 	}
 
 	//DTO done
@@ -106,13 +149,16 @@ public class SmokeTestCase extends BrowserTypes {
 		LoginPageDTO lpDTO = new LoginPageDTO();
 		LoginPage loginpage = new LoginPage(driver);
 		RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
-		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).headerPolicyTab().searchPolicyRateAPolicyPage();
+		loginpage.loginToeOasis(lpDTO.username, lpDTO.password)
+		.headerPolicyTab()
+		.searchPolicyRateAPolicyPage();
 		String policyNo = rateapolicypage.policyNo();
-		rateapolicypage.coverageDetailsSelect().cincomFlow(policyNo);
+		rateapolicypage.coverageDetailsSelect()
+		.cincomFlow(policyNo);
   }
 
     //DTO done
-	@Test(description="Hospital Verify Attach Form", groups = { "Smoke Test" })
+	//@Test(description="Hospital Verify Attach Form", groups = { "Smoke Test" })
 	public void TC42399() throws Exception {
 		
 		LoginPageDTO lpDTO = new LoginPageDTO();
@@ -122,11 +168,14 @@ public class SmokeTestCase extends BrowserTypes {
 		String policyNum=homepage.policySearchUsingSearchCriteria();
 		RateApolicyPage rateapolicyPage = new RateApolicyPage(driver);
 		String policyNumber =rateapolicyPage.checkPolicyViewModeAndUpdateCoverage(policyNum);
-										rateapolicyPage.rateFunctionality(policyNumber).clickPreviewTab().savePDF().verifyPdfContent(policyNumber);
+		rateapolicyPage.rateFunctionality(policyNumber)
+		.clickPreviewTab()
+		.savePDF()
+		.verifyPdfContent(policyNumber);
 		
 	}
 
-	
+
 	// DTO done
 	// @Test(description = "Verify Add Organization", groups = { "Smoke Test" })
 	public void TC42404() throws Exception {
@@ -369,21 +418,38 @@ public class SmokeTestCase extends BrowserTypes {
 	}
 
 	@AfterMethod(alwaysRun = true)
-	public void logoffFromAppclication(ITestResult result) throws IOException, InterruptedException {
+	public void logoffFromAppclication(ITestResult result) throws IOException, InterruptedException, URISyntaxException {
 		// homepage.logoutFromeOasis();
 		ExtentReporter.report.endTest(ExtentReporter.logger);
 
 		if (ITestResult.FAILURE == result.getStatus()) {
+		//	verdict = "Fail";
 			ExtentReporter.logger.log(LogStatus.FAIL, result.getName());
 			ExtentReporter.logger.log(LogStatus.FAIL, result.getThrowable());
 
 		} else if (ITestResult.SUCCESS == result.getStatus()) {
+		//	verdict = "Pass";
 			ExtentReporter.logger.log(LogStatus.INFO, "User is logged out of applciation");
 			ExtentReporter.logger.log(LogStatus.PASS, result.getName());
 		} else if (ITestResult.SKIP == result.getStatus()) {
+		//	verdict = "Hold";
 			ExtentReporter.logger.log(LogStatus.SKIP, result.getName());
 		}
 		ExtentReporter.report.flush();
+		//"Blocked", "Deferred", "Enhancement", "Error", "Fail", "Hold", "In Progress", "Inconclusive", "Invalid", "Out of Scope", "Pass", "Waiting for Policy"
+
+	/*	iR.updateResultsInRally(serverURL,
+				username,
+				password,
+				workspace,
+				project,
+				testcaseFormattedID.toUpperCase(),
+				buildNumber,
+				notes,
+				userRef,
+				duration,
+				verdict);*/
+		
 		Thread.sleep(2000);
 		// driver.close();
 	}

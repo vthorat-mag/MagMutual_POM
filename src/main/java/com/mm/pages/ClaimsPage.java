@@ -170,7 +170,6 @@ public class ClaimsPage extends CommonAction {
 	
 	
 	
-	
 	// Constructor to initialize driver, page elements and DTO PageObject for
 	// Claims Page.
 	public ClaimsPage(WebDriver driver) throws Exception {
@@ -179,8 +178,8 @@ public class ClaimsPage extends CommonAction {
 		claimsdto = new ClaimsDTO();
 	}
 
-	
-	
+
+	//
 	public void addFile() throws Exception{
 		//Move to Files tab and select Add File option from menu
  		invisibilityOfLoader(driver);
@@ -190,8 +189,10 @@ public class ClaimsPage extends CommonAction {
 		invisibilityOfLoader(driver);
 	//	getPageTitle(driver, "Add File");
 		Thread.sleep(2000);
+		//Click search button will open a new window
 		clickButton(driver, patientSearchBtn, "Search for patient");
 		Thread.sleep(2000);
+		//Switch to new window using get window handles
 		String parentWindow = switchToWindow(driver);
 		searchAPatientNameFromEntitySelectList(parentWindow);
 		selectDropdownByVisibleText(driver, fileTypeDDL, "Claim", "File Type");
@@ -204,7 +205,7 @@ public class ClaimsPage extends CommonAction {
 		
 	}
 	
-	// Searching and select the client from 'Entity Select List' using client name and matching id from excel file
+	// Search and select the client from 'Entity Select List' using client name and matching id from excel file
 	public void searchAPatientNameFromEntitySelectList(String parentWindow) throws InterruptedException{
 		
 		waitForElementToLoad(driver, 20, lastOrgName);
