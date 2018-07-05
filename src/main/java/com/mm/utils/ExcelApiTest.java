@@ -54,7 +54,9 @@ public class ExcelApiTest {
 			sheet = workbook.getSheet(sheetName);
 			row = sheet.getRow(rowNum);
 			cell = row.getCell(colNum);
-			if (cell.getCellTypeEnum() == CellType.STRING)
+			if (cell == null)
+				return "";
+			else if (cell.getCellTypeEnum() == CellType.STRING)
 				return cell.getStringCellValue();
 			else if (cell.getCellTypeEnum() == CellType.NUMERIC || cell.getCellTypeEnum() == CellType.FORMULA) {
 				String cellValue = String.valueOf(cell.getNumericCellValue());

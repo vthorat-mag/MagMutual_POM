@@ -17,6 +17,8 @@ public PolicySubmissionPageDTO() throws IllegalArgumentException, IllegalAccessE
 	
 		for (int iFC=0; iFC < PolicySubmissionPageDTO.class.getFields().length; iFC++)
 		{
+			if (SmokeTestCase.testDataMap.containsKey(PolicySubmissionPageDTO.class.getFields()[iFC].getName().toLowerCase()))
+			{
 			try{
 			PolicySubmissionPageDTO.class.getFields()[iFC].set(this, SmokeTestCase.testDataMap.get(PolicySubmissionPageDTO.class.getFields()[iFC].getName().toLowerCase()).get(0));
 			}catch(Exception e){
@@ -25,4 +27,5 @@ public PolicySubmissionPageDTO() throws IllegalArgumentException, IllegalAccessE
 			}
 		}
 	}
+  }
 }

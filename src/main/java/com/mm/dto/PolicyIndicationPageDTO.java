@@ -32,6 +32,8 @@ public PolicyIndicationPageDTO() throws IllegalArgumentException, IllegalAccessE
 		
 		for (int iFC=0; iFC < PolicyIndicationPageDTO.class.getFields().length; iFC++) 
 		{
+			if (SmokeTestCase.testDataMap.containsKey(PolicyIndicationPageDTO.class.getFields()[iFC].getName().toLowerCase()))
+			{
 			if(PolicyIndicationPageDTO.class.getFields()[iFC].getType().toString().toLowerCase().contains("java.util.list"))
 				//ToDo - Check if the field is blank, don't add in list
 			{
@@ -55,8 +57,7 @@ public PolicyIndicationPageDTO() throws IllegalArgumentException, IllegalAccessE
 				
 				}
 			
-			
+			}
 		}
-}
-	
+	}
 }

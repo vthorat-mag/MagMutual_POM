@@ -340,13 +340,15 @@ public class RateApolicyPage extends CommonAction {
 		//Check if the primary coverage is selected
 		if (coverageList.get(0).isSelected()) {
 			ExtentReporter.logger.log(LogStatus.INFO, "Primary risk is selected and coverages are displayed");
-			// Select 'Coverage' tab and add Manuscript from optional forms and Save
+			// Method to update single coverage
 			coverageUpdatesForSingleCoverage(policyNo);
-		} else {
+		} 
+		//else select primary coverage and call method to update coverage
+		else {
 
 			ExtentReporter.logger.log(LogStatus.INFO, "Primary risk is selected and coverages are displayed");
 			selectValue(driver, coverageList.get(0), "Primary coverage");
-			// Select 'Coverage' tab and add Manuscript from optional forms and Save
+			// Method to update single coverage
 			coverageUpdatesForSingleCoverage(policyNo);
 		}
 		waitForElementToLoad(driver, 10, policyTab);
@@ -402,8 +404,7 @@ public class RateApolicyPage extends CommonAction {
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
 		Thread.sleep(2000);
 
-		// Verify that form selected from 'Add manuscript' pop up is added under
-		// list
+		// Verify that form selected from 'Add manuscript' pop up is added under list
 		CommonUtilities comUtil = new CommonUtilities();
 		comUtil.verifyFormIsAdded(manuscriptAddedForm, rateApolicyPageDTO.manuscriptForm);
 

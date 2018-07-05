@@ -32,6 +32,7 @@ public class HomePage extends CommonAction {
 	String addOrganizationquickEntry = "Add Organization Quick Entry";
 	String entitySelectSearchPageTitle = "Entity Select Search";
 	String entitySelectListPageTitle = "Entity Select List";
+	String financePageTitle="Account Search";
 
 	@FindBy(id = "CIS")
 	WebElement cisTab;
@@ -63,14 +64,9 @@ public class HomePage extends CommonAction {
 	@FindBy(id = "CI_ENTITY_SELECT_SCH_SCH")
 	WebElement Search_Quote;
 
-	// @FindBy(xpath="//div[@id='CCLIENT_NAME' and contains(text()='Gerber,
-	// Jon,')]//parent::td//preceding-sibling::td//input[@type='checkbox']")
-	// List<WebElement> Select_Entity_Checkbox;
-
 	@FindBy(xpath = "//input[@name='chkCSELECTIND']")
 	WebElement Select_Entity_Checkbox;
 
-	// @FindBy(xpath="//input[@class='BlueButton' and value = 'Select']")
 	@FindBy(id = "CI_ENT_SEL_LST_FORM_SEL")
 	WebElement Select_Entity;
 
@@ -122,8 +118,11 @@ public class HomePage extends CommonAction {
 	WebElement FinanceTabMenu;
 	
 	@FindBy(id = "topnav_Claims")
-	WebElement ClaimsPageLink;
-  
+	WebElement claimsPageLink;
+	
+	@FindBy(id = "topnav_FM")
+	WebElement financePageLink;
+
 	// Constructor to initialize driver, page elements and DTO PageObject for
 	// HomePage
 	public HomePage(WebDriver driver) throws IllegalArgumentException, IllegalAccessException, SecurityException {
@@ -220,10 +219,19 @@ public class HomePage extends CommonAction {
 
 	// Navigate to Claims page from Home Page[Header]
 	public ClaimsPage navigateToClaimsPageFromHomePageLink() throws Exception {
-		click(driver, ClaimsPageLink, "Claims link on Home Page");
+		click(driver, claimsPageLink, "Claims link on Home Page");
 
 		return new ClaimsPage(driver);
 	}
+	
+	// Navigate to Finance page from header link
+	public FinancePage navigateToFinancePageFromHeaderLink() throws Exception{
+		click(driver, financePageLink, "Finance Link");
+		invisibilityOfLoader(driver);
+		getPageTitle(driver, financePageTitle);
+		return new FinancePage(driver);
+	}
+	
 
 	// Logout from application.
 	public void logoutFromeOasis() {
@@ -266,7 +274,6 @@ public class HomePage extends CommonAction {
 		Thread.sleep(2000);
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("arguments[0].click();", Create_New);
-		// clickButton(driver, Create_New, "Create New from Policy Menu ");
 		return new HomePage(driver);
 	}
 
@@ -298,7 +305,6 @@ public class HomePage extends CommonAction {
 	// click done.
 	public PolicySubmissionPage selectPolicyType()
 			throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
-		String Eff_Date = "01012017";
 		Thread.sleep(1000);
 		switchToFrameUsingId(driver, "popupframe1");
 		Thread.sleep(1000);
