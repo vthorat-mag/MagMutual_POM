@@ -113,7 +113,10 @@ public class HomePage extends CommonAction {
 
 	@FindBy(xpath = "//span[@class='txtOrange']")
 	WebElement pageLoader;
-
+	
+	@FindBy(id = "topnav_FM")
+	WebElement FinanceTabMenu;
+	
 	@FindBy(id = "topnav_Claims")
 	WebElement claimsPageLink;
 	
@@ -195,6 +198,12 @@ public class HomePage extends CommonAction {
 	public RateApolicyPage navigateToPolicyPageFromrateApolicyPage() throws Exception {
 		navigateToPolicyPage();
 		return new RateApolicyPage(driver);
+	}
+	
+	public FinancePage navigateToFinanceHomePage()
+	{
+		clickButton(driver, FinanceTabMenu, "Finanace Tab");
+		return new FinancePage(driver);
 	}
 
 	// Navigate to policy page using Policy tab from rateApolicyPage.

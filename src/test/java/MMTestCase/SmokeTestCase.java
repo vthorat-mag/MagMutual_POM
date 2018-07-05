@@ -150,21 +150,45 @@ public class SmokeTestCase extends BrowserTypes {
 	 */
 
 	// DTO done
-	// @Test(description = "Hospital Verify Interactive Form", groups = { "Smoke
-	// Test" })
-	public void TC42247() throws Exception {
+	// @Test(description = "Verify Add Organization", groups = { "Smoke Test" })
+	public void TC42404() throws Exception {
+		LoginPageDTO lpDTO;
+		LoginPage loginpage;
+		lpDTO = new LoginPageDTO();
+		loginpage = new LoginPage(driver);
+		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToCISPage().clickOnNewOrganization()
+				.enterDataInNewOrgPage().selectZipCode().saveNewOrgDetails();
+	}
+
+	// DTO done.-
+	// TODO-This may be Rate a policy test, need to verify
+	// @Test(description="Hospital Rate",groups = { "Smoke Test" })
+	public void TC42239(String UserName, String PassWord) throws Exception {
+		LoginPageDTO lpDTO;
+		LoginPage loginpage;
+		lpDTO = new LoginPageDTO();
+		loginpage = new LoginPage(driver);
+		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToCISPage().clickOnNewOrganization()
+				.enterDataInNewOrgPage().selectZipCode().saveNewOrgDetails();
+	}
+
+	
+	//DTO done
+	//@Test(description = "Hospital Verify Interactive Form", groups = { "Smoke Test" })
+	public void TC42247() throws Exception
+	{
 		LoginPageDTO lpDTO = new LoginPageDTO();
 		LoginPage loginpage = new LoginPage(driver);
 		RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).headerPolicyTab().searchPolicyRateAPolicyPage();
 		String policyNo = rateapolicypage.policyNo();
-		rateapolicypage.coverageDetailsSelect().cincomFlow(policyNo).rateFunctionality(policyNo).clickPreviewTab()
-				.savePDF().verifyPdfContent(policyNo);
+		rateapolicypage.coverageDetailSelectForCinCom().cincomFlow(policyNo).rateFunctionality(policyNo)
+				.clickPreviewTab().savePDF().verifyPdfContent(policyNo);
 	}
 
-	// DTO done
-	// @Test(description="Hospital Verify Attach Form", groups = { "Smoke Test"
-	// })
+
+  //DTO done
+	@Test(description="Hospital Verify Attach Form", groups = { "Smoke Test" })
 	public void TC42399() throws Exception {
 
 		LoginPageDTO lpDTO = new LoginPageDTO();
@@ -369,7 +393,6 @@ public class SmokeTestCase extends BrowserTypes {
 
 		policyindicationpage.coverageUpdates(PolicyNo).openLimitSharingTab(PolicyNo).addSharedGroup(PolicyNo)
 				.closeLimitSharingtab();
-
 		// TODO - Add PDF verification steps.
 	}
 
