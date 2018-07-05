@@ -182,7 +182,7 @@ public class CommonAction implements CommonActionInterface {
 	}
   
   
-public String  getPageTitle(WebDriver driver, String expectedPageTitle) throws InterruptedException {
+public String  getPageTitle(WebDriver driver, String expectedPageTitle) throws InterruptedException  {
 		invisibilityOfLoader(driver);
 		Thread.sleep(3000);
 		List<WebElement> getPageTitleFromPage = driver.findElements(By.xpath("//div[@class='pageTitle']"));
