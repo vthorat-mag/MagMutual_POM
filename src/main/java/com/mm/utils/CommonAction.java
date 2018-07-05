@@ -157,7 +157,7 @@ public class CommonAction implements CommonActionInterface {
 
 	public void clickButton(WebDriver driver, WebElement pageElement, String buttonName) {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, Medium);
+			WebDriverWait wait = new WebDriverWait(driver, High);
 			wait.until(ExpectedConditions.elementToBeClickable(pageElement));
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			Assert.assertTrue(pageElement.isDisplayed(), buttonName + " button is displayed on screen.");

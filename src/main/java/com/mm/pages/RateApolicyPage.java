@@ -183,15 +183,6 @@ public class RateApolicyPage extends CommonAction {
 
 	@FindBy(xpath = "//span[@class='dragbox_main_head_class']")
 	WebElement spellchkBoxHeading;
-
-	@FindBy(name = "IgnoreAllBtn")
-	WebElement ignoreAllBtn;
-
-	@FindBy(xpath="//input[contains(@id,'delopt')]")
-	WebElement DelOptions;
-	
-	@FindBy(id = "Deliver")
-	WebElement deliverBtn;
 	
 	@FindBy(xpath="//div[@class='noerror']")
 	WebElement sucessMsg;
@@ -248,7 +239,7 @@ public class RateApolicyPage extends CommonAction {
 		
 		@FindBy(id="PM_ENDORSE_OK")
 		WebElement endorsePolicyOK;
-		
+ 		
 		@FindBy(id="CFORMCODELOVLABEL")
 		List <WebElement> manuscriptAddedForm;
 
@@ -588,6 +579,12 @@ public String checkPolicyViewModeAndUpdateCoverage(String policyNo) throws Excep
 		return new RateApolicyPage(driver);
 	}
 
+	//Below method is to execute coverage details selet method and return Cincom page object.
+	public CincomPage coverageDetailSelectForCinCom() throws Exception
+	{
+		coverageDetailsSelect();
+		return new CincomPage(driver);
+	}
 	// Coverage updates flow.
 	public void coverageUpdates(String PolicyNo) throws Exception {
 		for (int j = 0; j < rateApolicyPageDTO.coverage.size(); j++) {
@@ -656,96 +653,7 @@ public String checkPolicyViewModeAndUpdateCoverage(String policyNo) throws Excep
 		}
 	}
 
-	public RateApolicyPage cincomFlow(String PolicyNo) throws Exception {
-		for (int j = 0; j < rateApolicyPageDTO.coverage.size(); j++) {
-			for (int i = 0; i < coverageList.size(); i++) {
-				if (coverageList.get(i).getAttribute("innerHTML").equals(rateApolicyPageDTO.coverage.get(j))) {
-					clickButton(driver, coverageList.get(i), coverageList.get(i).getAttribute("innerHTML"));
-					ExtentReporter.logger.log(LogStatus.INFO,
-							"Select" + rateApolicyPageDTO.coverage.get(j) + " Coverage.");
-					break;
-				}
-			}
-			ExtentReporter.logger.log(LogStatus.INFO, "Click [Optional Forms]");
-			Thread.sleep(4000);
-			clickButton(driver, optionalFormBtn, "Optional Form");
-			// invisibilityOfLoader(driver, PageloaderSymbol);
-			switchToFrameUsingElement(driver,
-					driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
-			ExtentReporter.logger.log(LogStatus.INFO, "Click [Add].");
-			/*
-			 * clickButton(driver, manuscriptPageAddBtn, "Manu script Add"); }
-			 * Thread.sleep(4000); invisibilityOfLoader(driver);
-			 * switchToFrameUsingElement(driver,
-			 * driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" +
-			 * PolicyNo + "')]"))); for (int k = 0; k <
-			 * rateApolicyPageDTO.phase.size(); k++) { for (int l = 0; l <
-			 * manuscriptAddListformName.size(); l++) { if
-			 * (manuscriptAddListformName.get(l).getAttribute("innerHTML")
-			 * .equals(rateApolicyPageDTO.phase.get(k))) { clickButton(driver,
-			 * manuscriptAddListformNameChkBox.get(l), "check Box for " +
-			 * rateApolicyPageDTO.phase.get(k));
-			 * ExtentReporter.logger.log(LogStatus.INFO, "Select " +
-			 * rateApolicyPageDTO.phase.get(k) + ", Click done."); break; } }
-			 * clickButton(driver, manuscriptAddListDoneBtn, "Done");
-			 * Thread.sleep(4000); switchToParentWindowfromframe(driver);
-			 * switchToFrameUsingElement(driver,
-			 * driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" +
-			 * PolicyNo + "')]"))); ExtentReporter.logger.log(LogStatus.INFO,
-			 * "Enter additional text: " + rateApolicyPageDTO.phase.get(k) +
-			 * ""); enterTextIn(driver, addText, rateApolicyPageDTO.phase.get(k)
-			 * + " form added.", "Aditional Text"); clickButton(driver,
-			 * manuscriptPageSaveBtn, "Manu Script page Save");
-			 * Thread.sleep(4000);
-			 */
-			clickButton(driver, dataEntryBtn, "Data Entry");
-			Thread.sleep(4000);
-			String parentWindowId = switchToWindow(driver);
-			titleHFLHPLCHGGE.clear();
-			enterTextIn(driver, titleHFLHPLCHGGE, "Automated Test CHGGE", " Cincom Title");
-			clickButton(driver, freeFormCHGGEBeginChkBox, "freeFormCHGGEBeginChkBox");
-			Thread.sleep(2000);
-			JavascriptExecutor executor = (JavascriptExecutor) driver;
-			executor.executeScript("tinyMCE.activeEditor.setContent('<p>Automated Test Case {"+comUtil.getSystemDatemmddyyyy()+"}</p>This test is to <ul><li>Adds the form</li><li>Enter data entry </li><li>Verify Bulletpoints display as entered</li></ul>')");
-			executor.executeScript("document.getElementById('mceu_43-open').innerHTML = 'Arial';");
-			executor.executeScript("document.getElementById('mceu_44-open').innerHTML = '10pt';", "");
-			driver.switchTo().defaultContent();
-			clickButton(driver, DelOptions, "Delivery Options");
-			boolean chkspellpopupvalue = verifyCheckSpellingPopup();
-			if (chkspellpopupvalue == true) {
-				do {
-					clickButton(driver, ignoreAllBtn, "Ignore All");
-					Thread.sleep(1000);
-				} while (verifyCheckSpellingPopup() == true);
-			}
-			clickButton(driver, DelOptions, "Delivery Options");
-			clickButton(driver, deliverBtn, "deliver button");
-			visibilityOfElement(driver, sucessMsg,"Sucess Message");
-			driver.close();
-			switchToParentWindowfromotherwindow(driver, parentWindowId);
-			
-			switchToFrameUsingElement(driver,
-			driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
-			
-			clickButton(driver, manuscriptPageSaveBtn, "Manu Script page Save");
-			Thread.sleep(2000);
-			clickButton(driver, manuscriptPageCloseBtn, "Manu Script page Close");
-			switchToParentWindowfromframe(driver);
-		}
-		return new RateApolicyPage(driver);
-	}
-
-	public boolean verifyCheckSpellingPopup() throws InterruptedException {
-		try {
-			WebDriverWait wait = new WebDriverWait(driver, 20);
-			if (wait.until(ExpectedConditions.visibilityOf(spellchkBoxHeading)) != null)
-				ExtentReporter.logger.log(LogStatus.INFO, "Spell check pop up window displayed..");
-			return true;
-		} catch (Exception e) {
-			ExtentReporter.logger.log(LogStatus.INFO, "Spell check pop up window is NOT displayed..");
-			return false;
-		}
-	}
+	
 
 	public String verifyProductNotifyWindowDisplayed(String PolicyNo) {
 		try {
@@ -795,6 +703,8 @@ public String checkPolicyViewModeAndUpdateCoverage(String policyNo) throws Excep
 		switchToParentWindowfromframe(driver);
 		return new PolicyQuotePage(driver);
 	}
+	
+	
 
 	//PDF verification flow.
 	public RateApolicyPage pdfVerify() throws Exception

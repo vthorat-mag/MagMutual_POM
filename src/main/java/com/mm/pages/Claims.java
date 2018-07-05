@@ -124,7 +124,7 @@ public class Claims extends CommonAction {
 	// method to search claims from 'Enter Text #' text box(Top right corner of
 	// the screen)
 	public Claims searchClaim() throws Exception {
-		
+		Thread.sleep(2000);
 		getPageTitle(driver, claimsdto.FileSearchPageTitle);
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Enter Claim # from Hospital Create Claim Test Case(Example 66429) & Click Search.");
