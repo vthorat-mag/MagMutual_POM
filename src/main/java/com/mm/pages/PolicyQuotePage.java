@@ -134,7 +134,7 @@ public class PolicyQuotePage extends CommonAction {
 	WebElement loader;
 	
   // This is a constructor for PolicyQuotePage class to initialize page elments and DTO object
-	public PolicyQuotePage(WebDriver driver) throws IllegalArgumentException, IllegalAccessException, SecurityException 
+	public PolicyQuotePage(WebDriver driver)throws Exception
 	{
 		this.driver=driver;
 		PageFactory.initElements(driver, this);
@@ -150,7 +150,7 @@ public class PolicyQuotePage extends CommonAction {
 	}
 	
 	//Select Copy to action from "Action DropDown".
-	public PolicyQuotePage CopyOptionFromActionDropDown() throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException
+	public PolicyQuotePage CopyOptionFromActionDropDown() throws Exception
 	{
 		Thread.sleep(4000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy>Ok");
@@ -277,9 +277,9 @@ public class PolicyQuotePage extends CommonAction {
 
 	//Save option functionality flow.
 	//We need to call multiple times with different values, so we are passing values in test case call 
-	public PolicyQuotePage saveOption(String saveAsPolicyValue) throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException
+	public PolicyQuotePage saveOption(String saveAsPolicyValue) throws Exception
 	{
-		/*Thread.sleep(5000);
+	/*	Thread.sleep(5000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options");
 		waitForElementToLoad(driver, 15, saveOptionBtn);
 		clickButton(driver, saveOptionBtn, "Save Option");
@@ -298,7 +298,7 @@ public class PolicyQuotePage extends CommonAction {
 		return new PolicyQuotePage(driver);
 }
 
-	public PolicyQuotePage product_Notify() throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException{
+	public PolicyQuotePage product_Notify() throws Exception{
 		
 			switchToFrameUsingId(driver, "popupframe1");
 			waitForElementToLoad(driver, 10, productNotifyDropDown);
