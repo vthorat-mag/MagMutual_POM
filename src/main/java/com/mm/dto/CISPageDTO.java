@@ -6,16 +6,18 @@ import MMTestCase.SmokeTestCase;
 
 public class CISPageDTO {
 
-	public String LongName;
-	public String Address_Line1;
+	public String OrgName;
+	public String addressLine1;
 	public String City;
-	public String Phone_no;
-	public String Area_code; 
-	public String Class_Eff_To_Date;
+	public String phoneNumber;
+	public String areaCode; 
+	public String classEffctToDate;
 	public String zipCode;
 	public String Classification;
-	public String Addr_Type;
+	public String addrType;
 	public String State;
+	public String dateOfBirth;
+	public String phoneNumType;
 
 	public String clientFirstName;
 	public String clientLastName;
