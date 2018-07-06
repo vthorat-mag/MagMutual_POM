@@ -15,17 +15,15 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 import com.mm.dto.ClaimsDTO;
-import com.mm.dto.HomePageDTO;
 import com.mm.dto.RateAPolicyPageDTO;
 import com.mm.utils.CommonAction;
 import com.mm.utils.CommonUtilities;
 import com.mm.utils.ExtentReporter;
 import com.relevantcodes.extentreports.LogStatus;
 
-public class ClaimsPage extends CommonAction {
+public class Claims extends CommonAction {
 	WebDriver driver;
 	ClaimsDTO claimsdto;
-	HomePage homePage;
 	CommonUtilities comUtil = new CommonUtilities();
 
 	String fileStatusDropDownOption = "OPENERROR";
@@ -114,140 +112,32 @@ public class ClaimsPage extends CommonAction {
 
 	@FindBy(xpath = "//input[@name = 'entity_clientID']")
 	WebElement entityClientId;
-	
-	//WebELements for TC42252
-	
-	@FindBy(xpath = "//li[@id='CM_CLAIMS_MENU']")
-	WebElement filesMenu;
-	
-	@FindBy(xpath = "//ul[@id='subMenuForCM_CLAIMS_MENU']//li//a//span")
-	List <WebElement> filesMenuList;
-	
-	@FindBy(xpath="//a//img[@id='btnFind_claimantFullName']")
-	WebElement patientSearchBtn;
-	
-	@FindBy(name = "entitySearch_lastOrOrgName")
-	WebElement lastOrgName;
-	
-	@FindBy(id="CI_ENTITY_SELECT_SCH_SCH")
-	WebElement searchEntityButton;
-	
-	@FindBy(id="CCLIENT_NAME")
-	List <WebElement> entitySelectclientNameList;
-	
-	@FindBy(xpath = "//input[@name='chkCSELECTIND']")
-	List <WebElement> entityCheckboxList;
 
-	@FindBy(xpath="//div[@id='CCLIENT_ID']")
-	List <WebElement> entitySelectClientIdList;
-	
-	@FindBy(id = "CI_ENT_SEL_LST_FORM_SEL")
-	WebElement selectEntity;
-	
-	@FindBy(name="name=claimType")
-	WebElement fileTypeDDL;
-	
-	@FindBy(name="cmLobCode")
-	WebElement LOBDDL;
-	
-	@FindBy(xpath="//textarea[@name='headline']")
-	WebElement fileDescription;
-	
-	@FindBy(name="entityExaminerId")
-	WebElement fileHandlerDDL;
-	
-	@FindBy(name="claimStateCode")
-	WebElement stateOfLoss;
-	
-	@FindBy(name="lossDate")
-	WebElement accidentDate;
-	
-	@FindBy(xpath="//a//img[@id='btnFind_insuredFullName']")
-	WebElement searchInsuredName;
-	
-	@FindBy(name="entity_clientID")
-	WebElement entityClientID;
-	
-	
-	
 	// Constructor to initialize driver, page elements and DTO PageObject for
 	// Claims Page.
-	public ClaimsPage(WebDriver driver) throws Exception {
+	public Claims(WebDriver driver) throws Exception {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
 		claimsdto = new ClaimsDTO();
 	}
 
-
-	//
-	public void addFile() throws Exception{
-		//Move to Files tab and select Add File option from menu
- 		invisibilityOfLoader(driver);
-		Actions action = new Actions(driver);
-		action.moveToElement(filesMenu).click().build().perform();
-		clickButton(driver, filesMenuList.get(0), "Add File");
-		invisibilityOfLoader(driver);
-	//	getPageTitle(driver, "Add File");
-		Thread.sleep(2000);
-		//Click search button will open a new window
-		clickButton(driver, patientSearchBtn, "Search for patient");
-		Thread.sleep(2000);
-		//Switch to new window using get window handles
-		String parentWindow = switchToWindow(driver);
-		searchAPatientNameFromEntitySelectList(parentWindow);
-		selectDropdownByVisibleText(driver, fileTypeDDL, "Claim", "File Type");
-		selectDropdownByVisibleText(driver, LOBDDL, "HLP", "LOB");
-		enterTextIn(driver, fileDescription, "Automation Test", "Desciption");
-		selectDropdownByVisibleText(driver, fileHandlerDDL, " ", "File Handler");
-		selectDropdownByVisibleText(driver, stateOfLoss, " ", "State of Loss");
-		clickButton(driver, insuredSearchIcon, "Insured ");
-		enterDataIn(driver, accidentDate, "06252018", "Accident Date");
-		
-	}
-	
-	// Search and select the client from 'Entity Select List' using client name and matching id from excel file
-	public void searchAPatientNameFromEntitySelectList(String parentWindow) throws InterruptedException{
-		
-		waitForElementToLoad(driver, 20, lastOrgName);
-		//getPageTitle(driver, entitySelectSearchPageTitle);
-		visibilityOfElement(driver, lastOrgName, "Last Org Name on Entity Select Search window");
-		Thread.sleep(3000);
-		//click Search button to load Entity List
-		clickButton(driver, searchEntityButton, "Search Name of an entity");		
-		invisibilityOfLoader(driver);
-		Thread.sleep(3000);
-		
-		//Get the list of client names from system
-		for (int i = 0; i < entitySelectclientNameList.size(); i++) {
-
-		// compare the client name from system with client name from excel sheet 
-		// also the client id from system to client id from sheet 
-		if (entitySelectclientNameList.get(i).getAttribute("innerHTML").trim().equals(claimsdto.clientNameValue)
-			&& entitySelectClientIdList.get(i).getAttribute("innerHTML").trim().equals(claimsdto.clientIDValue)) {
-			// select client name whose id matches
-			ExtentReporter.logger.log(LogStatus.INFO, claimsdto.clientNameValue+" check box is selected ");
-			selectValue(driver, entitySelectclientNameList.get(i), claimsdto.clientNameValue);
-			break;
-			}else{
-			break;
-			}
-		}
-			clickButton(driver, selectEntity, "Select Entity");
-			switchToParentWindowfromotherwindow(driver, parentWindow);
-	}
-	
-	
 	// method to search claims from 'Enter Text #' text box(Top right corner of
 	// the screen)
-	public ClaimsPage searchClaim() throws Exception {
-		
-		getPageTitle(driver, claimsdto.FileSearchPageTitle);
+	public Claims searchClaim(String claimNo) throws Exception {
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Enter Claim # from Hospital Create Claim Test Case(Example 66429) & Click Search.");
-		policySearch(driver, claimsdto.claimNum, claim_Search, Search_btn);
-		getPageTitle(driver, "Claim Folder " + claimsdto.claimNum);
+		policySearch(driver, claimNo, claim_Search, Search_btn);
 
-		return new ClaimsPage(driver);
+		// As File Search Page (Claims) having 2 headers Hence instead of using
+		// getPageTitle method below logic is written to verify page title.
+		List<WebElement> pageheaders = driver.findElements(By.xpath("//div[@class='pageTitle']"));
+		WebElement pageLoader = driver.findElement(By.xpath("//span[@class='txtOrange']"));
+		WebDriverWait wait = new WebDriverWait(driver, 40);
+		wait.until(ExpectedConditions.invisibilityOf(pageLoader));
+		Assert.assertEquals(pageheaders.get(1).getAttribute("innerHTML").trim(), "Claim Folder " + claimNo,
+				"Page title is not matching.");
+
+		return new Claims(driver);
 	}
 
 	// This method will change the status of claims.
@@ -294,8 +184,16 @@ public class ClaimsPage extends CommonAction {
 		Thread.sleep(5000);
 		switchToParentWindowfromframe(driver);
 
-		getPageTitle(driver, "Claim Folder " + claimNo);
-		verifyValueFromField(driver, fileStatusOnClaimFolderPage, verifyFileStatusValue, "innerHTML","File Status");
+		// As File Search Page (Claims) having 2 headers Hence instead of using
+		// getPageTitle method below logic is written to verify page title.
+		List<WebElement> pageheaders1 = driver.findElements(By.xpath("//div[@class='pageTitle']"));
+		WebElement pageLoader1 = driver.findElement(By.xpath("//span[@class='txtOrange']"));
+		WebDriverWait wait1 = new WebDriverWait(driver, 40);
+		wait.until(ExpectedConditions.invisibilityOf(pageLoader));
+		Assert.assertEquals(pageheaders.get(1).getAttribute("innerHTML").trim(), "Claim Folder " + claimNo,
+				"Page title is not matching.");
+
+		verifyValueFromField(driver, fileStatusOnClaimFolderPage, verifyFileStatusValue, "innerHTML");
 	}
 
 	// Select Patient.

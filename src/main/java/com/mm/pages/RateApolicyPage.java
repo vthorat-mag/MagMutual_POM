@@ -215,35 +215,35 @@ public class RateApolicyPage extends CommonAction {
 
 	@FindBy(xpath = "//iframe[@class ='cover']")
 	WebElement checkSpellIframe;
-
-	@FindBy(id = "policyPhaseCode_VALUE_CONTAINER")
+	
+	@FindBy(id ="policyPhaseCode_VALUE_CONTAINER")
 	WebElement phaseNonEditableField;
-
+	
 	// For policy add forms TC42399
-
-	@FindBy(name = "policyViewMode")
-	WebElement viewMode;
-
-	@FindBy(id = "PM_POLICY_FOLDER_AG")
-	WebElement policyActionDDL;
-
-	@FindBy(id = "CPRODUCTCOVERAGEDESC")
-	WebElement coverage;
-
-	@FindBy(id = "PM_COMMON_TABS_SAVEWIP")
-	WebElement saveWIP;
-
-	@FindBy(xpath = "//a[@id='PM_PT_VIEWPOL']//span")
-	WebElement policyTab;
-
-	@FindBy(name = "endorsementCode")
-	WebElement endorsementReason;
-
-	@FindBy(id = "PM_ENDORSE_OK")
-	WebElement endorsePolicyOK;
-
-	@FindBy(id = "CFORMCODELOVLABEL")
-	List<WebElement> manuscriptAddedForm;
+	
+		@FindBy(name="policyViewMode")
+		WebElement viewMode;
+		
+		@FindBy(id="PM_POLICY_FOLDER_AG")
+		WebElement policyActionDDL;
+		
+		@FindBy(id="CPRODUCTCOVERAGEDESC")
+		WebElement coverage;
+		
+		@FindBy(id="PM_COMMON_TABS_SAVEWIP")
+		WebElement saveWIP;
+		
+		@FindBy(xpath = "//a[@id='PM_PT_VIEWPOL']//span")
+		WebElement policyTab;
+		
+		@FindBy(name="endorsementCode")
+		WebElement endorsementReason;
+		
+		@FindBy(id="PM_ENDORSE_OK")
+		WebElement endorsePolicyOK;
+ 		
+		@FindBy(id="CFORMCODELOVLABEL")
+		List <WebElement> manuscriptAddedForm;
 
 	// Constructor to initialize driver, page elements and DTO PageObject for
 	// CISPage
@@ -315,12 +315,13 @@ public class RateApolicyPage extends CommonAction {
 			// Select 'Coverage' tab and add Manuscript from optional forms and
 			// Save
 			coverageUpdatesForSingleCoverage(policyNo);
-		} else {
+		} 
+		//else select primary coverage and call method to update coverage
+		else {
 
 			ExtentReporter.logger.log(LogStatus.INFO, "Primary risk is selected and coverages are displayed");
 			selectValue(driver, coverageList.get(0), "Primary coverage");
-			// Select 'Coverage' tab and add Manuscript from optional forms and
-			// Save
+			// Method to update single coverage
 			coverageUpdatesForSingleCoverage(policyNo);
 		}
 		waitForElementToLoad(driver, 10, policyTab);
@@ -376,8 +377,7 @@ public class RateApolicyPage extends CommonAction {
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
 		Thread.sleep(2000);
 
-		// Verify that form selected from 'Add manuscript' pop up is added under
-		// list
+		// Verify that form selected from 'Add manuscript' pop up is added under list
 		CommonUtilities comUtil = new CommonUtilities();
 		comUtil.verifyFormIsAdded(manuscriptAddedForm, rateApolicyPageDTO.manuscriptForm);
 

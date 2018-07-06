@@ -10,8 +10,7 @@ public class pdfReaderDTO {
 	
 	public pdfReaderDTO() {
 		for (int iFC = 0; iFC < pdfReaderDTO.class.getFields().length; iFC++) {
-			if (SmokeTestCase.testDataMap.containsKey(pdfReaderDTO.class.getFields()[iFC].getName().toLowerCase()))
-			{
+			
 			if (pdfReaderDTO.class.getFields()[iFC].getType().toString().toLowerCase().contains("java.util.list")) {
 				try {
 					pdfReaderDTO.class.getFields()[iFC].set(this,
@@ -34,5 +33,4 @@ public class pdfReaderDTO {
 			}
 		}
 	}
-	}	
 }

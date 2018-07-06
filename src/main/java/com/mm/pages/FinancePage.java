@@ -12,16 +12,14 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
-import com.mm.dto.FinanacePageDTO;
+import com.mm.dto.FinancePageDTO;
+import com.mm.dto.FindPolicyPageDTO;
 import com.mm.utils.CommonAction;
 
 public class FinancePage extends CommonAction {
 
 	WebDriver driver;
-	FinanacePageDTO financepagedto;
-
-	static String invoiceNumber;
-	static String invoiceAmount;
+	FinancePageDTO financePageDTO;
 	static String batchNumber;
 	static String accountNumber;
 	JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -52,6 +50,10 @@ public class FinancePage extends CommonAction {
 
 	@FindBy(xpath = "//a[@id='URL_CACCOUNTNO']")
 	List<WebElement> accountList;
+	
+	@FindBy(xpath = "//a[@id='URL_CACCOUNTNO']//span")
+	List<WebElement> accountNumList;
+	
 
 	@FindBy(xpath = "//li[@id='FM_BILLING_ADMIN']//a[@class='fNiv isParent']//span")
 	WebElement billingAdminMenu;
@@ -139,12 +141,64 @@ public class FinancePage extends CommonAction {
 
 	@FindBy(id = "currentAccountBalanceROSPAN")
 	WebElement currBalOnAllTxnEnqPage;
-
-	public FinancePage(WebDriver driver) throws IllegalArgumentException, IllegalAccessException, SecurityException {
+	
+	@FindBy(xpath="//a[@class='selectedMenu fNiv isParent']//span")
+	WebElement accountMenuTab;
+	
+	@FindBy(xpath="//li[@id='FM_MAINTAIN_ACCT_MENU']//a//span")
+	WebElement maintainAccount;
+	
+	@FindBy(name="billingFrequency")
+	WebElement billingFrequencyDDL;
+	
+	@FindBy(name="baseBillMmDd")
+	WebElement startDate;
+	
+	@FindBy(name="billLeadDays")
+	WebElement leadDays;
+	
+	@FindBy(id="FM_MAINT_ACCT_SAVE")
+	WebElement saveMaintAction;
+	
+	public FinancePage(WebDriver driver) throws Exception {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
-		financepagedto = new FinanacePageDTO();
+		financePageDTO = new FinancePageDTO();
 	}
+	
+	
+	public void maintainAccount() throws InterruptedException{
+		
+		clickButton(driver, Search_btn, "Search for account");
+		invisibilityOfLoader(driver);
+		Thread.sleep(2000);
+		
+		for(int i=0;i<accountNumList.size();i++){
+			
+			if(accountNumList.get(i).getAttribute("innerHTML").trim().equals("A0000550")){
+				
+				selectValue(driver, accountNumList.get(i), "Account Number"+accountNumList.get(i));
+				break;
+			}
+		}//TODO - if the account num is not available in list
+		//invisibilityOfLoader(driver);
+		Thread.sleep(2000);
+		Actions act = new Actions(driver);
+		act.moveToElement(accountMenuTab).build().perform();
+		JavascriptExecutor jse= (JavascriptExecutor)driver; 
+		jse.executeScript("arguments[0].click();",maintainAccount);
+		
+		Thread.sleep(2000);
+		selectDropdownByVisibleText(driver, billingFrequencyDDL, "Bi-Monthly", "Billing Frequency");
+		clearTextBox(driver, startDate, "Start Date");
+		enterDataIn(driver, startDate, "0301", "Start Date");
+		clearTextBox(driver, leadDays, "Lead Days");
+		enterDataIn(driver, leadDays, "9", "Lead Days");
+		clickButton(driver, saveMaintAction, "Save");
+		
+	}
+	
+	
 
 	// Search Account from Search Account text field on Finanace Home Page.
 	public FinancePage searchPolicyOnFinanceHomePage() throws Exception {
@@ -159,7 +213,7 @@ public class FinancePage extends CommonAction {
 
 	// This method will click on first account number displayed after Policy
 	// search.
-	public FinancePage openFirstAccount() throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
+	public FinancePage openFirstAccount() throws Exception {
 		clickButton(driver, accountList.get(0), "Account List");
 		invisibilityOfLoader(driver);
 		getPageTitle(driver, allTxnInquireyPageTitle);

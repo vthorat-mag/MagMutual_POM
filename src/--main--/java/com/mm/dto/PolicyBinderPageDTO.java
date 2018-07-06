@@ -30,8 +30,6 @@ public PolicyBinderPageDTO() throws IllegalArgumentException, IllegalAccessExcep
 		
 	for (int iFC=0; iFC < PolicyBinderPageDTO.class.getFields().length; iFC++) 
 	{
-		if (SmokeTestCase.testDataMap.containsKey(PolicyBinderPageDTO.class.getFields()[iFC].getName().toLowerCase()))
-		{
 		if(PolicyBinderPageDTO.class.getFields()[iFC].getType().toString().toLowerCase().contains("java.util.list"))
 		{
 			try{
@@ -39,6 +37,7 @@ public PolicyBinderPageDTO() throws IllegalArgumentException, IllegalAccessExcep
 		
 			}catch(Exception e){
 			 e.printStackTrace();
+			 System.out.println(SmokeTestCase.testDataMap.get(PolicyBinderPageDTO.class.getFields()[iFC].getName()));
 			}
 			
 		}else				
@@ -48,10 +47,10 @@ public PolicyBinderPageDTO() throws IllegalArgumentException, IllegalAccessExcep
 			
 			}catch(Exception e){
 				 e.printStackTrace();
+				 System.out.println(SmokeTestCase.testDataMap.get(PolicyBinderPageDTO.class.getFields()[iFC].getName()));
 					}
 			
 			}
-		}
 	}
 }
 	

@@ -8,8 +8,7 @@ public class PolicySubmissionPageDTO {
 	public String organisationType;
 	public String discoveryPeriodRating;
 	public String quoteDescription;
-	public String valueOfPolicyActionCopy;
-	public String indicationPhaseValue;
+	
 	
 	
 public PolicySubmissionPageDTO() throws IllegalArgumentException, IllegalAccessException, SecurityException{
@@ -17,8 +16,6 @@ public PolicySubmissionPageDTO() throws IllegalArgumentException, IllegalAccessE
 	
 		for (int iFC=0; iFC < PolicySubmissionPageDTO.class.getFields().length; iFC++)
 		{
-			if (SmokeTestCase.testDataMap.containsKey(PolicySubmissionPageDTO.class.getFields()[iFC].getName().toLowerCase()))
-			{
 			try{
 			PolicySubmissionPageDTO.class.getFields()[iFC].set(this, SmokeTestCase.testDataMap.get(PolicySubmissionPageDTO.class.getFields()[iFC].getName().toLowerCase()).get(0));
 			}catch(Exception e){
@@ -27,5 +24,4 @@ public PolicySubmissionPageDTO() throws IllegalArgumentException, IllegalAccessE
 			}
 		}
 	}
-  }
 }
