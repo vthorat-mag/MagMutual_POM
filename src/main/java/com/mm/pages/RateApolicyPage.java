@@ -213,35 +213,6 @@ public class RateApolicyPage extends CommonAction {
 	@FindBy(name = "transactionComment")
 	WebElement CommentsTxtBoxOnEndorsePolicyPopup;
 
-	@FindBy(id = "policyPhaseCode_VALUE_CONTAINER")
-	WebElement phaseNonEditableField;
-
-	// For policy add forms TC42399
-
-	@FindBy(name = "policyViewMode")
-	WebElement viewMode;
-
-	@FindBy(id = "PM_POLICY_FOLDER_AG")
-	WebElement policyActionDDL;
-
-	@FindBy(id = "CPRODUCTCOVERAGEDESC")
-	WebElement coverage;
-
-	@FindBy(id = "PM_COMMON_TABS_SAVEWIP")
-	WebElement saveWIP;
-
-	@FindBy(xpath = "//a[@id='PM_PT_VIEWPOL']//span")
-	WebElement policyTab;
-
-	@FindBy(name = "endorsementCode")
-	WebElement endorsementReason;
-
-	@FindBy(id = "PM_ENDORSE_OK")
-	WebElement endorsePolicyOK;
-
-	@FindBy(id = "CFORMCODELOVLABEL")
-	List<WebElement> manuscriptAddedForm;
-  
 	@FindBy(xpath = "//iframe[@class ='cover']")
 	WebElement checkSpellIframe;
 	

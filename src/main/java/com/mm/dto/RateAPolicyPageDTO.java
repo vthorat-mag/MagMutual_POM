@@ -23,8 +23,12 @@ public class RateAPolicyPageDTO {
 	public String manuscriptForm;
 	public String viewModeOfficial;
 	public String viewModeWIP;
-
-
+	public String policyAction;
+	public String endorsementReason;
+	public String policyNum;
+	
+	
+	
 	public RateAPolicyPageDTO() throws IllegalArgumentException, IllegalAccessException, SecurityException{
 
 		for (int iFC = 0; iFC < RateAPolicyPageDTO.class.getFields().length; iFC++) {
