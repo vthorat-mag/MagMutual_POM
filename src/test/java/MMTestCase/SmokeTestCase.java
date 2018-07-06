@@ -115,17 +115,34 @@ public class SmokeTestCase extends BrowserTypes {
 		LoginPageDTO lpDTO = new LoginPageDTO();
 		LoginPage loginpage = new LoginPage(driver);
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToClaimsPageFromHomePageLink().addFile();
-		// ClaimsPage claimsPage = new ClaimsPage(driver);
+		ClaimsPage claimsPage = new ClaimsPage(driver);
 	}
 
 	// DTO done
-	// @Test(description = "Verify CIS Page Displays", groups = { "Smoke Test"
-	// })
+	@Test(description = "FM - Hospital Verify On Demand Invoice, Create Batch and Post Batch", groups = { "Smoke Test" })
+	public void TC42250() throws Exception {
+			LoginPageDTO lpDTO = new LoginPageDTO();
+			LoginPage loginpage = new LoginPage(driver);
+			loginpage.loginToeOasis(lpDTO.username, lpDTO.password)
+			.navigateToFinanceHomePage()
+			.searchPolicyOnFinanceHomePage()
+			.openFirstAccount()
+			.onDemandInvoice()
+			.cashEntry()
+			.batchFunction()
+			.postBatchFunctionality();
+	}
+	
+	
+	//DTO done
+	//@Test(description = "Verify CIS Page Displays", groups = { "Smoke Test" })
+		// ClaimsPage claimsPage = new ClaimsPage(driver);
 	public void TC42253() throws Exception {
 		LoginPageDTO lpDTO = new LoginPageDTO();
 		LoginPage loginpage = new LoginPage(driver);
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToCISPage().searchAndSelectAClientName()
 				.verifyPagesHavingMenuOnPersonPageAreDisplayed().verifyPagesWithoutSubMenu();
+
 	}
 
 	// DTO done
@@ -174,7 +191,6 @@ public class SmokeTestCase extends BrowserTypes {
 				.clickPreviewTab().savePDF().verifyPdfContent(policyNo);
 	}
 
-
   //DTO done
 	//@Test(description="Hospital Verify Attach Form", groups = { "Smoke Test" })
 	public void TC42399() throws Exception {
@@ -190,6 +206,16 @@ public class SmokeTestCase extends BrowserTypes {
 
 	}
 
+	// DTO done
+	// @Test(description = "Verify Add Organization", groups = { "Smoke Test" })
+	public void TC42404() throws Exception {
+		LoginPageDTO lpDTO = new LoginPageDTO();
+		LoginPage loginpage = new LoginPage(driver);
+		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToCISPage().clickOnNewOrganization()
+				.enterDataInNewOrgPage().selectZipCode().saveNewOrgDetails();
+
+		// TODO - Need to change test case according to updated test steps
+	}
 
 	// DTO done
 	// @Test(description = "HPL - Binder", groups = { "Smoke Test" })
