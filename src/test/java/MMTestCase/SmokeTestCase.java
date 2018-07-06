@@ -116,7 +116,7 @@ public class SmokeTestCase extends BrowserTypes {
 		LoginPageDTO lpDTO = new LoginPageDTO();
 		LoginPage loginpage = new LoginPage(driver);
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToClaimsPageFromHomePageLink().addFile();
-		// ClaimsPage claimsPage = new ClaimsPage(driver);
+		ClaimsPage claimsPage = new ClaimsPage(driver);
 	}
 
 	
@@ -146,6 +146,23 @@ public class SmokeTestCase extends BrowserTypes {
 		.searchAndSelectAClientName()
 		.verifyPagesHavingMenuOnPersonPageAreDisplayed()
 		.verifyPagesWithoutSubMenu();
+
+    
+    @Test(description = "FM - Hospital Verify On Demand Invoice, Create Batch and Post Batch", groups = { "Smoke Test" })
+	public void TC42250() throws Exception {
+			LoginPageDTO lpDTO = new LoginPageDTO();
+			LoginPage loginpage = new LoginPage(driver);
+			loginpage.loginToeOasis(lpDTO.username, lpDTO.password)
+			.navigateToFinanceHomePage()
+			.searchPolicyOnFinanceHomePage()
+			.openFirstAccount()
+			.onDemandInvoice()
+			.cashEntry()
+			.batchFunction()
+			.postBatchFunctionality();
+	}
+	
+	
 	}
 
 	// DTO done
@@ -173,7 +190,6 @@ public class SmokeTestCase extends BrowserTypes {
 		rateapolicypage.coverageDetailSelectForCinCom().cincomFlow(policyNo).rateFunctionality(policyNo)
 				.clickPreviewTab().savePDF().verifyPdfContent(policyNo);
 	}
-
 
   //DTO done
 	//@Test(description="Hospital Verify Attach Form", groups = { "Smoke Test" })

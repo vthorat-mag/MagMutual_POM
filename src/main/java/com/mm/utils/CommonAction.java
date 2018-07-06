@@ -15,6 +15,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -27,18 +28,16 @@ import com.relevantcodes.extentreports.LogStatus;
 import BaseClass.CommonActionInterface;
 
 public class CommonAction implements CommonActionInterface {
-	
-	
-	Properties pro=new Properties();
 
-	//Integer.valueOf(properties.prop.getProperty("High"));
-	
-	int Low=10;
-	int Medium=30;
-	int High=50;
+	Properties pro = new Properties();
+
+	// Integer.valueOf(properties.prop.getProperty("High"));
+
+	int Low = 10;
+	int Medium = 30;
+	int High = 50;
 	String findPolicyQuotePage = "Find Policy/Quote";
 
-	
 	public void selectValue(WebDriver driver, WebElement pageElement, String value) {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, Medium);
@@ -103,22 +102,20 @@ public class CommonAction implements CommonActionInterface {
 		}
 	}
 
-	
-	public String getSelectedTextFromDropDown(WebDriver driver,WebElement dropDownElement){
-		
-		 Select dropDownList = new Select(dropDownElement);
-		 String  selectedDDLValue = dropDownList.getFirstSelectedOption().getText();
-		
-		 return selectedDDLValue;
+	public String getSelectedTextFromDropDown(WebDriver driver, WebElement dropDownElement) {
+
+		Select dropDownList = new Select(dropDownElement);
+		String selectedDDLValue = dropDownList.getFirstSelectedOption().getText();
+
+		return selectedDDLValue;
 	}
-	
 	
 	public String randomNumGenerator() {
 		return RandomStringUtils.random(3, "1234567890");
 	}
 
 
-	// Enter text values in the text field 
+	// Enter text values in the text field
 	public void enterTextIn(WebDriver driver, WebElement pageElement, String text, String textField) {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, High);
@@ -177,10 +174,17 @@ public class CommonAction implements CommonActionInterface {
 	public void takeScreenShot(String pageTitle) {
 		// TODO Auto-generated method stub
 	}
-  
-  
-public String  getPageTitle(WebDriver driver, String expectedPageTitle) throws InterruptedException  {
-		//invisibilityOfLoader(driver);
+
+	public void navigatetoMenuItemPage(WebDriver driver, WebElement mainMenu, WebElement menuItem) {
+		Actions act = new Actions(driver);
+		act.moveToElement(mainMenu).build().perform();
+		JavascriptExecutor jse = (JavascriptExecutor) driver;
+		jse.executeScript("arguments[0].click();", menuItem);
+		invisibilityOfLoader(driver);
+	}
+
+	public String getPageTitle(WebDriver driver, String expectedPageTitle) throws InterruptedException {
+		invisibilityOfLoader(driver);
 		Thread.sleep(3000);
 		List<WebElement> getPageTitleFromPage = driver.findElements(By.xpath("//div[@class='pageTitle']"));
 		WebDriverWait wait = new WebDriverWait(driver, High);
@@ -196,7 +200,8 @@ public String  getPageTitle(WebDriver driver, String expectedPageTitle) throws I
 					break;
 				}
 			}
-			//if Expected page title is not found then below code will stop the test case and throw the error.
+			// if Expected page title is not found then below code will stop the
+			// test case and throw the error.
 			if (i == getPageTitleFromPage.size()) {
 				ExtentReporter.logger.log(LogStatus.FAIL, expectedPageTitle + " Page is NOT displayed");
 				assertTrue(false, expectedPageTitle + " Page is NOT displayed");
@@ -207,29 +212,32 @@ public String  getPageTitle(WebDriver driver, String expectedPageTitle) throws I
 		}
 		return "true";
 	}
-		
+
 	public String getPageTitleWithPolicyNumber(WebDriver driver, String policyNum) throws InterruptedException {
 		Thread.sleep(5000);
-		
+
 		List<WebElement> pageheaders = driver.findElements(By.xpath("//div[@class='pageTitle']"));
 		WebElement pageLoader = driver.findElement(By.xpath("//span[@class='txtOrange']"));
 		WebDriverWait wait = new WebDriverWait(driver, 40);
 		wait.until(ExpectedConditions.invisibilityOf(pageLoader));
 		Assert.assertEquals(pageheaders.get(1).getAttribute("innerHTML").trim(), "Policy Folder " + policyNum,
 				"Page title is not matching.");
-		
-		
-		/*String getPageTitleFromPage = driver.findElement(By.xpath("//div[@class='pageTitle']"))
-				.getAttribute("innerHTML").trim();
-		WebDriverWait wait = new WebDriverWait(driver, High);
-		// WebDriverWait wait=new WebDriverWait(driver, 40);
-		WebElement pageLoader = driver.findElement(By.xpath("//span[@class='txtOrange']"));
-		wait.until(ExpectedConditions.invisibilityOf(pageLoader));
-		// wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[@class='pageTitle']"))));
-		Assert.assertEquals(getPageTitleFromPage, expectedPageTitle, "Page title is not matching.");*/
+
+		/*
+		 * String getPageTitleFromPage =
+		 * driver.findElement(By.xpath("//div[@class='pageTitle']"))
+		 * .getAttribute("innerHTML").trim(); WebDriverWait wait = new
+		 * WebDriverWait(driver, High); // WebDriverWait wait=new
+		 * WebDriverWait(driver, 40); WebElement pageLoader =
+		 * driver.findElement(By.xpath("//span[@class='txtOrange']"));
+		 * wait.until(ExpectedConditions.invisibilityOf(pageLoader)); //
+		 * wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.
+		 * xpath("//div[@class='pageTitle']"))));
+		 * Assert.assertEquals(getPageTitleFromPage, expectedPageTitle,
+		 * "Page title is not matching.");
+		 */
 		return null;
 	}
-	
 
 	public String getText(WebDriver driver, WebElement pageElement) {
 		WebDriverWait wait = new WebDriverWait(driver, High);
@@ -328,11 +336,11 @@ public String  getPageTitle(WebDriver driver, String expectedPageTitle) throws I
 			wait.until(ExpectedConditions.visibilityOf(element));
 			Select Sel = new Select(element);
 			Sel.selectByVisibleText(DropDownOption);
-			ExtentReporter.logger.log(LogStatus.PASS, DropDownOption+"  is selected from " + label + " drop down");
+			ExtentReporter.logger.log(LogStatus.PASS, DropDownOption + "  is selected from " + label + " drop down");
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			ExtentReporter.logger.log(LogStatus.FAIL,DropDownOption+"   is not selected from" + label + "drop down");
+			ExtentReporter.logger.log(LogStatus.FAIL, DropDownOption + "   is not selected from" + label + "drop down");
 		}
 
 	}
@@ -347,12 +355,20 @@ public String  getPageTitle(WebDriver driver, String expectedPageTitle) throws I
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, High);
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
-			Assert.assertEquals(pageElement.getAttribute(attributeName).trim(), expectedValue,"Value entered/ selected in "+fieldName+" is NOT as expected. Expected value is "+expectedValue+". And actual value is  "+pageElement.getAttribute(attributeName).trim() +".");
-			ExtentReporter.logger.log(LogStatus.PASS, expectedValue,"Value entered/ selected in "+fieldName+" is as expected. Expected value is "+expectedValue+". And actual value is  "+pageElement.getAttribute(attributeName).trim() +".");
+			Assert.assertEquals(pageElement.getAttribute(attributeName).trim(), expectedValue,
+					"Value entered/ selected in " + fieldName + " is NOT as expected. Expected value is "
+							+ expectedValue + ". And actual value is  " + pageElement.getAttribute(attributeName).trim()
+							+ ".");
+			ExtentReporter.logger.log(LogStatus.PASS, expectedValue,
+					"Value entered/ selected in " + fieldName + " is as expected. Expected value is " + expectedValue
+							+ ". And actual value is  " + pageElement.getAttribute(attributeName).trim() + ".");
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			ExtentReporter.logger.log(LogStatus.FAIL, expectedValue, "Value entered/ selected in "+fieldName+" is NOT as expected. Expected value is "+expectedValue+". And actual value is  "+pageElement.getAttribute(attributeName).trim() +".");
+			ExtentReporter.logger.log(LogStatus.FAIL, expectedValue,
+					"Value entered/ selected in " + fieldName + " is NOT as expected. Expected value is "
+							+ expectedValue + ". And actual value is  " + pageElement.getAttribute(attributeName).trim()
+							+ ".");
 			return false;
 		}
 
@@ -387,19 +403,40 @@ public String  getPageTitle(WebDriver driver, String expectedPageTitle) throws I
 	}
 
 	public void invisibilityOfLoader(WebDriver driver) {
-		WebElement pageLoader = driver.findElement(By.xpath("//span[@class='txtOrange']"));
+		
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, High);
-			wait.until(ExpectedConditions.invisibilityOf(pageLoader));
-			Thread.sleep(2000);
-			ExtentReporter.logger.log(LogStatus.PASS, "Page Loader disappeared sucessfully.");
+			if (verifypageloaderdisplayedornot(driver)==true)
+			{
+				WebElement pageLoader = driver.findElement(By.xpath("//span[@class='txtOrange']"));
+				WebDriverWait wait = new WebDriverWait(driver, High);
+				wait.until(ExpectedConditions.invisibilityOf(pageLoader));
+				Thread.sleep(2000);
+				ExtentReporter.logger.log(LogStatus.PASS, "Page Loader disappeared sucessfully.");
+			}
 		} catch (Exception e) {
-			ExtentReporter.logger.log(LogStatus.FAIL, "Page is still loading.");
+			ExtentReporter.logger.log(LogStatus.WARNING, "Page is taking longer time than usual for loading.");
 		}
 	}
 	
-	public void saveOption(WebDriver driver, WebElement saveOptionBtn,WebElement saveAsDropDown,WebElement saveOptionOkBtn, String saveOption) throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException
+	public boolean verifypageloaderdisplayedornot(WebDriver driver)
 	{
+		try{
+		if(driver.findElement(By.xpath("//span[@class='txtOrange']")).isDisplayed())
+		{
+			return true;
+		}
+		else
+		{return false;}
+		}catch(Exception e)
+		{
+			ExtentReporter.logger.log(LogStatus.FAIL, "Page Loader is not displayed.");
+		}
+		return false;
+	}
+
+	public void saveOption(WebDriver driver, WebElement saveOptionBtn, WebElement saveAsDropDown,
+			WebElement saveOptionOkBtn, String saveOption)
+			throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
 		Thread.sleep(5000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options");
 		waitForElementToLoad(driver, 15, saveOptionBtn);
@@ -407,10 +444,10 @@ public String  getPageTitle(WebDriver driver, String expectedPageTitle) throws I
 		Thread.sleep(4000);
 		switchToFrameUsingId(driver, "popupframe1");
 		getPageTitle(driver, "Save As");
-		selectDropdownByVisibleText(driver, saveAsDropDown, saveOption, "Selected "+saveOption);
-		ExtentReporter.logger.log(LogStatus.INFO,  "Select "+saveOption+" Click [OK]");
+		selectDropdownByVisibleText(driver, saveAsDropDown, saveOption, "Selected " + saveOption);
+		ExtentReporter.logger.log(LogStatus.INFO, "Select " + saveOption + " Click [OK]");
 		clickButton(driver, saveOptionOkBtn, "Save");
 		switchToParentWindowfromframe(driver);
 		Thread.sleep(3000);
-}
+	}
 }
