@@ -201,7 +201,7 @@ public class HomePage extends CommonAction {
 		return new RateApolicyPage(driver);
 	}
 	
-	public FinancePage navigateToFinanceHomePage()
+	public FinancePage navigateToFinanceHomePage() throws IllegalArgumentException, IllegalAccessException, SecurityException
 	{
 		clickButton(driver, FinanceTabMenu, "Finanace Tab");
 		return new FinancePage(driver);

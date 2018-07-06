@@ -7,15 +7,18 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
+import com.mm.dto.FinanacePageDTO;
 import com.mm.utils.CommonAction;
 
 public class FinancePage extends CommonAction {
 
 	WebDriver driver;
+	FinanacePageDTO financepagedto;
 
 	static String invoiceNumber;
 	static String invoiceAmount;
@@ -50,10 +53,10 @@ public class FinancePage extends CommonAction {
 	@FindBy(xpath = "//a[@id='URL_CACCOUNTNO']")
 	List<WebElement> accountList;
 
-	@FindBy(xpath = "//li[@id='FM_BILLING_ADMIN']//span")
+	@FindBy(xpath = "//li[@id='FM_BILLING_ADMIN']//a[@class='fNiv isParent']//span")
 	WebElement billingAdminMenu;
 
-	@FindBy(xpath = "//li[@id='FM_ON_DEMAND_INVOICE']//span")
+	@FindBy(xpath = "//li[@id='FM_ON_DEMAND_INVOICE']//a")
 	WebElement onDemandInvoiceMenuOption;
 
 	@FindBy(xpath = "//li[@id='FM_CASH_APPLICATION']//span")
@@ -137,15 +140,16 @@ public class FinancePage extends CommonAction {
 	@FindBy(id = "currentAccountBalanceROSPAN")
 	WebElement currBalOnAllTxnEnqPage;
 
-	public FinancePage(WebDriver driver) {
+	public FinancePage(WebDriver driver) throws IllegalArgumentException, IllegalAccessException, SecurityException {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
+		financepagedto = new FinanacePageDTO();
 	}
 
 	// Search Account from Search Account text field on Finanace Home Page.
-	public FinancePage searchPolicy(String policy_no) throws Exception {
+	public FinancePage searchPolicyOnFinanceHomePage() throws Exception {
 		invisibilityOfLoader(driver);
-		enterTextIn(driver, PolicyNoTxtBox, "DTO Code to be Implemented", "Policy Number");
+		enterTextIn(driver, PolicyNoTxtBox, financepagedto.policyNo, "Policy Number");
 		clickButton(driver, Search_btn, "Search");
 		invisibilityOfLoader(driver);
 		Assert.assertTrue(accountList.size() != 0, "Account list is not displayed on " + "Account Search" + "page");
@@ -155,7 +159,7 @@ public class FinancePage extends CommonAction {
 
 	// This method will click on first account number displayed after Policy
 	// search.
-	public FinancePage openFirstAccount() throws InterruptedException {
+	public FinancePage openFirstAccount() throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
 		clickButton(driver, accountList.get(0), "Account List");
 		invisibilityOfLoader(driver);
 		getPageTitle(driver, allTxnInquireyPageTitle);
@@ -163,9 +167,7 @@ public class FinancePage extends CommonAction {
 	}
 
 	public FinancePage onDemandInvoice() throws Exception {
-		js.executeScript("arguments[0].click();", billingAdminMenu);
-		js.executeScript("arguments[0].click();", onDemandInvoiceMenuOption);
-		invisibilityOfLoader(driver);
+		navigatetoMenuItemPage(driver,billingAdminMenu,onDemandInvoiceMenuOption);
 		selectDropdownByValue(driver, invoiceOptionDDL, invoiceOptionDDLValue, "Invoice Option");
 		selectDropdownByValue(driver, createChargesDDL, createChargesDDLValue, "Invoice Option");
 		selectDropdownByValue(driver, specifyInvoiceDateDDL, specifyInvoiceDateDDLValue, "Invoice Option");
@@ -173,6 +175,7 @@ public class FinancePage extends CommonAction {
 		accountNumber = accountNo.getAttribute("innerHTML");
 		clickButton(driver, processButton, "Process");
 		invisibilityOfLoader(driver);
+		Thread.sleep(15000);
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'accountNo=" + accountNumber + "')]")));
 		invoiceNumber = invoiceNo.getAttribute("innerHTML");
@@ -183,9 +186,8 @@ public class FinancePage extends CommonAction {
 		return new FinancePage(driver);
 	}
 
-	public void cashEntry() throws InterruptedException {
-		js.executeScript("arguments[0].click();", paymentsMenu);
-		js.executeScript("arguments[0].click();", cashEntryMenuOption);
+	public FinancePage cashEntry() throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
+		navigatetoMenuItemPage(driver,paymentsMenu,cashEntryMenuOption);
 		invisibilityOfLoader(driver);
 		getPageTitle(driver, cashEntryPageTitle);
 		clickButton(driver, newButton, "New");
@@ -195,9 +197,10 @@ public class FinancePage extends CommonAction {
 		enterTextIn(driver, checkNoOnCashEntryPage, randomNoGenerator(), "Cash Entry Page's Check Number");
 		enterTextIn(driver, amountOnCashEntryPage, invoiceAmount, "Cash Entry Page's Amount");
 		clickButton(driver, saveBtnOnCashEntryPage, "Cash Entry Page's Save");
+		return new FinancePage(driver);
 	}
 
-	public void batchFunction() throws Exception {
+	public FinancePage batchFunction() throws Exception {
 		invisibilityOfLoader(driver);
 		batchNumber = batchNo.getAttribute("innerHTML");
 		js.executeScript("arguments[0].click();", paymentsMenu);
@@ -221,9 +224,10 @@ public class FinancePage extends CommonAction {
 		invisibilityOfLoader(driver);
 		verifyValueFromField(driver, validateField, validlateFieldExpectedValue, validlateFieldAttributeValue,
 				validlateFieldName);
+		return new FinancePage(driver);
 	}
 	
-	public void postBatchFunctionality() throws InterruptedException
+	public FinancePage postBatchFunctionality() throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException
 	{
 		clickButton(driver, postBatchBtn, "Post Batch");
 		Alert alert = driver.switchTo().alert();
@@ -231,7 +235,8 @@ public class FinancePage extends CommonAction {
 		policySearch(driver, accountNumber, Policy_Search, Search_btn);
 		invisibilityOfLoader(driver);
 		getPageTitle(driver, allTxnInquireyPageTitle);
-		Assert.assertTrue(currBalOnAllTxnEnqPage.getAttribute("innerHTML").equals("0"),
+		Assert.assertTrue(currBalOnAllTxnEnqPage.getAttribute("innerHTML").equals(financepagedto.currunetBalance),
 				"Current Balance is not zero on All transaction enquirey Page");
+		return new FinancePage(driver);
 	}
 }

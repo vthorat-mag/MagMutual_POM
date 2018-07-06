@@ -185,8 +185,8 @@ public class RateApolicyPage extends CommonAction {
 
 	@FindBy(xpath = "//span[@class='dragbox_main_head_class']")
 	WebElement spellchkBoxHeading;
-	
-	@FindBy(xpath="//div[@class='noerror']")
+
+	@FindBy(xpath = "//div[@class='noerror']")
 	WebElement sucessMsg;
 
 	@FindBy(xpath = "//button[contains(@class,'titlebar-close')]")
@@ -212,6 +212,9 @@ public class RateApolicyPage extends CommonAction {
 
 	@FindBy(name = "transactionComment")
 	WebElement CommentsTxtBoxOnEndorsePolicyPopup;
+
+	@FindBy(xpath = "//iframe[@class ='cover']")
+	WebElement checkSpellIframe;
 
 	@FindBy(id = "policyPhaseCode_VALUE_CONTAINER")
 	WebElement phaseNonEditableField;
@@ -241,38 +244,6 @@ public class RateApolicyPage extends CommonAction {
 
 	@FindBy(id = "CFORMCODELOVLABEL")
 	List<WebElement> manuscriptAddedForm;
-  
-	@FindBy(xpath = "//iframe[@class ='cover']")
-	WebElement checkSpellIframe;
-	
-	@FindBy(id ="policyPhaseCode_VALUE_CONTAINER")
-	WebElement phaseNonEditableField;
-	
-	// For policy add forms TC42399
-	
-		@FindBy(name="policyViewMode")
-		WebElement viewMode;
-		
-		@FindBy(id="PM_POLICY_FOLDER_AG")
-		WebElement policyActionDDL;
-		
-		@FindBy(id="CPRODUCTCOVERAGEDESC")
-		WebElement coverage;
-		
-		@FindBy(id="PM_COMMON_TABS_SAVEWIP")
-		WebElement saveWIP;
-		
-		@FindBy(xpath = "//a[@id='PM_PT_VIEWPOL']//span")
-		WebElement policyTab;
-		
-		@FindBy(name="endorsementCode")
-		WebElement endorsementReason;
-		
-		@FindBy(id="PM_ENDORSE_OK")
-		WebElement endorsePolicyOK;
- 		
-		@FindBy(id="CFORMCODELOVLABEL")
-		List <WebElement> manuscriptAddedForm;
 
 	// Constructor to initialize driver, page elements and DTO PageObject for
 	// CISPage
@@ -286,15 +257,15 @@ public class RateApolicyPage extends CommonAction {
 	// select Reason as 'Issue Policy Forms'
 	public RateApolicyPage policyEndorsement(String PolicyNo) throws Exception {
 		invisibilityOfLoader(driver);
-		//Select Endorsement from Policy Action
+		// Select Endorsement from Policy Action
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Endorsement.");
 		selectDropdownByVisibleText(driver, policyActionDDL, rateApolicyPageDTO.policyAction, "Policy Action");
 		Thread.sleep(2000);
-		//Navigate to pop up frame using policy no.
+		// Navigate to pop up frame using policy no.
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
 		waitForElementToLoad(driver, 10, endorsementReason);
-		//Enter Data in pop up like Effective Date,Endorsement Reason
+		// Enter Data in pop up like Effective Date,Endorsement Reason
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Enter/Select Below Information: Effective Date:Policy Effective Date Accounting Date: Fixed Date Reason: Issue Policy Forms Comment: Issue Policy Forms");
 		selectDropdownByVisibleText(driver, endorsementReason, rateApolicyPageDTO.endorsementReason, "Reason");
@@ -321,7 +292,8 @@ public class RateApolicyPage extends CommonAction {
 		Thread.sleep(3000);
 		String currentViewMode = getSelectedTextFromDropDown(driver, viewMode);
 
-		// If the policy View Mode is official then endorse a policy and then go to coverage tab
+		// If the policy View Mode is official then endorse a policy and then go
+		// to coverage tab
 		if (currentViewMode.equals(rateApolicyPageDTO.viewModeOfficial)) {
 
 			policyEndorsement(policyNo);
@@ -330,23 +302,25 @@ public class RateApolicyPage extends CommonAction {
 			clickButton(driver, coverageTab, "Coverage Tab");
 			Thread.sleep(3000);
 			waitForElementToLoad(driver, 10, coverageList.get(0));
-		//If the policy View Mode is official then select Coverage Tab
+			// If the policy View Mode is official then select Coverage Tab
 		} else if (currentViewMode.equals(rateApolicyPageDTO.viewModeWIP)) {
 
 			clickButton(driver, coverageTab, "Coverage Tab");
 			Thread.sleep(3000);
 			waitForElementToLoad(driver, 10, coverageList.get(0));
 		}
-		//Check if the primary coverage is selected
+		// Check if the primary coverage is selected
 		if (coverageList.get(0).isSelected()) {
 			ExtentReporter.logger.log(LogStatus.INFO, "Primary risk is selected and coverages are displayed");
-			// Select 'Coverage' tab and add Manuscript from optional forms and Save
+			// Select 'Coverage' tab and add Manuscript from optional forms and
+			// Save
 			coverageUpdatesForSingleCoverage(policyNo);
 		} else {
 
 			ExtentReporter.logger.log(LogStatus.INFO, "Primary risk is selected and coverages are displayed");
 			selectValue(driver, coverageList.get(0), "Primary coverage");
-			// Select 'Coverage' tab and add Manuscript from optional forms and Save
+			// Select 'Coverage' tab and add Manuscript from optional forms and
+			// Save
 			coverageUpdatesForSingleCoverage(policyNo);
 		}
 		waitForElementToLoad(driver, 10, policyTab);
@@ -624,12 +598,13 @@ public class RateApolicyPage extends CommonAction {
 		return new RateApolicyPage(driver);
 	}
 
-	//Below method is to execute coverage details selet method and return Cincom page object.
-	public CincomPage coverageDetailSelectForCinCom() throws Exception
-	{
+	// Below method is to execute coverage details selet method and return
+	// Cincom page object.
+	public CincomPage coverageDetailSelectForCinCom() throws Exception {
 		coverageDetailsSelect();
 		return new CincomPage(driver);
 	}
+
 	// Coverage updates flow.
 	public void coverageUpdates(String PolicyNo) throws Exception {
 		for (int j = 0; j < rateApolicyPageDTO.coverage.size(); j++) {
@@ -698,8 +673,6 @@ public class RateApolicyPage extends CommonAction {
 		}
 	}
 
-	
-
 	public String verifyProductNotifyWindowDisplayed(String PolicyNo) {
 		try {
 			switchToFrameUsingElement(driver,
@@ -738,7 +711,7 @@ public class RateApolicyPage extends CommonAction {
 		clickButton(driver, rateBtn, "Rate Tab");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Rate].");
 		Thread.sleep(4000);
-		//If Product Notify Window appears then it will switch to window and
+		// If Product Notify Window appears then it will switch to window and
 		// select 'Yes' from that window and close window
 		if (verifyProductNotifyWindowDisplayed(policyNo).equals("true")) {
 			try {
@@ -751,7 +724,8 @@ public class RateApolicyPage extends CommonAction {
 			} catch (Exception e) {
 				ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window is NOT dispalyed to user.");
 			}
-		// If Product Notify Window does not appear it will log info in report and move ahead.
+			// If Product Notify Window does not appear it will log info in
+			// report and move ahead.
 		} else {
 			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window is NOT dispalyed to user.");
 		}
@@ -771,8 +745,6 @@ public class RateApolicyPage extends CommonAction {
 		switchToParentWindowfromframe(driver);
 		return new PolicyQuotePage(driver);
 	}
-	
-	
 
 	// PDF verification flow.
 	public RateApolicyPage pdfVerify() throws Exception {
