@@ -113,13 +113,10 @@ public class CommonAction implements CommonActionInterface {
 	}
 	
 	
-	public String randomNoGenerator() {
-		return RandomStringUtils.random(2, "1234567890");
+	public String randomNumGenerator() {
+		return RandomStringUtils.random(3, "1234567890");
 	}
 
-	public void navigateTo(String url) {
-
-	}
 
 	// Enter text values in the text field 
 	public void enterTextIn(WebDriver driver, WebElement pageElement, String text, String textField) {
@@ -183,7 +180,7 @@ public class CommonAction implements CommonActionInterface {
   
   
 public String  getPageTitle(WebDriver driver, String expectedPageTitle) throws InterruptedException  {
-		invisibilityOfLoader(driver);
+		//invisibilityOfLoader(driver);
 		Thread.sleep(3000);
 		List<WebElement> getPageTitleFromPage = driver.findElements(By.xpath("//div[@class='pageTitle']"));
 		WebDriverWait wait = new WebDriverWait(driver, High);
@@ -196,7 +193,6 @@ public String  getPageTitle(WebDriver driver, String expectedPageTitle) throws I
 					ExtentReporter.logger.log(LogStatus.PASS,
 							getPageTitleFromPage.get(i).getAttribute("innerHTML").trim()
 									+ " is sucessfully displayed.");
-					System.out.println("Page title is correct");
 					break;
 				}
 			}
@@ -395,6 +391,7 @@ public String  getPageTitle(WebDriver driver, String expectedPageTitle) throws I
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, High);
 			wait.until(ExpectedConditions.invisibilityOf(pageLoader));
+			Thread.sleep(2000);
 			ExtentReporter.logger.log(LogStatus.PASS, "Page Loader disappeared sucessfully.");
 		} catch (Exception e) {
 			ExtentReporter.logger.log(LogStatus.FAIL, "Page is still loading.");

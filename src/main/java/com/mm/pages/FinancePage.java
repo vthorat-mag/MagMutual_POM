@@ -252,7 +252,7 @@ public class FinancePage extends CommonAction {
 		invisibilityOfLoader(driver);
 		selectDropdownByValue(driver, paymentTypeDDL, paymentTypeDDLValue, "Payment Type");
 		enterTextIn(driver, invoiceNoOnCashEntryPage, invoiceNumber, "Cash Entry Page's invoice Number");
-		enterTextIn(driver, checkNoOnCashEntryPage, randomNoGenerator(), "Cash Entry Page's Check Number");
+		enterTextIn(driver, checkNoOnCashEntryPage, randomNumGenerator(), "Cash Entry Page's Check Number");
 		enterTextIn(driver, amountOnCashEntryPage, invoiceAmount, "Cash Entry Page's Amount");
 		clickButton(driver, saveBtnOnCashEntryPage, "Cash Entry Page's Save");
 	}

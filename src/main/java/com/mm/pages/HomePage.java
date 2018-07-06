@@ -148,6 +148,7 @@ public class HomePage extends CommonAction {
 	// Navigate to CIS page.
 	public CISPage navigateToCISPage() throws Exception {
 		verifyLogoIsAvailable();
+		ExtentReporter.logger.log(LogStatus.INFO, "CIS Entity Search page opens");
 		click(driver, cisTab, "CIS tab");
 		getPageTitle(driver, entitySearchPageTitle);
 		return new CISPage(driver);

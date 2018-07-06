@@ -7,7 +7,6 @@ import org.openqa.selenium.WebElement;
 
 public interface CommonActionInterface {
 	
-	void navigateTo(String url);
 	void enterTextIn(WebDriver driver, WebElement pageElement, String text, String TextFieldName);
     void clickButton(WebDriver driver, WebElement pageElement, String buttonName);
     void waitFor(WebDriver driver, long time);
