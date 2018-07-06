@@ -5,7 +5,7 @@ import java.util.List;
 import MMTestCase.SmokeTestCase;
 
 public class CISPageDTO {
-
+	
 	public String LongName;
 	public String Address_Line1;
 	public String City;
@@ -16,7 +16,7 @@ public class CISPageDTO {
 	public String Classification;
 	public String Addr_Type;
 	public String State;
-
+	
 	public String clientFirstName;
 	public String clientLastName;
 	public String clientNameValue;
@@ -37,35 +37,32 @@ public class CISPageDTO {
 	public List <String> windowTitlesForAuditTabs;
 	public List <String> allMenuOptions;
 
-
+	
 	public CISPageDTO() throws Exception{
-
+		
 		for (int iFC=0; iFC < CISPageDTO.class.getFields().length; iFC++) 
 		{
-			if (SmokeTestCase.testDataMap.containsKey(CISPageDTO.class.getFields()[iFC].getName().toLowerCase()))
+			if(CISPageDTO.class.getFields()[iFC].getType().toString().toLowerCase().contains("java.util.list"))
 			{
-				if(CISPageDTO.class.getFields()[iFC].getType().toString().toLowerCase().contains("java.util.list"))
-				{
-					try{
-						CISPageDTO.class.getFields()[iFC].set(this, SmokeTestCase.testDataMap.get(CISPageDTO.class.getFields()[iFC].getName().toLowerCase()));
-
-					}catch(Exception e){
-						e.printStackTrace();
-						System.out.println(SmokeTestCase.testDataMap.get(CISPageDTO.class.getFields()[iFC].getName()));
-					}
-
-				}else				
-				{
-					try{
-						CISPageDTO.class.getFields()[iFC].set(this, SmokeTestCase.testDataMap.get(CISPageDTO.class.getFields()[iFC].getName().toLowerCase()).get(0));
-
-					}catch(Exception e){
-						e.printStackTrace();
-						System.out.println(SmokeTestCase.testDataMap.get(CISPageDTO.class.getFields()[iFC].getName()));
-					}
-
+				try{
+					CISPageDTO.class.getFields()[iFC].set(this, SmokeTestCase.testDataMap.get(CISPageDTO.class.getFields()[iFC].getName().toLowerCase()));
+			
+				}catch(Exception e){
+				 e.printStackTrace();
+				 System.out.println(SmokeTestCase.testDataMap.get(CISPageDTO.class.getFields()[iFC].getName()));
 				}
-			}
+				
+			}else				
+			{
+				try{
+					CISPageDTO.class.getFields()[iFC].set(this, SmokeTestCase.testDataMap.get(CISPageDTO.class.getFields()[iFC].getName().toLowerCase()).get(0));
+				
+				}catch(Exception e){
+					 e.printStackTrace();
+					 System.out.println(SmokeTestCase.testDataMap.get(CISPageDTO.class.getFields()[iFC].getName()));
+						}
+				
+				}
 		}
 	}
 }

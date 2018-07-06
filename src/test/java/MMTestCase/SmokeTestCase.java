@@ -160,18 +160,6 @@ public class SmokeTestCase extends BrowserTypes {
 				.enterDataInNewOrgPage().selectZipCode().saveNewOrgDetails();
 	}
 
-	// DTO done.-
-	// TODO-This may be Rate a policy test, need to verify
-	// @Test(description="Hospital Rate",groups = { "Smoke Test" })
-	public void TC42239(String UserName, String PassWord) throws Exception {
-		LoginPageDTO lpDTO;
-		LoginPage loginpage;
-		lpDTO = new LoginPageDTO();
-		loginpage = new LoginPage(driver);
-		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToCISPage().clickOnNewOrganization()
-				.enterDataInNewOrgPage().selectZipCode().saveNewOrgDetails();
-	}
-
 	
 	//DTO done
 	//@Test(description = "Hospital Verify Interactive Form", groups = { "Smoke Test" })
@@ -188,7 +176,7 @@ public class SmokeTestCase extends BrowserTypes {
 
 
   //DTO done
-	@Test(description="Hospital Verify Attach Form", groups = { "Smoke Test" })
+	//@Test(description="Hospital Verify Attach Form", groups = { "Smoke Test" })
 	public void TC42399() throws Exception {
 
 		LoginPageDTO lpDTO = new LoginPageDTO();
@@ -202,16 +190,6 @@ public class SmokeTestCase extends BrowserTypes {
 
 	}
 
-	// DTO done
-	// @Test(description = "Verify Add Organization", groups = { "Smoke Test" })
-	public void TC42404() throws Exception {
-		LoginPageDTO lpDTO = new LoginPageDTO();
-		LoginPage loginpage = new LoginPage(driver);
-		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToCISPage().clickOnNewOrganization()
-				.enterDataInNewOrgPage().selectZipCode().saveNewOrgDetails();
-
-		// TODO - Need to change test case according to updated test steps
-	}
 
 	// DTO done
 	// @Test(description = "HPL - Binder", groups = { "Smoke Test" })

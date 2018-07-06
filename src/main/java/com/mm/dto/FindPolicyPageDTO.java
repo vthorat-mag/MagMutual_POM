@@ -6,7 +6,7 @@ public class FindPolicyPageDTO {
 	
 	
 	public static String phase;
-	public static String status;;
+	public static String status;
 	
 	public FindPolicyPageDTO() throws Exception{
 		
