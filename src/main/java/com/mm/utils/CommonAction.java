@@ -109,14 +109,11 @@ public class CommonAction implements CommonActionInterface {
 
 		return selectedDDLValue;
 	}
-
-	public String randomNoGenerator() {
-		return RandomStringUtils.random(2, "1234567890");
+	
+	public String randomNumGenerator() {
+		return RandomStringUtils.random(3, "1234567890");
 	}
 
-	public void navigateTo(String url) {
-
-	}
 
 	// Enter text values in the text field
 	public void enterTextIn(WebDriver driver, WebElement pageElement, String text, String textField) {
