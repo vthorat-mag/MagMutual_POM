@@ -22,6 +22,8 @@ public class FinancePage extends CommonAction {
 	FinancePageDTO financePageDTO;
 	static String batchNumber;
 	static String accountNumber;
+	String invoiceNumber;
+	String invoiceAmount;
 	JavascriptExecutor js = (JavascriptExecutor) driver;
 	String accountSearchPageTitle = "Account Search";
 	String allTxnInquireyPageTitle = "All Transactions Inquiry";
@@ -203,7 +205,7 @@ public class FinancePage extends CommonAction {
 	// Search Account from Search Account text field on Finanace Home Page.
 	public FinancePage searchPolicyOnFinanceHomePage() throws Exception {
 		invisibilityOfLoader(driver);
-		enterTextIn(driver, PolicyNoTxtBox, financepagedto.policyNo, "Policy Number");
+		enterTextIn(driver, PolicyNoTxtBox, financePageDTO.policyNo, "Policy Number");
 		clickButton(driver, Search_btn, "Search");
 		invisibilityOfLoader(driver);
 		Assert.assertTrue(accountList.size() != 0, "Account list is not displayed on " + "Account Search" + "page");
@@ -240,7 +242,7 @@ public class FinancePage extends CommonAction {
 		return new FinancePage(driver);
 	}
 
-	public FinancePage cashEntry() throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
+	public FinancePage cashEntry() throws Exception {
 		navigatetoMenuItemPage(driver,paymentsMenu,cashEntryMenuOption);
 		invisibilityOfLoader(driver);
 		getPageTitle(driver, cashEntryPageTitle);
@@ -281,7 +283,7 @@ public class FinancePage extends CommonAction {
 		return new FinancePage(driver);
 	}
 	
-	public FinancePage postBatchFunctionality() throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException
+	public FinancePage postBatchFunctionality() throws Exception
 	{
 		clickButton(driver, postBatchBtn, "Post Batch");
 		Alert alert = driver.switchTo().alert();
@@ -289,7 +291,7 @@ public class FinancePage extends CommonAction {
 		policySearch(driver, accountNumber, Policy_Search, Search_btn);
 		invisibilityOfLoader(driver);
 		getPageTitle(driver, allTxnInquireyPageTitle);
-		Assert.assertTrue(currBalOnAllTxnEnqPage.getAttribute("innerHTML").equals(financepagedto.currunetBalance),
+		Assert.assertTrue(currBalOnAllTxnEnqPage.getAttribute("innerHTML").equals(financePageDTO.currunetBalance),
 				"Current Balance is not zero on All transaction enquirey Page");
 		return new FinancePage(driver);
 	}

@@ -29,9 +29,9 @@ public class CISPage extends CommonAction {
 
 	WebDriver driver;
 	CISPageDTO oCISPageDTO;
-	String EntitySearchPageTitle="Entity Search";
+	String EntitySearchPageTitle = "Entity Search";
 	String EntityListPageTitle = "Entity List";
-	String AddOrganizationPageTitle= "Add Organization Quick Entry";
+	String AddOrganizationPageTitle = "Add Organization Quick Entry";
 
 	// Locators for TC42253 Verify CIS Page Displays
 
@@ -44,10 +44,19 @@ public class CISPage extends CommonAction {
 	@FindBy(id = "CI_ENSRC_SEARCH")
 	WebElement searchButton;
 
-	@FindBy(xpath = "//span[@id='CCLIENT_NAME']")
-	List<WebElement> clientNameEntityList;
+	/*@FindBy(xpath="//a[@id='entityListGrid_CCLIENT_NAME_0_HREF']") 
+	List<WebElement> clientNameEntityListQA;
+	
+	@FindBy(xpath = "//span[@id='CCLIENT_NAME']") 
+	List<WebElement> clientNameEntityListBTS;*/
 
-	@FindBy(xpath = "//div[@id='CCLIENT_ID']") // id= 0003683482- Automation QA
+	@FindBy(xpath=("//span[@id='CCLIENT_NAME'] | //a[@id='entityListGrid_CCLIENT_NAME_0_HREF']"))
+	List<WebElement> clientNameEntityList;
+	
+	// @FindBy(xpath = "//div[@id='CCLIENT_ID']") id= 0003683482 - BTS
+	//@FindBy(xpath = "//div[@id='row0entityListGrid']//div[3]") // id = 0003529128- QA
+	
+	@FindBy(xpath = "//div[@id='CCLIENT_ID'] | //div[@id='row0entityListGrid']//div[3]")
 	List<WebElement> clientIDEntityList;
 
 	@FindBy(id = "panelTitleForEntityList")
@@ -98,7 +107,7 @@ public class CISPage extends CommonAction {
 	@FindBy(id = "CI_VENDOR_TG")
 	WebElement vendorMainTab;
 
-	@FindBy(xpath="//a[@id='CI_MNT_AGENT']//span")
+	@FindBy(xpath = "//a[@id='CI_MNT_AGENT']//span")
 	WebElement agencyMainTab;
 
 	@FindBy(xpath = "//ul[@id='tabSubMenuForCI_VENDOR_TG']//li//a//span")
@@ -116,8 +125,7 @@ public class CISPage extends CommonAction {
 	@FindBy(id = "pageTitleForpageHeader")
 	WebElement pageTitleForPersonInfoPage;
 
-
-	//Quick Add Organization locators
+	// Quick Add Organization locators
 
 	@FindBy(xpath = "//a[@class='fNiv isParent']")
 	WebElement quickAdd;
@@ -152,7 +160,7 @@ public class CISPage extends CommonAction {
 	@FindBy(name = "address_stateCode")
 	WebElement zipcode;
 
-	@FindBy(name="address_zipCode")
+	@FindBy(name = "address_zipCode")
 	WebElement addressZipCode;
 
 	@FindBy(xpath = "//input[@type='button' and @value='OK']")
@@ -170,23 +178,23 @@ public class CISPage extends CommonAction {
 	@FindBy(id = "CI_QCKADDORG_SAVE")
 	WebElement Save;
 
-	@FindBy(xpath="//li[@id='CI_HOME_SEARCH']//a//span")
+	@FindBy(xpath = "//li[@id='CI_HOME_SEARCH']//a//span")
 	WebElement HomeSearchTab;
 
 	@FindBy(name = "entitySearch_lastOrOrgName")
 	WebElement lastNameORorgName;
 
-	@FindBy(id="CI_ENSRC_SEARCH")
+	@FindBy(id = "CI_ENSRC_SEARCH")
 	WebElement searchEntity;
 
-	@FindBy(xpath="//span[@id='CCLIENT_NAME']")
-	List <WebElement> orgNameList;
+	@FindBy(xpath = "//span[@id='CCLIENT_NAME']")
+	List<WebElement> orgNameList;
 
-	@FindBy(xpath="//div[@id='CDATE_OF_BIRTH']")
-	List <WebElement> DOBList;
+	@FindBy(xpath = "//div[@id='CDATE_OF_BIRTH']")
+	List<WebElement> DOBList;
 
-
-	// Constructor to initialize driver, page elements and DTO PageObject for CISPage
+	// Constructor to initialize driver, page elements and DTO PageObject for
+	// CISPage
 	public CISPage(WebDriver driver) throws Exception {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
@@ -199,85 +207,98 @@ public class CISPage extends CommonAction {
 		waitForElementToLoad(driver, 10, clientLastName);
 		enterTextIn(driver, clientLastName, oCISPageDTO.clientLastName, "Last/Org Name");
 		enterTextIn(driver, clientFirstName, oCISPageDTO.clientFirstName, "First Name");
-		clickButton(driver, searchButton, "Search");
+		click(driver, searchButton, "Search");
 		ExtentReporter.logger.log(LogStatus.INFO, "Search results returned");
 		invisibilityOfLoader(driver);
-		
 		getPageTitle(driver, EntityListPageTitle);
-		Thread.sleep(2000);
-
-		// Searching the client using client name and matching id
-		boolean flag=false;
+		//Get list of client IDs based on environment 'BTS OR QA' and store in List WebElement
+		List <WebElement>clientIDEntityList =driver.findElements(By.xpath("//span[@id='CCLIENT_NAME'] | //div[@title='"+oCISPageDTO.clientIDValue+"']//div"));
 		try{
+		visibilityOfElement(driver, clientNameEntityList.get(0), "Client name");
+		visibilityOfElement(driver, clientIDEntityList.get(0), "Client ID");
+		}catch(Exception e){
+			throw new NoSuchElementException();
+		}
+		// Searching the client using client name and matching id
+		boolean flag = false;
+		try {
 			for (int i = 0; i < clientNameEntityList.size(); i++) {
 
-				// compare the client name with the client id and select client name whose id matches
+				// compare the client name with the client id and select client
+				// name whose id matches
 				if (clientNameEntityList.get(i).getAttribute("innerHTML").trim().equals(oCISPageDTO.clientNameValue)
 						&& clientIDEntityList.get(i).getAttribute("innerHTML").trim().equals(oCISPageDTO.clientIDValue)) {
 					ExtentReporter.logger.log(LogStatus.INFO, "CIS Demographic Client screen opens");
-					selectValue(driver, clientNameEntityList.get(i), oCISPageDTO.clientNameValue);
-					flag=true;
+					click(driver, clientNameEntityList.get(i), oCISPageDTO.clientNameValue);
+					flag = true;
 					break;
 				}
 			}
-			if(flag==false){
+			if (flag == false) {
 				throw new Exception("Client Name is not listed in search result");
 			}
-		}catch(Exception exception){
-			ExtentReporter.logger.log(LogStatus.FAIL, "Client name with matching ID is not available in the Entity List");
+		} catch (Exception exception) {
+			ExtentReporter.logger.log(LogStatus.FAIL,
+					"Client name with matching ID is not available in the Entity List");
 		}
 		return new CISPage(driver);
 	}
 
-	
-	//Verify that all main tabs having menu options are opened and page title is verified
+	// Verify that all main tabs having menu options are opened and page title
+	// is verified
 	public CISPage verifyPagesHavingMenuOnPersonPageAreDisplayed() throws Exception {
 		Thread.sleep(3000);
 		JavascriptExecutor executor = (JavascriptExecutor) driver;
 
-		//Get list of main tabs from Excel sheet column
-		for (int i = 0; i < oCISPageDTO.mainTabList.size(); i++) 
-		{
-			//Get the list of all sub tabs under the selected main tab from application
-			List<WebElement> tabMenuOption = driver.findElements(By.xpath("//ul[@id='tabSubMenuForCI_" + oCISPageDTO.mainTabList.get(i).trim() + "_TG']//span"));
+		// Get list of main tabs from Excel sheet column
+		for (int i = 0; i < oCISPageDTO.mainTabList.size(); i++) {
+			// Get the list of all sub tabs under the selected main tab from
+			// application
+			List<WebElement> tabMenuOption = driver.findElements(
+					By.xpath("//ul[@id='tabSubMenuForCI_" + oCISPageDTO.mainTabList.get(i).trim() + "_TG']//span"));
 
-			//Get the count of all sub tabs under selected main tab
-			for (int j = 0; j < tabMenuOption.size(); j++)
-			{
-				//Get list of all sub tabs from excel sheet
+			// Get the count of all sub tabs under selected main tab
+			for (int j = 0; j < tabMenuOption.size(); j++) {
+				// Get list of all sub tabs from excel sheet
 				for (int k = 0; k < oCISPageDTO.allMenuOptions.size(); k++) {
 
-					//verify if the main tab displayed is selected
-					if(verifyelementDisplay(selectedMainTab)==true)
-					{
-						//Reinitialize the tab menu options elements to avoid stale element
-						List<WebElement> tabMenuOption1 = driver.findElements(By.xpath("//ul[@id='tabSubMenuForCI_" + oCISPageDTO.mainTabList.get(i).trim() + "_TG']//span"));
+					// verify if the main tab displayed is selected
+					if (verifyelementDisplay(selectedMainTab) == true) {
+						// Reinitialize the tab menu options elements to avoid
+						// stale element
+						List<WebElement> tabMenuOption1 = driver.findElements(By.xpath(
+								"//ul[@id='tabSubMenuForCI_" + oCISPageDTO.mainTabList.get(i).trim() + "_TG']//span"));
 
-						//compare if tab menu text is equal to menu option from excel sheet
-						if (tabMenuOption1.get(j).getAttribute("innerHTML").equalsIgnoreCase(oCISPageDTO.allMenuOptions.get(k)))
-						{
+						// compare if tab menu text is equal to menu option from
+						// excel sheet
+						if (tabMenuOption1.get(j).getAttribute("innerHTML")
+								.equalsIgnoreCase(oCISPageDTO.allMenuOptions.get(k))) {
 							waitForElementToLoad(driver, 10, selectedMainTab);
 							JavascriptExecutor executor1 = (JavascriptExecutor) driver;
-							//click on tab main tab and then click on tab menu
+							// click on tab main tab and then click on tab menu
 							executor1.executeScript("arguments[0].click();", selectedMainTab);
-							ExtentReporter.logger.log(LogStatus.INFO, oCISPageDTO.allMenuOptions.get(k)+" window opens");
+							ExtentReporter.logger.log(LogStatus.INFO,
+									oCISPageDTO.allMenuOptions.get(k) + " window opens");
 							executor1.executeScript("arguments[0].click();", tabMenuOption1.get(j));
 							invisibilityOfLoader(driver);
 							Thread.sleep(2000);
-							//verifying the page title of an open window
+							// verifying the page title of an open window
 							verifyPageTitleForTheOpenWindow(displayedWindowTitle,
 									oCISPageDTO.windowTitlesForSubMenuTabs.get(k) + " " + oCISPageDTO.clientNameValue,
 									oCISPageDTO.allMenuOptions.get(k));
 						}
-					}else{
-						if (tabMenuOption.get(j).getAttribute("innerHTML").equals(oCISPageDTO.allMenuOptions.get(k)))
-						{
-							//click on tab menu option (when main tab is not in selected mode) 
-							ExtentReporter.logger.log(LogStatus.INFO, oCISPageDTO.allMenuOptions.get(k)+" window opens");
+					} else {
+						if (tabMenuOption.get(j).getAttribute("innerHTML").equals(oCISPageDTO.allMenuOptions.get(k))) {
+							// click on tab menu option (when main tab is not in
+							// selected mode)
+							ExtentReporter.logger.log(LogStatus.INFO,
+									oCISPageDTO.allMenuOptions.get(k) + " window opens");
 							executor.executeScript("arguments[0].click();", tabMenuOption.get(j));
 							invisibilityOfLoader(driver);
-							//verifying the page title of an open window
-							verifyPageTitleForTheOpenWindow(displayedWindowTitle,oCISPageDTO.windowTitlesForSubMenuTabs.get(k) + " " + oCISPageDTO.clientNameValue,
+							Thread.sleep(2000);
+							// verifying the page title of an open window
+							verifyPageTitleForTheOpenWindow(displayedWindowTitle,
+									oCISPageDTO.windowTitlesForSubMenuTabs.get(k) + " " + oCISPageDTO.clientNameValue,
 									oCISPageDTO.allMenuOptions.get(k));
 						}
 					}
@@ -287,50 +308,53 @@ public class CISPage extends CommonAction {
 		return new CISPage(driver);
 	}
 
-	//Verify that main tab not having menu options is opened and page title is verified
-	public CISPage verifyPagesWithoutSubMenu() throws Exception{
+	// Verify that main tab not having menu options is opened and page title is
+	// verified
+	public CISPage verifyPagesWithoutSubMenu() throws Exception {
 
-		//Get the list and count of all menus from excel sheet list
+		Thread.sleep(2000);
+		// Get the list and count of all menus from excel sheet list
 		for (int i = 0; i < oCISPageDTO.allMenuOptions.size(); i++) {
 
-			//compare tab name with names from excel column 
+			// compare tab name with names from excel column
 			Thread.sleep(1000);
-			if (agencyMainTab.getAttribute("innerHTML").equalsIgnoreCase(oCISPageDTO.allMenuOptions.get(i))){
-				try{
-					//click on tab name when it matches with name from excel sheet
+			if (agencyMainTab.getAttribute("innerHTML").equalsIgnoreCase(oCISPageDTO.allMenuOptions.get(i))) {
+				try {
+					// click on tab name when it matches with name from excel
+					// sheet
 					JavascriptExecutor executor1 = (JavascriptExecutor) driver;
-					ExtentReporter.logger.log(LogStatus.INFO,oCISPageDTO.allMenuOptions.get(i)+" window opens" );
+					ExtentReporter.logger.log(LogStatus.INFO, oCISPageDTO.allMenuOptions.get(i) + " window opens");
 					executor1.executeScript("arguments[0].click();", agencyMainTab);
 					Thread.sleep(2000);
-					//verify the page title when the tab window opens
+					// verify the page title when the tab window opens
 					verifyPageTitleForTheOpenWindow(displayedWindowTitle,
 							oCISPageDTO.windowTitlesForSubMenuTabs.get(i) + " " + oCISPageDTO.clientNameValue,
 							oCISPageDTO.allMenuOptions.get(i));
 					break;
-				}catch(Exception e){
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-		}			
+		}
 		return new CISPage(driver);
 	}
 
+	// Verify the page title for the open window, this method is called after
+	// each tab that is selected
+	public void verifyPageTitleForTheOpenWindow(WebElement tabTitleElement, String tabTitle, String tabName) throws InterruptedException {
+		Thread.sleep(2000);
+		//waitForElementToLoad(driver, 10, tabTitleElement);
 
-	// Verify the page title for the open window, this method is called after each tab that is selected
-	public void verifyPageTitleForTheOpenWindow(WebElement tabTitleElement, String tabTitle, String tabName) {
-
-		waitForElementToLoad(driver, 10, tabTitleElement);
-		
-			//verify if tab title matches with tab title from excel sheet and log message
-			if (tabTitleElement.getAttribute("innerHTML").trim().equals(tabTitle)) {
-				ExtentReporter.logger.log(LogStatus.PASS,
-						tabName + " page title is as expected i.e. " + tabTitleElement.getAttribute("innerHTML").trim());
-			}else{
-				ExtentReporter.logger.log(LogStatus.FAIL, tabName + " page title did not match, expected was " + tabTitle
-						+ " but found " + tabTitleElement.getAttribute("innerHTML").trim());
-			}
+		// verify if tab title matches with tab title from excel sheet and log
+		// message
+		if (tabTitleElement.getAttribute("innerHTML").trim().equals(tabTitle)) {
+			ExtentReporter.logger.log(LogStatus.PASS,
+					tabName + " page title is as expected i.e. " + tabTitleElement.getAttribute("innerHTML").trim());
+		} else {
+			ExtentReporter.logger.log(LogStatus.FAIL, tabName + " page title did not match, expected was " + tabTitle
+					+ " but found " + tabTitleElement.getAttribute("innerHTML").trim());
 		}
-
+	}
 
 	// verify that Menu tab is displayed and return boolean value
 	public Boolean verifyelementDisplay(WebElement pageElement) {
@@ -344,9 +368,9 @@ public class CISPage extends CommonAction {
 		}
 	}
 
-	//Quick Add organization new code
+	// Quick Add organization new code
 
-	//Move to Quick Add button and select Add Organization menu
+	// Move to Quick Add button and select Add Organization menu
 	public CISPage navigateToAddOrgPage() throws Exception {
 		Thread.sleep(2000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Add Organization Quick Entry window displays");
@@ -358,12 +382,12 @@ public class CISPage extends CommonAction {
 		return new CISPage(driver);
 	}
 
-	//Add info like Org. Name, DOI, Classfication, EffectTODate in 
+	// Add info like Org. Name, DOI, Classfication, EffectTODate in
 	public String addOrganizationInformation() throws Exception {
 
 		getPageTitle(driver, AddOrganizationPageTitle);
 		ExtentReporter.logger.log(LogStatus.INFO, "Organization information is added");
-		String OrganizationName= oCISPageDTO.OrgName+randomNumGenerator();
+		String OrganizationName = oCISPageDTO.OrgName + randomNumGenerator();
 		enterTextIn(driver, orgName, OrganizationName, "Org Name");
 		enterTextIn(driver, dateOfBirth, oCISPageDTO.dateOfBirth, "DOI");
 		selectDropdownByVisibleText(driver, classification, oCISPageDTO.Classification, "Classfication");
@@ -373,7 +397,7 @@ public class CISPage extends CommonAction {
 		return OrganizationName;
 	}
 
-	//Add org address in Address section
+	// Add org address in Address section
 	public CISPage addOrgAddress() throws Exception {
 		ExtentReporter.logger.log(LogStatus.INFO, "Address is entered");
 		selectDropdownByValue(driver, addressType1, oCISPageDTO.addrType, "Add_Type1");
@@ -384,25 +408,25 @@ public class CISPage extends CommonAction {
 		return new CISPage(driver);
 	}
 
-	//Select zip code from pop up window and validate on parent window
+	// Select zip code from pop up window and validate on parent window
 	public CISPage selectZipCode() throws Exception {
 		Thread.sleep(2000);
-		//switch to new window using get window handle
+		// switch to new window using get window handle
 		String parentwindow = switchToWindow(driver);
-		WebElement zipCode = driver.findElement(By.xpath("//input[@value='"+oCISPageDTO.zipCode+"']"));
-		//select zip code from pop up window
+		WebElement zipCode = driver.findElement(By.xpath("//input[@value='" + oCISPageDTO.zipCode + "']"));
+		// select zip code from pop up window
 		click(driver, zipCode, "ZipCode");
 		click(driver, OkButton, "OK button");
 		Thread.sleep(1000);
-		//navigate back to parent window
+		// navigate back to parent window
 		switchToParentWindowfromotherwindow(driver, parentwindow);
-		//verify value in zip code field is as expected
+		// verify value in zip code field is as expected
 		verifyValueFromField(driver, addressZipCode, oCISPageDTO.zipCode, "value", "Zip Code");
 
 		return new CISPage(driver);
 	}
 
-	//Add phone number in phone section
+	// Add phone number in phone section
 	public CISPage addPhoneNumber() throws Exception {
 		ExtentReporter.logger.log(LogStatus.INFO, "Phone number is added");
 		enterTextIn(driver, phoneNumType, oCISPageDTO.phoneNumType, "Phone Num Type");
@@ -413,34 +437,35 @@ public class CISPage extends CommonAction {
 		return new CISPage(driver);
 	}
 
-	//Validate that added organization is listed in searched list
-	public void searchRecentlyAddedOrganisation(String OrganizationName ) throws InterruptedException{
+	// Validate that added organization is listed in searched list
+	public void searchRecentlyAddedOrganisation(String OrganizationName) throws InterruptedException {
 		Thread.sleep(2000);
-		//Click Search from home tab header
+		// Click Search from home tab header
 		clickButton(driver, HomeSearchTab, "Search");
 		invisibilityOfLoader(driver);
 		getPageTitle(driver, EntitySearchPageTitle);
-		//Add recently added org name and search
+		// Add recently added org name and search
 		enterTextIn(driver, lastNameORorgName, OrganizationName, "Last/Org name");
 		clickButton(driver, searchEntity, "Search");
 		Thread.sleep(15000);
-		
-		boolean flag= false;
-		try{
-			//Get organization name list from search result
-			for(int i=0;i<orgNameList.size();i++){
-				//compare if organization name and DOB are as expected from excel sheet
-				if(orgNameList.get(i).getAttribute("innerHTML").trim().equals(OrganizationName)
-						&& DOBList.get(i).getAttribute("innerHTML").trim().equals(oCISPageDTO.dateOfBirth)){
+
+		boolean flag = false;
+		try {
+			// Get organization name list from search result
+			for (int i = 0; i < orgNameList.size(); i++) {
+				// compare if organization name and DOB are as expected from
+				// excel sheet
+				if (orgNameList.get(i).getAttribute("innerHTML").trim().equals(OrganizationName)
+						&& DOBList.get(i).getAttribute("innerHTML").trim().equals(oCISPageDTO.dateOfBirth)) {
 					ExtentReporter.logger.log(LogStatus.PASS, "New Organization is available in search List");
 					flag = true;
 					break;
 				}
 			}
-			if(flag==false){
+			if (flag == false) {
 				throw new Exception("Org name not listed in search results");
-		}
-		}catch(Exception e){
+			}
+		} catch (Exception e) {
 			ExtentReporter.logger.log(LogStatus.FAIL, "New organization name is not listed in search results");
 		}
 	}

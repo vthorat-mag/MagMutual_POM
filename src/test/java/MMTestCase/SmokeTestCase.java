@@ -121,7 +121,7 @@ public class SmokeTestCase extends BrowserTypes {
 
 	
 	// DTO done
-	@Test(description= "Quick_Add_Organisation",groups = { "Smoke Test" })
+	//@Test(description= "Verify Add Organization",groups = { "Smoke Test" })
 	public void TC42404() throws Exception {
 		LoginPage loginpage = new LoginPage(driver);
 		LoginPageDTO lpDTO = new LoginPageDTO();
@@ -137,7 +137,7 @@ public class SmokeTestCase extends BrowserTypes {
 	}
 	
 	// DTO done
-	//@Test(description = "Verify CIS Page Displays", groups = { "Smoke Test" })
+	@Test(description = "Verify CIS Page Displays", groups = { "Smoke Test" })
 	public void TC42253() throws Exception {
 		LoginPageDTO lpDTO = new LoginPageDTO();
 		LoginPage loginpage = new LoginPage(driver);
@@ -146,9 +146,9 @@ public class SmokeTestCase extends BrowserTypes {
 		.searchAndSelectAClientName()
 		.verifyPagesHavingMenuOnPersonPageAreDisplayed()
 		.verifyPagesWithoutSubMenu();
-
+	}
     
-    @Test(description = "FM - Hospital Verify On Demand Invoice, Create Batch and Post Batch", groups = { "Smoke Test" })
+   // @Test(description = "FM - Hospital Verify On Demand Invoice, Create Batch and Post Batch", groups = { "Smoke Test" })
 	public void TC42250() throws Exception {
 			LoginPageDTO lpDTO = new LoginPageDTO();
 			LoginPage loginpage = new LoginPage(driver);
@@ -161,12 +161,10 @@ public class SmokeTestCase extends BrowserTypes {
 			.batchFunction()
 			.postBatchFunctionality();
 	}
-	
-	
-	}
 
-	// DTO done
-	// @Test(description="Hospital Rate", groups = { "Smoke Test" })
+
+	// DTO done // QA done
+	//@Test(description="Hospital Rate", groups = { "Smoke Test" })
 	public void TC42239() throws Exception {
 		LoginPageDTO lpDTO = new LoginPageDTO();
 		LoginPage loginpage = new LoginPage(driver);
@@ -191,7 +189,7 @@ public class SmokeTestCase extends BrowserTypes {
 				.clickPreviewTab().savePDF().verifyPdfContent(policyNo);
 	}
 
-  //DTO done
+	//DTO done
 	//@Test(description="Hospital Verify Attach Form", groups = { "Smoke Test" })
 	public void TC42399() throws Exception {
 
@@ -367,7 +365,7 @@ public class SmokeTestCase extends BrowserTypes {
 		LoginPageDTO lpDTO = new LoginPageDTO();
 		LoginPage loginpage = new LoginPage(driver);
 		HomePage homepage;
-		PolicyBinderPage policybinderpage;
+		//PolicyBinderPage policybinderpage;
 		PolicyIndicationPage policyindicationpage;
 		lpDTO = new LoginPageDTO();
 		loginpage = new LoginPage(driver);
