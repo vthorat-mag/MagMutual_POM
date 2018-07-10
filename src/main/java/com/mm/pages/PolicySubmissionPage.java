@@ -87,8 +87,7 @@ public class PolicySubmissionPage extends CommonAction {
 	// Submission to Indication.
 	public PolicyIndicationPage updatePolicyDetails() throws Exception {
 	
-		WebDriverWait wait=new WebDriverWait(driver, 40);
-		wait.until(ExpectedConditions.invisibilityOf(driver.findElement(By.xpath("//span[@class='txtOrange']"))));
+		invisibilityOfLoader(driver);
 		waitForElementToLoad(driver, 20, Phase);
 	    //Change policy type to Indication and add organization type as Hospital from DDL
 		selectDropdownByValue(driver, Phase, policysubmissionpageDTO.policyPhase, "Phase");

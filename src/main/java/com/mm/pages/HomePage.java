@@ -102,11 +102,12 @@ public class HomePage extends CommonAction {
 	@FindBy(id = "PM_SPOL_SEARCH")
 	WebElement searchCriteria;
 
-	@FindBy(xpath = "//a[@class='gridcontent']//span[@id='CPOLICYNO']")
+	//@FindBy(xpath = "//a[@class='gridcontent']//span[@id='CPOLICYNO']") - BTS
+	@FindBy(id="findPolicyListGrid_CPOLICYNO_0_HREF")  // QA
 	WebElement policyNumFromPolicyCount;
 
-	@FindBy(id = "pageTitleForpageHeaderForPolicyFolder")
-	WebElement pageHeaderForPolicyFolder;
+	@FindBy(id = "pageTitleForpageHeaderForPolicyFolder") // seperate for BTS and QA
+	WebElement pageHeaderForPolicyFolder; 
 
 	@FindBy(id = "PM_COMMON_TABS_RATE")
 	WebElement RateBtn;
@@ -251,10 +252,11 @@ public class HomePage extends CommonAction {
 		enterTextIn(driver, policyOrQuoteNum, homepageDTO.policyNum, "Policy/Quote#");
 		ExtentReporter.logger.log(LogStatus.INFO, "Policy # displays correctly under Policy Count tab");
 		clickButton(driver, searchCriteria, "Search");
-
+		Thread.sleep(2000);
 		// Select the first policy from the search results under Count tab
 		ExtentReporter.logger.log(LogStatus.INFO, "Full Policy displays when web cycles to active policy window");
-		selectValue(driver, policyNumFromPolicyCount, homepageDTO.policyNum);
+		//selectValue(driver, policyNumFromPolicyCount, homepageDTO.policyNum);
+		click(driver, policyNumFromPolicyCount, homepageDTO.policyNum);
 		invisibilityOfLoader(driver);
 		rateapolicyPage = new RateApolicyPage(driver);
 

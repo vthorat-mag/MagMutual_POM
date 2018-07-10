@@ -25,18 +25,6 @@ public class PolicyIndicationPage extends CommonAction {
 	String limitSharingPageTitle ="Limit Sharing";
 	
 
-	// policy details page
-
-	/*
-	 * @FindBy(name="policyPhaseCode") WebElement Phase;
-	 * 
-	 * @FindBy(name="organizationTypeCode") WebElement Org_Type;
-	 * 
-	 * @FindBy(name="discoveryPeriodRating") WebElement Hosp_Disc_Period_Rating;
-	 * 
-	 * @FindBy(name="termDesc") WebElement Quote_Description;
-	 */
-
 	@FindBy(id = "PM_COMMON_TABS_SAVEWIP")
 	WebElement Save_WIP;
 
@@ -244,9 +232,6 @@ public class PolicyIndicationPage extends CommonAction {
 	@FindBy(id = "PM_COMMON_TABS_PREVIEW")
 	WebElement previewBtn;
 
-	@FindBy(xpath = "//span[@class='txtOrange']")
-	WebElement loader;
-
 	@FindBy(id = "PM_LIMIT_SHARING_SAVE")
 	WebElement Save_Limit_Sharing;
 
@@ -381,8 +366,6 @@ public class PolicyIndicationPage extends CommonAction {
 		//Select Risk country and Risk specialty using DDL
 		selectDropdownByVisibleText(driver,Risk_Country, hospitalIndicationDTO.riskCountry, "Risk Country");
 		selectDropdownByVisibleText(driver,Risk_Speciality,hospitalIndicationDTO.riskSpeciality, "Risk speciality");
-		//Verify Risk Speciality value is selected and it is correct
-	//	verifyValueFromField(driver, Risk_Speciality, hospitalIndicationDTO.riskSpeciality,"value");
 		return new PolicyIndicationPage(driver);
 	}
 
@@ -448,7 +431,6 @@ public class PolicyIndicationPage extends CommonAction {
 						clearTextBox(driver, Premium, "Premium Amount");
 						enterDataIn(driver,Premium, hospitalIndicationDTO.premiumAmount.get(retroDateCount), "Premium text box");
 						//Verify that premium amount is entered and it is correct
-			//			verifyValueFromField(driver, Premium, hospitalIndicationDTO.premiumAmount.get(retroDateCount),"value");
 						enterDataIn(driver,Retro_Date, hospitalIndicationDTO.retroDate.get(retroDateCount),  "Retro Date");
 						break;
 					}
@@ -502,8 +484,6 @@ public class PolicyIndicationPage extends CommonAction {
 					
 					clearTextBox(driver,Premium, "Premium Amount");
 					enterDataIn(driver,Premium, hospitalIndicationDTO.premiumAmount.get(coverageCount), "Premium text box");
-					//Verify that premium amount is entered and it is correct
-				//	verifyValueFromField(driver, Premium, hospitalIndicationDTO.premiumAmount.get(coverageCount),"value");
 					enterDataIn(driver,Retro_Date, hospitalIndicationDTO.retroDate.get(coverageCount), "Retro Date");
 
 				} // else add only premium for selected coverage
@@ -511,14 +491,10 @@ public class PolicyIndicationPage extends CommonAction {
 
 					clearTextBox(driver,Premium, "Premium Amount");
 					enterDataIn(driver,Premium, hospitalIndicationDTO.premiumAmount.get(coverageCount), "Premium text box");
-					//Verify that premium amount is entered and it is correct
-				//	verifyValueFromField(driver, Premium, hospitalIndicationDTO.premiumAmount.get(coverageCount),"value");
 				}
 				break;
-				
 			}
 		}
-		
 	}
 
 	
@@ -542,8 +518,6 @@ public class PolicyIndicationPage extends CommonAction {
 					try{
 				if (Retro_Date.isDisplayed()) {
 					enterDataIn(driver,Retro_Date, hospitalIndicationDTO.retroDateValue.get(coverageTitleCount), "Retro Date");
-					//Verify that retro date is entered and it is correct
-		//			verifyValueFromField(driver, Retro_Date, hospitalIndicationDTO.premiumAmount.get(coverageTitleCount),"value");
 				}  
 					}catch(Exception e){
 						e.printStackTrace();
@@ -669,7 +643,7 @@ public class PolicyIndicationPage extends CommonAction {
 		click(driver,Add_Shared_Group, "Add button for Shared group");
 		Thread.sleep(1000);
 		selectDropdownByVisibleText(driver,Desc_Shared_Group, hospitalIndicationDTO.sharedGroupDescription.get(sharedGroupCoverageCount), "Shared group description");
-	//	verifyValueFromField(driver, Desc_Shared_Group, hospitalIndicationDTO.sharedGroupDescription.get(sharedGroupCoverageCount),"value");
+		//verifyValueFromField(driver, Desc_Shared_Group, hospitalIndicationDTO.sharedGroupDescription.get(sharedGroupCoverageCount),"value");
 		
 		// Click on 'Add' button from pop up to add shared group details
 		ExtentReporter.logger.log(LogStatus.INFO, "Select Shared Group Detail window displays");

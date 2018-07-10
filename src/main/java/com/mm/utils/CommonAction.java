@@ -44,7 +44,8 @@ public class CommonAction implements CommonActionInterface {
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
 			Assert.assertTrue(pageElement.isDisplayed(), pageElement + " is Not displayed on screen.");
 			ExtentReporter.logger.log(LogStatus.PASS, "Selected value " + value);
-			clickButton(driver, pageElement, value);
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			js.executeScript("arguments[0].click();", pageElement);
 		} catch (Exception e) {
 			ExtentReporter.logger.log(LogStatus.FAIL, value + " element is not found.");
 		}
@@ -429,7 +430,7 @@ public class CommonAction implements CommonActionInterface {
 		{return false;}
 		}catch(Exception e)
 		{
-			ExtentReporter.logger.log(LogStatus.FAIL, "Page Loader is not displayed.");
+			ExtentReporter.logger.log(LogStatus.WARNING, "Page Loader is not displayed.");
 		}
 		return false;
 	}

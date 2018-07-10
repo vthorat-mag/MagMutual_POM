@@ -94,6 +94,9 @@ public class RateApolicyPage extends CommonAction {
 
 	@FindBy(xpath = "//div[contains(@id ,'pageTitleForpageHeaderFor')]")
 	WebElement pageHeaderForPolicyFolder;
+	
+	@FindBy(xpath = "//div[contains(@id ,'pageTitleForpageHeader')]")
+	WebElement pageHeaderForPageTitle;
 
 	// @FindBy(id="polPhaseCodeROSPAN")
 	@FindBy(xpath = "//table[@id='formFieldsTableForHeaderFieldsSecond']//span[@id='polPhaseCodeROSPAN']")
@@ -547,7 +550,7 @@ public class RateApolicyPage extends CommonAction {
 
 	// Identify Policy number from Page.
 	public String policyNo() throws InterruptedException {
-		Thread.sleep(3000);
+		Thread.sleep(5000);
 		// String profileNoLable =
 		// pageHeaderForPolicyFolder.getAttribute("innerHTML");
 		String profileNoLable = getText(driver, pageHeaderForPolicyFolder);
@@ -734,13 +737,14 @@ public class RateApolicyPage extends CommonAction {
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]")));
 		Thread.sleep(4000);
+		//Close the View Premium window
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Close]");
 		clickButton(driver, closeBtnOnViewPremiumPopup, "Close");
 		invisibilityOfLoader(driver);
 		switchToParentWindowfromframe(driver);
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]")));
-		Thread.sleep(4000);
+		Thread.sleep(3000);
 		clickButton(driver, okPolicySaveAsWIPPopup, "Ok");
 		switchToParentWindowfromframe(driver);
 		return new PolicyQuotePage(driver);
