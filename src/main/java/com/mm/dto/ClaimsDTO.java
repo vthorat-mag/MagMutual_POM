@@ -1,5 +1,7 @@
 package com.mm.dto;
 
+import java.util.List;
+
 import MMTestCase.SmokeTestCase;
 
 public class ClaimsDTO {
@@ -14,11 +16,19 @@ public class ClaimsDTO {
 	public static String stateOfLossDropDownValue;
 	public static String searchEntityPageTitle;
 	public static String description;
-	public  String FileSearchPageTitle;
+	public String FileSearchPageTitle;
 	public String claimNum;
 	public String clientIDValue;
 	public String clientNameValue;
-
+	public String seperateCheck;
+	public List <String> transactionType;
+	public List <String> paymentType;
+	public List <String> vendorIDValue;
+	public List <String> taxIDType;
+	public List <String> transactionAmount;
+	public List <String> invoiceNo;
+	public List <String> payeeName;
+	
 	public ClaimsDTO() throws Exception{
 
 		for (int iFC=0; iFC < ClaimsDTO.class.getFields().length; iFC++) 

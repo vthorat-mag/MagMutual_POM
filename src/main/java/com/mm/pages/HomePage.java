@@ -62,7 +62,7 @@ public class HomePage extends CommonAction {
 	WebElement Last_Org_Name;
 
 	@FindBy(id = "CI_ENTITY_SELECT_SCH_SCH")
-	WebElement Search_Quote;
+	WebElement searchEntityBtn;
 
 	@FindBy(xpath = "//input[@name='chkCSELECTIND']")
 	WebElement Select_Entity_Checkbox;
@@ -123,6 +123,11 @@ public class HomePage extends CommonAction {
 	
 	@FindBy(id = "topnav_FM")
 	WebElement financePageLink;
+
+	@FindBy(name="entitySearch_addlField")
+	WebElement vendorID;
+	
+	
 
 	// Constructor to initialize driver, page elements and DTO PageObject for
 	// HomePage
@@ -284,15 +289,19 @@ public class HomePage extends CommonAction {
 	 * Entity Select Search window appears and then we enter Organization name
 	 * and search Then select the Organization name from populated list.
 	 */
-	public HomePage search_Quote(String parentWindow)
-			throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
+	public HomePage searchEntity(String vendorIDValue)throws Exception {
 
 		waitForElementToLoad(driver, 20, Last_Org_Name);
 		getPageTitle(driver, entitySelectSearchPageTitle);
 		visibilityOfElement(driver, Last_Org_Name, "Last Org Name on Entity Select Search window");
 		enterTextIn(driver, Last_Org_Name, homepageDTO.lastOrgName, "Last Org Name");
+		enterDataIn(driver, vendorID, vendorIDValue, "Vendor ID");
 		ExtentReporter.logger.log(LogStatus.INFO, "List is populated of risk to select Organization with today's date");
-		click(driver, Search_Quote, "Search button");
+		click(driver, searchEntityBtn, "Search button");
+		return new HomePage(driver);
+	}
+	
+	public HomePage selectEntity(String parentWindow) throws IllegalArgumentException, IllegalAccessException, SecurityException{
 		waitForElementToLoad(driver, 60, Select_Entity_Checkbox);
 		ExtentReporter.logger.log(LogStatus.INFO, "Risk is selected");
 		clickButton(driver, Select_Entity_Checkbox, "Select Entity Checkbox");

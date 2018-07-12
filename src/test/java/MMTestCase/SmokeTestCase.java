@@ -109,14 +109,16 @@ public class SmokeTestCase extends BrowserTypes {
 
 	}
 
-	// Blocked - need updated steps
-	// @Test(description = "Claims - Available Test Case", groups = { "Smoke
-	// Test" })
+	//DTO done
+	@Test(description = "Claims - Enter Transactions", groups = { "Smoke Test" })
 	public void TC42252() throws Exception {
 		LoginPageDTO lpDTO = new LoginPageDTO();
 		LoginPage loginpage = new LoginPage(driver);
-		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToClaimsPageFromHomePageLink().addFile();
-		ClaimsPage claimsPage = new ClaimsPage(driver);
+		loginpage.loginToeOasis(lpDTO.username, lpDTO.password)
+		.navigateToClaimsPageFromHomePageLink()
+		.searchClaim()
+		.openTransactionTab()
+		.addTransactionDataAndSaveTransaction();
 	}
 
 	
@@ -136,8 +138,8 @@ public class SmokeTestCase extends BrowserTypes {
 		.searchRecentlyAddedOrganisation(OrganizationName);
 	}
 	
-	// DTO done
-	@Test(description = "Verify CIS Page Displays", groups = { "Smoke Test" })
+	// DTO done //QA done
+	//@Test(description = "Verify CIS Page Displays", groups = { "Smoke Test" })
 	public void TC42253() throws Exception {
 		LoginPageDTO lpDTO = new LoginPageDTO();
 		LoginPage loginpage = new LoginPage(driver);
@@ -365,7 +367,6 @@ public class SmokeTestCase extends BrowserTypes {
 		LoginPageDTO lpDTO = new LoginPageDTO();
 		LoginPage loginpage = new LoginPage(driver);
 		HomePage homepage;
-		//PolicyBinderPage policybinderpage;
 		PolicyIndicationPage policyindicationpage;
 		lpDTO = new LoginPageDTO();
 		loginpage = new LoginPage(driver);
@@ -374,7 +375,7 @@ public class SmokeTestCase extends BrowserTypes {
 		homepage = new HomePage(driver);
 		String ParentWindow = homepage.create_Quote();
 
-		homepage.search_Quote(ParentWindow).selectPolicyType().updatePolicyDetails();
+		homepage.searchEntity("").selectEntity(ParentWindow).selectPolicyType().updatePolicyDetails();
 
 		policyindicationpage = new PolicyIndicationPage(driver);
 		List<WebElement> firstFrame = policyindicationpage.open_Underwriter();

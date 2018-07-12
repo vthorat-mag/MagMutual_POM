@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.RandomStringUtils;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -123,7 +124,7 @@ public class CommonAction implements CommonActionInterface {
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
 			Assert.assertTrue(pageElement.isDisplayed(), textField + " is not displayed on screen.");
 			pageElement.sendKeys(text);
-			ExtentReporter.logger.log(LogStatus.PASS, "Value entered in text box -" + textField);
+			ExtentReporter.logger.log(LogStatus.PASS, "Value "+text+" is entered in text field " + textField);
 		} catch (Exception e) {
 			e.printStackTrace();
 			ExtentReporter.logger.log(LogStatus.FAIL, textField + " element is not found.");
@@ -137,13 +138,10 @@ public class CommonAction implements CommonActionInterface {
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
 			Assert.assertTrue(pageElement.isDisplayed(), textField + " is not displayed on screen.");
 			pageElement.sendKeys(text);
-			// driver.executeScript("arguments[0].setAttribute(value,
-			// arguments[1]);", pageElement, text);
-
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			js.executeScript("arguments[0].value=text;", pageElement);
 
-			ExtentReporter.logger.log(LogStatus.PASS, "Value entered in text box -" + textField);
+			ExtentReporter.logger.log(LogStatus.PASS, "Value "+text+" entered in text field " + textField);
 		} catch (Exception e) {
 			e.printStackTrace();
 			ExtentReporter.logger.log(LogStatus.FAIL, textField + " element is not found.");
@@ -282,12 +280,12 @@ public class CommonAction implements CommonActionInterface {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, High);
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
-			Assert.assertTrue(pageElement.isDisplayed(), "Logo / text" + text + " is not displayed on the page.");
-			ExtentReporter.logger.log(LogStatus.PASS, "Logo / text" + text + " is displayed on page after login");
+			Assert.assertTrue(pageElement.isDisplayed(), "Logo / text " + text + " is not displayed on the page.");
+			ExtentReporter.logger.log(LogStatus.PASS, "Logo / text " + text + " is displayed on page");
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			ExtentReporter.logger.log(LogStatus.FAIL, text + " is not displayed on page after login");
+			ExtentReporter.logger.log(LogStatus.FAIL, text + " is not displayed on page");
 		}
 	}
 
@@ -394,6 +392,17 @@ public class CommonAction implements CommonActionInterface {
 		wait.until(ExpectedConditions.visibilityOf(element));
 
 	}
+	
+	public void acceptAlert(WebDriver driver){
+		
+		Alert saveAlert= driver.switchTo().alert();
+			  saveAlert.accept();
+	}
+	
+	public String getAlertText(WebDriver driver){
+		String saveAlertText= driver.switchTo().alert().getText();
+		return saveAlertText;
+	}
 
 	public void policySearch(WebDriver driver, String policyNo, WebElement policySearchTxtBox, WebElement searchBtn) {
 		clearTextBox(driver, policySearchTxtBox, "Enter Policy text field");
@@ -410,8 +419,8 @@ public class CommonAction implements CommonActionInterface {
 			{
 				WebElement pageLoader = driver.findElement(By.xpath("//span[@class='txtOrange']"));
 				WebDriverWait wait = new WebDriverWait(driver, High);
-				wait.until(ExpectedConditions.invisibilityOf(pageLoader));
 				Thread.sleep(2000);
+				wait.until(ExpectedConditions.invisibilityOf(pageLoader));
 				ExtentReporter.logger.log(LogStatus.PASS, "Page Loader disappeared sucessfully.");
 			}
 		} catch (Exception e) {
