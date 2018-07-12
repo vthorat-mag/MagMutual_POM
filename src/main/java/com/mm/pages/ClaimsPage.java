@@ -30,6 +30,7 @@ public class ClaimsPage extends CommonAction {
 
 	String fileStatusDropDownOption = "OPENERROR";
 	String verifyFileStatusValue = "Opened in Error";
+	String fileSearchPageTitle ="File Search";
 
 	@FindBy(name = "globalSearch")
 	WebElement claim_Search;
@@ -115,7 +116,7 @@ public class ClaimsPage extends CommonAction {
 	@FindBy(xpath = "//input[@name = 'entity_clientID']")
 	WebElement entityClientId;
 	
-	//WebELements for TC42252
+	//WebELements for TC42252 -- this test has changed completely
 	
 	@FindBy(xpath = "//li[@id='CM_CLAIMS_MENU']")
 	WebElement filesMenu;
@@ -169,6 +170,65 @@ public class ClaimsPage extends CommonAction {
 	WebElement entityClientID;
 	
 	
+	//TC 42252 - Claims - Enter Transactions
+	
+	@FindBy(id="CM_CMF_TRANS_MI")
+	WebElement transactionTab;
+	
+	@FindBy(id="CM_CMTXN_ADD_AI")
+	WebElement addTransactionBtn;
+	
+	@FindBy(name="cmTransactionTypeCode")
+	WebElement transactionType;
+	
+	@FindBy(name="cmPaymentTypeCode")
+	WebElement paymentType;
+	
+	@FindBy(id="btnFind_payeeCisName")
+	WebElement searchIconPayeeName;
+	
+	@FindBy(name="entitySearch_addlField")
+	WebElement vendorID;
+	
+	@FindBy(name="taxIdType")
+	WebElement taxIDType;
+	
+	@FindBy(name="transAmt")
+	WebElement transactionAmount;
+	
+	@FindBy(name="invoiceNo")
+	WebElement invoiceNo;
+	
+	@FindBy(name="separateCheckB")
+	WebElement seperateCheck;
+	
+	@FindBy(id="CM_TXN_ADD_DATA_SAVE")
+	WebElement saveTransactionBtn;
+	
+	@FindBy(id="CM_TXN_ADD_DATA_CLS")
+	WebElement closeTransactionBtn;
+	
+	@FindBy(name="payeeCisName")
+	WebElement payeeNameCIS;
+	
+	@FindBy(id="CM_TXN_DUP_SAVE")
+	WebElement saveDuplicate;
+	
+	@FindBy(id="CCMTRANSACTIONTYPECODELOVLABEL")
+	List <WebElement> transTypeFromTransList;
+	
+	@FindBy(id="CTRANSAMT")
+	List <WebElement> transAmountFromTransList;
+	
+	@FindBy(id="CPAYEECISNAME")
+	List <WebElement> CISpayeeNameFromTransList;
+	
+	@FindBy(id="CINVOICENO")
+	List <WebElement> invoiceNumFromTransactionList;
+	
+	@FindBy(id="panelTitleIdForClaimTrans")
+	WebElement transactionListTitle;
+	
 	
 	// Constructor to initialize driver, page elements and DTO PageObject for
 	// Claims Page.
@@ -178,9 +238,126 @@ public class ClaimsPage extends CommonAction {
 		claimsdto = new ClaimsDTO();
 	}
 
+	public ClaimsPage openTransactionTab() throws Exception{
+		ExtentReporter.logger.log(LogStatus.INFO, "Transaction List displays at the bottom of the page");
+		clickButton(driver, transactionTab, "Transaction");
+		invisibilityOfLoader(driver);
+		visibilityOfElement(driver, transactionListTitle, "Transaction List");
+		return new ClaimsPage(driver);
+	}
+	
+	public void addTransactionDataAndSaveTransaction() throws Exception{
+	//Get the number of transaction types from excel sheet
+	for(int i =0;i<claimsdto.transactionType.size();i++){
+	
+		ExtentReporter.logger.log(LogStatus.INFO, "Add Transaction window displays");
+		clickButton(driver, addTransactionBtn, "Add Transaction");
+		invisibilityOfLoader(driver);
+		Thread.sleep(1000);
+		switchToFrameUsingId(driver, "popupframe1");
+		Thread.sleep(2000);
+		//Select Trans type and Payee Type from DDL
+		selectDropdownByVisibleText(driver, transactionType, claimsdto.transactionType.get(i), "Trans Type");
+		Thread.sleep(1000);
+		selectDropdownByVisibleText(driver, paymentType, claimsdto.paymentType.get(i), "Pay Type");
+		//Click PayeeCISNameSearchIcon
+		clickButton(driver, searchIconPayeeName, "Search Icon for Payee Name");
+		//switch to pop up window and call searchEntity and selectEntity methods from home page
+		//to search and Select Payee Name.
+		String parentWindow= switchToWindow(driver);
+		Thread.sleep(1000);
+		HomePage homePage = new HomePage(driver);
+		homePage.searchEntity(claimsdto.vendorIDValue.get(i));
+		homePage.selectEntity(parentWindow);
+		switchToFrameUsingId(driver, "popupframe1");
+		Thread.sleep(2000);
+		selectDropdownByVisibleText(driver, taxIDType, claimsdto.taxIDType.get(i), "Tax ID Type");
+		enterDataIn(driver, transactionAmount, claimsdto.transactionAmount.get(i), "Trans Amount");
+		//Invoice no. is current date + index. of transaction(e.g. 1,2,3..)
+		CommonUtilities comUtil = new CommonUtilities();
+		String Date = comUtil.getSystemDatemmddyyyy();
+		String invoiceNumber=Date+"-"+(i+2); // TODO- change to 1
+		enterDataIn(driver, invoiceNo, invoiceNumber, "Invoice No.");
+		selectDropdownByVisibleText(driver, seperateCheck, claimsdto.seperateCheck, "Sep Check");
+		clickButton(driver, saveTransactionBtn, "Save");
+		// After save button, get alert message in variable and verify alert pop up message
+		ExtentReporter.logger.log(LogStatus.INFO, "Transaction is entered and the Alert message is displayed");
+		Thread.sleep(20000);
+		String alertText= getAlertText(driver);
+		verifySaveAlertMessage(alertText,claimsdto.claimNum,claimsdto.transactionAmount.get(i),claimsdto.transactionType.get(i));
+		//close Add transaction window
+		closeAddTransactionWindow();
+		ExtentReporter.logger.log(LogStatus.INFO, "Message window closes and transaction is listed at the top of the Transaction list");
+		//verify transaction is listed at the top of transaction list
+		verifyAddedTransactionIsListedInTransactionList(invoiceNumber);
+		ExtentReporter.logger.log(LogStatus.INFO, "Transactions display as entered in the Transaction List.");
+	}
+}
+	
+	
+	//Navigate to open window and close Add Transaction window.
+	public void closeAddTransactionWindow() throws InterruptedException{
+	switchToParentWindowfromframe(driver);
+	switchToFrameUsingId(driver, "popupframe1");
+	Thread.sleep(1000);
+	clickButton(driver, closeTransactionBtn, "Close");
+	Thread.sleep(4000);
+}
+	
+	//Verify added transaction is available at the top of Transaction List.
+	public void verifyAddedTransactionIsListedInTransactionList(String InvoiceNum) throws Exception {
 
-	//
-	public void addFile() throws Exception{
+		boolean flag = false;
+		try {
+			//value of i remains zero, as we want to verify top most transaction in the list.
+			int i =0;
+			//Get the size of transaction types from excel sheet
+			for (int j = 0; j < claimsdto.transactionType.size(); j++) {
+			//Compare column values Trans type and Trans Amount from transaction list with excel sheet values
+				if (transTypeFromTransList.get(i).getAttribute("innerHTML").trim().equals(claimsdto.transactionType.get(j))
+						&& transAmountFromTransList.get(i).getAttribute("innerHTML").trim().equals("$" + claimsdto.transactionAmount.get(j))) 
+				{
+					//Compare column values CISpayeeName and invoice number from transaction list with excel sheet values
+					if (CISpayeeNameFromTransList.get(i).getAttribute("innerHTML").trim().equals(claimsdto.payeeName.get(j).trim())
+							&& invoiceNumFromTransactionList.get(i).getAttribute("innerHTML").trim().equals(InvoiceNum)) 
+					{
+						//if the transaction values are correct, 
+						ExtentReporter.logger.log(LogStatus.PASS, "Transaction invoice no. " + InvoiceNum + " is listed in Transaction list.");
+						flag = true;
+						break;
+					}
+				}
+			}
+				if(flag==false)
+				throw new Exception();
+			} catch (Exception e) {
+				//Log failed message in report and stop execution
+				ExtentReporter.logger.log(LogStatus.FAIL, "Transaction invoice no. "+InvoiceNum+" is Not available at top of Transaction list OR  it is incorrect.");
+				Assert.assertTrue(false);
+			}
+		}
+			
+	
+	//Get the alert window text message and compare with expected alert message
+	public void verifySaveAlertMessage(String alertMessageText,String claimNumber, String Amount, String TransType){
+		
+		// Spaces and \n are added to make the messages identical.
+		String expectedAlertMessage="The transaction has been successfully saved:\n Source #:File "+claimNumber+" \n"
+				+" Transaction Type:"+TransType+" \n Transaction Amount:$"+Amount;
+		
+		// Below expectedAlertMessage string is compared with actual alert message
+		if(alertMessageText.equals(expectedAlertMessage)){
+			ExtentReporter.logger.log(LogStatus.PASS, "Alert message is as Expected");
+		}else{
+			ExtentReporter.logger.log(LogStatus.WARNING, "Alert message is Incorrect, not as Expected.");
+		}
+	}
+	
+	
+	
+	//Below commented code is for "Available test case"
+	
+	/*public void addFile() throws Exception{
 		//Move to Files tab and select Add File option from menu
  		invisibilityOfLoader(driver);
 		Actions action = new Actions(driver);
@@ -203,7 +380,7 @@ public class ClaimsPage extends CommonAction {
 		clickButton(driver, insuredSearchIcon, "Insured ");
 		enterDataIn(driver, accidentDate, "06252018", "Accident Date");
 		
-	}
+	}*/
 	
 	// Search and select the client from 'Entity Select List' using client name and matching id from excel file
 	public void searchAPatientNameFromEntitySelectList(String parentWindow) throws InterruptedException{
@@ -241,7 +418,7 @@ public class ClaimsPage extends CommonAction {
 	// the screen)
 	public ClaimsPage searchClaim() throws Exception {
 		
-		getPageTitle(driver, claimsdto.FileSearchPageTitle);
+		getPageTitle(driver, fileSearchPageTitle);
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Enter Claim # from Hospital Create Claim Test Case(Example 66429) & Click Search.");
 		policySearch(driver, claimsdto.claimNum, claim_Search, Search_btn);

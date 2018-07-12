@@ -1,5 +1,7 @@
 package com.mm.dto;
 
+import java.util.List;
+
 import MMTestCase.SmokeTestCase;
 
 public class HomePageDTO {
