@@ -44,6 +44,14 @@ public class ExcelUtil {
 		
 		return excelData;
 	}
+	
+	public void downloadExcel() throws Exception
+	{
+		Thread.sleep(6000);
+		String[] executionPath = {System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\saveExcel.exe"};
+		Runtime.getRuntime().exec(executionPath);
+		Thread.sleep(12000);
+	}
 }
 
 /*for (int i = 1; i < rows; i++) {

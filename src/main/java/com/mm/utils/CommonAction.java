@@ -5,13 +5,29 @@ import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 import java.awt.AWTException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+
+import org.apache.commons.io.FileUtils;
+import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.RandomStringUtils;
+<<<<<<< Upstream, based on branch 'VT_Feature_Sprint_5' of https://github.com/vthorat-mag/MagMutual_POM.git
 import org.openqa.selenium.Alert;
+=======
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+>>>>>>> 049402d 1. Save Excel AUtoIT script. 2. ExcelUtil update. 3.
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -413,10 +429,9 @@ public class CommonAction implements CommonActionInterface {
 	}
 
 	public void invisibilityOfLoader(WebDriver driver) {
-		
+
 		try {
-			if (verifypageloaderdisplayedornot(driver)==true)
-			{
+			if (verifypageloaderdisplayedornot(driver) == true) {
 				WebElement pageLoader = driver.findElement(By.xpath("//span[@class='txtOrange']"));
 				WebDriverWait wait = new WebDriverWait(driver, High);
 				Thread.sleep(2000);
@@ -427,19 +442,112 @@ public class CommonAction implements CommonActionInterface {
 			ExtentReporter.logger.log(LogStatus.WARNING, "Page is taking longer time than usual for loading.");
 		}
 	}
-	
-	public boolean verifypageloaderdisplayedornot(WebDriver driver)
-	{
-		try{
-		if(driver.findElement(By.xpath("//span[@class='txtOrange']")).isDisplayed())
-		{
-			return true;
+
+	public void copyFile() {
+		File source = new File("C:\\TempsaveExcel\\OnDemandInvoiceCredit.xlsx");
+		File dest = new File("C:\\saveExcel\\OnDemandInvoiceCredit.xlsx");
+		try {
+			FileUtils.copyFile(source, dest);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+<<<<<<< Upstream, based on branch 'VT_Feature_Sprint_5' of https://github.com/vthorat-mag/MagMutual_POM.git
 		else
 		{return false;}
 		}catch(Exception e)
 		{
 			ExtentReporter.logger.log(LogStatus.WARNING, "Page Loader is not displayed.");
+=======
+	}
+
+	public String getDataFromExcel(String sheetName, String columnName, int rowNum,String filePath)
+			throws IOException {
+		
+		String excelFilePath = filePath;
+		FileInputStream inputStream;
+		String returnCellValue = null;
+		inputStream = new FileInputStream(new File(excelFilePath));
+
+		try {
+
+			XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
+			XSSFSheet dataSheet = (XSSFSheet) workbook.getSheet(sheetName);
+
+			Row headerRow = dataSheet.getRow(0);
+
+			for (int cellNumber = headerRow.getFirstCellNum(); cellNumber <= headerRow.getLastCellNum()
+					- 1; cellNumber++) {
+				Cell headerCell = headerRow.getCell(cellNumber);
+				System.out.println(headerCell.getStringCellValue().toLowerCase());
+				if (headerCell.getStringCellValue().toLowerCase().trim().equals(columnName.toLowerCase())) {
+					// System.out.println("cell found");
+					Row dataRow = dataSheet.getRow(rowNum);
+					Cell dataCell = dataRow.getCell(cellNumber);
+					returnCellValue = dataCell.getStringCellValue();
+					break;
+				}
+
+			} // for loop - cellNumber
+			inputStream.close();
+			FileOutputStream outputStream = new FileOutputStream(excelFilePath);
+			workbook.write(outputStream);
+			workbook.close();
+			outputStream.flush();
+			outputStream.close();
+		} catch (NoSuchElementException e) {
+			e.printStackTrace();
+		}
+		return returnCellValue;
+	}
+
+	public static void writeData(String testCaseId, String columnName, String cellValue, int rowNum,String saveDataFilePath) throws Exception {
+		String excelFilePath = saveDataFilePath;
+		FileInputStream inputStream;
+
+		inputStream = new FileInputStream(new File(excelFilePath));
+		try {
+
+			XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
+			XSSFSheet dataSheet = (XSSFSheet) workbook.getSheet(testCaseId);
+
+			Row headerRow = dataSheet.getRow(0);
+
+			for (int cellNumber = headerRow.getFirstCellNum(); cellNumber <= headerRow.getLastCellNum()
+					- 1; cellNumber++) {
+				Cell headerCell = headerRow.getCell(cellNumber);
+				System.out.println(headerCell.getStringCellValue().toLowerCase());
+				if (headerCell.getStringCellValue().toLowerCase().trim().equals(columnName.toLowerCase())) {
+					Row dataRow = dataSheet.getRow(rowNum);
+					Cell dataCell = dataRow.getCell(cellNumber);
+					dataCell.setCellValue(cellValue);
+					break;
+				}
+
+			} // for loop - cellNumber
+			inputStream.close();
+			FileOutputStream outputStream = new FileOutputStream(excelFilePath);
+			workbook.write(outputStream);
+			workbook.close();
+			outputStream.flush();
+			outputStream.close();
+
+		} catch (NoSuchElementException e) {
+
+			e.printStackTrace();
+		}
+
+	}
+
+	public boolean verifypageloaderdisplayedornot(WebDriver driver) {
+		try {
+			if (driver.findElement(By.xpath("//span[@class='txtOrange']")).isDisplayed()) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (Exception e) {
+			ExtentReporter.logger.log(LogStatus.FAIL, "Page Loader is not displayed.");
+>>>>>>> 049402d 1. Save Excel AUtoIT script. 2. ExcelUtil update. 3.
 		}
 		return false;
 	}
