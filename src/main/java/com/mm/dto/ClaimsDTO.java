@@ -18,6 +18,8 @@ public class ClaimsDTO {
 	public String claimNum;
 	public String clientIDValue;
 	public String clientNameValue;
+	public String  policyNum;
+	public String CoverageDescription;
 
 	public ClaimsDTO() throws Exception{
 
