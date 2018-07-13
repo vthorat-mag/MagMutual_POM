@@ -21,6 +21,7 @@ import org.testng.annotations.Test;
 import com.mm.browsers.BrowserTypes;
 import com.mm.dto.LoginPageDTO;
 import com.mm.dto.PolicyQuotePageDTO;
+import com.mm.pages.CISPage;
 import com.mm.pages.ClaimsPage;
 import com.mm.pages.FindPolicyPage;
 import com.mm.pages.HomePage;
@@ -109,24 +110,24 @@ public class SmokeTestCase extends BrowserTypes {
 
 	}
 
-	// Blocked - need updated steps
-	// @Test(description = "Claims - Available Test Case", groups = { "Smoke
-	// Test" })
+	// DTO done
+	//@Test(description = "Claims - Enter Transactions", groups = { "Smoke Test" })
 	public void TC42252() throws Exception {
 		LoginPageDTO lpDTO = new LoginPageDTO();
 		LoginPage loginpage = new LoginPage(driver);
-		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToClaimsPageFromHomePageLink().addFile();
-		ClaimsPage claimsPage = new ClaimsPage(driver);
+		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToClaimsPageFromHomePageLink().searchClaim()
+				.openTransactionTab().addTransactionDataAndSaveTransaction();
 	}
 
 	// DTO done
-	@Test(description = "FM - Hospital Verify On Demand Invoice, Create Batch and Post Batch", groups = { "Smoke Test" })
+	@Test(description = "FM - Hospital Verify On Demand Invoice, Create Batch and Post Batch", groups = {
+			"Smoke Test" })
 	public void TC42250() throws Exception {
 		LoginPageDTO lpDTO = new LoginPageDTO();
 		LoginPage loginpage = new LoginPage(driver);
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToFinanceHomePage()
-				.searchPolicyOnFinanceHomePage().openFirstAccount().onDemandInvoice().cashEntry()/*.batchFunction()
-				.postBatchFunctionality()*/;
+				.searchPolicyOnFinanceHomePage().openFirstAccount().onDemandInvoice()
+				.cashEntry().batchFunction().validateBatch().postBatchFunctionality().donwloadFinalSheetBySearchingAccountNo();
 	}
 
 	// DTO done
@@ -153,24 +154,15 @@ public class SmokeTestCase extends BrowserTypes {
 		rateapolicyPage.rateFunctionality(policyNum);
 	}
 
-	/*
-	 * // DTO done // @Test(description = "Verify Add Organization", groups = {
-	 * "Smoke Test" }) public void TC42404() throws Exception { LoginPageDTO
-	 * lpDTO; LoginPage loginpage; lpDTO = new LoginPageDTO(); loginpage = new
-	 * LoginPage(driver); loginpage.loginToeOasis(lpDTO.username,
-	 * lpDTO.password).navigateToCISPage().clickOnNewOrganization()
-	 * .enterDataInNewOrgPage().selectZipCode().saveNewOrgDetails(); }
-	 */
-
 	// DTO done
-	// @Test(description = "Verify Add Organization", groups = { "Smoke Test" })
+	// @Test(description= "Verify Add Organization",groups = { "Smoke Test" })
 	public void TC42404() throws Exception {
-		LoginPageDTO lpDTO;
-		LoginPage loginpage;
-		lpDTO = new LoginPageDTO();
-		loginpage = new LoginPage(driver);
-		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToCISPage().clickOnNewOrganization()
-				.enterDataInNewOrgPage().selectZipCode().saveNewOrgDetails();
+		LoginPage loginpage = new LoginPage(driver);
+		LoginPageDTO lpDTO = new LoginPageDTO();
+		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToCISPage().navigateToAddOrgPage();
+		CISPage cisPage = new CISPage(driver);
+		String OrganizationName = cisPage.addOrganizationInformation();
+		cisPage.addOrgAddress().selectZipCode().addPhoneNumber().searchRecentlyAddedOrganisation(OrganizationName);
 	}
 
 	// DTO done
@@ -290,9 +282,7 @@ public class SmokeTestCase extends BrowserTypes {
 		LoginPage loginpage = new LoginPage(driver);
 		PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
 
-		loginpage.loginToeOasis(lpDTO.username, lpDTO.password)
-		.headerPolicyTab()
-		.searchPolicyRateAPolicyPage();
+		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).headerPolicyTab().searchPolicyRateAPolicyPage();
 		String clientID = policybinderpage.getClientId();
 		policybinderpage.verifyPhase().navigatetoClaimsPage().getPatientDetails().enterDataOnClaimsPage(clientID);
 	}
@@ -368,7 +358,7 @@ public class SmokeTestCase extends BrowserTypes {
 		homepage = new HomePage(driver);
 		String ParentWindow = homepage.create_Quote();
 
-		homepage.search_Quote(ParentWindow).selectPolicyType().updatePolicyDetails();
+		homepage.searchEntity("").selectEntity(ParentWindow).selectPolicyType().updatePolicyDetails();
 
 		policyindicationpage = new PolicyIndicationPage(driver);
 		List<WebElement> firstFrame = policyindicationpage.open_Underwriter();

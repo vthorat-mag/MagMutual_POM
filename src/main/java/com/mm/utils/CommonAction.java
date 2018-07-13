@@ -188,10 +188,12 @@ public class CommonAction implements CommonActionInterface {
 	}
 
 	public void navigatetoMenuItemPage(WebDriver driver, WebElement mainMenu, WebElement menuItem) {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("arguments[0].scrollIntoView(true);", mainMenu);
 		Actions act = new Actions(driver);
 		act.moveToElement(mainMenu).build().perform();
-		JavascriptExecutor jse = (JavascriptExecutor) driver;
-		jse.executeScript("arguments[0].click();", menuItem);
+		//JavascriptExecutor jse = (JavascriptExecutor) driver;
+		js.executeScript("arguments[0].click();", menuItem);
 		invisibilityOfLoader(driver);
 	}
 
@@ -440,9 +442,9 @@ public class CommonAction implements CommonActionInterface {
 		}
 	}
 
-	public void copyFile() {
+	public void copyFile(String saveFilName) {
 		File source = new File("C:\\TempsaveExcel\\OnDemandInvoiceCredit.xlsx");
-		File dest = new File("C:\\saveExcel\\OnDemandInvoiceCredit.xlsx");
+		File dest = new File("C:\\saveExcel\\"+saveFilName+".xlsx");
 		try {
 			FileUtils.copyFile(source, dest);
 		} catch (IOException e) {
@@ -465,9 +467,10 @@ public class CommonAction implements CommonActionInterface {
 
 			Row headerRow = dataSheet.getRow(0);
 
-			for (int cellNumber = headerRow.getFirstCellNum(); cellNumber <= headerRow.getLastCellNum()
+				for (int cellNumber = headerRow.getFirstCellNum(); cellNumber <= headerRow.getLastCellNum()
 					- 1; cellNumber++) {
 				Cell headerCell = headerRow.getCell(cellNumber);
+				
 				System.out.println(headerCell.getStringCellValue().toLowerCase());
 				if (headerCell.getStringCellValue().toLowerCase().trim().equals(columnName.toLowerCase())) {
 					// System.out.println("cell found");
