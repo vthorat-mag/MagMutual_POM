@@ -209,6 +209,7 @@ public class HomePage extends CommonAction {
 	
 	public FinancePage navigateToFinanceHomePage() throws Exception
 	{
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Finance in right corner of screen.");
 		clickButton(driver, FinanceTabMenu, "Finanace Tab");
 		return new FinancePage(driver);
 	}
