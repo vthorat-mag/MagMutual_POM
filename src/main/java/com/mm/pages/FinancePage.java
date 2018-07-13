@@ -12,18 +12,18 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
-import com.mm.dto.FinancePageDTO;
+import com.mm.dto.FinancPageDTO;
 import com.mm.dto.FindPolicyPageDTO;
 import com.mm.utils.CommonAction;
+import com.mm.utils.ExcelUtil;
 
 public class FinancePage extends CommonAction {
 
 	WebDriver driver;
-	FinancePageDTO financePageDTO;
+	FinancPageDTO financePageDTO;
 	static String batchNumber;
 	static String accountNumber;
-	String invoiceNumber;
-	String invoiceAmount;
+	static String invoiceAmount;
 	JavascriptExecutor js = (JavascriptExecutor) driver;
 	String accountSearchPageTitle = "Account Search";
 	String allTxnInquireyPageTitle = "All Transactions Inquiry";
@@ -40,6 +40,8 @@ public class FinancePage extends CommonAction {
 	String validlateFieldExpectedValue = "VALIDATE";
 	String validlateFieldAttributeValue = "innerHTML";
 	String validlateFieldName = "Validate";
+	String onDemandPageTitle = "On Demand Invoice";
+	String checkNo = "ST12345";
 
 	@FindBy(name = "globalSearch")
 	WebElement Policy_Search;
@@ -101,7 +103,10 @@ public class FinancePage extends CommonAction {
 
 	@FindBy(id = "FM_CONFIRM_INVOICE_JUMP")
 	WebElement jumpButton;
-
+	
+	@FindBy(id = "btnSaveAsCSV")
+	WebElement saveCSVBtn;
+	
 	@FindBy(id = "FM_CE_BATCH_NEW")
 	WebElement newButton;
 
@@ -165,7 +170,7 @@ public class FinancePage extends CommonAction {
 	public FinancePage(WebDriver driver) throws Exception {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
-		financePageDTO = new FinancePageDTO();
+		financePageDTO = new FinancPageDTO();
 	}
 	
 	
@@ -204,12 +209,14 @@ public class FinancePage extends CommonAction {
 
 	// Search Account from Search Account text field on Finanace Home Page.
 	public FinancePage searchPolicyOnFinanceHomePage() throws Exception {
+		Thread.sleep(2000);
 		invisibilityOfLoader(driver);
+		getPageTitle(driver, accountSearchPageTitle);
 		enterTextIn(driver, PolicyNoTxtBox, financePageDTO.policyNo, "Policy Number");
 		clickButton(driver, Search_btn, "Search");
 		invisibilityOfLoader(driver);
-		Assert.assertTrue(accountList.size() != 0, "Account list is not displayed on " + "Account Search" + "page");
 		Thread.sleep(3000);
+		Assert.assertTrue(accountList.get(0).isDisplayed(), "Account list is not displayed on " + "Account Search" + "page");
 		return new FinancePage(driver);
 	}
 
@@ -224,6 +231,8 @@ public class FinancePage extends CommonAction {
 
 	public FinancePage onDemandInvoice() throws Exception {
 		navigatetoMenuItemPage(driver,billingAdminMenu,onDemandInvoiceMenuOption);
+		Thread.sleep(2000);
+		getPageTitle(driver, onDemandPageTitle);
 		selectDropdownByValue(driver, invoiceOptionDDL, invoiceOptionDDLValue, "Invoice Option");
 		selectDropdownByValue(driver, createChargesDDL, createChargesDDLValue, "Invoice Option");
 		selectDropdownByValue(driver, specifyInvoiceDateDDL, specifyInvoiceDateDDLValue, "Invoice Option");
@@ -234,10 +243,23 @@ public class FinancePage extends CommonAction {
 		Thread.sleep(15000);
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'accountNo=" + accountNumber + "')]")));
-		invoiceNumber = invoiceNo.getAttribute("innerHTML");
 		invoiceAmount = invoiceAmt.getAttribute("innerHTML");
 		clickButton(driver, jumpButton, "Jump");
+		invisibilityOfLoader(driver);
 		switchToParentWindowfromframe(driver);
+		clickButton(driver, saveCSVBtn, "Export Excel");
+		ExcelUtil exlUtil = new ExcelUtil();	
+		exlUtil.downloadExcel();
+		copyFile();
+		
+		String numberValue = getDataFromExcel("Sheet1","Number",1,"C:\\saveExcel\\OnDemandInvoiceCredit.xlsx");
+		Thread.sleep(3000);
+		writeData("TC42250","Number",numberValue,1,System.getProperty("user.dir")+"\\src\\main\\resources\\Form_Data.xlsx");
+		
+		String amountValue = getDataFromExcel("Sheet1","Amount",1,"C:\\saveExcel\\OnDemandInvoiceCredit.xlsx");
+		Thread.sleep(3000);
+		writeData("TC42250","Amount",amountValue,1,System.getProperty("user.dir")+"\\src\\main\\resources\\Form_Data.xlsx");
+		
 		getPageTitle(driver, allTxnInquireyPageTitle);
 		return new FinancePage(driver);
 	}
@@ -249,9 +271,12 @@ public class FinancePage extends CommonAction {
 		clickButton(driver, newButton, "New");
 		invisibilityOfLoader(driver);
 		selectDropdownByValue(driver, paymentTypeDDL, paymentTypeDDLValue, "Payment Type");
-		enterTextIn(driver, invoiceNoOnCashEntryPage, invoiceNumber, "Cash Entry Page's invoice Number");
-		enterTextIn(driver, checkNoOnCashEntryPage, randomNumGenerator(), "Cash Entry Page's Check Number");
-		enterTextIn(driver, amountOnCashEntryPage, invoiceAmount, "Cash Entry Page's Amount");
+		enterTextIn(driver, invoiceNoOnCashEntryPage, financePageDTO.Number, "Cash Entry Page's invoice Number");
+		Thread.sleep(1000);
+		acceptAlert(driver);
+		Thread.sleep(1000);
+		enterTextIn(driver, checkNoOnCashEntryPage, checkNo, "Cash Entry Page's Check Number");
+		enterTextIn(driver, amountOnCashEntryPage, financePageDTO.Amount, "Cash Entry Page's Amount");
 		clickButton(driver, saveBtnOnCashEntryPage, "Cash Entry Page's Save");
 		return new FinancePage(driver);
 	}
