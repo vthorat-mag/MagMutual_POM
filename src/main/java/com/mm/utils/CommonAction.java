@@ -18,16 +18,13 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.RandomStringUtils;
-<<<<<<< Upstream, based on branch 'VT_Feature_Sprint_5' of https://github.com/vthorat-mag/MagMutual_POM.git
 import org.openqa.selenium.Alert;
-=======
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
->>>>>>> 049402d 1. Save Excel AUtoIT script. 2. ExcelUtil update. 3.
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -451,13 +448,6 @@ public class CommonAction implements CommonActionInterface {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-<<<<<<< Upstream, based on branch 'VT_Feature_Sprint_5' of https://github.com/vthorat-mag/MagMutual_POM.git
-		else
-		{return false;}
-		}catch(Exception e)
-		{
-			ExtentReporter.logger.log(LogStatus.WARNING, "Page Loader is not displayed.");
-=======
 	}
 
 	public String getDataFromExcel(String sheetName, String columnName, int rowNum,String filePath)
@@ -547,7 +537,6 @@ public class CommonAction implements CommonActionInterface {
 			}
 		} catch (Exception e) {
 			ExtentReporter.logger.log(LogStatus.FAIL, "Page Loader is not displayed.");
->>>>>>> 049402d 1. Save Excel AUtoIT script. 2. ExcelUtil update. 3.
 		}
 		return false;
 	}

@@ -20,7 +20,6 @@ public class ClaimsDTO {
 	public String claimNum;
 	public String clientIDValue;
 	public String clientNameValue;
-<<<<<<< Upstream, based on branch 'VT_Feature_Sprint_5' of https://github.com/vthorat-mag/MagMutual_POM.git
 	public String seperateCheck;
 	public List <String> transactionType;
 	public List <String> paymentType;
@@ -29,12 +28,9 @@ public class ClaimsDTO {
 	public List <String> transactionAmount;
 	public List <String> invoiceNo;
 	public List <String> payeeName;
-	
-=======
 	public String  policyNum;
 	public String CoverageDescription;
 
->>>>>>> 049402d 1. Save Excel AUtoIT script. 2. ExcelUtil update. 3.
 	public ClaimsDTO() throws Exception{
 
 		for (int iFC=0; iFC < ClaimsDTO.class.getFields().length; iFC++) 

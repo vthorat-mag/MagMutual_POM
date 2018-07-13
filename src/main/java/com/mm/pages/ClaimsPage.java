@@ -30,11 +30,8 @@ public class ClaimsPage extends CommonAction {
 
 	String fileStatusDropDownOption = "OPENERROR";
 	String verifyFileStatusValue = "Opened in Error";
-<<<<<<< Upstream, based on branch 'VT_Feature_Sprint_5' of https://github.com/vthorat-mag/MagMutual_POM.git
 	String fileSearchPageTitle ="File Search";
-=======
 	String duplicateClaimPageTitle = "Possible Duplicate Claim";
->>>>>>> 049402d 1. Save Excel AUtoIT script. 2. ExcelUtil update. 3.
 
 	@FindBy(name = "globalSearch")
 	WebElement claim_Search;

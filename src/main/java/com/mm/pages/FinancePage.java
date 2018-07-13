@@ -12,7 +12,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
-import com.mm.dto.FinancePageDTO;
+import com.mm.dto.FinancPageDTO;
 import com.mm.dto.FindPolicyPageDTO;
 import com.mm.utils.CommonAction;
 import com.mm.utils.ExcelUtil;
@@ -20,15 +20,10 @@ import com.mm.utils.ExcelUtil;
 public class FinancePage extends CommonAction {
 
 	WebDriver driver;
-	FinancePageDTO financePageDTO;
+	FinancPageDTO financePageDTO;
 	static String batchNumber;
 	static String accountNumber;
-<<<<<<< Upstream, based on branch 'VT_Feature_Sprint_5' of https://github.com/vthorat-mag/MagMutual_POM.git
-	String invoiceNumber;
-	String invoiceAmount;
-=======
 	static String invoiceAmount;
->>>>>>> 049402d 1. Save Excel AUtoIT script. 2. ExcelUtil update. 3.
 	JavascriptExecutor js = (JavascriptExecutor) driver;
 	String accountSearchPageTitle = "Account Search";
 	String allTxnInquireyPageTitle = "All Transactions Inquiry";
@@ -175,7 +170,7 @@ public class FinancePage extends CommonAction {
 	public FinancePage(WebDriver driver) throws Exception {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
-		financePageDTO = new FinancePageDTO();
+		financePageDTO = new FinancPageDTO();
 	}
 	
 	
@@ -216,10 +211,7 @@ public class FinancePage extends CommonAction {
 	public FinancePage searchPolicyOnFinanceHomePage() throws Exception {
 		Thread.sleep(2000);
 		invisibilityOfLoader(driver);
-<<<<<<< Upstream, based on branch 'VT_Feature_Sprint_5' of https://github.com/vthorat-mag/MagMutual_POM.git
-=======
 		getPageTitle(driver, accountSearchPageTitle);
->>>>>>> 049402d 1. Save Excel AUtoIT script. 2. ExcelUtil update. 3.
 		enterTextIn(driver, PolicyNoTxtBox, financePageDTO.policyNo, "Policy Number");
 		clickButton(driver, Search_btn, "Search");
 		invisibilityOfLoader(driver);
@@ -279,15 +271,12 @@ public class FinancePage extends CommonAction {
 		clickButton(driver, newButton, "New");
 		invisibilityOfLoader(driver);
 		selectDropdownByValue(driver, paymentTypeDDL, paymentTypeDDLValue, "Payment Type");
-<<<<<<< Upstream, based on branch 'VT_Feature_Sprint_5' of https://github.com/vthorat-mag/MagMutual_POM.git
-		enterTextIn(driver, invoiceNoOnCashEntryPage, invoiceNumber, "Cash Entry Page's invoice Number");
-		enterTextIn(driver, checkNoOnCashEntryPage, randomNumGenerator(), "Cash Entry Page's Check Number");
-		enterTextIn(driver, amountOnCashEntryPage, invoiceAmount, "Cash Entry Page's Amount");
-=======
 		enterTextIn(driver, invoiceNoOnCashEntryPage, financePageDTO.Number, "Cash Entry Page's invoice Number");
+		Thread.sleep(1000);
+		acceptAlert(driver);
+		Thread.sleep(1000);
 		enterTextIn(driver, checkNoOnCashEntryPage, checkNo, "Cash Entry Page's Check Number");
 		enterTextIn(driver, amountOnCashEntryPage, financePageDTO.Amount, "Cash Entry Page's Amount");
->>>>>>> 049402d 1. Save Excel AUtoIT script. 2. ExcelUtil update. 3.
 		clickButton(driver, saveBtnOnCashEntryPage, "Cash Entry Page's Save");
 		return new FinancePage(driver);
 	}
