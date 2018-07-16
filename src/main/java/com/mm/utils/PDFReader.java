@@ -38,6 +38,7 @@ public class PDFReader extends CommonAction {
 	WebDriver driver;
 	pdfReaderDTO pdfreaderdto;
 	int i =0;
+	String ExcelPath = System.getProperty("user.dir")+"\\src\\main\\resources\\Form_Data.xlsx";
 	
 	//AUTOIT script execution to save PDF.
 	public PDFReader savePDF() throws IOException, InterruptedException {
@@ -59,7 +60,7 @@ public class PDFReader extends CommonAction {
 	}
 
 	//Logic to verify PDF content.
-	public PolicyBinderPage verifyPdfContent(String PolicyNo) throws IOException, AWTException, InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
+	public PolicyBinderPage verifyPdfContent(String PolicyNo) throws Exception {
 		Thread.sleep(15000);
 		//getPageTitle(driver, "Policy Folder "+PolicyNo);
 		boolean flag = false;

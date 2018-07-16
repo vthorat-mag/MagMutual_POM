@@ -1,11 +1,16 @@
 package com.mm.utils;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.NoSuchElementException;
 
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -51,6 +56,44 @@ public class ExcelUtil {
 		String[] executionPath = {System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\saveExcel.exe"};
 		Runtime.getRuntime().exec(executionPath);
 		Thread.sleep(12000);
+	}
+	
+	public void writeData(String testCaseId, String columnName, String cellValue, int rowNum,String saveDataFilePath) throws Exception {
+		String excelFilePath = saveDataFilePath;
+		FileInputStream inputStream;
+
+		inputStream = new FileInputStream(new File(excelFilePath));
+		try {
+
+			XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
+			XSSFSheet dataSheet = (XSSFSheet) workbook.getSheet(testCaseId);
+
+			Row headerRow = dataSheet.getRow(0);
+
+			for (int cellNumber = headerRow.getFirstCellNum(); cellNumber <= headerRow.getLastCellNum()
+					- 1; cellNumber++) {
+				Cell headerCell = headerRow.getCell(cellNumber);
+				System.out.println(headerCell.getStringCellValue().toLowerCase());
+				if (headerCell.getStringCellValue().toLowerCase().trim().equals(columnName.toLowerCase())) {
+					Row dataRow = dataSheet.getRow(rowNum);
+					Cell dataCell = dataRow.getCell(cellNumber);
+					dataCell.setCellValue(cellValue);
+					break;
+				}
+
+			} // for loop - cellNumber
+			inputStream.close();
+			FileOutputStream outputStream = new FileOutputStream(excelFilePath);
+			workbook.write(outputStream);
+			workbook.close();
+			outputStream.flush();
+			outputStream.close();
+
+		} catch (NoSuchElementException e) {
+
+			e.printStackTrace();
+		}
+
 	}
 }
 

@@ -51,7 +51,7 @@ public class CommonAction implements CommonActionInterface {
 	int Medium = 30;
 	int High = 50;
 	String findPolicyQuotePage = "Find Policy/Quote";
-
+	
 	public void selectValue(WebDriver driver, WebElement pageElement, String value) {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, Medium);
