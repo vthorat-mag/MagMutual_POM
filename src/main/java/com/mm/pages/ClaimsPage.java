@@ -32,6 +32,7 @@ public class ClaimsPage extends CommonAction {
 	String verifyFileStatusValue = "Opened in Error";
 	String fileSearchPageTitle ="File Search";
 	String duplicateClaimPageTitle = "Possible Duplicate Claim";
+	String ExcelPath = System.getProperty("user.dir")+"\\src\\main\\resources\\Form_Data.xlsx";
 
 	@FindBy(name = "globalSearch")
 	WebElement claim_Search;
@@ -587,8 +588,6 @@ public class ClaimsPage extends CommonAction {
 		}
 		switchToParentWindowfromframe(driver);
 		visibilityOfElement(driver, claimNo, "Claim Number");
-		String claimNumber = claimNo.getAttribute("innerHTML");
-		//TODO - save claimNumber to excel
 	}
 	public boolean checkduplicateClaimWindow()
 	{

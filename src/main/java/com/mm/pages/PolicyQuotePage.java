@@ -383,6 +383,7 @@ public class PolicyQuotePage extends CommonAction {
 		waitForElementToLoad(driver, 10, Exit_Ok);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [OK]");
 		clickButton(driver, Exit_Ok, "Exit Ok");
+		invisibilityOfLoader(driver);
 		return new PolicyQuotePage(driver);
 	}
 }
