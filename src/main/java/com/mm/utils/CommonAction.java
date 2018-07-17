@@ -14,6 +14,8 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -63,34 +65,33 @@ public class CommonAction implements CommonActionInterface {
 
 		try {
 			driver.switchTo().window(parentwindow);
-			ExtentReporter.logger.log(LogStatus.PASS, "Control switched back to parent window.");
+			ExtentReporter.logger.log(LogStatus.INFO, "Control switched back to parent window.");
 		} catch (Exception e) {
 			e.printStackTrace();
-			ExtentReporter.logger.log(LogStatus.FAIL, "Error while switching to parent window.");
+			ExtentReporter.logger.log(LogStatus.WARNING, "Error while switching to parent window.");
 		}
 	}
 
-	public void switchToFrameUsingId(WebDriver driver, String frameName) {
-
+	public void switchToFrameUsingId(WebDriver driver, String frameName) throws InterruptedException {
+		Thread.sleep(3000);
 		try {
 			driver.switchTo().frame(frameName);
-			ExtentReporter.logger.log(LogStatus.PASS, "Control switched Switched to frame.");
+			ExtentReporter.logger.log(LogStatus.INFO, "Control switched Switched to frame.");
 		} catch (Exception e) {
 			e.printStackTrace();
-			ExtentReporter.logger.log(LogStatus.FAIL, "Error while switching to frame.");
+			ExtentReporter.logger.log(LogStatus.WARNING, "Error while switching to frame.");
 		}
 
 	}
 
 	public void switchToFrameUsingElement(WebDriver driver, WebElement element) throws Exception {
-		waitFor(driver, 15);
-		Thread.sleep(5000);
+		Thread.sleep(4000);
 		try {
 			driver.switchTo().frame(element);
-			ExtentReporter.logger.log(LogStatus.PASS, "Control switched Switched to frame.");
+			ExtentReporter.logger.log(LogStatus.INFO, "Control switched Switched to frame.");
 		} catch (Exception e) {
 			e.printStackTrace();
-			ExtentReporter.logger.log(LogStatus.FAIL, "Error while switching to frame.");
+			ExtentReporter.logger.log(LogStatus.WARNING, "Error while switching to frame.");
 		}
 	}
 
@@ -138,9 +139,8 @@ public class CommonAction implements CommonActionInterface {
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
 			Assert.assertTrue(pageElement.isDisplayed(), textField + " is not displayed on screen.");
 			pageElement.sendKeys(text);
-			JavascriptExecutor js = (JavascriptExecutor) driver;
-			js.executeScript("arguments[0].value=text;", pageElement);
-
+			/*JavascriptExecutor js = (JavascriptExecutor) driver;
+			js.executeScript("arguments[0].value=text;", pageElement);*/
 			ExtentReporter.logger.log(LogStatus.PASS, "Value "+text+" entered in text field " + textField);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -153,7 +153,7 @@ public class CommonAction implements CommonActionInterface {
 			WebDriverWait wait = new WebDriverWait(driver, High);
 			wait.until(ExpectedConditions.elementToBeClickable(pageElement));
 			JavascriptExecutor js = (JavascriptExecutor) driver;
-			Assert.assertTrue(pageElement.isDisplayed(), buttonName + " button is displayed on screen.");
+			Assert.assertTrue(pageElement.isDisplayed(), buttonName + " button is Not displayed on screen.");
 			js.executeScript("arguments[0].click();", pageElement);
 			ExtentReporter.logger.log(LogStatus.PASS, "clicked on button / Link- " + buttonName);
 		} catch (Exception e) {
@@ -319,13 +319,12 @@ public class CommonAction implements CommonActionInterface {
 			wait.until(ExpectedConditions.visibilityOf(element));
 			Select Sel = new Select(element);
 			Sel.selectByValue(DropDownOption);
-			ExtentReporter.logger.log(LogStatus.PASS, "Value is selected from " + label + " drop down");
+			ExtentReporter.logger.log(LogStatus.PASS, DropDownOption+" value is selected from " + label + " drop down list");
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			ExtentReporter.logger.log(LogStatus.FAIL, "Value is not selected from" + label + "drop down");
+			ExtentReporter.logger.log(LogStatus.FAIL, "No value is selected from " + label + " drop down list");
 		}
-
 	}
 
 	public void selectDropdownByVisibleText(WebDriver driver, WebElement element, String DropDownOption, String label) {
@@ -335,11 +334,11 @@ public class CommonAction implements CommonActionInterface {
 			wait.until(ExpectedConditions.visibilityOf(element));
 			Select Sel = new Select(element);
 			Sel.selectByVisibleText(DropDownOption);
-			ExtentReporter.logger.log(LogStatus.PASS, DropDownOption + "  is selected from " + label + " drop down");
+			ExtentReporter.logger.log(LogStatus.PASS, DropDownOption + "  is selected from " + label + " drop down list");
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			ExtentReporter.logger.log(LogStatus.FAIL, DropDownOption + "   is not selected from" + label + "drop down");
+			ExtentReporter.logger.log(LogStatus.FAIL, "No value is selected from " + label + " drop down list");
 		}
 
 	}
@@ -374,7 +373,6 @@ public class CommonAction implements CommonActionInterface {
 	}
 
 	// This method is called to load a page during navigation through pages
-
 	public void waitForPageLoad(WebDriver driver, int Timeout) {
 		ExpectedCondition<Boolean> pageLoadCondition = new ExpectedCondition<Boolean>() {
 			public Boolean apply(WebDriver driver) {
@@ -393,11 +391,36 @@ public class CommonAction implements CommonActionInterface {
 
 	}
 	
+	/*public boolean isAlertPresent(WebDriver driver){
+	    boolean foundAlert = false;
+	    WebDriverWait wait = new WebDriverWait(driver,5);
+	    try {
+	        wait.until(ExpectedConditions.alertIsPresent());
+	        foundAlert = true;
+	    } catch (TimeoutException eTO) {
+	        foundAlert = false;
+	    }
+	    return foundAlert;
+	}*/
+	
+	 public static boolean isAlertPresent(WebDriver driver) throws InterruptedException{
+         try{
+        	 Thread.sleep(2000);
+             driver.switchTo().alert();
+             return true;
+             }catch(NoAlertPresentException ex){
+                   return false;
+             }
+         }
+	
+	
 	public void acceptAlert(WebDriver driver){
 		
 		Alert saveAlert= driver.switchTo().alert();
 			  saveAlert.accept();
+			  
 	}
+	
 	
 	public String getAlertText(WebDriver driver){
 		String saveAlertText= driver.switchTo().alert().getText();
@@ -444,20 +467,32 @@ public class CommonAction implements CommonActionInterface {
 		return false;
 	}
 
+	
+	public void refreshAPage(WebDriver driver){
+		driver.navigate().refresh();
+	}
+	
+	
 	public void saveOption(WebDriver driver, WebElement saveOptionBtn, WebElement saveAsDropDown,
-			WebElement saveOptionOkBtn, String saveOption)
+			WebElement saveOKBtn, WebElement exitOK, String saveAsValue)
 			throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
-		Thread.sleep(5000);
+		Thread.sleep(2000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options");
 		waitForElementToLoad(driver, 15, saveOptionBtn);
 		clickButton(driver, saveOptionBtn, "Save Option");
-		Thread.sleep(4000);
+		Thread.sleep(2000);
 		switchToFrameUsingId(driver, "popupframe1");
 		getPageTitle(driver, "Save As");
-		selectDropdownByVisibleText(driver, saveAsDropDown, saveOption, "Selected " + saveOption);
-		ExtentReporter.logger.log(LogStatus.INFO, "Select " + saveOption + " Click [OK]");
-		clickButton(driver, saveOptionOkBtn, "Save");
+		selectDropdownByVisibleText(driver, saveAsDropDown, saveAsValue, "Selected " + saveAsValue);
+		ExtentReporter.logger.log(LogStatus.INFO, "Select " + saveAsValue + " Click [OK]");
+		clickButton(driver, saveOKBtn, "Save");
+		invisibilityOfLoader(driver);
 		switchToParentWindowfromframe(driver);
-		Thread.sleep(3000);
+		switchToFrameUsingId(driver, "popupframe1");
+		Thread.sleep(5000);
+		ExtentReporter.logger.log(LogStatus.INFO, "Save as Official window displays");
+		clickButton(driver, exitOK, "Workflow exit OK");
+		switchToParentWindowfromframe(driver);
+		Thread.sleep(2000);
 	}
 }
