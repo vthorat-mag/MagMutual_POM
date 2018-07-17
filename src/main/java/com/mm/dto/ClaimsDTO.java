@@ -28,7 +28,9 @@ public class ClaimsDTO {
 	public List <String> transactionAmount;
 	public List <String> invoiceNo;
 	public List <String> payeeName;
-	
+	public String  policyNum;
+	public String CoverageDescription;
+
 	public ClaimsDTO() throws Exception{
 
 		for (int iFC=0; iFC < ClaimsDTO.class.getFields().length; iFC++) 

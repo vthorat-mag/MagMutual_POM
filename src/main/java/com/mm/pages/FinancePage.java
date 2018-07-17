@@ -12,18 +12,27 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
-import com.mm.dto.FinancePageDTO;
+import com.mm.dto.FinancPageDTO;
 import com.mm.dto.FindPolicyPageDTO;
 import com.mm.utils.CommonAction;
+import com.mm.utils.ExcelUtil;
+import com.mm.utils.ExtentReporter;
+import com.relevantcodes.extentreports.LogStatus;
 
 public class FinancePage extends CommonAction {
 
 	WebDriver driver;
-	FinancePageDTO financePageDTO;
+	FinancPageDTO financePageDTO;
 	static String batchNumber;
 	static String accountNumber;
-	String invoiceNumber;
-	String invoiceAmount;
+	static String invoiceAmount;
+	String onDemandInvoiceExcelName = "OnDemandInvoiceCredit";
+	String PaymentCreditExcelName = "PaymentCredit";
+	String openbatchcreditExcelName = "openbatchcredit";
+	String FinancePageExcelName = "FinancePage";
+	String validatebatchcreditExcelName = "validatebatchcredit";
+	String postedbatchcreditExcelName = "postedbatchcredit";
+	String alltransactionlistafterpaymentcreditExcelName = "alltransactionlistafterpaymentcredit";
 	JavascriptExecutor js = (JavascriptExecutor) driver;
 	String accountSearchPageTitle = "Account Search";
 	String allTxnInquireyPageTitle = "All Transactions Inquiry";
@@ -40,6 +49,9 @@ public class FinancePage extends CommonAction {
 	String validlateFieldExpectedValue = "VALIDATE";
 	String validlateFieldAttributeValue = "innerHTML";
 	String validlateFieldName = "Validate";
+	String onDemandPageTitle = "On Demand Invoice";
+	String checkNo = "ST12345";
+	ExcelUtil exlUtil = new ExcelUtil();	
 
 	@FindBy(name = "globalSearch")
 	WebElement Policy_Search;
@@ -101,7 +113,10 @@ public class FinancePage extends CommonAction {
 
 	@FindBy(id = "FM_CONFIRM_INVOICE_JUMP")
 	WebElement jumpButton;
-
+	
+	@FindBy(id = "btnSaveAsCSV")
+	WebElement saveCSVBtn;
+	
 	@FindBy(id = "FM_CE_BATCH_NEW")
 	WebElement newButton;
 
@@ -165,7 +180,7 @@ public class FinancePage extends CommonAction {
 	public FinancePage(WebDriver driver) throws Exception {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
-		financePageDTO = new FinancePageDTO();
+		financePageDTO = new FinancPageDTO();
 	}
 	
 	
@@ -204,18 +219,22 @@ public class FinancePage extends CommonAction {
 
 	// Search Account from Search Account text field on Finanace Home Page.
 	public FinancePage searchPolicyOnFinanceHomePage() throws Exception {
+		Thread.sleep(2000);
 		invisibilityOfLoader(driver);
+		getPageTitle(driver, accountSearchPageTitle);
+		ExtentReporter.logger.log(LogStatus.INFO, "Using the policy from 'Issue Policy Forms' test case enter Policy number in Policy#: search box and click Search.");
 		enterTextIn(driver, PolicyNoTxtBox, financePageDTO.policyNo, "Policy Number");
 		clickButton(driver, Search_btn, "Search");
 		invisibilityOfLoader(driver);
-		Assert.assertTrue(accountList.size() != 0, "Account list is not displayed on " + "Account Search" + "page");
 		Thread.sleep(3000);
+		Assert.assertTrue(accountList.get(0).isDisplayed(), "Account list is not displayed on " + "Account Search" + "page");
 		return new FinancePage(driver);
 	}
 
 	// This method will click on first account number displayed after Policy
 	// search.
 	public FinancePage openFirstAccount() throws Exception {
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Account No("+accountList.get(0).getAttribute("innerHTML")+").");
 		clickButton(driver, accountList.get(0), "Account List");
 		invisibilityOfLoader(driver);
 		getPageTitle(driver, allTxnInquireyPageTitle);
@@ -223,76 +242,151 @@ public class FinancePage extends CommonAction {
 	}
 
 	public FinancePage onDemandInvoice() throws Exception {
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Billing Admin>On Demand Invoice.");
 		navigatetoMenuItemPage(driver,billingAdminMenu,onDemandInvoiceMenuOption);
+		Thread.sleep(2000);
+		getPageTitle(driver, onDemandPageTitle);
+		ExtentReporter.logger.log(LogStatus.INFO, "Select the below options.");
+		ExtentReporter.logger.log(LogStatus.INFO, "Invoice Option: Immediately.");
+		ExtentReporter.logger.log(LogStatus.INFO, "Create Charges: No.");
+		ExtentReporter.logger.log(LogStatus.INFO, "Specify Invoice Date: No.");
+		ExtentReporter.logger.log(LogStatus.INFO, "No Specify Due Date: No.");
 		selectDropdownByValue(driver, invoiceOptionDDL, invoiceOptionDDLValue, "Invoice Option");
 		selectDropdownByValue(driver, createChargesDDL, createChargesDDLValue, "Invoice Option");
 		selectDropdownByValue(driver, specifyInvoiceDateDDL, specifyInvoiceDateDDLValue, "Invoice Option");
 		selectDropdownByValue(driver, specifyDueDateDDL, specifyDueDateDDLValue, "Invoice Option");
 		accountNumber = accountNo.getAttribute("innerHTML");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click [Process].");
 		clickButton(driver, processButton, "Process");
 		invisibilityOfLoader(driver);
 		Thread.sleep(15000);
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'accountNo=" + accountNumber + "')]")));
-		invoiceNumber = invoiceNo.getAttribute("innerHTML");
 		invoiceAmount = invoiceAmt.getAttribute("innerHTML");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click [Jump].");
 		clickButton(driver, jumpButton, "Jump");
+		invisibilityOfLoader(driver);
 		switchToParentWindowfromframe(driver);
+		ExtentReporter.logger.log(LogStatus.INFO, "Export All Transactions to excel");
+		clickButton(driver, saveCSVBtn, "Export Excel");
+		exlUtil.downloadExcel();
+		copyFile(onDemandInvoiceExcelName);
+		
+		String numberValue = getDataFromExcel("Sheet1","Number",1,"C:\\saveExcel\\OnDemandInvoiceCredit.xlsx");
+		Thread.sleep(3000);
+		writeData("TC42250","Number",numberValue,1,System.getProperty("user.dir")+"\\src\\main\\resources\\Form_Data.xlsx");
+		
+		String amountValue = getDataFromExcel("Sheet1","Amount",1,"C:\\saveExcel\\OnDemandInvoiceCredit.xlsx");
+		Thread.sleep(3000);
+		writeData("TC42250","Amount",amountValue,1,System.getProperty("user.dir")+"\\src\\main\\resources\\Form_Data.xlsx");
+		
 		getPageTitle(driver, allTxnInquireyPageTitle);
 		return new FinancePage(driver);
 	}
 
 	public FinancePage cashEntry() throws Exception {
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Payments>Cash Entry");
 		navigatetoMenuItemPage(driver,paymentsMenu,cashEntryMenuOption);
+		
 		invisibilityOfLoader(driver);
 		getPageTitle(driver, cashEntryPageTitle);
+		ExtentReporter.logger.log(LogStatus.INFO, "Click [New]");
 		clickButton(driver, newButton, "New");
 		invisibilityOfLoader(driver);
+		ExtentReporter.logger.log(LogStatus.INFO, "Payment Type: Check");
 		selectDropdownByValue(driver, paymentTypeDDL, paymentTypeDDLValue, "Payment Type");
-		enterTextIn(driver, invoiceNoOnCashEntryPage, invoiceNumber, "Cash Entry Page's invoice Number");
-		enterTextIn(driver, checkNoOnCashEntryPage, randomNumGenerator(), "Cash Entry Page's Check Number");
-		enterTextIn(driver, amountOnCashEntryPage, invoiceAmount, "Cash Entry Page's Amount");
+		ExtentReporter.logger.log(LogStatus.INFO, "Invoice No: "+financePageDTO.Number+"");
+		enterTextIn(driver, invoiceNoOnCashEntryPage, financePageDTO.Number, "Cash Entry Page's invoice Number");
+		checkNoOnCashEntryPage.click();//check no element is clicked to enable Alert.
+		Thread.sleep(1000);
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Ok");
+		acceptAlert(driver);
+		Thread.sleep(1000);
+		ExtentReporter.logger.log(LogStatus.INFO, "Check No: Enter ST12345");
+		enterTextIn(driver, checkNoOnCashEntryPage, checkNo, "Cash Entry Page's Check Number");
+		ExtentReporter.logger.log(LogStatus.INFO, "Amount:"+financePageDTO.Amount+"");
+		enterTextIn(driver, amountOnCashEntryPage, financePageDTO.Amount, "Cash Entry Page's Amount");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click [Save]");
 		clickButton(driver, saveBtnOnCashEntryPage, "Cash Entry Page's Save");
+		ExtentReporter.logger.log(LogStatus.INFO, "Export All Transactions to excel");
+		clickButton(driver, saveCSVBtn, "Export Excel");
+		exlUtil.downloadExcel();
+		copyFile(PaymentCreditExcelName);
 		return new FinancePage(driver);
 	}
 
 	public FinancePage batchFunction() throws Exception {
-		invisibilityOfLoader(driver);
+		//invisibilityOfLoader(driver);
 		batchNumber = batchNo.getAttribute("innerHTML");
-		js.executeScript("arguments[0].click();", paymentsMenu);
-		js.executeScript("arguments[0].click();", batchFunctionMenuOption);
+		Thread.sleep(2000);
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Payments>Batch Functions");
+		/*js.executeScript("arguments[0].click();", paymentsMenu);
+		js.executeScript("arguments[0].click();", batchFunctionMenuOption);*/
+		navigatetoMenuItemPage(driver, paymentsMenu, batchFunctionMenuOption);
 		invisibilityOfLoader(driver);
 		getPageTitle(driver, batchFunctionPageTitle);
+		ExtentReporter.logger.log(LogStatus.INFO, "Select Batch that was just created(usually will be the first one)");
 		for (int i = 0; i < batchNoOnBatchFunPage.size(); i++) {
 			if (batchNoOnBatchFunPage.get(i).getAttribute("innerHTML").equals(batchNumber)) {
 				clickButton(driver, batchNoOnBatchFunPage.get(i), "Batch Number");
-				clickButton(driver, validateBatchBtn, "Validate Batch");
-				switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'batchNo="
-						+ batchNoOnBatchFunPage.get(i).getAttribute("innerHTML") + "')]")));
 				break;
 			}
 		}
+		ExtentReporter.logger.log(LogStatus.INFO, "Export All Transactions to excel");
+		clickButton(driver, saveCSVBtn, "Export Excel");
+		exlUtil.downloadExcel();
+		copyFile(openbatchcreditExcelName);
+		
+		return new FinancePage(driver);
+	}
+	
+	public FinancePage validateBatch() throws Exception
+	{
+		ExtentReporter.logger.log(LogStatus.INFO, "Click [Validate Batch]");
+		clickButton(driver, validateBatchBtn, "Validate Batch");
 		getPageTitle(driver, validateBatchPageTitle);
-		enterTextIn(driver, batchAmount, BatchAmount, "batch Amount");
+		ExtentReporter.logger.log(LogStatus.INFO, "Enter below information");
+		ExtentReporter.logger.log(LogStatus.INFO, "Amount:"+financePageDTO.Amount+"");
+		enterTextIn(driver, batchAmount, financePageDTO.Amount, "batch Amount");
+		ExtentReporter.logger.log(LogStatus.INFO, "No. of Payment: 1");
 		enterTextIn(driver, numberOfPaymentTxtBox, BatchNoPayment, "Batch Number Of Payment");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click[Done]");
 		clickButton(driver, doneBatchPopUp, "Done");
 		switchToParentWindowfromframe(driver);
 		invisibilityOfLoader(driver);
-		verifyValueFromField(driver, validateField, validlateFieldExpectedValue, validlateFieldAttributeValue,
-				validlateFieldName);
+		/*verifyValueFromField(driver, validateField, validlateFieldExpectedValue, validlateFieldAttributeValue,
+				validlateFieldName);*/
+		ExtentReporter.logger.log(LogStatus.INFO, "Export All Transactions to excel");
+		clickButton(driver, saveCSVBtn, "Export Excel");
+		exlUtil.downloadExcel();
+		copyFile(validatebatchcreditExcelName);
 		return new FinancePage(driver);
 	}
 	
 	public FinancePage postBatchFunctionality() throws Exception
 	{
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Post Batch Button.");
 		clickButton(driver, postBatchBtn, "Post Batch");
-		Alert alert = driver.switchTo().alert();
-		alert.accept();
+		/*Alert alert = driver.switchTo().alert();
+		alert.accept();*/
+		ExtentReporter.logger.log(LogStatus.INFO, "Click [Ok]");
+		acceptAlert(driver);
+		ExtentReporter.logger.log(LogStatus.INFO, "Export All Transactions to excel");
+		clickButton(driver, saveCSVBtn, "Export Excel");
+		exlUtil.downloadExcel();
+		copyFile(postedbatchcreditExcelName);
+		return new FinancePage(driver);
+	}
+	
+	public void donwloadFinalSheetBySearchingAccountNo() throws Exception
+	{
+		ExtentReporter.logger.log(LogStatus.INFO, "Enter account number in account search box in upper right corner of the page.");
 		policySearch(driver, accountNumber, Policy_Search, Search_btn);
 		invisibilityOfLoader(driver);
 		getPageTitle(driver, allTxnInquireyPageTitle);
-		Assert.assertTrue(currBalOnAllTxnEnqPage.getAttribute("innerHTML").equals(financePageDTO.currunetBalance),
-				"Current Balance is not zero on All transaction enquirey Page");
-		return new FinancePage(driver);
+		ExtentReporter.logger.log(LogStatus.INFO, "Export All Transactions to excel");
+		clickButton(driver, saveCSVBtn, "Export Excel");
+		exlUtil.downloadExcel();
+		copyFile(alltransactionlistafterpaymentcreditExcelName);
 	}
 }

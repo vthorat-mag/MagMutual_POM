@@ -31,6 +31,8 @@ public class ClaimsPage extends CommonAction {
 	String fileStatusDropDownOption = "OPENERROR";
 	String verifyFileStatusValue = "Opened in Error";
 	String fileSearchPageTitle ="File Search";
+	String duplicateClaimPageTitle = "Possible Duplicate Claim";
+	String ExcelPath = System.getProperty("user.dir")+"\\src\\main\\resources\\Form_Data.xlsx";
 
 	@FindBy(name = "globalSearch")
 	WebElement claim_Search;
@@ -88,6 +90,24 @@ public class ClaimsPage extends CommonAction {
 
 	@FindBy(id = "CI_ENT_SEL_LST_FORM_SEL")
 	WebElement selectBtnOnEntitySelectListPage;
+	
+	@FindBy(name = "coverageFilter_policyNo")
+	WebElement policyNoDDL;
+	
+	@FindBy(xpath = "//table[@id='claimCoverageListGrid']//div[@id='CCOVERAGEDESC']")
+	List<WebElement> coverageDescriptionList;
+	
+	@FindBy(xpath = "//table[@id='claimCoverageListGrid']//input[@name='chkCSELECT_IND']")
+	List<WebElement> coverageDescriptionChkBoxList;
+	
+	@FindBy(id = "CM_CREATE_CLM_SC")
+	WebElement saveAsClaimBtn;
+	
+	@FindBy(id = "CM_VERDUP_CLM_SC")
+	WebElement saveAsClaimBtnOnPsblDuplciateClaimPage;
+	
+	@FindBy(id = "claimHeaderClaimNoROSPAN1")
+	WebElement claimNo;
 
 	@FindBy(xpath = "//select[@name ='claimType']")
 	WebElement FileTypeDropDown;
@@ -478,55 +498,109 @@ public class ClaimsPage extends CommonAction {
 	}
 
 	// Select Patient.
-	public void getPatientDetails(String clientIdValue) throws Exception {
+	public ClaimsPage getPatientDetails() throws Exception {
+		ExtentReporter.logger.log(LogStatus.INFO,"Click [Files]-- Add[File]");
 		Thread.sleep(2000);
 		Actions builder = new Actions(driver);
 		builder.moveToElement(filesMenuTab).build().perform();
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("arguments[0].click();", fileAddMenuOption);
-		// clickButton(driver, fileAddMenuOption, "Add File Menu");
+		invisibilityOfLoader(driver);
+		Thread.sleep(3000);
 		getPageTitle(driver, ClaimsDTO.addFilePageTitle);
+		ExtentReporter.logger.log(LogStatus.INFO,"Click Magnifying glass by Search Patient.");
 		clickButton(driver, patientSearchIcon, "Patient Search");
 		waitFor(driver, 10);
+		ExtentReporter.logger.log(LogStatus.INFO,"In Last name field enter '"+ClaimsDTO.lastName+"'");
+		ExtentReporter.logger.log(LogStatus.INFO,"In Last name field enter '"+ClaimsDTO.firstName+"'");
 		String parentWindowId = switchToWindow(driver);
 		getPageTitle(driver, ClaimsDTO.entitySearchListPageTitle);
 		enterTextIn(driver, lastNameEntitySearchPage, ClaimsDTO.lastName, "Last Name");
 		enterTextIn(driver, firstNameEntitySearchPage, ClaimsDTO.firstName, "First Name");
+		ExtentReporter.logger.log(LogStatus.INFO,"Press Enter or Search");
 		clickButton(driver, searchBtnOnEntitySearchPage, "Entity Search Page's Search");
 		Assert.assertEquals(resultOnEntityListPage.getAttribute("innerHTML").trim(),
 				ClaimsDTO.lastName + ", " + ClaimsDTO.firstName + ",", "Data displayed after search is not correct");
 		waitFor(driver, 5);
+		ExtentReporter.logger.log(LogStatus.INFO,"Check the checkbox next to"+ ClaimsDTO.lastName+","+ClaimsDTO.lastName+".");
+		ExtentReporter.logger.log(LogStatus.INFO,"Click [Select]");
 		clickButton(driver, selectEntityChkBox, "Select Entity Check Box");
 		clickButton(driver, selectBtnOnEntitySelectListPage, "Entity Select List Page's Select");
 		switchToParentWindowfromotherwindow(driver, parentWindowId);
 		Assert.assertEquals(patientSelectedValue.getAttribute("value").trim(),
 				ClaimsDTO.lastName + ", " + ClaimsDTO.firstName + ",", "Patient selected is NOT displayed correctly");
+		return new ClaimsPage(driver);
+		
+	}
+	
+	//Enter data in Claims page.
+	public void enterDataOnClaimsPage(String clientIdValue) throws Exception
+	{
+		ExtentReporter.logger.log(LogStatus.INFO,"Click the dropdown by file type and select claim ");
 		selectDropdownByValue(driver, FileTypeDropDown, ClaimsDTO.fileTypeDropDownValue, "File Type");
+		ExtentReporter.logger.log(LogStatus.INFO,"Click the LOB dropdown and select HLP");
 		selectDropdownByValue(driver, lobDropDown, ClaimsDTO.lobDropDownValue, "LOB");
+		ExtentReporter.logger.log(LogStatus.INFO,"Enter 'Test' in the description field ");
 		enterTextIn(driver, descriptionTextBox, ClaimsDTO.description, "Description");
+		ExtentReporter.logger.log(LogStatus.INFO,"Click File Handler dropdown and select Act Super, EJ");
 		selectDropdownByValue(driver, fileHandlerDorpDown, ClaimsDTO.fileHandlerDropDownValue, "File Handler");
+		ExtentReporter.logger.log(LogStatus.INFO,"Click State of Loss dropdown and select GA");
 		selectDropdownByValue(driver, stateOfLossDorpDown, ClaimsDTO.stateOfLossDropDownValue, "State Of Loss");
+		ExtentReporter.logger.log(LogStatus.INFO,"Enter today's date in 'Accident Date' field");
 		enterTextIn(driver, accidentDateTextBox, comUtil.getSystemDatemmddyyyy(), "Accident Date");
+		ExtentReporter.logger.log(LogStatus.INFO,"Click the magnifying glass next to insured");
 		clickButton(driver, insuredSearchIcon, "Insured Search Icon");
 		String parentWindowIdSearchEntity = switchToWindow(driver);
 		String searchEntityTitle = getPageTitle(driver, ClaimsDTO.searchEntityPageTitle);
+		ExtentReporter.logger.log(LogStatus.INFO,"In the search screen enter the client id that was noted in step 5 Click [Search]");
 		enterTextIn(driver, entityClientId, clientIdValue, "Client Id");
 		clickButton(driver, searchBtnOnEntitySearchPage, "Entity Search Page's Search");
 		waitFor(driver, 10);
 		Assert.assertTrue(resultOnEntityListPage.isDisplayed(),
 				"Insured Name is not populated on 'Entity Select List' page.");
+		ExtentReporter.logger.log(LogStatus.INFO,"Click the checkbox next to the insured's name  Click [Select]");
 		clickButton(driver, selectEntityChkBox, "Insured Name");
 		clickButton(driver, selectBtnOnEntitySelectListPage, "Select");
-
-		// TODO - Need To add below steps once got confirmaiton on query - Cant
-		// see policy No from Policy No drop down field.
-		/*
-		 * In the filter criteria section, click the Policy No dropdown and
-		 * Select [Policy number entered in step 3] Click the checkbox next the
-		 * Prof Liab coverage Click Save as Claim Possible duplicate claim
-		 * screen displays Click Save as Claim Claim No displays in the upper
-		 * left corner. Note (and save for later input) the claim number:
-		 * ****add ########### Click [Close]
-		 */
+		switchToParentWindowfromotherwindow(driver, parentWindowIdSearchEntity);
+		invisibilityOfLoader(driver);
+		Thread.sleep(2000);
+		ExtentReporter.logger.log(LogStatus.INFO,"In the filter criteria section, click the Policy No dropdown and Select [Policy number entered in step 3]");
+		selectDropdownByValue(driver, policyNoDDL, claimsdto.policyNum, "Policy Number");
+		ExtentReporter.logger.log(LogStatus.INFO,"Click the checkbox next the Prof Liab coverage Click Save as Claim");
+		try{
+		for (int i=0;i<coverageDescriptionList.size();i++)
+		{
+			if(coverageDescriptionList.get(i).getAttribute("innerHTML").trim().equalsIgnoreCase(claimsdto.CoverageDescription)){
+				clickButton(driver, coverageDescriptionChkBoxList.get(i), "Coverage Description Check Box");
+				break;
+			}
+		}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		ExtentReporter.logger.log(LogStatus.INFO,"Click Save as Claim ");
+		clickButton(driver, saveAsClaimBtn, "Save As Claim");
+		if(checkduplicateClaimWindow()==true)
+		{
+			switchToFrameUsingElement(driver, changeFileStatusFrameEle);
+			clickButton(driver, saveAsClaimBtnOnPsblDuplciateClaimPage, "Save As Claim");
+			invisibilityOfLoader(driver);
+		}else{
+			ExtentReporter.logger.log(LogStatus.INFO, "Duplicat Claims window is not displayed.");
+		}
+		switchToParentWindowfromframe(driver);
+		visibilityOfElement(driver, claimNo, "Claim Number");
+	}
+	public boolean checkduplicateClaimWindow()
+	{
+		try{
+			switchToFrameUsingElement(driver, changeFileStatusFrameEle);
+			getPageTitle(driver,duplicateClaimPageTitle);
+			return true;
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return false;
 	}
 }
