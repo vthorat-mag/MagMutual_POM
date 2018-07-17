@@ -227,7 +227,7 @@ public class PolicyIndicationPage extends CommonAction {
 	WebElement closeBtnOnViewPremiumPopup;
 
 	@FindBy(name = "workflowExit_Ok")
-	WebElement okPolicySaveAsWIPPopup;
+	WebElement okBtnExitSaveAsPopup;
 
 	@FindBy(id = "PM_COMMON_TABS_PREVIEW")
 	WebElement previewBtn;
@@ -351,12 +351,11 @@ public class PolicyIndicationPage extends CommonAction {
 		click(driver, Add_Agent, "Add button");
 		Thread.sleep(3000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Agent is selected");
-		// Select producer value using DDL // Add in excel shhet
-		selectDropdownByVisibleText(driver, Producer, hospitalIndicationDTO.producer, "Producer");
-		// Verify producer value is selected and it is correct
-		// verifyValueFromField(driver,Producer,
-		// hospitalIndicationDTO.producer,"value");
-		click(driver, Save_Agent, "Save button");
+		//Select producer value using DDL // Add in excel sheet
+		selectDropdownByVisibleText(driver,Producer,hospitalIndicationDTO.producer, "Producer");
+		//Verify producer value is selected and it is correct
+	//	verifyValueFromField(driver,Producer, hospitalIndicationDTO.producer,"value");
+		click(driver,Save_Agent, "Save button");
 		Thread.sleep(2000);
 
 		// Close agent and switch to parent window

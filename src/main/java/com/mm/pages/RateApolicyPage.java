@@ -29,6 +29,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
@@ -510,7 +511,17 @@ public class RateApolicyPage extends CommonAction {
 	// Select Accept option from "Action Drop Down".
 	public RateApolicyPage AcceptFromActionDropDown() throws Exception {
 		ExtentReporter.logger.log(LogStatus.INFO, "Select Accept from the dropdown screen.");
-		selectDropdownByValue(driver, policyAction, rateApolicyPageDTO.valueOfPolicyActionAccept, "Policy Action");
+		selectDropdownByVisibleText(driver, policyAction, rateApolicyPageDTO.valueOfPolicyActionAccept, "Policy Action");
+		Thread.sleep(3000);
+		
+		if(isAlertPresent(driver)){
+		
+			String actualAlertText= getAlertText(driver);
+			//TODO-compare actual and expected text.
+			ExtentReporter.logger.log(LogStatus.INFO, actualAlertText);
+			acceptAlert(driver);
+		}
+				
 		Assert.assertTrue(policyPhaseBinder.isEnabled(), "Policy" + policyNo() + "is NOT Editable.");
 		return new RateApolicyPage(driver);
 	}
@@ -523,11 +534,11 @@ public class RateApolicyPage extends CommonAction {
 	// Verify Alert is present or not.
 	public RateApolicyPage isAlertPresent() throws Exception {
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(3000);
 			Alert alert = driver.switchTo().alert();
 			alert.accept();
 			ExtentReporter.logger.log(LogStatus.INFO, alert.getText());
-			Thread.sleep(5000);
+			Thread.sleep(3000);
 		} // try
 		catch (NoAlertPresentException Ex) {
 			ExtentReporter.logger.log(LogStatus.INFO, "Alert is not displayed for Same policy exist.");
@@ -562,16 +573,18 @@ public class RateApolicyPage extends CommonAction {
 	public RateApolicyPage billingSetup() throws Exception {
 		Thread.sleep(3000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions-->Select Billing Setup");
-		selectDropdownByValue(driver, policyAction, rateApolicyPageDTO.billingSetup, "Policy Action");
+		selectDropdownByValue(driver, policyAction, rateApolicyPageDTO.valueOfPolicyActionBillingSetup, "Policy Action");
 		waitFor(driver, 5000);
 		switchToFrameUsingId(driver, "popupframe1");
 		getPageTitle(driver, manageBillingSetupPageTitle);
-		ExtentReporter.logger.log(LogStatus.INFO, "Payment plan dropdown: Select A-Monthly");
+		ExtentReporter.logger.log(LogStatus.INFO, "Payment plan dropdown: Select A-Monthly");//Quarterly for copy to quote
 		selectDropdownByValue(driver, paymentPlan, rateApolicyPageDTO.paymentPlanValue, "Payment Plan");
 		Thread.sleep(5000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Save]");
 		clickButton(driver, billingSetupSaveBtn, "Save Button");
-		Thread.sleep(35000);
+		Thread.sleep(3000);
+		invisibilityOfLoader(driver);
+		Thread.sleep(2000);
 		switchToParentWindowfromframe(driver);
 		return new RateApolicyPage(driver);
 	}
@@ -601,7 +614,7 @@ public class RateApolicyPage extends CommonAction {
 		return new RateApolicyPage(driver);
 	}
 
-	// Below method is to execute coverage details selet method and return
+	// Below method is to execute coverage details select method and return
 	// Cincom page object.
 	public CincomPage coverageDetailSelectForCinCom() throws Exception {
 		coverageDetailsSelect();
@@ -708,12 +721,25 @@ public class RateApolicyPage extends CommonAction {
 		return "false";
 	}
 
+	
+	public RateApolicyPage refreshCurrentPage(WebDriver driver) throws Exception {
+		refreshAPage(driver);
+		Thread.sleep(3000);
+		if(isAlertPresent(driver)){
+			acceptAlert(driver);
+			Thread.sleep(1000);
+			invisibilityOfLoader(driver);
+		}
+		return new RateApolicyPage(driver);
+	}
+	
 	// Rate a functionality flow.
 	public PolicyQuotePage rateFunctionality(String policyNo) throws Exception {
-		Thread.sleep(3000);
+		
+		Thread.sleep(1000);
 		clickButton(driver, rateBtn, "Rate Tab");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Rate].");
-		Thread.sleep(4000);
+		Thread.sleep(3000);
 		// If Product Notify Window appears then it will switch to window and
 		// select 'Yes' from that window and close window
 		if (verifyProductNotifyWindowDisplayed(policyNo).equals("true")) {
@@ -732,11 +758,11 @@ public class RateApolicyPage extends CommonAction {
 		} else {
 			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window is NOT dispalyed to user.");
 		}
-		Thread.sleep(3000);
+		Thread.sleep(2000);
 		switchToParentWindowfromframe(driver);
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]")));
-		Thread.sleep(4000);
+		Thread.sleep(2000);
 		//Close the View Premium window
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Close]");
 		clickButton(driver, closeBtnOnViewPremiumPopup, "Close");
@@ -759,7 +785,8 @@ public class RateApolicyPage extends CommonAction {
 	}
 
 	// Save Option flow.
-	public void saveOption(String policyNo) throws Exception {
+	public void saveOption() throws Exception {
+		String policyNo="";
 		Thread.sleep(2000);
 		clickButton(driver, saveOptionBtn, "Save Option");
 		ExtentReporter.logger.log(LogStatus.PASS, "Click Save Options.");
