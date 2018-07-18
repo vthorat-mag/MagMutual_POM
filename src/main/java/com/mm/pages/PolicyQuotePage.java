@@ -42,6 +42,9 @@ public class PolicyQuotePage extends CommonAction {
 	@FindBy(name="search")
 	WebElement Search_btn;
 	
+	@FindBy(id="findPolicyListGrid_CPOLICYNO_0_HREF")  // QA
+	WebElement policyList;
+	
 	@FindBy(id="pageTitleForpageHeaderForPolicyFolder")
 	WebElement pageHeaderForPolicyFolder;
 	
@@ -162,7 +165,7 @@ public class PolicyQuotePage extends CommonAction {
 	public RateApolicyPage searchPolicy( String policy_no) throws Exception
 	{
 		Thread.sleep(3000);
-		policySearch(driver, policy_no,Policy_Search, Search_btn);
+		policySearch(driver, policy_no,Policy_Search, Search_btn,policyList);
 		String actual=getText(driver,pageHeaderForPolicyFolder);
 		ExtentReporter.logger.log(LogStatus.INFO, "Policy # dispalys correctly under Policy Folder");
 		Assert.assertEquals(actual, "Policy Folder "+policy_no, "The policy "+policy_no+" is Not available.");

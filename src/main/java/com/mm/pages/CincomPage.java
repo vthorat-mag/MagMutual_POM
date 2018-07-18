@@ -88,10 +88,9 @@ public class CincomPage extends CommonAction {
 
 	@FindBy(xpath = "//div[@class='noerror']")
 	WebElement sucessMsg;
-	
+
 	@FindBy(name = "additionalText")
 	WebElement addText;
-
 
 	public CincomPage(WebDriver driver) throws IllegalArgumentException, IllegalAccessException, SecurityException {
 		this.driver = driver;
@@ -108,16 +107,18 @@ public class CincomPage extends CommonAction {
 					break;
 				}
 			}
-			ExtentReporter.logger.log(LogStatus.INFO, "Click [Optional Forms]");
-			Thread.sleep(4000);
-			clickButton(driver, optionalFormBtn, "Optional Form");
-			// invisibilityOfLoader(driver, PageloaderSymbol);
-			switchToFrameUsingElement(driver,
-					driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
-			ExtentReporter.logger.log(LogStatus.INFO, "Click [Add].");
-
-			clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
 		}
+		ExtentReporter.logger.log(LogStatus.INFO, "Click [Optional Forms]");
+		Thread.sleep(4000);
+		clickButton(driver, optionalFormBtn, "Optional Form");
+		// invisibilityOfLoader(driver, PageloaderSymbol);
+		Thread.sleep(3000);
+		switchToFrameUsingElement(driver,
+				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
+		ExtentReporter.logger.log(LogStatus.INFO, "Click [Add].");
+
+		clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
+
 		Thread.sleep(4000);
 		invisibilityOfLoader(driver);
 		switchToFrameUsingElement(driver,

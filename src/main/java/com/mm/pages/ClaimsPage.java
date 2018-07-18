@@ -39,6 +39,9 @@ public class ClaimsPage extends CommonAction {
 
 	@FindBy(name = "search")
 	WebElement Search_btn;
+	
+	@FindBy(id="findPolicyListGrid_CPOLICYNO_0_HREF")  // QA
+	WebElement policyList;
 
 	@FindBy(name = "claim_claimStatusDate")
 	WebElement chagneFileDate;
@@ -441,7 +444,7 @@ public class ClaimsPage extends CommonAction {
 		getPageTitle(driver, fileSearchPageTitle);
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Enter Claim # from Hospital Create Claim Test Case(Example 66429) & Click Search.");
-		policySearch(driver, claimsdto.claimNum, claim_Search, Search_btn);
+		policySearch(driver, claimsdto.claimNum, claim_Search, Search_btn,policyList);
 		getPageTitle(driver, "Claim Folder " + claimsdto.claimNum);
 
 		return new ClaimsPage(driver);
