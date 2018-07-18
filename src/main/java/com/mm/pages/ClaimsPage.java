@@ -311,9 +311,11 @@ public class ClaimsPage extends CommonAction {
 		//close Add transaction window
 		closeAddTransactionWindow();
 		ExtentReporter.logger.log(LogStatus.INFO, "Message window closes and transaction is listed at the top of the Transaction list");
+		Thread.sleep(2000);
+		visibilityOfElement(driver, transactionListTitle, "Transaction List");
 		//verify transaction is listed at the top of transaction list
-		verifyAddedTransactionIsListedInTransactionList(invoiceNumber);
 		ExtentReporter.logger.log(LogStatus.INFO, "Transactions display as entered in the Transaction List.");
+		verifyAddedTransactionIsListedInTransactionList(invoiceNumber);
 	}
 }
 	
@@ -332,7 +334,7 @@ public class ClaimsPage extends CommonAction {
 
 		boolean flag = false;
 		try {
-			//value of i remains zero, as we want to verify top most transaction in the list.
+			//i represents transaction list index, so value of i remains zero as we need to verify top most transaction from the list always.
 			int i =0;
 			//Get the size of transaction types from excel sheet
 			for (int j = 0; j < claimsdto.transactionType.size(); j++) {
@@ -344,7 +346,7 @@ public class ClaimsPage extends CommonAction {
 					if (CISpayeeNameFromTransList.get(i).getAttribute("innerHTML").trim().equals(claimsdto.payeeName.get(j).trim())
 							&& invoiceNumFromTransactionList.get(i).getAttribute("innerHTML").trim().equals(InvoiceNum)) 
 					{
-						//if the transaction values are correct, 
+						//if all the transaction values are correct, set flag to true
 						ExtentReporter.logger.log(LogStatus.PASS, "Transaction invoice no. " + InvoiceNum + " is listed in Transaction list.");
 						flag = true;
 						break;
@@ -354,25 +356,25 @@ public class ClaimsPage extends CommonAction {
 				if(flag==false)
 				throw new Exception();
 			} catch (Exception e) {
-				//Log failed message in report and stop execution
+				//Log status as failed in report and stop execution
 				ExtentReporter.logger.log(LogStatus.FAIL, "Transaction invoice no. "+InvoiceNum+" is Not available at top of Transaction list OR  it is incorrect.");
-				Assert.assertTrue(false);
+				Assert.assertTrue(false,"\nTransaction invoice no. "+InvoiceNum+" is Not available at top of Transaction list OR  it is incorrect.");
 			}
 		}
 			
 	
 	//Get the alert window text message and compare with expected alert message
-	public void verifySaveAlertMessage(String alertMessageText,String claimNumber, String Amount, String TransType){
+	public void verifySaveAlertMessage(String actualAlertMessage,String claimNumber, String Amount, String TransType){
 		
-		// Spaces and \n are added to make the messages identical.
+		// Spaces and \n are added to make the message identical.
 		String expectedAlertMessage="The transaction has been successfully saved:\n Source #:File "+claimNumber+" \n"
 				+" Transaction Type:"+TransType+" \n Transaction Amount:$"+Amount;
 		
 		// Below expectedAlertMessage string is compared with actual alert message
-		if(alertMessageText.equals(expectedAlertMessage)){
-			ExtentReporter.logger.log(LogStatus.PASS, "Alert message is as Expected");
+		if(actualAlertMessage.equals(expectedAlertMessage)){
+			ExtentReporter.logger.log(LogStatus.PASS, "Alert message is as Expected\n"+actualAlertMessage);
 		}else{
-			ExtentReporter.logger.log(LogStatus.WARNING, "Alert message is Incorrect, not as Expected.");
+			ExtentReporter.logger.log(LogStatus.WARNING, "Alert message is Incorrect, not as Expected\n"+actualAlertMessage);
 		}
 	}
 	

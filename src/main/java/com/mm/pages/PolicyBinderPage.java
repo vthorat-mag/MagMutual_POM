@@ -246,11 +246,10 @@ public class PolicyBinderPage extends CommonAction {
 		Claim No displays in the upper left corner. 
 		Note (and save for later input) the claim number:  ****add ###########
 		Click [Close]*/
-
-		
 	}
 
-	// Get Client Id from Entity menu popup flow.
+	
+	// Get Client Id from Entity menu pop up flow.
 	public String getClientId() throws Exception {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click on the Policyholder Name: Note (and save for later input) the Client ID:  Click [Close]");
 		clickButton(driver, policyHolderNameLink, "Policy Holder Name");
@@ -271,7 +270,8 @@ public class PolicyBinderPage extends CommonAction {
 	}
 
 	// Select Endorsement from "Action DropoDown".
-	public PolicyBinderPage endorsementFromActionDropDown() throws IllegalArgumentException, IllegalAccessException, SecurityException {
+	public PolicyBinderPage endorsementFromActionDropDown() throws Exception {
+		Thread.sleep(3000);
 		ExtentReporter.logger.log(LogStatus.PASS, "Click Policy Actions > Select value from the dropdown screen.");
 		selectDropdownByValue(driver, policyAction, policybinderpageDTO.valueOfPolicyActionEndorse, "Policy Action");
 		return new PolicyBinderPage(driver);
@@ -279,10 +279,12 @@ public class PolicyBinderPage extends CommonAction {
 
 	// Select Copy To Quote from "Action DropoDown".
 	public PolicySubmissionPage copyToQuoteFromActionDropDown(String policyNum) throws Exception {
+		Thread.sleep(2000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy to Quote");
 		selectDropdownByValue(driver, policyAction, policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action");
 		Thread.sleep(10000);
 		String getUpdatedPolicyNo = policyNo();
+		Thread.sleep(2000);
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + getUpdatedPolicyNo + "')]")));
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [OK]");
@@ -292,12 +294,19 @@ public class PolicyBinderPage extends CommonAction {
 		return new PolicySubmissionPage(driver);
 	}
 
+	public RateApolicyPage endorseAPolicy() throws Exception{
+		endorseAPolicy();
+		return new RateApolicyPage(driver);
+	}
+	
+	
 	// Endorse Policy Flow.
 	public PolicyBinderPage endorsPolicy(String policyNum) throws Exception {
 		Thread.sleep(3000);
-		switchToFrameUsingElement(driver,
-				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNum + "')]")));
-		waitForElementToLoad(driver, 25, selectReason);
+		/*switchToFrameUsingElement(driver,
+				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNum + "')]")));*/
+		switchToFrameUsingId(driver, "popupframe1");
+		waitForElementToLoad(driver, 10, selectReason);
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Click the dropdown by Reason:  Select Issue Policy Forms-->Click [Ok]");
 		selectDropdownByValue(driver, selectReason, policybinderpageDTO.valueOfSelectReason, "Select Reason");
@@ -385,7 +394,7 @@ public class PolicyBinderPage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [OK]");
 		clickButton(driver, Exit_Ok, "Exit Ok");
 		*/
-		saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn, policybinderpageDTO.saveAsPolicyValue);
+		saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn,Exit_Ok, policybinderpageDTO.saveAsPolicyValue);
 		return new PolicyQuotePage(driver); 
 	}
 

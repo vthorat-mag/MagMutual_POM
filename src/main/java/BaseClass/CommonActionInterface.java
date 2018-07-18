@@ -18,7 +18,7 @@ public interface CommonActionInterface {
     void clearTextBox(WebDriver driver, WebElement pageElement, String textfield);
     String getAttributeValue(WebElement pageElement, String attributeName);
     void click(WebDriver driver, WebElement pageElement, String elementName);
-    void switchToFrameUsingId(WebDriver driver, String uniqId);
+    void switchToFrameUsingId(WebDriver driver, String uniqId) throws InterruptedException;
     void switchToFrameUsingElement(WebDriver driver, WebElement element) throws Exception;
     void switchToParentWindowfromframe(WebDriver driver);
     void visibilityOfElement(WebDriver driver, WebElement pageElement, String text);

@@ -11,7 +11,7 @@ public class RateAPolicyPageDTO {
 	public List<String> phase;
 	public List<String> coverage;
 	public String valueOfPolicyActionAccept;
-	public String billingSetup;
+	public String valueOfPolicyActionBillingSetup;
 	public String paymentPlanValue;
 	public String productNotifyValue;
 	public String footerContent;
