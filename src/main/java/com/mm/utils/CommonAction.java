@@ -89,7 +89,7 @@ public class CommonAction implements CommonActionInterface {
 		Thread.sleep(3000);
 		try {
 			driver.switchTo().frame(frameName);
-			ExtentReporter.logger.log(LogStatus.INFO, "Control switched Switched to frame.");
+			ExtentReporter.logger.log(LogStatus.INFO, "Control switched to frame.");
 		} catch (Exception e) {
 			e.printStackTrace();
 			ExtentReporter.logger.log(LogStatus.WARNING, "Error while switching to frame.");
@@ -101,7 +101,7 @@ public class CommonAction implements CommonActionInterface {
 		Thread.sleep(4000);
 		try {
 			driver.switchTo().frame(element);
-			ExtentReporter.logger.log(LogStatus.INFO, "Control switched Switched to frame.");
+			ExtentReporter.logger.log(LogStatus.INFO, "Control switched to frame.");
 		} catch (Exception e) {
 			e.printStackTrace();
 			ExtentReporter.logger.log(LogStatus.WARNING, "Error while switching to frame.");
@@ -202,10 +202,10 @@ public class CommonAction implements CommonActionInterface {
 		Thread.sleep(3000);
 		List<WebElement> getPageTitleFromPage = driver.findElements(By.xpath("//div[@class='pageTitle']"));
 		WebDriverWait wait = new WebDriverWait(driver, High);
-		WebElement pageLoader = driver.findElement(By.xpath("//span[@class='txtOrange']"));
-		wait.until(ExpectedConditions.invisibilityOf(pageLoader));
+		/*WebElement pageLoader = driver.findElement(By.xpath("//span[@class='txtOrange']"));
+		wait.until(ExpectedConditions.invisibilityOf(pageLoader));*/
 		try {
-			int i = 0;
+			int i=0;
 			for (i = 0; i < getPageTitleFromPage.size(); i++) {
 				if ((getPageTitleFromPage.get(i).getAttribute("innerHTML").trim().equals(expectedPageTitle))) {
 					ExtentReporter.logger.log(LogStatus.PASS,
@@ -308,12 +308,11 @@ public class CommonAction implements CommonActionInterface {
 
 		ExtentReporter.logger.log(LogStatus.INFO, "Switching to the pop up window");
 
+		String parentWindow = driver.getWindowHandle();
+		
 		Set<String> handles = driver.getWindowHandles(); // Return a set of
 															// window handle
-
-		String parentWindow = driver.getWindowHandle();
-
-		Thread.sleep(5000);
+		Thread.sleep(3000);
 		for (String currentWindow : handles) {
 			if (!currentWindow.equals(parentWindow)) {
 				driver.switchTo().window(currentWindow);
@@ -321,7 +320,7 @@ public class CommonAction implements CommonActionInterface {
 				ExtentReporter.logger.log(LogStatus.INFO, "Control is switched to pop up window");
 			}
 		}
-		Thread.sleep(5000);
+		Thread.sleep(2000);
 		return parentWindow;
 	}
 
@@ -406,19 +405,7 @@ public class CommonAction implements CommonActionInterface {
 
 	}
 	
-	/*public boolean isAlertPresent(WebDriver driver){
-	    boolean foundAlert = false;
-	    WebDriverWait wait = new WebDriverWait(driver,5);
-	    try {
-	        wait.until(ExpectedConditions.alertIsPresent());
-	        foundAlert = true;
-	    } catch (TimeoutException eTO) {
-	        foundAlert = false;
-	    }
-	    return foundAlert;
-	}*/
-	
-	 public static boolean isAlertPresent(WebDriver driver) throws InterruptedException{
+	public static boolean isAlertPresent(WebDriver driver) throws InterruptedException{
          try{
         	 Thread.sleep(2000);
              driver.switchTo().alert();

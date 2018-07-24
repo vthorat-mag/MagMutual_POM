@@ -12,7 +12,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
-import com.mm.dto.FinancPageDTO;
+import com.mm.dto.FinancePageDTO;
 import com.mm.dto.FindPolicyPageDTO;
 import com.mm.utils.CommonAction;
 import com.mm.utils.ExcelUtil;
@@ -22,11 +22,13 @@ import com.relevantcodes.extentreports.LogStatus;
 public class FinancePage extends CommonAction {
 
 	WebDriver driver;
-	FinancPageDTO financePageDTO;
+	FinancePageDTO financePageDTO;
 	static String batchNumber;
 	static String accountNumber;
 	static String invoiceAmount;
 	String onDemandInvoiceExcelName = "OnDemandInvoiceCredit";
+	String onDemandInvoiceInstallementExcelSheet="OnDemandInvoiceInstallementBefore";
+	String invoicesInstallmentDueDate="invoicesInstallmentDueDate";
 	String PaymentCreditExcelName = "PaymentCredit";
 	String openbatchcreditExcelName = "openbatchcredit";
 	String FinancePageExcelName = "FinancePage";
@@ -115,7 +117,7 @@ public class FinancePage extends CommonAction {
 	WebElement jumpButton;
 	
 	@FindBy(id = "btnSaveAsCSV")
-	WebElement saveCSVBtn;
+	WebElement exportExcelLink;
 	
 	@FindBy(id = "FM_CE_BATCH_NEW")
 	WebElement newButton;
@@ -177,13 +179,29 @@ public class FinancePage extends CommonAction {
 	@FindBy(id="FM_MAINT_ACCT_SAVE")
 	WebElement saveMaintAction;
 	
+	@FindBy(id="FM_FULL_INQ_RECV_TAB")
+	WebElement receivableTab;
+	
+	@FindBy(id="FM_FULL_INQ_ACCOUNT_TAB")
+	WebElement accountTab;
+	
+	@FindBy(id="FM_FULL_INQ_ACC_INV")
+	WebElement invoicesButton;
+	
+	
+	
+	
+	
+	
+	
 	public FinancePage(WebDriver driver) throws Exception {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
-		financePageDTO = new FinancPageDTO();
+		financePageDTO = new FinancePageDTO();
 	}
 	
 	
+	//For TC 42403 its on hold
 	public void maintainAccount() throws InterruptedException{
 		
 		clickButton(driver, Search_btn, "Search for account");
@@ -197,7 +215,7 @@ public class FinancePage extends CommonAction {
 				selectValue(driver, accountNumList.get(i), "Account Number"+accountNumList.get(i));
 				break;
 			}
-		}//TODO - if the account num is not available in list
+		}//TODO - if the account num is not available in list - use flag
 		//invisibilityOfLoader(driver);
 		Thread.sleep(2000);
 		Actions act = new Actions(driver);
@@ -216,8 +234,7 @@ public class FinancePage extends CommonAction {
 	}
 	
 	
-
-	// Search Account from Search Account text field on Finanace Home Page.
+	// Search Account from Search Account text field on Finance Home Page.
 	public FinancePage searchPolicyOnFinanceHomePage() throws Exception {
 		Thread.sleep(2000);
 		invisibilityOfLoader(driver);
@@ -268,9 +285,33 @@ public class FinancePage extends CommonAction {
 		invisibilityOfLoader(driver);
 		switchToParentWindowfromframe(driver);
 		ExtentReporter.logger.log(LogStatus.INFO, "Export All Transactions to excel");
-		clickButton(driver, saveCSVBtn, "Export Excel");
+		clickButton(driver, exportExcelLink, "Export Excel");
 		exlUtil.downloadExcel();
-		copyFile(onDemandInvoiceExcelName);
+		copyFile(financePageDTO.onDemandInvoiceInstallmentExcel);
+		
+		
+		return new FinancePage(driver);
+	}
+		
+	
+	public void receivableTabActions() throws Exception{
+		clickButton(driver, receivableTab, "Receivable");
+		invisibilityOfLoader(driver);
+		clickButton(driver, exportExcelLink, "Export Excel");
+		exlUtil.downloadExcel();
+		copyFile(financePageDTO.onDemandInvoiceInstallementBeforeExcel);
+		clickButton(driver, accountTab, "Account tab");
+		invisibilityOfLoader(driver);
+		clickButton(driver, invoicesButton, "Invoices");
+		invisibilityOfLoader(driver);
+		clickButton(driver, exportExcelLink, "Export Excel");
+		exlUtil.downloadExcel();
+		copyFile(financePageDTO.invoicesInstallmentDueDateExcel);
+	}
+	
+	
+	
+	public FinancePage writeDataInExcelSheet() throws Exception{
 		
 		String numberValue = getDataFromExcel("Sheet1","Number",1,"C:\\saveExcel\\OnDemandInvoiceCredit.xlsx");
 		Thread.sleep(3000);
@@ -309,7 +350,7 @@ public class FinancePage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Save]");
 		clickButton(driver, saveBtnOnCashEntryPage, "Cash Entry Page's Save");
 		ExtentReporter.logger.log(LogStatus.INFO, "Export All Transactions to excel");
-		clickButton(driver, saveCSVBtn, "Export Excel");
+		clickButton(driver, exportExcelLink, "Export Excel");
 		exlUtil.downloadExcel();
 		copyFile(PaymentCreditExcelName);
 		return new FinancePage(driver);
@@ -333,7 +374,7 @@ public class FinancePage extends CommonAction {
 			}
 		}
 		ExtentReporter.logger.log(LogStatus.INFO, "Export All Transactions to excel");
-		clickButton(driver, saveCSVBtn, "Export Excel");
+		clickButton(driver, exportExcelLink, "Export Excel");
 		exlUtil.downloadExcel();
 		copyFile(openbatchcreditExcelName);
 		
@@ -357,7 +398,7 @@ public class FinancePage extends CommonAction {
 		/*verifyValueFromField(driver, validateField, validlateFieldExpectedValue, validlateFieldAttributeValue,
 				validlateFieldName);*/
 		ExtentReporter.logger.log(LogStatus.INFO, "Export All Transactions to excel");
-		clickButton(driver, saveCSVBtn, "Export Excel");
+		clickButton(driver, exportExcelLink, "Export Excel");
 		exlUtil.downloadExcel();
 		copyFile(validatebatchcreditExcelName);
 		return new FinancePage(driver);
@@ -372,7 +413,7 @@ public class FinancePage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Ok]");
 		acceptAlert(driver);
 		ExtentReporter.logger.log(LogStatus.INFO, "Export All Transactions to excel");
-		clickButton(driver, saveCSVBtn, "Export Excel");
+		clickButton(driver, exportExcelLink, "Export Excel");
 		exlUtil.downloadExcel();
 		copyFile(postedbatchcreditExcelName);
 		return new FinancePage(driver);
@@ -385,7 +426,7 @@ public class FinancePage extends CommonAction {
 		invisibilityOfLoader(driver);
 		getPageTitle(driver, allTxnInquireyPageTitle);
 		ExtentReporter.logger.log(LogStatus.INFO, "Export All Transactions to excel");
-		clickButton(driver, saveCSVBtn, "Export Excel");
+		clickButton(driver, exportExcelLink, "Export Excel");
 		exlUtil.downloadExcel();
 		copyFile(alltransactionlistafterpaymentcreditExcelName);
 	}
