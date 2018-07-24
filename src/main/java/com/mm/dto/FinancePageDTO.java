@@ -4,11 +4,14 @@ import MMTestCase.SmokeTestCase;
 
 public class FinancePageDTO {
 
-	public String policyNo;
-	public Object currunetBalance;
+	public Object currentBalance;
 	public String accountNumber;
+	public String policyNo;
 	public String Number;
 	public String Amount;
+	public String onDemandInvoiceInstallmentExcel;
+	public String onDemandInvoiceInstallementBeforeExcel;
+	public String invoicesInstallmentDueDateExcel;
 	
 public FinancePageDTO() throws IllegalArgumentException, IllegalAccessException, SecurityException{
 		

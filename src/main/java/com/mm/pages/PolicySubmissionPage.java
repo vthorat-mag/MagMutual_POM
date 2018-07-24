@@ -20,6 +20,7 @@ public class PolicySubmissionPage extends CommonAction {
 	WebDriver driver;
 	String indicationPhaseValue = "INDICATION";
 	String valueOfPolicyActionCopy = "javascript:copyQuote();";
+	PolicyIndicationPage policyIndicationPage;
 	PolicySubmissionPageDTO policysubmissionpageDTO;
 
 	// Element repository for Policy Submission page.
@@ -69,7 +70,7 @@ public class PolicySubmissionPage extends CommonAction {
 	// Change policy phase to indication.
 	public PolicySubmissionPage changePhaseToIndicationAndAddQuoteDescription()
 			throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
-		Thread.sleep(2000);
+		Thread.sleep(3000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Change Policy Phase to Indication");
 		selectDropdownByValue(driver,policyPhase, policysubmissionpageDTO.indicationPhaseValue, "Phase");
 		enterTextIn(driver, Quote_Description, policysubmissionpageDTO.quoteDescription, "Quote Description");
@@ -84,13 +85,16 @@ public class PolicySubmissionPage extends CommonAction {
 		Thread.sleep(2000);
 		return new PolicyQuotePage(driver);
 	}
+	
 
 	// Update policy details for a policy and change policy phase from
 	// Submission to Indication.
 	public PolicyIndicationPage updatePolicyDetails() throws Exception {
 	
 		invisibilityOfLoader(driver);
-		waitForElementToLoad(driver, 20, Phase);
+		Thread.sleep(5000);
+		//TODO-add get page title
+		//waitForElementToLoad(driver, 20, Phase);
 	    //Change policy type to Indication and add organization type as Hospital from DDL
 		selectDropdownByValue(driver, Phase, policysubmissionpageDTO.policyPhase, "Phase");
 		selectDropdownByValue(driver, Org_Type, policysubmissionpageDTO.organisationType, "Organisation Type");
