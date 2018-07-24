@@ -137,15 +137,22 @@ public class SmokeTestCase extends BrowserTypes {
 	}
 
 	// DTO done
-	// @Test(description = "FM - Hospital Verify On Demand Invoice, Create Batch
-	// and Post Batch", groups = {
-	// "Smoke Test" })
+	//@Test(description = "FM - Hospital Verify On Demand Invoice, Create Batch and Post Batch", groups = {
+			//"Smoke Test" })
 	public void TC42250() throws Exception {
 		LoginPageDTO lpDTO = new LoginPageDTO();
 		LoginPage loginpage = new LoginPage(driver);
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToFinanceHomePage()
 				.searchPolicyOnFinanceHomePage().openFirstAccount().onDemandInvoice().writeDataInExcelSheet().cashEntry().batchFunction()
 				.validateBatch().postBatchFunctionality().donwloadFinalSheetBySearchingAccountNo();
+	}
+	
+	//QA test case.
+	//@Test(description = "QA FM - Hospital Verify On Demand Invoice, Create Batch and Post Batch-Complete", groups = {
+		//	"Smoke Test" })
+	public void TC43783()throws Exception
+	{
+		TC42250();
 	}
 
 	// DTO done
@@ -183,8 +190,7 @@ public class SmokeTestCase extends BrowserTypes {
 	}
 
 	// DTO done
-	// @Test(description = "Hospital Verify Interactive Form", groups = { "Smoke
-	// Test" })
+	//@Test(description = "Hospital Verify Interactive Form", groups = { "Smoke Test" })
 	public void TC42247() throws Exception {
 		LoginPageDTO lpDTO = new LoginPageDTO();
 		LoginPage loginpage = new LoginPage(driver);
@@ -195,6 +201,20 @@ public class SmokeTestCase extends BrowserTypes {
 				.clickPreviewTab().savePDF().verifyPdfContent(policyNo);
 	}
 
+	//QA HPL Test Case.
+	//@Test(description ="QA Hospital Verify Interactive Form - Complete", groups = { "Smoke Test" })
+	public void TC42219() throws Exception
+	{
+		LoginPageDTO lpDTO = new LoginPageDTO();
+		LoginPage loginpage = new LoginPage(driver);
+		RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
+		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).headerPolicyTab().searchPolicyRateAPolicyPage();
+		String policyNo = rateapolicypage.policyNo();
+		rateapolicypage.coverageDetailSelectForCinCom().cincomFlow(policyNo).rateFunctionality(policyNo)
+				.clickPreviewTab().savePDF().verifyPdfContent(policyNo);
+		//TODO - CINCOM page in QA is different than BTS page hence need confirmation from onshore team.
+	}
+	
 	// DTO done
 	// @Test(description="Hospital Verify Attach Form", groups = { "Smoke
 	// Test"})
@@ -275,8 +295,7 @@ public class SmokeTestCase extends BrowserTypes {
 	}
 
 	// DTO Done
-	// @Test(description = "Verify Hospital Preview Forms", groups = { "Smoke
-	// Test" })
+	//@Test(description = "Verify Hospital Preview Forms", groups = { "Smoke Test" })
 	public void TC42240() throws Exception {
 		RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
 		LoginPageDTO lpDTO;
@@ -289,7 +308,14 @@ public class SmokeTestCase extends BrowserTypes {
 		rateapolicypage.policyEndorsement(PolicyNo).rateFunctionality(PolicyNo).clickPreviewTab().savePDF()
 				.verifyPdfContent(PolicyNo);
 	}
-
+	
+	//QA test case.
+	//@Test(description = "QA Hospital Verify Preview Forms", groups = { "Smoke Test" })
+	public void TC42215() throws Exception
+	{
+		TC42240();
+	}
+	
 	// DTO Done
 	// @Test(description = "Hospital Create Claim", groups = { "Smoke Test" })
 	public void TC42666() throws Exception {

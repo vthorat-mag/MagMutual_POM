@@ -60,11 +60,14 @@ public class FinancePage extends CommonAction {
 
 	@FindBy(id = "FM_ACCOUNT_LIST_SEARCH")
 	WebElement Search_btn;
+	
+	@FindBy(id="findPolicyListGrid_CPOLICYNO_0_HREF")  // QA
+	WebElement policyList;
 
 	@FindBy(name = "policyNo")
 	WebElement PolicyNoTxtBox;
 
-	@FindBy(xpath = "//a[@id='URL_CACCOUNTNO']")
+	@FindBy(xpath = "//a[@id='URL_CACCOUNTNO'] | //a[@id='accountListGrid_CACCOUNTNO_0_HREF']")
 	List<WebElement> accountList;
 	
 	@FindBy(xpath = "//a[@id='URL_CACCOUNTNO']//span")
@@ -116,7 +119,7 @@ public class FinancePage extends CommonAction {
 	@FindBy(id = "FM_CONFIRM_INVOICE_JUMP")
 	WebElement jumpButton;
 	
-	@FindBy(id = "btnSaveAsCSV")
+	@FindBy(xpath = "//*[@id = 'btnSaveAsCSV'] | //input[@name='btnSaveAsCSV']")
 	WebElement exportExcelLink;
 	
 	@FindBy(id = "FM_CE_BATCH_NEW")
@@ -252,7 +255,10 @@ public class FinancePage extends CommonAction {
 	// search.
 	public FinancePage openFirstAccount() throws Exception {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Account No("+accountList.get(0).getAttribute("innerHTML")+").");
-		clickButton(driver, accountList.get(0), "Account List");
+		System.out.println("******"+accountList.get(0).getAttribute("innerHTML"));
+		//clickButton(driver, accountList.get(0), "Account List");
+		Actions action = new Actions(driver);
+		action.click(accountList.get(0)).build().perform();
 		invisibilityOfLoader(driver);
 		getPageTitle(driver, allTxnInquireyPageTitle);
 		return new FinancePage(driver);
@@ -337,6 +343,7 @@ public class FinancePage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Payment Type: Check");
 		selectDropdownByValue(driver, paymentTypeDDL, paymentTypeDDLValue, "Payment Type");
 		ExtentReporter.logger.log(LogStatus.INFO, "Invoice No: "+financePageDTO.Number+"");
+		Thread.sleep(1000);
 		enterTextIn(driver, invoiceNoOnCashEntryPage, financePageDTO.Number, "Cash Entry Page's invoice Number");
 		checkNoOnCashEntryPage.click();//check no element is clicked to enable Alert.
 		Thread.sleep(1000);
@@ -422,7 +429,7 @@ public class FinancePage extends CommonAction {
 	public void donwloadFinalSheetBySearchingAccountNo() throws Exception
 	{
 		ExtentReporter.logger.log(LogStatus.INFO, "Enter account number in account search box in upper right corner of the page.");
-		policySearch(driver, accountNumber, Policy_Search, Search_btn);
+		policySearch(driver, accountNumber, Policy_Search, Search_btn,policyList);
 		invisibilityOfLoader(driver);
 		getPageTitle(driver, allTxnInquireyPageTitle);
 		ExtentReporter.logger.log(LogStatus.INFO, "Export All Transactions to excel");

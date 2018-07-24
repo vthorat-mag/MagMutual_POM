@@ -60,6 +60,7 @@ public class RateApolicyPage extends CommonAction {
 	String innerText = "innerText";
 	String commentText = "Issue Policy Forms";
 	String dropDownNameLevel = "Level";
+	String ExcelPath = System.getProperty("user.dir")+"\\src\\main\\resources\\Form_Data.xlsx";
 	CommonUtilities comUtil = new CommonUtilities();
 	PDFReader pdfread = new PDFReader(driver);
 
@@ -228,7 +229,7 @@ public class RateApolicyPage extends CommonAction {
 		@FindBy(name="policyViewMode")
 		WebElement viewMode;
 		
-		@FindBy(id="PM_POLICY_FOLDER_AG")
+		@FindBy(xpath = "//select[@id='PM_POLICY_FOLDER_AG'] | //select[@id='PM_QT_POLICY_FOLDER_AG']")
 		WebElement policyActionDDL;
 		
 		@FindBy(id="CPRODUCTCOVERAGEDESC")
@@ -248,6 +249,9 @@ public class RateApolicyPage extends CommonAction {
  		
 		@FindBy(id="CFORMCODELOVLABEL")
 		List <WebElement> manuscriptAddedForm;
+		
+		@FindBy(id="findPolicyListGrid_CPOLICYNO_0_HREF")  // QA
+		WebElement policyList;
 
 	// Constructor to initialize driver, page elements and DTO PageObject for
 	// CISPage
@@ -284,7 +288,7 @@ public class RateApolicyPage extends CommonAction {
 	// Search Policy from Search Policy text field.
 	public RateApolicyPage searchPolicy(String policy_no) throws Exception {
 		Thread.sleep(3000);
-		policySearch(driver, policy_no, Policy_Search, Search_btn);
+		policySearch(driver, policy_no, Policy_Search, Search_btn, policyList);
 		String actual = getText(driver, pageHeaderForPolicyFolder);
 		Assert.assertEquals(actual, "Policy Folder " + policy_no, "The policy " + policy_no + " is Not available.");
 		Thread.sleep(3000);
@@ -592,8 +596,6 @@ public class RateApolicyPage extends CommonAction {
 	// Coverage Details flow.
 	public RateApolicyPage coverageDetailsSelect() throws Exception {
 		try {
-			clickButton(driver, coverageTab, "Coverage");
-			invisibilityOfLoader(driver);
 			ExtentReporter.logger.log(LogStatus.PASS, "Click Coverage tab.");
 			clickButton(driver, coverageTab, "Coverage");
 			invisibilityOfLoader(driver);

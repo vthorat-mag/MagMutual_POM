@@ -4,7 +4,7 @@ import MMTestCase.SmokeTestCase;
 
 public class FinancePageDTO {
 
-	public Object currunetBalance;
+	public Object currentBalance;
 	public String accountNumber;
 	public String policyNo;
 	public String Number;
@@ -13,12 +13,9 @@ public class FinancePageDTO {
 	public String onDemandInvoiceInstallementBeforeExcel;
 	public String invoicesInstallmentDueDateExcel;
 	
-	public FinancePageDTO() throws IllegalArgumentException, IllegalAccessException, SecurityException{
+public FinancePageDTO() throws IllegalArgumentException, IllegalAccessException, SecurityException{
 		
 		for (int iFC = 0; iFC < FinancePageDTO.class.getFields().length; iFC++) {
-			
-			if (SmokeTestCase.testDataMap.containsKey(FinancePageDTO.class.getFields()[iFC].getName().toLowerCase()))
-			{
 			
 			if (FinancePageDTO.class.getFields()[iFC].getType().toString().toLowerCase().contains("java.util.list")) {
 				try {
@@ -40,5 +37,6 @@ public class FinancePageDTO {
 			}
 		}
 	}
-  }
 }
+	
+	
