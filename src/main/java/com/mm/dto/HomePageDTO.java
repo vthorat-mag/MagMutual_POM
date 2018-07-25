@@ -13,7 +13,6 @@ public class HomePageDTO {
 	public String policyNum;
 
 
-
 	public HomePageDTO() throws IllegalArgumentException, IllegalAccessException, SecurityException{
 
 		for (int iFC=0; iFC < HomePageDTO.class.getFields().length; iFC++)

@@ -31,6 +31,8 @@ public class FinancePage extends CommonAction {
 	String cancelReasonDDLValue = "COMPOTHER";
 	String cancelMethodDLValue = "PRORATA";
 	String onDemandInvoiceExcelName = "OnDemandInvoiceCredit";
+	String onDemandInvoiceInstallementExcelSheet="OnDemandInvoiceInstallementBefore";
+	String invoicesInstallmentDueDate="invoicesInstallmentDueDate";
 	String PaymentCreditExcelName = "PaymentCredit";
 	String openbatchcreditExcelName = "openbatchcredit";
 	String FinancePageExcelName = "FinancePage";
@@ -123,7 +125,7 @@ public class FinancePage extends CommonAction {
 	WebElement jumpButton;
 	
 	@FindBy(xpath = "//*[@id = 'btnSaveAsCSV'] | //input[@name='btnSaveAsCSV']")
-	WebElement saveCSVBtn;
+	WebElement exportExcelLink;
 	
 	@FindBy(xpath = "//*[@id = 'btnSaveAsCSV']| //input[@name='btnSaveAsCSV']")
 	List<WebElement> saveCSVBtnOnRecivableTab;
@@ -234,6 +236,12 @@ public class FinancePage extends CommonAction {
 	@FindBy(id = "PM_NOTIFY_CLOSE")
 	WebElement prodNotifyClose;
 	
+	@FindBy(id="FM_FULL_INQ_ACCOUNT_TAB")
+	WebElement accountTab;
+	
+	@FindBy(id="FM_FULL_INQ_ACC_INV")
+	WebElement invoicesButton;
+	
 	public FinancePage(WebDriver driver) throws Exception {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
@@ -241,6 +249,7 @@ public class FinancePage extends CommonAction {
 	}
 	
 	
+	//For TC 42403 its on hold
 	public void maintainAccount() throws InterruptedException{
 		
 		clickButton(driver, Search_btn, "Search for account");
@@ -254,7 +263,7 @@ public class FinancePage extends CommonAction {
 				selectValue(driver, accountNumList.get(i), "Account Number"+accountNumList.get(i));
 				break;
 			}
-		}//TODO - if the account num is not available in list
+		}//TODO - if the account num is not available in list - use flag
 		//invisibilityOfLoader(driver);
 		Thread.sleep(2000);
 		Actions act = new Actions(driver);
@@ -273,8 +282,7 @@ public class FinancePage extends CommonAction {
 	}
 	
 	
-
-	// Search Account from Search Account text field on Finanace Home Page.
+	// Search Account from Search Account text field on Finance Home Page.
 	public FinancePage searchPolicyOnFinanceHomePage() throws Exception {
 		Thread.sleep(2000);
 		invisibilityOfLoader(driver);
@@ -329,6 +337,28 @@ public class FinancePage extends CommonAction {
 		switchToParentWindowfromframe(driver);
 		ExtentReporter.logger.log(LogStatus.INFO, "Export All Transactions to excel");
 		downloadExcel(onDemandInvoiceExcelName);
+		return new FinancePage(driver);
+	}
+		
+	
+	public void receivableTabActions() throws Exception{
+		clickButton(driver, receivableTab, "Receivable");
+		invisibilityOfLoader(driver);
+		clickButton(driver, exportExcelLink, "Export Excel");
+		exlUtil.downloadExcel();
+		copyFile(financePageDTO.onDemandInvoiceInstallementBeforeExcel);
+		clickButton(driver, accountTab, "Account tab");
+		invisibilityOfLoader(driver);
+		clickButton(driver, invoicesButton, "Invoices");
+		invisibilityOfLoader(driver);
+		clickButton(driver, exportExcelLink, "Export Excel");
+		exlUtil.downloadExcel();
+		copyFile(financePageDTO.invoicesInstallmentDueDateExcel);
+	}
+	
+	
+	
+	public FinancePage writeDataInExcelSheet() throws Exception{
 		
 		String numberValue = getDataFromExcel("Sheet1","Number",1,"C:\\saveExcel\\OnDemandInvoiceCredit.xlsx");
 		Thread.sleep(3000);
@@ -366,11 +396,6 @@ public class FinancePage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Amount:"+financePageDTO.Amount+"");
 		enterTextIn(driver, amountOnCashEntryPage, financePageDTO.Amount, "Cash Entry Page's Amount");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Save]");
-/*=======
-		enterTextIn(driver, invoiceNoOnCashEntryPage, financePageDTO.Number, "Cash Entry Page's invoice Number");
-		enterTextIn(driver, checkNoOnCashEntryPage, checkNo, "Cash Entry Page's Check Number");
-		enterTextIn(driver, amountOnCashEntryPage, financePageDTO.Amount, "Cash Entry Page's Amount");
->>>>>>> refs/heads/VT_Sprint_Feature_4*/
 		clickButton(driver, saveBtnOnCashEntryPage, "Cash Entry Page's Save");
 		ExtentReporter.logger.log(LogStatus.INFO, "Export All Transactions to excel");
 		downloadExcel(PaymentCreditExcelName);
@@ -437,7 +462,7 @@ public class FinancePage extends CommonAction {
 	//this method will download excel sheet
 	public FinancePage downloadExcel(String fileName) throws Exception
 	{
-		clickButton(driver, saveCSVBtn, "Export Excel");
+		clickButton(driver, exportExcelLink, "Export Excel");
 		exlUtil.downloadExcel();
 		copyFile(fileName);
 		return new FinancePage(driver);
@@ -452,6 +477,8 @@ public class FinancePage extends CommonAction {
 			copyFile(fileName);
 			return new FinancePage(driver);
 		}
+  
+  
 	public void donwloadFinalSheetBySearchingAccountNo() throws Exception
 	{
 		ExtentReporter.logger.log(LogStatus.INFO, "Enter account number in account search box in upper right corner of the page.");
@@ -538,5 +565,8 @@ public class FinancePage extends CommonAction {
 	{
 		saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn, financePageDTO.saveOption);
 		return new HomePage(driver);
+		clickButton(driver, exportExcelLink, "Export Excel");
+		exlUtil.downloadExcel();
+		copyFile(alltransactionlistafterpaymentcreditExcelName);
 	}
 }

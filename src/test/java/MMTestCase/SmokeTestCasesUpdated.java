@@ -131,34 +131,44 @@ public class SmokeTestCasesUpdated {
 
 	@Test(testName = "HospitalIndication", groups = { "Smoke Test" }, priority = 3)
 	public void TC42249() throws Exception {
+		ExcelUtil exlUtil =  new ExcelUtil();
 		LoginPageDTO lpDTO = new LoginPageDTO();
 		LoginPage loginpage = new LoginPage(driver);
-		HomePage homepage;
-		PolicyBinderPage policybinderpage;
-		PolicyIndicationPage policyindicationpage;
-		lpDTO = new LoginPageDTO();
-		loginpage = new LoginPage(driver);
-		ExcelUtil exlUtil =  new ExcelUtil();
-		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPage().create_New();
-
-		homepage = new HomePage(driver);
+		HomePage homepage = new HomePage(driver);
+		PolicyIndicationPage policyindicationpage = new PolicyIndicationPage(driver);
+		PolicyQuotePage policyQuotePage = new PolicyQuotePage(driver);
+		
+		loginpage.loginToeOasis(lpDTO.username, lpDTO.password)
+		.navigateToPolicyPage()
+		.create_New();
 		String ParentWindow = homepage.create_Quote();
-
-		homepage.searchEntity("").selectEntity(ParentWindow).selectPolicyType().updatePolicyDetails();
-
-		policyindicationpage = new PolicyIndicationPage(driver);
+		homepage.searchEntity("")
+		.selectEntity(ParentWindow)
+		.selectPolicyTypeForQA()
+		.updatePolicyDetails();
+		
 		List<WebElement> firstFrame = policyindicationpage.open_Underwriter();
 
-		policyindicationpage.add_Underwriter(firstFrame).close_Underwriter().addAgent().addRiskInformation()
-				.addCoverage().selectCoverageFromPopupListAddDatePremium().closeAddCoveragetab()
-				.selectCoverageFromGridList().addCoverageClass();
+		policyindicationpage.add_Underwriter(firstFrame)
+		.closeUnderwriter()
+		.addAgent()
+		.addRiskInformation()
+		.addCoverage()
+		.selectCoverageFromPopupListAddDatePremium()
+		.closeAddCoveragetab()
+		.selectCoverageFromGridList()
+		.addCoverageClass();
 
 		String PolicyNo = policyindicationpage.policyNo();
 
-		policyindicationpage.coverageUpdates(PolicyNo).openLimitSharingTab(PolicyNo).addSharedGroup(PolicyNo)
-				.closeLimitSharingtab();
+		policyindicationpage.coverageUpdates(PolicyNo)
+		.openLimitSharingTab(PolicyNo)
+		.addSharedGroup(PolicyNo)
+		.closeLimitSharingtab()
+		.rateFunctionality(PolicyNo);
+		policyQuotePage.clickPreviewTab().savePDF().verifyPdfContent(PolicyNo);
+		policyQuotePage.saveOptionOfficial();
 		exlUtil.writeData("TC42238", "PolicyNum", PolicyNo, 1, ExcelPath);
-		// TODO - Add PDF verification steps.
 	}
 
 	// DTO done
@@ -206,21 +216,39 @@ public class SmokeTestCasesUpdated {
 
 	@Test(description = "Hospital Copy to Quote", groups = { "Smoke Test" }, priority = 6)
 	public void TC42245(String UserName, String PassWord) throws Exception {
+		ExcelUtil exlUtil = new ExcelUtil();
 		LoginPageDTO lpDTO;
 		LoginPage loginpage;
-		PolicyBinderPage policybinderpage = null;
+		PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
+		RateApolicyPage rateApolicyPage = new RateApolicyPage(driver);
+		PolicyQuotePage policyQuotePage= new PolicyQuotePage(driver);
 		lpDTO = new LoginPageDTO();
-		ExcelUtil exlUtil = new ExcelUtil();
 		loginpage = new LoginPage(driver);
-		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageFromrateApolicyPage()
-				.searchPolicyRateAPolicyPage();
-
-		policybinderpage = new PolicyBinderPage(driver);
+		loginpage.loginToeOasis(lpDTO.username, lpDTO.password)
+		.navigateToPolicyPageFromrateApolicyPage()
+		.searchPolicyRateAPolicyPage();
+		
 		String policyNumber = policybinderpage.policyNo();
 
-		policybinderpage.copyToQuoteFromActionDropDown(policyNumber).copyFromActionDropDown(policyNumber)
-				.changePhaseToIndication().saveWip().clickPreviewTab().savePDF()
-				.verifyPdfContent(policyNumber);
+		policybinderpage.copyToQuoteFromActionDropDown(policyNumber)
+		.copyFromPolicyActionDropDown(policyNumber)
+		.changePhaseToIndicationAndAddQuoteDescription();
+		rateApolicyPage.rateFunctionality(policybinderpage.policyNo());
+		policyQuotePage.saveOptionOfficial()
+		.CopyOptionFromActionDropDown()
+		.changePhaseToQuote();
+		rateApolicyPage.rateFunctionality(policybinderpage.policyNo());
+		policyQuotePage.saveOptionOfficial();
+		rateApolicyPage.AcceptFromActionDropDown()
+		.billingSetup().refreshCurrentPage(driver)
+		.rateFunctionality(policybinderpage.policyNo())
+		.saveOptionOfficial();
+		policybinderpage.endorsementFromActionDropDown()
+		.endorseAPolicy()
+		.rateFunctionality(policybinderpage.policyNo());
+		policyQuotePage.clickPreviewTab()
+		.savePDF();
+		policyQuotePage.saveOptionOfficial();
 		exlUtil.writeData("TC42665", "PolicyNum", policyNumber, 1, ExcelPath);
 	}
 
@@ -294,7 +322,7 @@ public class SmokeTestCasesUpdated {
 		ExcelUtil exlUtil = new ExcelUtil();
 		PolicyQuotePageDTO policyquotepageDTO = new PolicyQuotePageDTO();
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageFromrateApolicyPage()
-				.searchPolicyPolicyQuotePage().select_policyAction().save_CaptureTransactionDetails()
+				.searchPolicyPolicyQuotePage().selectPolicyAction().save_CaptureTransactionDetails()
 				.saveOption(policyquotepageDTO.saveAsPolicyDDLValue).switchToNextFrame()
 				.save_CaptureTransactionDetails().saveOption(policyquotepageDTO.secondSaveAsPolicyDDLValue)
 				.product_Notify().exit_SaveOption();
