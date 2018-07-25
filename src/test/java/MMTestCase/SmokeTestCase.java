@@ -354,11 +354,7 @@ public class SmokeTestCase extends BrowserTypes {
 	}
 
 	// DTO done
-<<<<<<< Upstream, based on branch 'VT_Feature_Sprint_5' of https://github.com/vthorat-mag/MagMutual_POM.git
-	@Test(description = "Hospital Copy to Quote",groups = { "Smoke Test" })
-=======
 	//@Test(description = "Hospital Copy to Quote",groups = { "Smoke Test" })
->>>>>>> aa8bb21 Sprint 6 changes
 	public void TC42245() throws Exception {
 		LoginPageDTO lpDTO;
 		LoginPage loginpage;
@@ -372,7 +368,6 @@ public class SmokeTestCase extends BrowserTypes {
 		
 		String policyNumber = policybinderpage.policyNo();
 
-<<<<<<< Upstream, based on branch 'VT_Feature_Sprint_5' of https://github.com/vthorat-mag/MagMutual_POM.git
 		policybinderpage.copyToQuoteFromActionDropDown(policyNumber)
 		.copyFromPolicyActionDropDown(policyNumber)
 		.changePhaseToIndicationAndAddQuoteDescription();
@@ -392,10 +387,6 @@ public class SmokeTestCase extends BrowserTypes {
 		policyQuotePage.clickPreviewTab()
 		.savePDF();
 		policyQuotePage.saveOptionOfficial();
-=======
-		policybinderpage.copyToQuoteFromActionDropDown(policyNumber).copyFromActionDropDown(policyNumber)
-				.changePhaseToIndication().saveWip().clickPreviewTab().savePDF().verifyPdfContent();
->>>>>>> aa8bb21 Sprint 6 changes
 	}
 
 	// DTO done
@@ -436,7 +427,7 @@ public class SmokeTestCase extends BrowserTypes {
 		.addSharedGroup(PolicyNo)
 		.closeLimitSharingtab();
 		rateApolicyPage.rateFunctionality(PolicyNo);
-		policyQuotePage.clickPreviewTab().savePDF().verifyPdfContent(PolicyNo);
+		policyQuotePage.clickPreviewTab().savePDF().verifyPdfContent();
 		policyQuotePage.saveOptionOfficial();
 	}
 	
