@@ -60,7 +60,6 @@ public class CommonUtilities {
 		 return date;
 	}
 	
-	
 	public void downloadedFileExists(String fileNamePath){
 		
 		 try{

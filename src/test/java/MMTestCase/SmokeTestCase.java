@@ -19,10 +19,12 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.mm.browsers.BrowserTypes;
+import com.mm.dto.FinancePageDTO;
 import com.mm.dto.LoginPageDTO;
 import com.mm.dto.PolicyQuotePageDTO;
 import com.mm.pages.CISPage;
 import com.mm.pages.ClaimsPage;
+import com.mm.pages.FinancePage;
 import com.mm.pages.FindPolicyPage;
 import com.mm.pages.HomePage;
 import com.mm.pages.LoginPage;
@@ -198,7 +200,7 @@ public class SmokeTestCase extends BrowserTypes {
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).headerPolicyTab().searchPolicyRateAPolicyPage();
 		String policyNo = rateapolicypage.policyNo();
 		rateapolicypage.coverageDetailSelectForCinCom().cincomFlow(policyNo).rateFunctionality(policyNo)
-				.clickPreviewTab().savePDF().verifyPdfContent(policyNo);
+				.clickPreviewTab().savePDF().verifyPdfContent();
 	}
 
 	//QA HPL Test Case.
@@ -211,10 +213,10 @@ public class SmokeTestCase extends BrowserTypes {
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).headerPolicyTab().searchPolicyRateAPolicyPage();
 		String policyNo = rateapolicypage.policyNo();
 		rateapolicypage.coverageDetailSelectForCinCom().cincomFlow(policyNo).rateFunctionality(policyNo)
-				.clickPreviewTab().savePDF().verifyPdfContent(policyNo);
+				.clickPreviewTab().savePDF().verifyPdfContent();
 		//TODO - CINCOM page in QA is different than BTS page hence need confirmation from onshore team.
 	}
-	
+
 	// DTO done
 	// @Test(description="Hospital Verify Attach Form", groups = { "Smoke
 	// Test"})
@@ -227,7 +229,7 @@ public class SmokeTestCase extends BrowserTypes {
 		String policyNum = homepage.policySearchUsingSearchCriteria();
 		RateApolicyPage rateapolicyPage = new RateApolicyPage(driver);
 		String policyNumber = rateapolicyPage.checkPolicyViewModeAndUpdateCoverage(policyNum);
-		rateapolicyPage.rateFunctionality(policyNumber).clickPreviewTab().savePDF().verifyPdfContent(policyNumber);
+		rateapolicyPage.rateFunctionality(policyNumber).clickPreviewTab().savePDF().verifyPdfContent();
 	}
 
 	// DTO done
@@ -243,7 +245,7 @@ public class SmokeTestCase extends BrowserTypes {
 				.billingSetup().coverageDetailsSelect();
 		String policyNumber = rateapolicyPage.policyNo();
 		rateapolicyPage.coverageUpdates(policyNumber);
-		rateapolicyPage.rateFunctionality(policyNumber).clickPreviewTab().savePDF().verifyPdfContent(policyNumber)
+		rateapolicyPage.rateFunctionality(policyNumber).clickPreviewTab().savePDF().verifyPdfContent()
 				.saveOption();
 	}
 
@@ -275,7 +277,7 @@ public class SmokeTestCase extends BrowserTypes {
 
 		policybinderpage.endorsementFromActionDropDown().endorsPolicy(policyNumber).identifyPhase()
 				.rateFunctionality(policyNumber).saveOption().exit_SaveOption().clickPreviewTab().savePDF()
-				.verifyPdfContent(policyNumber);
+				.verifyPdfContent();
 	}
 
 	// DTO done
@@ -306,7 +308,7 @@ public class SmokeTestCase extends BrowserTypes {
 
 		String PolicyNo = rateapolicypage.policyNo();
 		rateapolicypage.policyEndorsement(PolicyNo).rateFunctionality(PolicyNo).clickPreviewTab().savePDF()
-				.verifyPdfContent(PolicyNo);
+				.verifyPdfContent();
 	}
 	
 	//QA test case.
@@ -323,7 +325,6 @@ public class SmokeTestCase extends BrowserTypes {
 		LoginPageDTO lpDTO = new LoginPageDTO();
 		LoginPage loginpage = new LoginPage(driver);
 		PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
-
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).headerPolicyTab().searchPolicyRateAPolicyPage();
 		String clientID = policybinderpage.getClientId();
 		policybinderpage.verifyPhase().navigatetoClaimsPage().getPatientDetails().enterDataOnClaimsPage(clientID);
@@ -364,7 +365,7 @@ public class SmokeTestCase extends BrowserTypes {
 
 		rateapolicyPage.coverageUpdates(policyNumber);
 		policyquotepage.rateFunctionality(policyNumber).saveOption(policyquotepagedto.secondSaveAsPolicyDDLValue)
-				.exit_SaveOption().clickPreviewTab().savePDF().verifyPdfContent(policyNumber);
+				.exit_SaveOption().clickPreviewTab().savePDF().verifyPdfContent();
 	}
 
 	// DTO done
@@ -421,7 +422,7 @@ public class SmokeTestCase extends BrowserTypes {
 
 		policyindicationpage.coverageUpdates(PolicyNo).openLimitSharingTab(PolicyNo).addSharedGroup(PolicyNo)
 				.closeLimitSharingtab().rateFunctionality(PolicyNo);
-		policyQuotePage.clickPreviewTab().savePDF().verifyPdfContent(PolicyNo);
+		policyQuotePage.clickPreviewTab().savePDF().verifyPdfContent();
 		policyQuotePage.saveOptionOfficial();
 	}
 	
@@ -472,7 +473,7 @@ public class SmokeTestCase extends BrowserTypes {
 		String PolicyNo = "9865321";
 		loginpage.loginToeOasis(UserName, PassWord).navigateToPolicyPageFromPolicyBinderPage()
 				.searchPolicyPolicyBinderPage().endorsPolicy(PolicyNo).rateFunctionality(PolicyNo).saveOption()
-				.clickPreviewTab().savePDF().verifyPdfContent(PolicyNo);
+				.clickPreviewTab().savePDF().verifyPdfContent();
 	}
 
 	// DTO code is not implemented as this is not part of scope.
@@ -499,6 +500,22 @@ public class SmokeTestCase extends BrowserTypes {
 		quickaddorganisation.navigate_To_Add_Org_Window().add_Org_Information().add_Org_Address().selectZipCode()
 				.add_Phone_Number();
 	}
+	
+	@Test(description = "FM - Hospital Verify Credit Applications", groups = {"Smoke Test" })
+	public void TC42248() throws Exception {
+		
+		FinancePage financepage = new FinancePage(driver);
+		//RateApolicyPage ratepolicypage =  new RateApolicyPage(driver);
+		LoginPageDTO lpDTO = new LoginPageDTO();
+		LoginPage loginpage = new LoginPage(driver);
+		FinancePageDTO financePagedto = new FinancePageDTO();
+		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToFinancePageFromHeaderLink()
+		.receivableDownload(financePagedto.CreditInstallmentBeforeFileName)
+		.naviagetToPolicyFromHeaderLink().searchPolicyRateAPolicyPage().coverageDetailsSelect();
+		financepage.selectUMBCoverage().selectCancelFromPolicyActionDDL().rateFunctionality().openPDF().savePDF();
+		financepage.savePolicyAsWIP().navigateToFinancePageFromHeaderLink().searchPolicyOnFinanceHomePage().openFirstAccount()
+		.downloadExcel(financePagedto.CancelledCoverageTransactionFileName).receivableDownload(financePagedto.CreditInstallmentAfterFileName);
+		}
 
 	@AfterMethod(alwaysRun = true)
 	public void logoffFromAppclication(ITestResult result)

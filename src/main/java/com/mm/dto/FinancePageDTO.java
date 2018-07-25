@@ -4,11 +4,19 @@ import MMTestCase.SmokeTestCase;
 
 public class FinancePageDTO {
 
+	public String policyNum;
 	public Object currentBalance;
 	public String accountNumber;
 	public String policyNo;
 	public String Number;
 	public String Amount;
+	public String coverage;
+	public String policyAction;
+	public String cancelComment;
+	public String saveOption;
+	public String CreditInstallmentBeforeFileName;
+	public String CreditInstallmentAfterFileName;
+	public String CancelledCoverageTransactionFileName;
 	public String onDemandInvoiceInstallmentExcel;
 	public String onDemandInvoiceInstallementBeforeExcel;
 	public String invoicesInstallmentDueDateExcel;

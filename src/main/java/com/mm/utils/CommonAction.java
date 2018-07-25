@@ -126,10 +126,10 @@ public class CommonAction implements CommonActionInterface {
 
 		return selectedDDLValue;
 	}
-
 	public String randomNumGenerator() {
 		return RandomStringUtils.random(3, "1234567890");
 	}
+
 
 	// Enter text values in the text field
 	public void enterTextIn(WebDriver driver, WebElement pageElement, String text, String textField) {
@@ -531,8 +531,8 @@ public class CommonAction implements CommonActionInterface {
 		return returnCellValue;
 	}
 
-	public static void writeData(String testCaseId, String columnName, String cellValue, int rowNum,
-			String saveDataFilePath) throws Exception {
+
+	public static void writeData(String testCaseId, String columnName, String cellValue, int rowNum,String saveDataFilePath) throws Exception {
 		String excelFilePath = saveDataFilePath;
 		FileInputStream inputStream;
 
