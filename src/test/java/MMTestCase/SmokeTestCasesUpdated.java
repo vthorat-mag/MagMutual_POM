@@ -100,7 +100,7 @@ public class SmokeTestCasesUpdated {
 		testDataMap = excelUtil.testData(method.getName());
 	}
 
-	@Test(description = "Hospital Rate", groups = { "Smoke Test" }, priority = 0)
+	//@Test(description = "Hospital Rate", groups = { "Smoke Test" }, priority = 0)
 	public void TC42239() throws Exception {
 		LoginPageDTO lpDTO = new LoginPageDTO();
 		LoginPage loginpage = new LoginPage(driver);
@@ -119,7 +119,7 @@ public class SmokeTestCasesUpdated {
 				.verifyPagesHavingMenuOnPersonPageAreDisplayed().verifyPagesWithoutSubMenu();
 	}
 
-	@Test(description = "Verify Add Organization", groups = { "Smoke Test" }, priority = 2)
+	/*@Test(description = "Verify Add Organization", groups = { "Smoke Test" }, priority = 2)
 	public void TC42404() throws Exception {
 		LoginPage loginpage = new LoginPage(driver);
 		LoginPageDTO lpDTO = new LoginPageDTO();
@@ -326,7 +326,7 @@ public class SmokeTestCasesUpdated {
 		policybinderpage = new PolicyBinderPage(driver);
 		// String ClaimNumber = rateapolicyPage.policyNo();
 		policybinderpage.navigatetoClaimsPage().searchClaim().statusChange(rateapolicyPage.policyNo());
-	}
+	}*/
 	
 	@AfterMethod(alwaysRun = true)
 	public void logoffFromAppclication(ITestResult result)

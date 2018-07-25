@@ -26,6 +26,7 @@ public class RateAPolicyPageDTO {
 	public String policyAction;
 	public String endorsementReason;
 	public String policyNum;
+	public String policyNo;
 	
 	
 	

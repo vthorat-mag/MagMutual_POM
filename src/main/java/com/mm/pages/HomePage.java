@@ -200,6 +200,13 @@ public class HomePage extends CommonAction {
 		navigateToPolicyPage();
 		return new EndorsePolicyPage(driver);
 	}
+	
+	//THis method will navigate to policy page from header PolicyTab link
+	public RateApolicyPage naviagetToPolicyFromHeaderLink() throws Exception
+	{
+		clickButton(driver, Policy_link, "Policy Header Link");
+		return new RateApolicyPage(driver);
+	}
 
 	// Navigate to policy page using Policy tab from rateApolicyPage.
 	public RateApolicyPage navigateToPolicyPageFromrateApolicyPage() throws Exception {
