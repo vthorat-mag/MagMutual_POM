@@ -593,6 +593,8 @@ public class ClaimsPage extends CommonAction {
 		}
 		switchToParentWindowfromframe(driver);
 		visibilityOfElement(driver, claimNo, "Claim Number");
+		String claimNumber = claimNo.getAttribute("innerHTML");
+		//TODO - save claimNumber to excel
 	}
 	public boolean checkduplicateClaimWindow()
 	{

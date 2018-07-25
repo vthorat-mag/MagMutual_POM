@@ -200,7 +200,7 @@ public class SmokeTestCase extends BrowserTypes {
 				.clickPreviewTab().savePDF().verifyPdfContent();
 		//TODO - CINCOM page in QA is different than BTS page hence need confirmation from onshore team.
 	}
-	
+
 	// DTO done
 	// @Test(description="Hospital Verify Attach Form", groups = { "Smoke Test"
 	// })
@@ -310,7 +310,6 @@ public class SmokeTestCase extends BrowserTypes {
 		LoginPageDTO lpDTO = new LoginPageDTO();
 		LoginPage loginpage = new LoginPage(driver);
 		PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
-
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).headerPolicyTab().searchPolicyRateAPolicyPage();
 		String clientID = policybinderpage.getClientId();
 		policybinderpage.verifyPhase().navigatetoClaimsPage().getPatientDetails().enterDataOnClaimsPage(clientID);

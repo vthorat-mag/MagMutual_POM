@@ -132,7 +132,10 @@ public class CISPage extends CommonAction {
 
 	@FindBy(xpath = "//li[@id='CI_QUICKADDORG_MI']//a/span")
 	WebElement addOrg;
-
+	
+	@FindBy(xpath = "//li[@id='CI_QUICKADDPER_MI']//a/span")
+	WebElement addPerson;
+	
 	@FindBy(name = "entity_organizationName")
 	WebElement orgName;
 
@@ -381,6 +384,19 @@ public class CISPage extends CommonAction {
 		Thread.sleep(2000);
 		return new CISPage(driver);
 	}
+	
+	// Move to Quick Add button and select Add Person menu
+		public CISPage navigateToAddPersonPage() throws Exception {
+			Thread.sleep(2000);
+			ExtentReporter.logger.log(LogStatus.INFO, "Add Organization Quick Entry window displays");
+			Actions action = new Actions(driver);
+			action.moveToElement(quickAdd).build().perform();
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			js.executeScript("arguments[0].click();", addPerson);
+			Thread.sleep(2000);
+			return new CISPage(driver);
+		}
+	
 
 	// Add info like Org. Name, DOI, Classfication, EffectTODate in
 	public String addOrganizationInformation() throws Exception {

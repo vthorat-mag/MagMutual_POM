@@ -11,7 +11,6 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
-
 import com.mm.dto.FinancePageDTO;
 import com.mm.dto.FindPolicyPageDTO;
 import com.mm.utils.CommonAction;
@@ -367,6 +366,11 @@ public class FinancePage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Amount:"+financePageDTO.Amount+"");
 		enterTextIn(driver, amountOnCashEntryPage, financePageDTO.Amount, "Cash Entry Page's Amount");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Save]");
+/*=======
+		enterTextIn(driver, invoiceNoOnCashEntryPage, financePageDTO.Number, "Cash Entry Page's invoice Number");
+		enterTextIn(driver, checkNoOnCashEntryPage, checkNo, "Cash Entry Page's Check Number");
+		enterTextIn(driver, amountOnCashEntryPage, financePageDTO.Amount, "Cash Entry Page's Amount");
+>>>>>>> refs/heads/VT_Sprint_Feature_4*/
 		clickButton(driver, saveBtnOnCashEntryPage, "Cash Entry Page's Save");
 		ExtentReporter.logger.log(LogStatus.INFO, "Export All Transactions to excel");
 		downloadExcel(PaymentCreditExcelName);
@@ -486,6 +490,8 @@ public class FinancePage extends CommonAction {
 				break;
 			}
 		}
+		/*Assert.assertTrue(currBalOnAllTxnEnqPage.getAttribute("innerHTML").equals(financePageDTO.currunetBalance),
+		"Current Balance is not zero on All transaction enquirey Page");*/
 		return new FinancePage(driver);
 	}
 	
