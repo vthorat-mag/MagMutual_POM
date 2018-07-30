@@ -509,7 +509,7 @@ public class ClaimsPage extends CommonAction {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("arguments[0].click();", fileAddMenuOption);
 		invisibilityOfLoader(driver);
-		Thread.sleep(3000);
+		Thread.sleep(5000);
 		getPageTitle(driver, ClaimsDTO.addFilePageTitle);
 		ExtentReporter.logger.log(LogStatus.INFO,"Click Magnifying glass by Search Patient.");
 		clickButton(driver, patientSearchIcon, "Patient Search");

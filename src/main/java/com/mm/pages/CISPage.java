@@ -210,12 +210,14 @@ public class CISPage extends CommonAction {
 		waitForElementToLoad(driver, 10, clientLastName);
 		enterTextIn(driver, clientLastName, oCISPageDTO.clientLastName, "Last/Org Name");
 		enterTextIn(driver, clientFirstName, oCISPageDTO.clientFirstName, "First Name");
+		Thread.sleep(2000);
 		click(driver, searchButton, "Search");
 		ExtentReporter.logger.log(LogStatus.INFO, "Search results returned");
 		invisibilityOfLoader(driver);
+		Thread.sleep(3000);
 		getPageTitle(driver, EntityListPageTitle);
 		//Get list of client IDs based on environment 'BTS OR QA' and store in List WebElement
-		List <WebElement>clientIDEntityList =driver.findElements(By.xpath("//span[@id='CCLIENT_NAME'] | //div[@title='"+oCISPageDTO.clientIDValue+"']//div"));
+		List <WebElement>clientIDEntityList =driver.findElements(By.xpath("//div[@id='CCLIENT_ID'] | //div[@title='"+oCISPageDTO.clientIDValue+"']//div"));
 		try{
 		visibilityOfElement(driver, clientNameEntityList.get(0), "Client name");
 		visibilityOfElement(driver, clientIDEntityList.get(0), "Client ID");

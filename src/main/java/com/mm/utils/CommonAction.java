@@ -401,15 +401,6 @@ public class CommonAction implements CommonActionInterface {
 		wait.until(ExpectedConditions.visibilityOf(element));
 
 	}
-
-	public void acceptAlert(WebDriver driver) {
-
-		Alert saveAlert = driver.switchTo().alert();
-		saveAlert.accept();
-	}
-
-	public String getAlertText(WebDriver driver) {
-		String saveAlertText = driver.switchTo().alert().getText();
 	
 	public static boolean isAlertPresent(WebDriver driver) throws InterruptedException{
          try{

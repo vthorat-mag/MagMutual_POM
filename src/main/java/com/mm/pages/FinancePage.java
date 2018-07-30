@@ -229,6 +229,9 @@ public class FinancePage extends CommonAction {
 
 	@FindBy(id = "PM_SAVE_OPTION_OK")
 	WebElement saveOptionOkBtn;
+	
+	@FindBy(name = "workflowExit_Ok")
+	WebElement Exit_Ok;
 
 	@FindBy(xpath = "//select[contains(@name,'confirmed')]")
 	WebElement productNotifyDropDown;
@@ -563,10 +566,10 @@ public class FinancePage extends CommonAction {
 	//this method will save policy.
 	public HomePage savePolicyAsWIP() throws Exception
 	{
-		saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn, financePageDTO.saveOption);
-		return new HomePage(driver);
+		saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn,Exit_Ok, financePageDTO.saveOption);
 		clickButton(driver, exportExcelLink, "Export Excel");
 		exlUtil.downloadExcel();
 		copyFile(alltransactionlistafterpaymentcreditExcelName);
+		return new HomePage(driver);
 	}
 }
