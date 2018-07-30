@@ -103,7 +103,7 @@ public class HomePage extends CommonAction {
 	WebElement searchCriteria;
 
 	//@FindBy(xpath = "//a[@class='gridcontent']//span[@id='CPOLICYNO']") - BTS
-	@FindBy(id="findPolicyListGrid_CPOLICYNO_0_HREF")  // QA
+	@FindBy(xpath = "//*[@id='findPolicyListGrid_CPOLICYNO_0_HREF'] | //a[@class='gridcontent']//span[@id='CPOLICYNO']" )
 	WebElement policyNumFromPolicyCount;
 
 	@FindBy(id = "pageTitleForpageHeaderForPolicyFolder") // seperate for BTS and QA
