@@ -15,7 +15,7 @@ import com.mm.utils.PDFReader;
 import com.relevantcodes.extentreports.LogStatus;
 
 public class PolicySubmissionPage extends CommonAction {
-
+	
 	// Global Assignment/initialization of variables.
 	WebDriver driver;
 	String indicationPhaseValue = "INDICATION";
@@ -86,11 +86,10 @@ public class PolicySubmissionPage extends CommonAction {
 		return new PolicyQuotePage(driver);
 	}
 	
-
+	
 	// Update policy details for a policy and change policy phase from
 	// Submission to Indication.
 	public PolicyIndicationPage updatePolicyDetails() throws Exception {
-	
 		invisibilityOfLoader(driver);
 		Thread.sleep(5000);
 		//TODO-add get page title

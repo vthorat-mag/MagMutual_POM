@@ -40,6 +40,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 import com.mm.pages.PolicyQuotePage;
+import com.mm.pages.RateApolicyPage;
 import com.relevantcodes.extentreports.LogStatus;
 
 import BaseClass.CommonActionInterface;
@@ -151,8 +152,10 @@ public class CommonAction implements CommonActionInterface {
 			WebDriverWait wait = new WebDriverWait(driver, Medium);
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
 			Assert.assertTrue(pageElement.isDisplayed(), textField + " is not displayed on screen.");
-			JavascriptExecutor js = (JavascriptExecutor) driver;
-			js.executeScript("arguments[0].value=text;", pageElement);
+			pageElement.sendKeys(text);
+			/*JavascriptExecutor js = (JavascriptExecutor) driver;
+			js.executeScript("arguments[0].value=text;", pageElement);*/
+			
 			ExtentReporter.logger.log(LogStatus.PASS, "Value " + text + " entered in text field " + textField);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -569,7 +572,7 @@ public class CommonAction implements CommonActionInterface {
 				return false;
 			}
 		} catch (Exception e) {
-			ExtentReporter.logger.log(LogStatus.FAIL, "Page Loader is not displayed.");
+			ExtentReporter.logger.log(LogStatus.INFO, "Page Loader is not displayed.");
 		}
 		return false;
 	}
@@ -581,22 +584,25 @@ public class CommonAction implements CommonActionInterface {
 	
 	
 	public void saveOption(WebDriver driver, WebElement saveOptionBtn, WebElement saveAsDropDown,
-			WebElement saveOKBtn, WebElement exitOK, String saveAsValue)
-			throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
+			WebElement saveOKBtn, WebElement exitOK, String saveAsValue,String policyNo)
+			throws Exception {
 		Thread.sleep(2000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options");
 		waitForElementToLoad(driver, 15, saveOptionBtn);
 		clickButton(driver, saveOptionBtn, "Save Option");
-		Thread.sleep(2000);
+		invisibilityOfLoader(driver);
+		Thread.sleep(5000);
 		switchToFrameUsingId(driver, "popupframe1");
 		getPageTitle(driver, "Save As");
 		selectDropdownByVisibleText(driver, saveAsDropDown, saveAsValue, "Selected " + saveAsValue);
 		ExtentReporter.logger.log(LogStatus.INFO, "Select " + saveAsValue + " Click [OK]");
 		clickButton(driver, saveOKBtn, "Save");
 		invisibilityOfLoader(driver);
+		Thread.sleep(5000);
+		RateApolicyPage rateapolicypage =  new RateApolicyPage(driver);
+		rateapolicypage.handleProducNotifyWindow(policyNo);
 		switchToParentWindowfromframe(driver);
 		switchToFrameUsingId(driver, "popupframe1");
-		Thread.sleep(5000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Save as Official window displays");
 		clickButton(driver, exitOK, "Workflow exit OK");
 		switchToParentWindowfromframe(driver);

@@ -303,8 +303,7 @@ public class HomePage extends CommonAction {
 	public PolicySubmissionPage selectPolicyTypeForBTS()
 			throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
 		Thread.sleep(2000);
-		String parentWindow = switchToWindow(driver);     //For QA
-		//switchToFrameUsingId(driver, "popupframe1");      for BTS
+		switchToFrameUsingId(driver, "popupframe1");      
 		Thread.sleep(2000);
 		//getPageTitle(driver, selectPolicyTypePageTitle);           //TODO- clarify, Page title is different in QA
 		//Verify Select Policy Type window appeared, enter Effective date,Issue company,state and click Search
@@ -327,8 +326,7 @@ public class HomePage extends CommonAction {
 	public PolicySubmissionPage selectPolicyTypeForQA()
 			throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
 		Thread.sleep(2000);
-		String parentWindow = switchToWindow(driver);     //For QA
-		//switchToFrameUsingId(driver, "popupframe1");      for BTS
+		String parentWindow = switchToWindow(driver);     
 		Thread.sleep(2000);
 		//getPageTitle(driver, selectPolicyTypePageTitle);           //TODO- clarify, Page title is different in QA
 		//Verify Select Policy Type window appeared, enter Effective date,Issue company,state and click Search
