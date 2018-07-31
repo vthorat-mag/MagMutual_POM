@@ -1,7 +1,9 @@
 package com.mm.pages;
 
+import java.io.IOException;
 import java.util.List;
 
+import org.apache.http.impl.client.EntityEnclosingRequestWrapper;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -58,6 +60,8 @@ public class FinancePage extends CommonAction {
 	String validlateFieldName = "Validate";
 	String onDemandPageTitle = "On Demand Invoice";
 	String checkNo = "ST12345";
+	String accountNoUnExpectedValue = "";
+	String accountNovalueAttributeName = "value";
 	ExcelUtil exlUtil = new ExcelUtil();	
 
 	@FindBy(name = "globalSearch")
@@ -204,6 +208,45 @@ public class FinancePage extends CommonAction {
 	
 	@FindBy(xpath="//li[@id='FM_MAINTAIN_ACCT_MENU']//a//span")
 	WebElement maintainAccount;
+	
+	@FindBy(xpath = "//iframe[contains(@id,'popupframe')]")
+	WebElement iFrameElement;
+	
+	@FindBy(xpath = "//div[@id='CLONGDESCRIPTION']")
+	List<WebElement> accountType;
+	
+	@FindBy(xpath = "//input[@name='entitySearch_lastOrOrgName']")
+	WebElement lastOrOrgNameInputField;
+	
+	@FindBy(id = "FM_FIND_NEW_ACCOUNT")
+	WebElement newAccountBtn;
+	
+	@FindBy(id = "CI_ENTITY_SELECT_SCH_SCH")
+	WebElement searchBtnEntitySearchPage;
+	
+	@FindBy(xpath = "//input[@name='chkCSELECTIND']")
+	WebElement searchedEntityChkBox;
+	
+	@FindBy(id = "CI_ENT_SEL_LST_FORM_SEL")
+	WebElement selectBtnSearchedEntity;
+	
+	@FindBy(xpath = "//input[@name='accountNo']")
+	WebElement accountNoFieldValue;
+	
+	@FindBy(id="FM_MAINT_ACCT_SELECT")
+	WebElement selectAdressBtn;
+	
+	@FindBy(id="FM_SEL_ACCT_ADDR_DONE")
+	WebElement DoneBtnOnAddListPopUp;
+	
+	@FindBy(id="FM_MAINT_ACCT_SAVE")
+	WebElement SaveBtnOnMaintainActPage;
+	
+	@FindBy(id = "longDescriptionROSPAN")
+	WebElement descriptionAfterSave;
+	
+	@FindBy(id = "FM_SEL_ACCT_TYPE_DONE")
+	WebElement doneBtnOnSelectAccTypePopUp;
 	
 	@FindBy(name="billingFrequency")
 	WebElement billingFrequencyDDL;
@@ -535,7 +578,7 @@ public class FinancePage extends CommonAction {
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + financePageDTO.policyNum + "')]")));
 		Thread.sleep(3000);
-		enterTextIn(driver, cancelDateOnCancelPopUp,commutil.getSystemDatemmddyyyy(),"Cancel Date");
+		enterTextIn(driver, cancelDateOnCancelPopUp,commutil.getSystemDatemm_dd_yyyy(),"Cancel Date");
 		verifyValueFromField(driver, accountingDateOnCancelPopUp, "N", "iseditable", "Accounting Date");
 		selectDropdownByValue(driver, cancelTypeaccountingDateOnCancelPopUp, cancelTypeDDLValue, "Cancel Type");
 		selectDropdownByValue(driver, cancelReasonOnCancelPopUp, cancelReasonDDLValue, "Cancel Type");
@@ -572,4 +615,104 @@ public class FinancePage extends CommonAction {
 		copyFile(alltransactionlistafterpaymentcreditExcelName);
 		return new HomePage(driver);
 	}
+	
+	//This method will open new account page.
+	public FinancePage newAccountOpen() throws Exception
+	{
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Account>Maintain Account");
+		Thread.sleep(2000);
+		Actions act = new Actions(driver);
+		act.moveToElement(accountMenuTab).build().perform();
+		JavascriptExecutor jse= (JavascriptExecutor)driver; 
+		jse.executeScript("arguments[0].click();",maintainAccount);
+		invisibilityOfLoader(driver);
+		switchToFrameUsingElement(driver, iFrameElement);
+		ExtentReporter.logger.log(LogStatus.INFO, "Click [New Account]");
+		clickButton(driver, newAccountBtn, "New Account");
+		invisibilityOfLoader(driver);
+		Thread.sleep(2000);
+		switchToFrameUsingElement(driver, iFrameElement);
+		for(int i = 0 ;i<accountType.size();i++)
+		{
+			if(accountType.get(i).getAttribute("innerText").equals(financePageDTO.AccountType))
+			{
+				ExtentReporter.logger.log(LogStatus.INFO, "Select Account type("+accountType.get(i).getAttribute("innerHTML")+").");
+				ExtentReporter.logger.log(LogStatus.INFO, "Click[Done]");
+				clickButton(driver, accountType.get(i), accountType.get(i).getAttribute("innerText"));
+				break;
+			}
+			else
+			{
+				ExtentReporter.logger.log(LogStatus.INFO, "Account type("+accountType.get(i).getAttribute("innerHTML")+" is not found).");
+			}
+		}
+		clickButton(driver, doneBtnOnSelectAccTypePopUp, "Done Button on Select Account Type Pop up");
+		return new FinancePage(driver);
+	}
+	
+	//This method will search organization and select address for organization.
+	public FinancePage entitySelectSearch() throws Exception
+	{
+		invisibilityOfLoader(driver);
+		String parentWindow = switchToWindow(driver);
+		ExtentReporter.logger.log(LogStatus.INFO, "Enter: Test Agency Account Click[Search}");
+		enterTextIn(driver, lastOrOrgNameInputField, financePageDTO.LastOrgName, "Last/Organization Name");
+		clickButton(driver, searchBtnEntitySearchPage, "Search");
+		invisibilityOfLoader(driver);
+		ExtentReporter.logger.log(LogStatus.INFO, "Select entity by checking the check box then Click [Select]"); 
+		clickButton(driver, searchedEntityChkBox, "Search Entity Check Box");
+		Thread.sleep(1000);
+		clickButton(driver, selectBtnSearchedEntity, "Select");
+		invisibilityOfLoader(driver);
+		Thread.sleep(3000);
+		switchToParentWindowfromotherwindow(driver, parentWindow);
+		//verifyValueFromField(driver, accountNoFieldValue, , accountNovalueAttributeName, "Account Number")
+		if(accountNoFieldValue.getAttribute("value").trim().equals(accountNoUnExpectedValue))
+		{
+			Assert.assertTrue(false,"Account Information is NOT automatically populated on Maintain account page.");
+		}
+		else {
+			ExtentReporter.logger.log(LogStatus.INFO,"Account Information is automatically populated on Maintain account page.");
+		}
+		return new FinancePage(driver);
+	}
+	
+	//This method will select address for prepopulated account details.
+	public FinancePage selectAddress() throws Exception
+	{
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Select Address Button"); 
+		clickButton(driver, selectAdressBtn, "Select Adress");
+		invisibilityOfLoader(driver);
+		switchToFrameUsingElement(driver, iFrameElement);
+		ExtentReporter.logger.log(LogStatus.INFO, "Click [Done]"); 
+		clickButton(driver, DoneBtnOnAddListPopUp, "Done");
+		switchToParentWindowfromframe(driver);
+		invisibilityOfLoader(driver);
+		return new FinancePage(driver);
+	}
+	
+	//This method will save account details.
+	public FinancePage saveAccountDetails() throws Exception
+	{
+		Thread.sleep(2000);
+		ExtentReporter.logger.log(LogStatus.INFO, "Click [Save]");
+		clickButton(driver, SaveBtnOnMaintainActPage, "save");
+		invisibilityOfLoader(driver);
+		ExtentReporter.logger.log(LogStatus.INFO, "Click [Ok]");
+		if(isAlertPresent(driver)){
+		acceptAlert(driver);
+		}else{
+			ExtentReporter.logger.log(LogStatus.WARNING, "Save Confirmation Alert is NOT displayed"); 
+		}
+		invisibilityOfLoader(driver);
+		Thread.sleep(2000);
+		Assert.assertEquals(descriptionAfterSave.getAttribute("innerHTML"), financePageDTO.LastOrgName,"Account details are not save Sucessfully");
+		return new FinancePage(driver);
+	}
+	
+	public void captureSaveScreenshotofMantainAccountpage() throws IOException
+	{
+		captureScreenshot(driver);
+	}
+	
 }

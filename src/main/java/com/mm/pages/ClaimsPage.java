@@ -298,7 +298,7 @@ public class ClaimsPage extends CommonAction {
 		enterDataIn(driver, transactionAmount, claimsdto.transactionAmount.get(i), "Trans Amount");
 		//Invoice no. is current date + index. of transaction(e.g. 1,2,3..)
 		CommonUtilities comUtil = new CommonUtilities();
-		String Date = comUtil.getSystemDatemmddyyyy();
+		String Date = comUtil.getSystemDatemm_dd_yyyy();
 		String invoiceNumber=Date+"-"+(i+2); // TODO- change to 1
 		enterDataIn(driver, invoiceNo, invoiceNumber, "Invoice No.");
 		selectDropdownByVisibleText(driver, seperateCheck, claimsdto.seperateCheck, "Sep Check");
@@ -472,7 +472,7 @@ public class ClaimsPage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "File Status Date: Enter in Current Date if no date is entered");
 		clearTextBox(driver, chagneFileDate, "File Status Date");
 		CommonUtilities commUtil = new CommonUtilities();
-		enterDataIn(driver, chagneFileDate, commUtil.getSystemDatemmddyyyy(), "File Status Date");
+		enterDataIn(driver, chagneFileDate, commUtil.getSystemDatemm_dd_yyyy(), "File Status Date");
 		ExtentReporter.logger.log(LogStatus.INFO, "File Status: Select Opened in Error");
 		selectDropdownByValue(driver, fileStatus, fileStatusDropDownOption, "File Status");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Save]");
@@ -550,7 +550,7 @@ public class ClaimsPage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO,"Click State of Loss dropdown and select GA");
 		selectDropdownByValue(driver, stateOfLossDorpDown, ClaimsDTO.stateOfLossDropDownValue, "State Of Loss");
 		ExtentReporter.logger.log(LogStatus.INFO,"Enter today's date in 'Accident Date' field");
-		enterTextIn(driver, accidentDateTextBox, comUtil.getSystemDatemmddyyyy(), "Accident Date");
+		enterTextIn(driver, accidentDateTextBox, comUtil.getSystemDatemm_dd_yyyy(), "Accident Date");
 		ExtentReporter.logger.log(LogStatus.INFO,"Click the magnifying glass next to insured");
 		clickButton(driver, insuredSearchIcon, "Insured Search Icon");
 		String parentWindowIdSearchEntity = switchToWindow(driver);
