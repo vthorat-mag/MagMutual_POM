@@ -223,7 +223,7 @@ public class PolicyBinderPage extends CommonAction {
 		enterTextIn(driver, descriptionTextBox, policybinderpageDTO.description,"Description");
 		selectDropdownByValue(driver, fileHandlerDorpDown, policybinderpageDTO.fileHandlerDropDownValue, "File Handler");
 		selectDropdownByValue(driver, stateOfLossDorpDown, policybinderpageDTO.stateOfLossDropDownValue, "State Of Loss");
-		enterTextIn(driver, accidentDateTextBox, comUtil.getSystemDatemmddyyyy(),"Accident Date");
+		enterTextIn(driver, accidentDateTextBox, comUtil.getSystemDatemm_dd_yyyy(),"Accident Date");
 		clickButton(driver, insuredSearchIcon, "Insured Search Icon");
 		String parentWindowIdSearchEntity = switchToWindow(driver);
 		//switchToFrameUsingElement(driver, entityMiniPopupFrameId);

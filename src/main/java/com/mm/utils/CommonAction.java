@@ -28,6 +28,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -109,6 +111,20 @@ public class CommonAction implements CommonActionInterface {
 			ExtentReporter.logger.log(LogStatus.WARNING, "Error while switching to frame.");
 		}
 	}
+	
+	public void  captureScreenshot(WebDriver driver) throws IOException 
+	{
+		CommonUtilities commUtil = new CommonUtilities();
+		TakesScreenshot ts=(TakesScreenshot)driver;
+		
+		File source =ts.getScreenshotAs(OutputType.FILE);
+		
+		File destination=new File("C://SmokeTestFM//"+commUtil.getSystemDatemmddyyyy()+"_CreateFMAccount.png");
+				
+		FileUtils.copyFile(source, destination);
+		
+	}
+	
 
 	public void switchToParentWindowfromframe(WebDriver driver) {
 		try {

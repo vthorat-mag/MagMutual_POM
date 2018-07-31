@@ -217,7 +217,8 @@ public class HomePage extends CommonAction {
 	
 	// Navigate to Finance page from header link
 	public FinancePage navigateToFinancePageFromHeaderLink() throws Exception{
-		click(driver, financePageLink, "Finance Link");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Finance in right corner of screen");
+		clickButton(driver, financePageLink, "Finance Link");
 		invisibilityOfLoader(driver);
 		getPageTitle(driver, financePageTitle);
 		return new FinancePage(driver);

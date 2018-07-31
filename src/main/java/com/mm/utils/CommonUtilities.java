@@ -51,9 +51,18 @@ public class CommonUtilities {
 		 return date;
 	}
 	
-	public String getSystemDatemmddyyyy(){
+	public String getSystemDatemm_dd_yyyy(){
 		
 		 DateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy");
+		 Date today = Calendar.getInstance().getTime();        
+		 String date= dateFormatter.format(today);
+		
+		 return date;
+	}
+	
+	public String getSystemDatemmddyyyy(){
+		
+		 DateFormat dateFormatter = new SimpleDateFormat("MMddyyyy");
 		 Date today = Calendar.getInstance().getTime();        
 		 String date= dateFormatter.format(today);
 		
