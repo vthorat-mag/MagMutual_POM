@@ -62,6 +62,7 @@ public class FinancePage extends CommonAction {
 	String checkNo = "ST12345";
 	String accountNoUnExpectedValue = "";
 	String accountNovalueAttributeName = "value";
+	String policyNo;
 	ExcelUtil exlUtil = new ExcelUtil();	
 
 	@FindBy(name = "globalSearch")
@@ -609,7 +610,7 @@ public class FinancePage extends CommonAction {
 	//this method will save policy.
 	public HomePage savePolicyAsWIP() throws Exception
 	{
-		saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn,Exit_Ok, financePageDTO.saveOption);
+		saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn,Exit_Ok, financePageDTO.saveOption,policyNo);
 		clickButton(driver, exportExcelLink, "Export Excel");
 		exlUtil.downloadExcel();
 		copyFile(alltransactionlistafterpaymentcreditExcelName);
