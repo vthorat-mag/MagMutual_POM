@@ -29,6 +29,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -41,6 +43,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 import com.mm.pages.PolicyQuotePage;
+import com.mm.pages.RateApolicyPage;
 import com.relevantcodes.extentreports.LogStatus;
 
 import BaseClass.CommonActionInterface;
@@ -109,6 +112,20 @@ public class CommonAction implements CommonActionInterface {
 			ExtentReporter.logger.log(LogStatus.WARNING, "Error while switching to frame.");
 		}
 	}
+	
+	public void  captureScreenshot(WebDriver driver) throws IOException 
+	{
+		CommonUtilities commUtil = new CommonUtilities();
+		TakesScreenshot ts=(TakesScreenshot)driver;
+		
+		File source =ts.getScreenshotAs(OutputType.FILE);
+		
+		File destination=new File("C://SmokeTestFM//"+commUtil.getSystemDatemmddyyyy()+"_CreateFMAccount.png");
+				
+		FileUtils.copyFile(source, destination);
+		
+	}
+	
 
 	public void switchToParentWindowfromframe(WebDriver driver) {
 		try {
@@ -127,10 +144,10 @@ public class CommonAction implements CommonActionInterface {
 
 		return selectedDDLValue;
 	}
-
 	public String randomNumGenerator() {
 		return RandomStringUtils.random(3, "1234567890");
 	}
+
 
 	// Enter text values in the text field
 	public void enterTextIn(WebDriver driver, WebElement pageElement, String text, String textField) {
@@ -528,8 +545,8 @@ public class CommonAction implements CommonActionInterface {
 		return returnCellValue;
 	}
 
-	public static void writeData(String testCaseId, String columnName, String cellValue, int rowNum,
-			String saveDataFilePath) throws Exception {
+
+	public static void writeData(String testCaseId, String columnName, String cellValue, int rowNum,String saveDataFilePath) throws Exception {
 		String excelFilePath = saveDataFilePath;
 		FileInputStream inputStream;
 
@@ -587,13 +604,14 @@ public class CommonAction implements CommonActionInterface {
 
 
 	public void saveOption(WebDriver driver, WebElement saveOptionBtn, WebElement saveAsDropDown,
-			WebElement saveOKBtn, WebElement exitOK, String saveAsValue)
-					throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
+			WebElement saveOKBtn, WebElement exitOK, String saveAsValue,String policyNo)
+			throws Exception {
 		Thread.sleep(2000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options");
 		waitForElementToLoad(driver, 15, saveOptionBtn);
 		clickButton(driver, saveOptionBtn, "Save Option");
-		Thread.sleep(2000);
+		invisibilityOfLoader(driver);
+		Thread.sleep(5000);
 		switchToFrameUsingId(driver, "popupframe1");
 		getPageTitle(driver, "Save As");
 		ExtentReporter.logger.log(LogStatus.INFO, "Save as Official window displays");
@@ -601,6 +619,9 @@ public class CommonAction implements CommonActionInterface {
 		ExtentReporter.logger.log(LogStatus.INFO, "Select " + saveAsValue + " Click [OK]");
 		clickButton(driver, saveOKBtn, "Save");
 		invisibilityOfLoader(driver);
+		Thread.sleep(5000);
+		RateApolicyPage rateapolicypage =  new RateApolicyPage(driver);
+		rateapolicypage.handleProducNotifyWindow(policyNo);
 		switchToParentWindowfromframe(driver);
 		switchToFrameUsingId(driver, "popupframe1");
 		Thread.sleep(5000);

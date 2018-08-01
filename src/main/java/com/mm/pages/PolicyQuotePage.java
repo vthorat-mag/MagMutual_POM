@@ -46,7 +46,7 @@ public class PolicyQuotePage extends CommonAction {
 	@FindBy(id="pageTitleForpageHeaderForPolicyFolder")
 	WebElement pageHeaderForPolicyFolder;
 	
-	@FindBy(xpath="//div[@id='globalDropdownActionItems']//select[@class='globalActionItemList']")
+	@FindBy(id="PM_QT_POLICY_FOLDER_AG")
 	WebElement policyAction;
 	
 	@FindBy(id="PM_CPT_TRAN_OK")
@@ -112,6 +112,9 @@ public class PolicyQuotePage extends CommonAction {
 	@FindBy(name="policyPhaseCode")
 	WebElement policyPhase;
 	
+	@FindBy(id ="PM_QT_POLICY_FOLDER_AG")
+	WebElement PolicyActionDropDown;
+	
 //	@FindBy(xpath="//select[contains(@name,'confirmed')]")
 	@FindBy(name="483865737.confirmed")
 	WebElement productNotifyDropDown;
@@ -153,9 +156,9 @@ public class PolicyQuotePage extends CommonAction {
 	//Select Copy to action from "Action DropDown".
 	public PolicyQuotePage CopyOptionFromActionDropDown() throws Exception
 	{
-		Thread.sleep(3000);
+		Thread.sleep(6000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy>Ok");
-		selectDropdownByVisibleText(driver, policyAction, policyquotepageDTO.valueOfPolicyActionCopy, "Policy Action");
+		selectDropdownByValue(driver, policyAction, policyquotepageDTO.valueOfPolicyActionCopy, "Policy Action");
 		return new PolicyQuotePage(driver);
 	}
 	
@@ -177,8 +180,8 @@ public class PolicyQuotePage extends CommonAction {
 		Thread.sleep(3000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Coverage tab");
 		clickButton(driver, coverageTab, "Coverage");
-		Assert.assertEquals(coverageList.get(0).getAttribute("innerHTML"),policyquotepageDTO.riskType, "Coverage for Primary Risk is NOT displayed");
 		Thread.sleep(3000);
+		Assert.assertEquals(coverageList.get(0).getAttribute("innerHTML"),policyquotepageDTO.riskType, "Coverage for Primary Risk is NOT displayed");
 	}
 	
 	//Coverage Update flow.
@@ -244,11 +247,14 @@ public class PolicyQuotePage extends CommonAction {
 	public PolicyQuotePage rateFunctionality(String policyNo) throws Exception
 	{
 		Thread.sleep(3000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Click [Rate]");
+		RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
+		rateapolicypage.rateFunctionality(policyNo);
+		
+/*		ExtentReporter.logger.log(LogStatus.INFO, "Click [Rate]");
 		clickButton(driver, rateBtn, "Rate Tab");
-		Thread.sleep(4000);
 		invisibilityOfLoader(driver);
-		/*try{
+		Thread.sleep(4000);
+		try{
 			switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
 			selectDropdownByValue(driver, productNotifyDropDown, ProductNotifyValue, "product notify");
 			Thread.sleep(1000);
@@ -258,7 +264,7 @@ public class PolicyQuotePage extends CommonAction {
 		}catch (Exception e)
 		{
 			ExtentReporter.logger.log(LogStatus.FAIL, "Product Notify Window is NOT dispalyed to user.");
-		}*/
+		}
 		Thread.sleep(2000);
 		//switchToParentWindowfromframe(driver);
 		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
@@ -273,13 +279,13 @@ public class PolicyQuotePage extends CommonAction {
 		clickButton(driver, okPolicySaveAsWIPPopup, "Ok");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Close] click [Ok]");
 		switchToParentWindowfromframe(driver);
-		return new PolicyQuotePage(driver);
+*/		return new PolicyQuotePage(driver);
 	}
 	
 
 	//Save option functionality flow.
 	//We need to call multiple times with different values, so we are passing values in test case call 
-	public PolicyQuotePage saveOption(String saveAsPolicyValue) throws Exception
+	public PolicyQuotePage saveOption(String saveAsPolicyValue,String PolicyNo) throws Exception
 	{
 		/*	Thread.sleep(5000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options");
@@ -295,14 +301,15 @@ public class PolicyQuotePage extends CommonAction {
 		clickButton(driver, saveOptionOkBtn, "Save");
 		switchToParentWindowfromframe(driver);
 		Thread.sleep(3000);*/
-		saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn,exitOK, saveAsPolicyValue);
+		
+		saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn,exitOK, saveAsPolicyValue, PolicyNo);
 		return new PolicyQuotePage(driver);
 }
 
 	
-	public PolicyQuotePage saveOptionOfficial() throws Exception{
-		Thread.sleep(1000);
-		saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn,exitOK, policyquotepageDTO.saveAsPolicyValueOfficial);
+	public PolicyQuotePage saveOptionOfficial(String PolicyNo) throws Exception{
+		
+		saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn,exitOK, policyquotepageDTO.saveAsPolicyValueOfficial,PolicyNo);
 		return new PolicyQuotePage(driver);
 		
 	}

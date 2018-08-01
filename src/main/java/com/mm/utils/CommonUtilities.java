@@ -22,8 +22,6 @@ import com.relevantcodes.extentreports.LogStatus;
 
 public class CommonUtilities {
 	
-	
-	
 	public void selectDropdown(WebElement Element, String value){
 		
 		Select Sel = new Select(Element);
@@ -31,6 +29,7 @@ public class CommonUtilities {
 		Sel.selectByValue(value);
 		
 		}
+  
 	public void verifyFormIsAdded(List<WebElement> pageElement,String formValue){
 		
 			if(pageElement.get(pageElement.size()-1).getAttribute("innerHTML").trim().equals(formValue.trim())){
@@ -52,7 +51,7 @@ public class CommonUtilities {
 		 return date;
 	}
 	
-	public String getSystemDatemmddyyyy(){
+	public String getSystemDatemm_dd_yyyy(){
 		
 		 DateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy");
 		 Date today = Calendar.getInstance().getTime();        
@@ -61,33 +60,14 @@ public class CommonUtilities {
 		 return date;
 	}
 	
-	public String changeDateFormatTommddyyyy(Date date) throws ParseException{
+	public String getSystemDatemmddyyyy(){
 		
-		 DateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy");
-		 //Date today = date;      
-		// Date date = dateFormatter.parse(today);
-
-		 String date1= dateFormatter.format(date);
-		 Date date2=new SimpleDateFormat("dd/MM/yyyy").parse(date1);  
+		 DateFormat dateFormatter = new SimpleDateFormat("MMddyyyy");
+		 Date today = Calendar.getInstance().getTime();        
+		 String date= dateFormatter.format(today);
 		
-		 return date1;
+		 return date;
 	}
-	
-	
-	public Date getNextDayOfGivenDate(){
-		
-		Date date = new Date();
-		Calendar c = Calendar.getInstance(); 
-		c.setTime(date); 
-		c.add(Calendar.DATE, 1);
-		date = c.getTime();
-		return date;
-		/*Date dt = new Date();
-		DateTime dtOrg = new DateTime(dt);
-		DateTime dtPlusOne = dtOrg.plusDays(1);
-		*/
-	}
-	
 	
 	public void downloadedFileExists(String fileNamePath){
 		

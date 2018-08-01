@@ -151,7 +151,7 @@ public class CincomPage extends CommonAction {
 			Thread.sleep(2000);
 			JavascriptExecutor executor = (JavascriptExecutor) driver;
 			executor.executeScript("tinyMCE.activeEditor.setContent('<p>Automated Test Case {"
-					+ comUtil.getSystemDatemmddyyyy()
+					+ comUtil.getSystemDatemm_dd_yyyy()
 					+ "}</p>This test is to <ul><li>Adds the form</li><li>Enter data entry </li><li>Verify Bulletpoints display as entered</li></ul>')");
 			executor.executeScript("document.getElementById('mceu_43-open').innerHTML = 'Arial';");
 			executor.executeScript("document.getElementById('mceu_44-open').innerHTML = '10pt';", "");

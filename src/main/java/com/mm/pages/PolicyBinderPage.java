@@ -223,7 +223,7 @@ public class PolicyBinderPage extends CommonAction {
 		enterTextIn(driver, descriptionTextBox, policybinderpageDTO.description,"Description");
 		selectDropdownByValue(driver, fileHandlerDorpDown, policybinderpageDTO.fileHandlerDropDownValue, "File Handler");
 		selectDropdownByValue(driver, stateOfLossDorpDown, policybinderpageDTO.stateOfLossDropDownValue, "State Of Loss");
-		enterTextIn(driver, accidentDateTextBox, comUtil.getSystemDatemmddyyyy(),"Accident Date");
+		enterTextIn(driver, accidentDateTextBox, comUtil.getSystemDatemm_dd_yyyy(),"Accident Date");
 		clickButton(driver, insuredSearchIcon, "Insured Search Icon");
 		String parentWindowIdSearchEntity = switchToWindow(driver);
 		//switchToFrameUsingElement(driver, entityMiniPopupFrameId);
@@ -361,7 +361,7 @@ public class PolicyBinderPage extends CommonAction {
 	}
 
 	// Save Option functionality flow.
-	public PolicyQuotePage saveOption() throws Exception {
+	public PolicyQuotePage saveOption(String policyNo) throws Exception {
 		/*
 		Thread.sleep(2000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options");
@@ -394,7 +394,7 @@ public class PolicyBinderPage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [OK]");
 		clickButton(driver, Exit_Ok, "Exit Ok");
 		*/
-		saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn,Exit_Ok, policybinderpageDTO.saveAsPolicyValue);
+		saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn,Exit_Ok, policybinderpageDTO.saveAsPolicyValue,policyNo);
 		return new PolicyQuotePage(driver); 
 	}
 

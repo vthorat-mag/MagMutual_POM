@@ -181,6 +181,13 @@ public class HomePage extends CommonAction {
 		navigateToPolicyPage();
 		return new EndorsePolicyPage(driver);
 	}
+	
+	//THis method will navigate to policy page from header PolicyTab link
+	public RateApolicyPage naviagetToPolicyFromHeaderLink() throws Exception
+	{
+		clickButton(driver, Policy_link, "Policy Header Link");
+		return new RateApolicyPage(driver);
+	}
 
 	// Navigate to policy page using Policy tab from rateApolicyPage.
 	public RateApolicyPage navigateToPolicyPageFromrateApolicyPage() throws Exception {
@@ -219,6 +226,7 @@ public class HomePage extends CommonAction {
 	// Navigate to Finance page from header link
 	public FinancePage navigateToFinancePageFromHeaderLink() throws Exception{
 		Thread.sleep(3000);
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Finance in right corner of screen");
 		clickButton(driver, financePageLink, "Finance Link");
 		invisibilityOfLoader(driver);
 		getPageTitle(driver, financePageTitle);
@@ -308,7 +316,6 @@ public class HomePage extends CommonAction {
 	public PolicySubmissionPage selectPolicyTypeForBTS()
 			throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
 		Thread.sleep(2000);
-		//String parentWindow = switchToWindow(driver);     //For QA
 		switchToFrameUsingId(driver, "popupframe1");    //  for BTS
 		Thread.sleep(2000);
 		//getPageTitle(driver, selectPolicyTypePageTitle);           //TODO- clarify, Page title is different in QA
@@ -332,8 +339,7 @@ public class HomePage extends CommonAction {
 	public PolicySubmissionPage selectPolicyTypeForQA()
 			throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
 		Thread.sleep(2000);
-		String parentWindow = switchToWindow(driver);     //For QA
-		//switchToFrameUsingId(driver, "popupframe1");      for BTS
+		String parentWindow = switchToWindow(driver);     
 		Thread.sleep(2000);
 		//getPageTitle(driver, selectPolicyTypePageTitle);           //TODO- clarify, Page title is different in QA
 		//Verify Select Policy Type window appeared, enter Effective date,Issue company,state and click Search
@@ -351,7 +357,6 @@ public class HomePage extends CommonAction {
 		return new PolicySubmissionPage(driver);
 
 	}
-	
 	
 	
 	// Select Create Quote option from POlicy tab menu

@@ -39,7 +39,7 @@ public class SmokeTestCasesUpdated {
 
 	// Global Assignment/initialization of variables.
 	IntegrateRallyRestAPI iR;
-	WebDriver driver = BrowserTypes.getDriver();
+	WebDriver driver;
 	public static HashMap<String, List<String>> testDataMap;
 
 	String serverURL = "";
@@ -59,7 +59,7 @@ public class SmokeTestCasesUpdated {
 	public void beforeClass() throws IOException, URISyntaxException {
 		// Runtime.getRuntime().exec("taskkill /F /IM iexplorer.exe");
 
-		Properties configProperties = new Properties();
+		/*Properties configProperties = new Properties();
 		InputStream inputFile = new FileInputStream("config.properties");
 		configProperties.load(inputFile);
 
@@ -82,12 +82,13 @@ public class SmokeTestCasesUpdated {
 		iR = new IntegrateRallyRestAPI();
 		password = iR.decodeString(password);
 		// This should go in Before Suite method
-		userRef = iR.getRallyUserDetails(serverURL, username, password);
+		userRef = iR.getRallyUserDetails(serverURL, username, password);*/
 	}
 
 	// Extent report initialization before every test case.
 	@BeforeMethod(alwaysRun = true)
 	public void Setup(Method method) throws Exception {
+		driver = BrowserTypes.getDriver();
 		ExtentReporter.logger = ExtentReporter.report.startTest(method.getName());
 		System.out.println("==============================================");
 		System.out.println(method.getName() + " test case execution started.");
@@ -131,43 +132,31 @@ public class SmokeTestCasesUpdated {
 
 	@Test(testName = "HospitalIndication", groups = { "Smoke Test" }, priority = 3)
 	public void TC42249() throws Exception {
-		ExcelUtil exlUtil =  new ExcelUtil();
+		
 		LoginPageDTO lpDTO = new LoginPageDTO();
 		LoginPage loginpage = new LoginPage(driver);
 		HomePage homepage = new HomePage(driver);
 		PolicyIndicationPage policyindicationpage = new PolicyIndicationPage(driver);
 		PolicyQuotePage policyQuotePage = new PolicyQuotePage(driver);
-		
-		loginpage.loginToeOasis(lpDTO.username, lpDTO.password)
-		.navigateToPolicyPage()
-		.create_New();
-		String ParentWindow = homepage.create_Quote();
-		homepage.searchEntity("")
-		.selectEntity(ParentWindow)
-		.selectPolicyTypeForQA()
-		.updatePolicyDetails();
-		
-		List<WebElement> firstFrame = policyindicationpage.open_Underwriter();
 
-		policyindicationpage.add_Underwriter(firstFrame)
-		.closeUnderwriter()
-		.addAgent()
-		.addRiskInformation()
-		.addCoverage()
-		.selectCoverageFromPopupListAddDatePremium()
-		.closeAddCoveragetab()
-		.selectCoverageFromGridList()
-		.addCoverageClass();
+		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPage().create_New();
+		String ParentWindow = homepage.create_Quote();
+		homepage.searchEntity("").selectEntity(ParentWindow).selectPolicyTypeForBTS().updatePolicyDetails();
+
+	   List<WebElement> firstFrame = policyindicationpage.open_Underwriter();
+
+			   policyindicationpage.add_Underwriter(firstFrame).closeUnderwriter().addAgent().addRiskInformation()
+				.selectCoverageTab().selectAddCoverageButton().selectCoverageFromPopupListAddDatePremium().closeAddCoveragetab()
+				.selectCoverageFromGridList().addCoverageClass();
 
 		String PolicyNo = policyindicationpage.policyNo();
 
-		policyindicationpage.coverageUpdates(PolicyNo)
-		.openLimitSharingTab(PolicyNo)
-		.addSharedGroup(PolicyNo)
-		.closeLimitSharingtab()
-		.rateFunctionality(PolicyNo);
+		policyindicationpage.coverageUpdates(PolicyNo).openLimitSharingTab(PolicyNo).addSharedGroup(PolicyNo)
+				.closeLimitSharingtab().rateFunctionality(PolicyNo);
 		policyQuotePage.clickPreviewTab().savePDF().verifyPdfContent(PolicyNo);
-		policyQuotePage.saveOptionOfficial();
+		policyQuotePage.saveOptionOfficial(PolicyNo);
+		
+		ExcelUtil exlUtil =  new ExcelUtil();
 		exlUtil.writeData("TC42238", "PolicyNum", PolicyNo, 1, ExcelPath);
 	}
 
@@ -191,8 +180,8 @@ public class SmokeTestCasesUpdated {
 		String policyNumber = policyquotepage.policyNo();
 
 		rateapolicyPage.coverageUpdates(policyNumber);
-		policyquotepage.rateFunctionality(policyNumber).saveOption(policyquotepagedto.secondSaveAsPolicyDDLValue)
-				.exit_SaveOption().clickPreviewTab().savePDF().verifyPdfContent(policyNumber);
+		policyquotepage.rateFunctionality(policyNumber).saveOption(policyquotepagedto.secondSaveAsPolicyDDLValue,policyNumber)
+				.clickPreviewTab().savePDF().verifyPdfContent(policyNumber);
 		exlUtil.writeData("TC42242", "PolicyNum", policyNumber, 1, ExcelPath);
 	}
 
@@ -205,16 +194,16 @@ public class SmokeTestCasesUpdated {
 		lpDTO = new LoginPageDTO();
 		loginpage = new LoginPage(driver);
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageFromrateApolicyPage()
-				.searchPolicyRateAPolicyPage().AcceptFromActionDropDown().isAlertPresent().identifyPhase()
+				.searchPolicyRateAPolicyPage().AcceptFromActionDropDown().identifyPhase()
 				.billingSetup().coverageDetailsSelect();
 		String policyNumber = rateapolicyPage.policyNo();
 		rateapolicyPage.coverageUpdates(policyNumber);
 		rateapolicyPage.rateFunctionality(policyNumber).clickPreviewTab().savePDF()
-				.verifyPdfContent(policyNumber).saveOption();
+				.verifyPdfContent(policyNumber).saveOption(policyNumber);
 		exlUtil.writeData("TC42245", "PolicyNum", policyNumber, 1, ExcelPath);
 	}
 
-	@Test(description = "Hospital Copy to Quote", groups = { "Smoke Test" }, priority = 6)
+	/*@Test(description = "Hospital Copy to Quote", groups = { "Smoke Test" }, priority = 6)
 	public void TC42245(String UserName, String PassWord) throws Exception {
 		ExcelUtil exlUtil = new ExcelUtil();
 		LoginPageDTO lpDTO;
@@ -354,7 +343,7 @@ public class SmokeTestCasesUpdated {
 		policybinderpage = new PolicyBinderPage(driver);
 		// String ClaimNumber = rateapolicyPage.policyNo();
 		policybinderpage.navigatetoClaimsPage().searchClaim().statusChange(rateapolicyPage.policyNo());
-	}
+	}*/
 	
 	@AfterMethod(alwaysRun = true)
 	public void logoffFromAppclication(ITestResult result)

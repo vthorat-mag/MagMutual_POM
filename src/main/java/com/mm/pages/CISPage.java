@@ -215,14 +215,17 @@ public class CISPage extends CommonAction {
 		invisibilityOfLoader(driver);
 		Thread.sleep(3000);
 		getPageTitle(driver, EntityListPageTitle);
+    
 		//Get list of client IDs based on environment 'BTS OR QA' and store in List WebElement
 	/*	List <WebElement>clientIDEntityList =driver.findElements(By.xpath("//span[@id='CCLIENT_NAME'] | //div[@title='"+oCISPageDTO.clientIDValue+"']//div"));
+		List <WebElement>clientIDEntityList =driver.findElements(By.xpath("//div[@id='CCLIENT_ID'] | //div[@title='"+oCISPageDTO.clientIDValue+"']//div"));
 		try{
 		visibilityOfElement(driver, clientNameEntityList.get(0), "Client name");
 		visibilityOfElement(driver, clientIDEntityList.get(0), "Client ID");
 		}catch(Exception e){
 			throw new NoSuchElementException();
 		}*/
+    
 		// Searching the client using client name and matching id
 		boolean flag = false;
 		try {

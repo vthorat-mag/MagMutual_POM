@@ -60,7 +60,7 @@ public class PDFReader extends CommonAction {
 	}
 
 	//Logic to verify PDF content.
-	public PolicyBinderPage verifyPdfContent(String PolicyNo) throws Exception {
+	public PolicyBinderPage verifyPdfContent(String PolicyNo ) throws Exception {
 		Thread.sleep(15000);
 		//getPageTitle(driver, "Policy Folder "+PolicyNo);
 		boolean flag = false;
@@ -101,4 +101,5 @@ public class PDFReader extends CommonAction {
 		}
 		return new PolicyBinderPage(driver);
 	}
+
 }
