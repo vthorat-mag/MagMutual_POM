@@ -111,6 +111,9 @@ public class PolicyIndicationPage extends CommonAction {
 
 	@FindBy(name = "retroDate")
 	WebElement Retro_Date;
+	
+	@FindBy(name="productDefaultLimitCode")
+	WebElement coverageLimitCode;
 
 	@FindBy(id = "PM_SEL_COVG_DONE")
 	WebElement Select_coverage;
@@ -311,24 +314,31 @@ public class PolicyIndicationPage extends CommonAction {
 			selectDropdownByVisibleText(driver, Underwriter_name,
 					hospitalIndicationDTO.teamMembername.get(underwritercount), "Underwriter team member name");
 			// Verify the Under writer name value is selected and it is correct
-			// verifyValueFromField(driver, Underwriter_name,
-			// hospitalIndicationDTO.teamMembername.get(underwritercount),"value");
+			
 			Thread.sleep(1000);
 			click(driver, Save_Underwritter, "Save button");
 			
-			//Below code for QA envt only
-			
-			/*List<WebElement> secondFrame2 = driver.findElements(By.id("popupframe1"));
-			driver.switchTo().frame(secondFrame2.get(0));
-			Thread.sleep(2000);
-			clickButton(driver, OK_Capt_Trans_Details, "Ok"); 
-			driver.switchTo().defaultContent();
-			Thread.sleep(2000);
-			driver.switchTo().frame(firstFrame.get(0));*/
-		}
+			//TODO-handle this method for QA
+			//captureTransactionDetailsForQA();
+		}	
 		return new PolicyIndicationPage(driver);
 	}
 
+	
+	//Capture transaction details occurs for QA environment only
+	public void captureTransactionDetailsForQA() throws InterruptedException{
+		
+		List<WebElement> secondFrame2 = driver.findElements(By.id("popupframe1"));
+		driver.switchTo().frame(secondFrame2.get(0));
+		Thread.sleep(2000);
+		clickButton(driver, OK_Capt_Trans_Details, "Ok"); 
+		driver.switchTo().defaultContent();
+		Thread.sleep(2000);
+		List<WebElement> firstFrame = driver.findElements(By.id("popupframe1"));
+		driver.switchTo().frame(firstFrame.get(0));
+	}
+	
+	
 	// Close 'Maintain Underwriting team' pop up, move control to parent window
 	// and Save WIP
 	public PolicyIndicationPage closeUnderwriter() throws Exception {
@@ -414,7 +424,7 @@ public class PolicyIndicationPage extends CommonAction {
 
 	// Select Coverage from the pop up List appearing after 'Add' button on
 	// coverage tab
-	public PolicyIndicationPage selectCoverageFromPopupListAddDatePremium()	throws Exception {
+	public PolicyIndicationPage selectCoverageFromPopupListAddDatePremium(String retroDate)	throws Exception {
 
 		// Get the count of coverage check boxes
 		Thread.sleep(2000);
@@ -436,15 +446,16 @@ public class PolicyIndicationPage extends CommonAction {
 						// Add Retro date and premium amount for the selected
 						// coverage
 						if (Retro_Date.isDisplayed()) {
-							clearTextBox(driver, Premium, "Premium Amount ");
+							clearTextBox(driver, coverageLimitCode,"Coverage Limit Code");
+							selectDropdownByVisibleText(driver, coverageLimitCode, hospitalIndicationDTO.coverageLimit, "Coverage Limit Code");
+							clearTextBox(driver, Premium, "Premium Amount");
 							enterDataIn(driver, Premium, hospitalIndicationDTO.premiumAmount.get(retroDateCount),
 									"Premium text box");
 							// Verify that premium amount is entered and it is
 							// correct 
 						//	verifyValueFromField(driver, Premium,hospitalIndicationDTO.premiumAmount.get(retroDateCount), "value", "Premium Amount");
 							Thread.sleep(1000);
-							enterDataIn(driver, Retro_Date, hospitalIndicationDTO.retroDate.get(retroDateCount),
-									"Retro Date");
+							enterDataIn(driver, Retro_Date, retroDate,"Retro Date");
 							break;
 						}
 					} catch (Exception e) {
@@ -490,12 +501,15 @@ public class PolicyIndicationPage extends CommonAction {
 	}
 
 	// Close Select Coverage pop up
-	public PolicyIndicationPage closeAddCoveragetab() throws Exception {
+	public PolicyIndicationPage closeAddCoverageWindow() throws Exception {
 
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Information has been entered and coverage has been added to primary risk");
 		click(driver, Select_coverage, "Select button for coverage");
+		invisibilityOfLoader(driver);
+		Thread.sleep(2000);
 		switchToParentWindowfromframe(driver);
+		
 		return new PolicyIndicationPage(driver);
 	}
 
@@ -531,7 +545,7 @@ public class PolicyIndicationPage extends CommonAction {
 					// If retro date field is displayed,add Retro Date and
 					// Premium Amount for selected coverage
 					if (Retro_Date.isDisplayed()) {
-
+						
 						clearTextBox(driver, Premium, "Premium Amount");
 						enterDataIn(driver, Premium, hospitalIndicationDTO.premiumAmount.get(coverageCount),
 								"Premium text box");

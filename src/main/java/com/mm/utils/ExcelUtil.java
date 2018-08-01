@@ -34,12 +34,12 @@ public class ExcelUtil {
 		//Browse through all columns
 		for (int j = 0; j < columns; j++) {
 			//Read the ColumnName
-			String sColumnName = eat.getCellData(sheetName, j, 0).toLowerCase();
+			String sColumnName = eat.getCellData(sheetName, j, 0).toString().toLowerCase();
 			listRowData = new ArrayList<String>();
 			
 			//Read All rows
 			for (int i = 1; i < rows; i++) {
-				listRowData.add(eat.getCellData(sheetName, j, i));
+				listRowData.add(eat.getCellData(sheetName, j, i).toString());
 				//ToDo- Check if the field is blank, don't add in list
 			}			
 			//Populate the HashMap

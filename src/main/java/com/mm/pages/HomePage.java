@@ -69,6 +69,9 @@ public class HomePage extends CommonAction {
 
 	@FindBy(id = "CI_ENT_SEL_LST_FORM_SEL")
 	WebElement Select_Entity;
+	
+	@FindBy(id="CPOLICYNO")
+	WebElement firstpolicyNumFromPolicyCount;
 
 	// Select Policy Type window
 
@@ -103,7 +106,7 @@ public class HomePage extends CommonAction {
 	WebElement searchCriteria;
 
 	//@FindBy(xpath = "//a[@class='gridcontent']//span[@id='CPOLICYNO']") - BTS
-	@FindBy(xpath = "//*[@id='findPolicyListGrid_CPOLICYNO_0_HREF'] | //a[@class='gridcontent']//span[@id='CPOLICYNO']" )
+	@FindBy(xpath="//a[@class='gridcontent']//span[@id='CPOLICYNO'] | //a[@id='findPolicyListGrid_CPOLICYNO_0_HREF']")  // QA
 	WebElement policyNumFromPolicyCount;
 
 	@FindBy(id = "pageTitleForpageHeaderForPolicyFolder") // seperate for BTS and QA
@@ -144,12 +147,14 @@ public class HomePage extends CommonAction {
 
 	// Verify user Navigated to Policy page when clicked on Policy tab present
 	// on Header.
-	public RateApolicyPage headerPolicyTab() throws Exception {
+	public RateApolicyPage navigateToPolicyPageUsingHeaderPolicyLink() throws Exception {
 		Thread.sleep(5000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click policy in right corner of screen");
 		clickButton(driver, headerPolicyTab, "Policy (from header");
 		return new RateApolicyPage(driver);
 	}
+	
+	
 
 	// Navigate to CIS page.
 	public CISPage navigateToCISPage() throws Exception {
@@ -190,6 +195,7 @@ public class HomePage extends CommonAction {
 		return new RateApolicyPage(driver);
 	}
 	
+	
 	public FinancePage navigateToFinanceHomePage() throws Exception
 	{
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Finance in right corner of screen.");
@@ -204,8 +210,10 @@ public class HomePage extends CommonAction {
 	}
 
 	// Navigate to Policy page from policy link[Header]
-	public void navigateToPolicyPageThroughPolicyTab() {
+	public HomePage navigateToPolicyPageThroughPolicyHeaderLink() throws Exception {
+		Thread.sleep(2000);
 		click(driver, headerPolicyTab, "Policy tab on Header");
+		return new HomePage(driver);
 	}
 
 	// Navigate to Claims page from Home Page[Header]
@@ -217,6 +225,7 @@ public class HomePage extends CommonAction {
 	
 	// Navigate to Finance page from header link
 	public FinancePage navigateToFinancePageFromHeaderLink() throws Exception{
+		Thread.sleep(3000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Finance in right corner of screen");
 		clickButton(driver, financePageLink, "Finance Link");
 		invisibilityOfLoader(driver);
@@ -231,6 +240,7 @@ public class HomePage extends CommonAction {
 		click(driver, logoff, "Logoff button");
 	}
 
+	
 	// Search a policy using Search Criteria tab and select a policy from count
 	// tab
 	public String policySearchUsingSearchCriteria() throws Exception {
@@ -239,25 +249,26 @@ public class HomePage extends CommonAction {
 		clearTextBox(driver, policyOrQuoteNum, "Policy/Quote#");
 
 		// Enter policy number in Policy/Quote# text field
-		enterTextIn(driver, policyOrQuoteNum, homepageDTO.policyNum, "Policy/Quote#");
+		enterTextIn(driver, policyOrQuoteNum, homepageDTO.policyNo, "Policy/Quote#");
 		ExtentReporter.logger.log(LogStatus.INFO, "Policy # displays correctly under Policy Count tab");
 		clickButton(driver, searchCriteria, "Search");
 		Thread.sleep(2000);
 		// Select the first policy from the search results under Count tab
 		ExtentReporter.logger.log(LogStatus.INFO, "Full Policy displays when web cycles to active policy window");
 		//selectValue(driver, policyNumFromPolicyCount, homepageDTO.policyNum);
-		click(driver, policyNumFromPolicyCount, homepageDTO.policyNum);
+		click(driver, policyNumFromPolicyCount, homepageDTO.policyNo);
 		invisibilityOfLoader(driver);
 		rateapolicyPage = new RateApolicyPage(driver);
 
 		// Verify that page title is correct
 		String policyNumber = rateapolicyPage.policyNo();
-		getPageTitleWithPolicyNumber(driver, policyNumber);
+	    getPageTitleWithPolicyNumber(driver, policyNumber);
 
 		return policyNumber;
 
 	}
-
+	
+	
 	// Move to Policy tab and select Create New option from menu
 	public HomePage create_New()
 			throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
@@ -274,13 +285,13 @@ public class HomePage extends CommonAction {
 	 * Entity Select Search window appears and then we enter Organization name
 	 * and search Then select the Organization name from populated list.
 	 */
-	public HomePage searchEntity(String vendorIDValue)throws Exception {
+	public HomePage searchEntity(String lastOrgNameValue,String vendorIDValue)throws Exception {
 
 		waitForElementToLoad(driver, 20, Last_Org_Name);
 		getPageTitle(driver, entitySelectSearchPageTitle);
 		visibilityOfElement(driver, Last_Org_Name, "Last Org Name on Entity Select Search window");
-		enterTextIn(driver, Last_Org_Name, homepageDTO.lastOrgName, "Last Org Name");
-		//enterDataIn(driver, vendorID, vendorIDValue, "Vendor ID");
+		enterTextIn(driver, Last_Org_Name, lastOrgNameValue, "Last Org Name");
+		enterDataIn(driver, vendorID, vendorIDValue, "Vendor ID");
 		ExtentReporter.logger.log(LogStatus.INFO, "List is populated of risk to select Organization with today's date");
 		click(driver, searchEntityBtn, "Search button");
 		return new HomePage(driver);
@@ -292,6 +303,7 @@ public class HomePage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Risk is selected");
 		clickButton(driver, Select_Entity_Checkbox, "Select Entity Checkbox");
 		ExtentReporter.logger.log(LogStatus.INFO, "Select Policy Type Window displays");
+		Thread.sleep(1000);
 		click(driver, Select_Entity, "Select button");
 		switchToParentWindowfromotherwindow(driver, parentWindow);
 
@@ -304,7 +316,7 @@ public class HomePage extends CommonAction {
 	public PolicySubmissionPage selectPolicyTypeForBTS()
 			throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
 		Thread.sleep(2000);
-		switchToFrameUsingId(driver, "popupframe1");      
+		switchToFrameUsingId(driver, "popupframe1");    //  for BTS
 		Thread.sleep(2000);
 		//getPageTitle(driver, selectPolicyTypePageTitle);           //TODO- clarify, Page title is different in QA
 		//Verify Select Policy Type window appeared, enter Effective date,Issue company,state and click Search
@@ -345,7 +357,6 @@ public class HomePage extends CommonAction {
 		return new PolicySubmissionPage(driver);
 
 	}
-	
 	
 	
 	// Select Create Quote option from POlicy tab menu

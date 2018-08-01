@@ -4,6 +4,7 @@ import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,8 +22,6 @@ import com.relevantcodes.extentreports.LogStatus;
 
 public class CommonUtilities {
 	
-	
-	
 	public void selectDropdown(WebElement Element, String value){
 		
 		Select Sel = new Select(Element);
@@ -30,6 +29,7 @@ public class CommonUtilities {
 		Sel.selectByValue(value);
 		
 		}
+  
 	public void verifyFormIsAdded(List<WebElement> pageElement,String formValue){
 		
 			if(pageElement.get(pageElement.size()-1).getAttribute("innerHTML").trim().equals(formValue.trim())){

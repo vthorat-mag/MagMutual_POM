@@ -40,7 +40,7 @@ public class ClaimsPage extends CommonAction {
 	@FindBy(name = "search")
 	WebElement Search_btn;
 	
-	@FindBy(id="findPolicyListGrid_CPOLICYNO_0_HREF")  // QA
+	@FindBy(xpath="//span[@id='CCLAIMNO']")  // QA "//span[@id='findPolicyListGrid_CPOLICYNO_0_HREF'
 	WebElement policyList;
 
 	@FindBy(name = "claim_claimStatusDate")
@@ -268,6 +268,8 @@ public class ClaimsPage extends CommonAction {
 		visibilityOfElement(driver, transactionListTitle, "Transaction List");
 		return new ClaimsPage(driver);
 	}
+		
+	
 	
 	public void addTransactionDataAndSaveTransaction() throws Exception{
 	//Get the number of transaction types from excel sheet
@@ -288,9 +290,10 @@ public class ClaimsPage extends CommonAction {
 		//switch to pop up window and call searchEntity and selectEntity methods from home page
 		//to search and Select Payee Name.
 		String parentWindow= switchToWindow(driver);
-		Thread.sleep(1000);
+		Thread.sleep(2000);
 		HomePage homePage = new HomePage(driver);
-		homePage.searchEntity(claimsdto.vendorIDValue.get(i));
+		//Blank value is passed to match arguments, as method is used by other test case as well.
+		homePage.searchEntity("",claimsdto.vendorIDValue.get(i));
 		homePage.selectEntity(parentWindow);
 		switchToFrameUsingId(driver, "popupframe1");
 		Thread.sleep(2000);
@@ -298,8 +301,8 @@ public class ClaimsPage extends CommonAction {
 		enterDataIn(driver, transactionAmount, claimsdto.transactionAmount.get(i), "Trans Amount");
 		//Invoice no. is current date + index. of transaction(e.g. 1,2,3..)
 		CommonUtilities comUtil = new CommonUtilities();
-		String Date = comUtil.getSystemDatemm_dd_yyyy();
-		String invoiceNumber=Date+"-"+(i+2); // TODO- change to 1
+		String Date = comUtil.getSystemDatemmddyyyy(); //TODO- add time stamp
+		String invoiceNumber=Date+"-"+(i+1);
 		enterDataIn(driver, invoiceNo, invoiceNumber, "Invoice No.");
 		selectDropdownByVisibleText(driver, seperateCheck, claimsdto.seperateCheck, "Sep Check");
 		clickButton(driver, saveTransactionBtn, "Save");
@@ -451,6 +454,8 @@ public class ClaimsPage extends CommonAction {
 
 		return new ClaimsPage(driver);
 	}
+	
+	
 
 	// This method will change the status of claims.
 	public void statusChange(String claimNo) throws Exception {

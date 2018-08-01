@@ -278,7 +278,7 @@ public class RateApolicyPage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Enter/Select Below Information: Effective Date:Policy Effective Date Accounting Date: Fixed Date Reason: Issue Policy Forms Comment: Issue Policy Forms");
 		selectDropdownByVisibleText(driver, endorsementReason, rateApolicyPageDTO.endorsementReason, "Reason");
-		enterTextIn(driver, CommentsTxtBoxOnEndorsePolicyPopup, commentText, "Comments");
+		enterTextIn(driver, CommentsTxtBoxOnEndorsePolicyPopup, rateApolicyPageDTO.endorsementComment, "Comments");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [OK].");
 		clickButton(driver, endorsePolicyOK, "OK");
 		switchToParentWindowfromframe(driver);
@@ -777,8 +777,9 @@ public class RateApolicyPage extends CommonAction {
 		Thread.sleep(1000);
 		clickButton(driver, rateBtn, "Rate Tab");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Rate].");
-		Thread.sleep(5000);
-		/*// If Product Notify Window appears then it will switch to window and
+		invisibilityOfLoader(driver);
+		Thread.sleep(3000);
+		// If Product Notify Window appears then it will switch to window and
 		// select 'Yes' from that window and close window
 		if (verifyProductNotifyWindowDisplayed(policyNo).equals("true")) {
 			try {
