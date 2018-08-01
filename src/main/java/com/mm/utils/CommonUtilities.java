@@ -4,6 +4,7 @@ import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -58,6 +59,33 @@ public class CommonUtilities {
 		 String date= dateFormatter.format(today);
 		
 		 return date;
+	}
+	
+	public String changeDateFormatTommddyyyy(Date date) throws ParseException{
+		
+		 DateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy");
+		 //Date today = date;      
+		// Date date = dateFormatter.parse(today);
+
+		 String date1= dateFormatter.format(date);
+		 Date date2=new SimpleDateFormat("dd/MM/yyyy").parse(date1);  
+		
+		 return date1;
+	}
+	
+	
+	public Date getNextDayOfGivenDate(){
+		
+		Date date = new Date();
+		Calendar c = Calendar.getInstance(); 
+		c.setTime(date); 
+		c.add(Calendar.DATE, 1);
+		date = c.getTime();
+		return date;
+		/*Date dt = new Date();
+		DateTime dtOrg = new DateTime(dt);
+		DateTime dtPlusOne = dtOrg.plusDays(1);
+		*/
 	}
 	
 	

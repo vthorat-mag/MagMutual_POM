@@ -295,14 +295,13 @@ public class PolicyQuotePage extends CommonAction {
 		clickButton(driver, saveOptionOkBtn, "Save");
 		switchToParentWindowfromframe(driver);
 		Thread.sleep(3000);*/
-		
 		saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn,exitOK, saveAsPolicyValue);
 		return new PolicyQuotePage(driver);
 }
 
 	
 	public PolicyQuotePage saveOptionOfficial() throws Exception{
-		
+		Thread.sleep(1000);
 		saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn,exitOK, policyquotepageDTO.saveAsPolicyValueOfficial);
 		return new PolicyQuotePage(driver);
 		

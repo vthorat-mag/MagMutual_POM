@@ -10,7 +10,7 @@ public class HomePageDTO {
 	public String effectiveFromDate;
 	public String issueCompany;
 	public String issueState;
-	public String policyNum;
+	public String policyNo;
 
 
 	public HomePageDTO() throws IllegalArgumentException, IllegalAccessException, SecurityException{

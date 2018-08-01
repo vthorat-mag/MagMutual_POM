@@ -1,5 +1,10 @@
 package com.mm.pages;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.openqa.selenium.Alert;
@@ -15,6 +20,7 @@ import org.testng.Assert;
 import com.mm.dto.FinancePageDTO;
 import com.mm.dto.FindPolicyPageDTO;
 import com.mm.utils.CommonAction;
+import com.mm.utils.CommonUtilities;
 import com.mm.utils.ExcelUtil;
 import com.mm.utils.ExtentReporter;
 import com.relevantcodes.extentreports.LogStatus;
@@ -27,8 +33,8 @@ public class FinancePage extends CommonAction {
 	static String accountNumber;
 	static String invoiceAmount;
 	String onDemandInvoiceExcelName = "OnDemandInvoiceCredit";
-	String onDemandInvoiceInstallementExcelSheet="OnDemandInvoiceInstallementBefore";
-	String invoicesInstallmentDueDate="invoicesInstallmentDueDate";
+	String onDemandInvoiceInstallementExcelSheet = "OnDemandInvoiceInstallementBefore";
+	String invoicesInstallmentDueDate = "invoicesInstallmentDueDate";
 	String PaymentCreditExcelName = "PaymentCredit";
 	String openbatchcreditExcelName = "openbatchcredit";
 	String FinancePageExcelName = "FinancePage";
@@ -53,26 +59,28 @@ public class FinancePage extends CommonAction {
 	String validlateFieldName = "Validate";
 	String onDemandPageTitle = "On Demand Invoice";
 	String checkNo = "ST12345";
-	ExcelUtil exlUtil = new ExcelUtil();	
+	ExcelUtil exlUtil = new ExcelUtil();
 
 	@FindBy(name = "globalSearch")
 	WebElement Policy_Search;
 
 	@FindBy(id = "FM_ACCOUNT_LIST_SEARCH")
-	WebElement Search_btn;
-	
-	@FindBy(id="findPolicyListGrid_CPOLICYNO_0_HREF")  // QA
+	WebElement searchBtn;
+
+	@FindBy(id = "findPolicyListGrid_CPOLICYNO_0_HREF") // QA
 	WebElement policyList;
 
 	@FindBy(name = "policyNo")
 	WebElement PolicyNoTxtBox;
 
-	@FindBy(xpath = "//a[@id='URL_CACCOUNTNO'] | //a[@id='accountListGrid_CACCOUNTNO_0_HREF']")
+	@FindBy(xpath = "//span[@id='CACCOUNTNO'] | //a[@id='accountListGrid_CACCOUNTNO_0_HREF']")
 	List<WebElement> accountList;
-	
+
+	@FindBy(id = "CACCOUNTNO")
+	WebElement firstAccount;
+
 	@FindBy(xpath = "//a[@id='URL_CACCOUNTNO']//span")
 	List<WebElement> accountNumList;
-	
 
 	@FindBy(xpath = "//li[@id='FM_BILLING_ADMIN']//a[@class='fNiv isParent']//span")
 	WebElement billingAdminMenu;
@@ -118,10 +126,10 @@ public class FinancePage extends CommonAction {
 
 	@FindBy(id = "FM_CONFIRM_INVOICE_JUMP")
 	WebElement jumpButton;
-	
+
 	@FindBy(xpath = "//*[@id = 'btnSaveAsCSV'] | //input[@name='btnSaveAsCSV']")
 	WebElement exportExcelLink;
-	
+
 	@FindBy(id = "FM_CE_BATCH_NEW")
 	WebElement newButton;
 
@@ -163,69 +171,92 @@ public class FinancePage extends CommonAction {
 
 	@FindBy(id = "currentAccountBalanceROSPAN")
 	WebElement currBalOnAllTxnEnqPage;
-	
-	@FindBy(xpath="//a[@class='selectedMenu fNiv isParent']//span")
+
+	@FindBy(xpath = "//a[@class='selectedMenu fNiv isParent']//span")
 	WebElement accountMenuTab;
+
 	
-	@FindBy(xpath="//li[@id='FM_MAINTAIN_ACCT_MENU']//a//span")
+	@FindBy(name="accountHolder")
+	WebElement accountHolder;
+	
+	@FindBy(xpath = "//li[@id='FM_MAINTAIN_ACCT_MENU']//a//span")
 	WebElement maintainAccount;
-	
-	@FindBy(name="billingFrequency")
+
+	@FindBy(name = "billingFrequency")
 	WebElement billingFrequencyDDL;
-	
-	@FindBy(name="baseBillMmDd")
+
+	@FindBy(name = "baseBillMmDd")
 	WebElement startDate;
-	
-	@FindBy(name="billLeadDays")
+
+	@FindBy(name = "billLeadDays")
 	WebElement leadDays;
-	
-	@FindBy(id="FM_MAINT_ACCT_SAVE")
+
+	@FindBy(id = "FM_MAINT_ACCT_SAVE")
 	WebElement saveMaintAction;
-	
-	@FindBy(id="FM_FULL_INQ_RECV_TAB")
+
+	@FindBy(id = "FM_FULL_INQ_RECV_TAB")
 	WebElement receivableTab;
-	
-	@FindBy(id="FM_FULL_INQ_ACCOUNT_TAB")
+
+	@FindBy(id = "FM_FULL_INQ_ACCOUNT_TAB")
 	WebElement accountTab;
-	
-	@FindBy(id="FM_FULL_INQ_ACC_INV")
+
+	@FindBy(id = "FM_FULL_INQ_ACC_INV")
 	WebElement invoicesButton;
-	
-	
-	
-	
-	
-	
-	
+
+	@FindBy(id = "CPRODUCTCOVERAGEDESC")
+	List<WebElement> coverageList;
+
+	@FindBy(xpath = "//select[@id='PM_POLICY_FOLDER_AG'] | //select[@id='PM_QT_POLICY_FOLDER_AG']")
+	WebElement policyActionDDL;
+
+	@FindBy(name = "effectiveFromDate")
+	WebElement effectiveFromDate;
+
+	@FindBy(name = "endorsementCode")
+	WebElement endorsementReason;
+
+	@FindBy(name = "transactionComment")
+	WebElement CommentsTxtBoxOnEndorsePolicyPopup;
+
+	@FindBy(id = "PM_ENDORSE_OK")
+	WebElement endorsePolicyOK;
+
 	public FinancePage(WebDriver driver) throws Exception {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
 		financePageDTO = new FinancePageDTO();
 	}
+
 	
 	
-	//For TC 42403 its on hold
-	public void maintainAccount() throws InterruptedException{
+	public FinancePage searchAccountUsingSearchCriteria() throws Exception{
 		
-		clickButton(driver, Search_btn, "Search for account");
+		getPageTitle(driver, accountSearchPageTitle);
+		enterTextIn(driver, accountHolder,financePageDTO.accountHolderName, "Account Holder");
+		clickButton(driver, searchBtn, "Search");
 		invisibilityOfLoader(driver);
-		Thread.sleep(2000);
+		return new FinancePage(driver);
+	}
+	
+	
+	public void selectLastAccountFromAccountList(){
 		
-		for(int i=0;i<accountNumList.size();i++){
-			
-			if(accountNumList.get(i).getAttribute("innerHTML").trim().equals("A0000550")){
-				
-				selectValue(driver, accountNumList.get(i), "Account Number"+accountNumList.get(i));
-				break;
-			}
-		}//TODO - if the account num is not available in list - use flag
-		//invisibilityOfLoader(driver);
+		int lastAccountFromList=accountNumList.size();
+		
+		selectValue(driver, accountNumList.get(lastAccountFromList),
+				"Account Number " + accountNumList.get(lastAccountFromList).getAttribute("innerHTML").trim());
+		invisibilityOfLoader(driver);
+	}
+	
+	
+	public void maintainAccount() throws InterruptedException {
+
 		Thread.sleep(2000);
 		Actions act = new Actions(driver);
 		act.moveToElement(accountMenuTab).build().perform();
-		JavascriptExecutor jse= (JavascriptExecutor)driver; 
-		jse.executeScript("arguments[0].click();",maintainAccount);
-		
+		JavascriptExecutor jse = (JavascriptExecutor) driver;
+		jse.executeScript("arguments[0].click();", maintainAccount);
+
 		Thread.sleep(2000);
 		selectDropdownByVisibleText(driver, billingFrequencyDDL, "Bi-Monthly", "Billing Frequency");
 		clearTextBox(driver, startDate, "Start Date");
@@ -233,41 +264,45 @@ public class FinancePage extends CommonAction {
 		clearTextBox(driver, leadDays, "Lead Days");
 		enterDataIn(driver, leadDays, "9", "Lead Days");
 		clickButton(driver, saveMaintAction, "Save");
-		
+
 	}
-	
-	
+
 	// Search Account from Search Account text field on Finance Home Page.
 	public FinancePage searchPolicyOnFinanceHomePage() throws Exception {
 		Thread.sleep(2000);
 		invisibilityOfLoader(driver);
 		getPageTitle(driver, accountSearchPageTitle);
-		ExtentReporter.logger.log(LogStatus.INFO, "Using the policy from 'Issue Policy Forms' test case enter Policy number in Policy#: search box and click Search.");
+		ExtentReporter.logger.log(LogStatus.INFO,
+				"Using the policy from 'Issue Policy Forms' test case enter Policy number in Policy#: search box and click Search.");
 		enterTextIn(driver, PolicyNoTxtBox, financePageDTO.policyNo, "Policy Number");
-		clickButton(driver, Search_btn, "Search");
+		clickButton(driver, searchBtn, "Search");
 		invisibilityOfLoader(driver);
 		Thread.sleep(3000);
-		Assert.assertTrue(accountList.get(0).isDisplayed(), "Account list is not displayed on " + "Account Search" + "page");
+		Assert.assertTrue(accountList.get(0).isDisplayed(),
+				"Account list is not displayed on " + "Account Search" + "page");
 		return new FinancePage(driver);
 	}
 
 	// This method will click on first account number displayed after Policy
 	// search.
 	public FinancePage openFirstAccount() throws Exception {
-		ExtentReporter.logger.log(LogStatus.INFO, "Click Account No("+accountList.get(0).getAttribute("innerHTML")+").");
-		System.out.println("******"+accountList.get(0).getAttribute("innerHTML"));
-		//clickButton(driver, accountList.get(0), "Account List");
-		Actions action = new Actions(driver);
-		action.click(accountList.get(0)).build().perform();
+		ExtentReporter.logger.log(LogStatus.INFO,
+				"Click Account No(" + accountList.get(0).getAttribute("innerHTML") + ").");
+		/*
+		 * Actions action = new Actions(driver);
+		 * action.click(accountList.get(0)).build().perform();
+		 */
+		clickButton(driver, accountList.get(0), "Account number");
 		invisibilityOfLoader(driver);
+		Thread.sleep(2000);
 		getPageTitle(driver, allTxnInquireyPageTitle);
 		return new FinancePage(driver);
 	}
 
 	public FinancePage onDemandInvoice() throws Exception {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Billing Admin>On Demand Invoice.");
-		navigatetoMenuItemPage(driver,billingAdminMenu,onDemandInvoiceMenuOption);
-		Thread.sleep(2000);
+		navigatetoMenuItemPage(driver, billingAdminMenu, onDemandInvoiceMenuOption);
+		Thread.sleep(3000);
 		getPageTitle(driver, onDemandPageTitle);
 		ExtentReporter.logger.log(LogStatus.INFO, "Select the below options.");
 		ExtentReporter.logger.log(LogStatus.INFO, "Invoice Option: Immediately.");
@@ -282,59 +317,153 @@ public class FinancePage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Process].");
 		clickButton(driver, processButton, "Process");
 		invisibilityOfLoader(driver);
-		Thread.sleep(15000);
-		switchToFrameUsingElement(driver,
-				driver.findElement(By.xpath("//iframe[contains(@src,'accountNo=" + accountNumber + "')]")));
+		Thread.sleep(8000);
+		switchToFrameUsingId(driver, "popupframe1");
+		/*
+		 * switchToFrameUsingElement(driver,
+		 * driver.findElement(By.xpath("//iframe[contains(@src,'accountNo=" +
+		 * accountNumber + "')]")));
+		 */
 		invoiceAmount = invoiceAmt.getAttribute("innerHTML");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Jump].");
 		clickButton(driver, jumpButton, "Jump");
 		invisibilityOfLoader(driver);
 		switchToParentWindowfromframe(driver);
-		ExtentReporter.logger.log(LogStatus.INFO, "Export All Transactions to excel");
-		clickButton(driver, exportExcelLink, "Export Excel");
-		exlUtil.downloadExcel();
-		copyFile(financePageDTO.onDemandInvoiceInstallmentExcel);
-		
-		
-		return new FinancePage(driver);
-	}
-		
-	
-	public void receivableTabActions() throws Exception{
-		clickButton(driver, receivableTab, "Receivable");
-		invisibilityOfLoader(driver);
-		clickButton(driver, exportExcelLink, "Export Excel");
-		exlUtil.downloadExcel();
-		copyFile(financePageDTO.onDemandInvoiceInstallementBeforeExcel);
-		clickButton(driver, accountTab, "Account tab");
-		invisibilityOfLoader(driver);
-		clickButton(driver, invoicesButton, "Invoices");
-		invisibilityOfLoader(driver);
-		clickButton(driver, exportExcelLink, "Export Excel");
-		exlUtil.downloadExcel();
-		copyFile(financePageDTO.invoicesInstallmentDueDateExcel);
-	}
-	
-	
-	
-	public FinancePage writeDataInExcelSheet() throws Exception{
-		
-		String numberValue = getDataFromExcel("Sheet1","Number",1,"C:\\saveExcel\\OnDemandInvoiceCredit.xlsx");
-		Thread.sleep(3000);
-		writeData("TC42250","Number",numberValue,1,System.getProperty("user.dir")+"\\src\\main\\resources\\Form_Data.xlsx");
-		
-		String amountValue = getDataFromExcel("Sheet1","Amount",1,"C:\\saveExcel\\OnDemandInvoiceCredit.xlsx");
-		Thread.sleep(3000);
-		writeData("TC42250","Amount",amountValue,1,System.getProperty("user.dir")+"\\src\\main\\resources\\Form_Data.xlsx");
-		
-		getPageTitle(driver, allTxnInquireyPageTitle);
 		return new FinancePage(driver);
 	}
 
+	public FinancePage exportExcelSheet(String saveExcelNameAs) throws Exception {
+
+		ExtentReporter.logger.log(LogStatus.INFO, "Export All Transactions to excel");
+		clickButton(driver, exportExcelLink, "Export Excel");
+		exlUtil.downloadExcel();
+		Thread.sleep(4000);
+		copyFile(saveExcelNameAs);
+		Thread.sleep(3000); 
+		return new FinancePage(driver);
+	}
+
+	public FinancePage selectReceivableTabAndExportExcel(String saveExcelNameAs) throws Exception {
+		ExtentReporter.logger.log(LogStatus.INFO, "Receivable page is opened");
+		clickButton(driver, receivableTab, "Receivable");
+		invisibilityOfLoader(driver);
+		Thread.sleep(2000);
+		exportExcelSheet(saveExcelNameAs);
+		return new FinancePage(driver);
+	}
+
+	public HomePage selectAccountTabInvoicesButtonAndExportExcel() throws Exception {
+		clickButton(driver, accountTab, "Account tab");
+		invisibilityOfLoader(driver);
+		ExtentReporter.logger.log(LogStatus.INFO, "Invoices transactions page is displayed");
+		clickButton(driver, invoicesButton, "Invoices");
+		invisibilityOfLoader(driver);
+		exportExcelSheet(financePageDTO.invoicesInstallmentDueDateExcel);
+		return new HomePage(driver);
+	}
+
+	public String readDataFromExcelSheet(String readerDataSheetName, String readerTestDataColumnName,
+			int readerDataRowNumber, String readerExportedExcelSheetName) throws Exception {
+
+		// String numberValue =
+		// getDataFromExcel("Sheet1","Number",1,"C:\\saveExcel\\OnDemandInvoiceCredit.xlsx");
+		// writeData("TC42250","Number",numberValue,1,System.getProperty("user.dir")+"\\src\\main\\resources\\Form_Data.xlsx");
+		// String amountValue =
+		// getDataFromExcel("Sheet1","Amount",1,"C:\\saveExcel\\OnDemandInvoiceCredit.xlsx");
+		// writeData("TC42250","Amount",amountValue,1,System.getProperty("user.dir")+"\\src\\main\\resources\\Form_Data.xlsx");
+
+		String columnCellValue = getDataFromExcel(readerDataSheetName, readerTestDataColumnName, readerDataRowNumber,
+				"C:\\saveExcel\\" + readerExportedExcelSheetName + ".xlsx");
+		Thread.sleep(3000);
+
+		// getPageTitle(driver, allTxnInquireyPageTitle); TODO-Need to adjust
+		// this at proper place
+		return columnCellValue;
+	}
+	
+	public FinancePage writeDataInExcelSheet(String cellValue,String writerTCSheetNumber,
+			String writerTestDataColumnHeader, int writerRowNumber) throws Exception {
+	
+		writeData(writerTCSheetNumber, writerTestDataColumnHeader, cellValue, writerRowNumber,
+				System.getProperty("user.dir") + "\\src\\main\\resources\\Form_Data.xlsx");
+
+		Thread.sleep(3000);
+		return new FinancePage(driver);
+		
+	}
+
+	//Get the next day of the due date column from exported excel sheet
+	public String nextDayOfDueDate() throws Exception {
+		 String dueDate = financePageDTO.retroDate;
+		 SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+		 Date date = formatter.parse(dueDate);
+		 Thread.sleep(1000);
+		 Calendar c = Calendar.getInstance();
+		 c.setTime(date);
+		 c.add(Calendar.DATE, 1); 
+		 Thread.sleep(1000);
+		 Date d = c.getTime();
+		 System.out.println("dueDate= "+dueDate);
+         String nextDay=formatter.format(d);
+         System.out.println("nextDay= "+nextDay);
+         return nextDay;
+	}
+	
+	//Endorse policy scenario with input having date
+	public PolicyIndicationPage policyEndorsementWithDate(String PolicyNo, String nextDayOfDueDate) throws Exception {
+		invisibilityOfLoader(driver);
+		Thread.sleep(2000);
+		// Select Endorsement from Policy Action
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Endorsement.");
+		selectDropdownByVisibleText(driver, policyActionDDL, financePageDTO.policyAction, "Policy Action");
+		Thread.sleep(2000);
+		// Navigate to pop up frame using policy no.
+		switchToFrameUsingElement(driver,
+				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
+		waitForElementToLoad(driver, 10, endorsementReason);
+		// Enter Data in pop up like Effective Date,Endorsement Reason
+		ExtentReporter.logger.log(LogStatus.INFO,
+				"Enter/Select Below Information: Effective Date:Policy Effective Date Accounting Date: Fixed Date Reason: Issue Policy Forms Comment: Issue Policy Forms");
+		// Effective Date is the retroDate from Sheet
+		clearTextBox(driver, effectiveFromDate, "Effective Date");
+		enterDataIn(driver, effectiveFromDate, nextDayOfDueDate, "Effective Date");
+		// enterDataIn(driver, effectiveFromDate, dueDate, "Effective Date");
+		selectDropdownByVisibleText(driver, endorsementReason, financePageDTO.endorsementReason, "Reason");
+		enterTextIn(driver, CommentsTxtBoxOnEndorsePolicyPopup, financePageDTO.endorsementComment, "Comments");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click [OK].");
+		clickButton(driver, endorsePolicyOK, "OK");
+		switchToParentWindowfromframe(driver);
+
+		return new PolicyIndicationPage(driver);
+	}
+
+	
+	public PolicyIndicationPage selectCoverageFromGridList() throws Exception {
+
+		Thread.sleep(4000);
+		// Get coverage count from the grid list on coverage page
+		for (int i = 0; i < coverageList.size(); i++) {
+			// compare if the coverage selected from excel sheet is same as
+			// coverage from grid on coverage page
+			if (coverageList.get(i).getAttribute("innerHTML").trim()
+					.equalsIgnoreCase(financePageDTO.coverageNameFromGrid)) {
+				ExtentReporter.logger.log(LogStatus.INFO,
+						financePageDTO.coverageNameFromGrid + " Coverage is selected from Grid");
+				// select the coverage from grid if it matches
+				selectValue(driver, coverageList.get(i), financePageDTO.coverageNameFromGrid);
+				// Assert.assertTrue(coverageList.get(i).isSelected(),coverageList.get(i)+"is
+				// NOt selected");
+				break;
+			}
+		}
+		return new PolicyIndicationPage(driver);
+	}
+
+	
 	public FinancePage cashEntry() throws Exception {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Payments>Cash Entry");
-		navigatetoMenuItemPage(driver,paymentsMenu,cashEntryMenuOption);
-		
+		navigatetoMenuItemPage(driver, paymentsMenu, cashEntryMenuOption);
+
 		invisibilityOfLoader(driver);
 		getPageTitle(driver, cashEntryPageTitle);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [New]");
@@ -342,17 +471,18 @@ public class FinancePage extends CommonAction {
 		invisibilityOfLoader(driver);
 		ExtentReporter.logger.log(LogStatus.INFO, "Payment Type: Check");
 		selectDropdownByValue(driver, paymentTypeDDL, paymentTypeDDLValue, "Payment Type");
-		ExtentReporter.logger.log(LogStatus.INFO, "Invoice No: "+financePageDTO.Number+"");
+		ExtentReporter.logger.log(LogStatus.INFO, "Invoice No: " + financePageDTO.Number + "");
 		Thread.sleep(1000);
 		enterTextIn(driver, invoiceNoOnCashEntryPage, financePageDTO.Number, "Cash Entry Page's invoice Number");
-		checkNoOnCashEntryPage.click();//check no element is clicked to enable Alert.
+		checkNoOnCashEntryPage.click();// check no element is clicked to enable
+										// Alert.
 		Thread.sleep(1000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Ok");
 		acceptAlert(driver);
 		Thread.sleep(1000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Check No: Enter ST12345");
 		enterTextIn(driver, checkNoOnCashEntryPage, checkNo, "Cash Entry Page's Check Number");
-		ExtentReporter.logger.log(LogStatus.INFO, "Amount:"+financePageDTO.Amount+"");
+		ExtentReporter.logger.log(LogStatus.INFO, "Amount:" + financePageDTO.Amount + "");
 		enterTextIn(driver, amountOnCashEntryPage, financePageDTO.Amount, "Cash Entry Page's Amount");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Save]");
 		clickButton(driver, saveBtnOnCashEntryPage, "Cash Entry Page's Save");
@@ -364,12 +494,14 @@ public class FinancePage extends CommonAction {
 	}
 
 	public FinancePage batchFunction() throws Exception {
-		//invisibilityOfLoader(driver);
+		// invisibilityOfLoader(driver);
 		batchNumber = batchNo.getAttribute("innerHTML");
 		Thread.sleep(2000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Payments>Batch Functions");
-		/*js.executeScript("arguments[0].click();", paymentsMenu);
-		js.executeScript("arguments[0].click();", batchFunctionMenuOption);*/
+		/*
+		 * js.executeScript("arguments[0].click();", paymentsMenu);
+		 * js.executeScript("arguments[0].click();", batchFunctionMenuOption);
+		 */
 		navigatetoMenuItemPage(driver, paymentsMenu, batchFunctionMenuOption);
 		invisibilityOfLoader(driver);
 		getPageTitle(driver, batchFunctionPageTitle);
@@ -384,17 +516,16 @@ public class FinancePage extends CommonAction {
 		clickButton(driver, exportExcelLink, "Export Excel");
 		exlUtil.downloadExcel();
 		copyFile(openbatchcreditExcelName);
-		
+
 		return new FinancePage(driver);
 	}
-	
-	public FinancePage validateBatch() throws Exception
-	{
+
+	public FinancePage validateBatch() throws Exception {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Validate Batch]");
 		clickButton(driver, validateBatchBtn, "Validate Batch");
 		getPageTitle(driver, validateBatchPageTitle);
 		ExtentReporter.logger.log(LogStatus.INFO, "Enter below information");
-		ExtentReporter.logger.log(LogStatus.INFO, "Amount:"+financePageDTO.Amount+"");
+		ExtentReporter.logger.log(LogStatus.INFO, "Amount:" + financePageDTO.Amount + "");
 		enterTextIn(driver, batchAmount, financePageDTO.Amount, "batch Amount");
 		ExtentReporter.logger.log(LogStatus.INFO, "No. of Payment: 1");
 		enterTextIn(driver, numberOfPaymentTxtBox, BatchNoPayment, "Batch Number Of Payment");
@@ -402,21 +533,24 @@ public class FinancePage extends CommonAction {
 		clickButton(driver, doneBatchPopUp, "Done");
 		switchToParentWindowfromframe(driver);
 		invisibilityOfLoader(driver);
-		/*verifyValueFromField(driver, validateField, validlateFieldExpectedValue, validlateFieldAttributeValue,
-				validlateFieldName);*/
+		/*
+		 * verifyValueFromField(driver, validateField,
+		 * validlateFieldExpectedValue, validlateFieldAttributeValue,
+		 * validlateFieldName);
+		 */
 		ExtentReporter.logger.log(LogStatus.INFO, "Export All Transactions to excel");
 		clickButton(driver, exportExcelLink, "Export Excel");
 		exlUtil.downloadExcel();
 		copyFile(validatebatchcreditExcelName);
 		return new FinancePage(driver);
 	}
-	
-	public FinancePage postBatchFunctionality() throws Exception
-	{
+
+	public FinancePage postBatchFunctionality() throws Exception {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Post Batch Button.");
 		clickButton(driver, postBatchBtn, "Post Batch");
-		/*Alert alert = driver.switchTo().alert();
-		alert.accept();*/
+		/*
+		 * Alert alert = driver.switchTo().alert(); alert.accept();
+		 */
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Ok]");
 		acceptAlert(driver);
 		ExtentReporter.logger.log(LogStatus.INFO, "Export All Transactions to excel");
@@ -425,11 +559,11 @@ public class FinancePage extends CommonAction {
 		copyFile(postedbatchcreditExcelName);
 		return new FinancePage(driver);
 	}
-	
-	public void donwloadFinalSheetBySearchingAccountNo() throws Exception
-	{
-		ExtentReporter.logger.log(LogStatus.INFO, "Enter account number in account search box in upper right corner of the page.");
-		policySearch(driver, accountNumber, Policy_Search, Search_btn,policyList);
+
+	public void donwloadFinalSheetBySearchingAccountNo() throws Exception {
+		ExtentReporter.logger.log(LogStatus.INFO,
+				"Enter account number in account search box in upper right corner of the page.");
+		policySearch(driver, accountNumber, Policy_Search, searchBtn, policyList);
 		invisibilityOfLoader(driver);
 		getPageTitle(driver, allTxnInquireyPageTitle);
 		ExtentReporter.logger.log(LogStatus.INFO, "Export All Transactions to excel");

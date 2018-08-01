@@ -21,6 +21,7 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.openqa.selenium.Alert;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -151,9 +152,10 @@ public class CommonAction implements CommonActionInterface {
 			WebDriverWait wait = new WebDriverWait(driver, Medium);
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
 			Assert.assertTrue(pageElement.isDisplayed(), textField + " is not displayed on screen.");
-			JavascriptExecutor js = (JavascriptExecutor) driver;
-			js.executeScript("arguments[0].value=text;", pageElement);
-			ExtentReporter.logger.log(LogStatus.PASS, "Value " + text + " entered in text field " + textField);
+			pageElement.sendKeys(text);
+			/*JavascriptExecutor js = (JavascriptExecutor) driver;
+			js.executeScript("arguments[0].value=text;", pageElement);*/
+			ExtentReporter.logger.log(LogStatus.PASS, "Value " + text + " is entered in text field " + textField);
 		} catch (Exception e) {
 			e.printStackTrace();
 			ExtentReporter.logger.log(LogStatus.FAIL, textField + " element is not found.");
@@ -207,7 +209,7 @@ public class CommonAction implements CommonActionInterface {
 				if ((getPageTitleFromPage.get(i).getAttribute("innerHTML").trim().equals(expectedPageTitle))) {
 					ExtentReporter.logger.log(LogStatus.PASS,
 							getPageTitleFromPage.get(i).getAttribute("innerHTML").trim()
-									+ " is sucessfully displayed.");
+							+ " is sucessfully displayed.");
 					break;
 				}
 			}
@@ -306,9 +308,9 @@ public class CommonAction implements CommonActionInterface {
 		ExtentReporter.logger.log(LogStatus.INFO, "Switching to the pop up window");
 
 		String parentWindow = driver.getWindowHandle();
-		
+
 		Set<String> handles = driver.getWindowHandles(); // Return a set of
-															// window handle
+		// window handle
 		Thread.sleep(3000);
 		for (String currentWindow : handles) {
 			if (!currentWindow.equals(parentWindow)) {
@@ -323,6 +325,7 @@ public class CommonAction implements CommonActionInterface {
 
 	// Select drop down value based on passed parameter driver, element locator
 	// for drop down, DropDown Option and lable of drop down.
+	//TODO-we need to validate if drop down value is selected
 	public void selectDropdownByValue(WebDriver driver, WebElement element, String DropDownOption, String label) {
 
 		try {
@@ -338,6 +341,7 @@ public class CommonAction implements CommonActionInterface {
 		}
 	}
 
+	//TODO-we need to validate if drop down value is selected 
 	public void selectDropdownByVisibleText(WebDriver driver, WebElement element, String DropDownOption, String label) {
 
 		try {
@@ -370,7 +374,7 @@ public class CommonAction implements CommonActionInterface {
 							+ ".");
 			ExtentReporter.logger.log(LogStatus.PASS, expectedValue,
 					"Value entered/ selected in " + fieldName + " is as expected. Expected value is " + expectedValue
-							+ ". And actual value is  " + pageElement.getAttribute(attributeName).trim() + ".");
+					+ ". And actual value is  " + pageElement.getAttribute(attributeName).trim() + ".");
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -408,63 +412,23 @@ public class CommonAction implements CommonActionInterface {
 		saveAlert.accept();
 	}
 
-	public String getAlertText(WebDriver driver) {
-		String saveAlertText = driver.switchTo().alert().getText();
-	
 	public static boolean isAlertPresent(WebDriver driver) throws InterruptedException{
-         try{
-        	 Thread.sleep(2000);
-             driver.switchTo().alert();
-             return true;
-             }catch(NoAlertPresentException ex){
-                   return false;
-             }
-         }
-	
-	
-	public void acceptAlert(WebDriver driver){
-		
-		Alert saveAlert= driver.switchTo().alert();
-			  saveAlert.accept();
-			  
+		try{
+			Thread.sleep(2000);
+			driver.switchTo().alert();
+			return true;
+		}catch(NoAlertPresentException ex){
+			return false;
+		}
 	}
-	
-	
+
+
 	public String getAlertText(WebDriver driver){
 		String saveAlertText= driver.switchTo().alert().getText();
 		return saveAlertText;
 	}
 
-	public void policySearch(WebDriver driver, String policyNo, WebElement policySearchTxtBox, WebElement searchBtn,WebElement policyList) {
-		clearTextBox(driver, policySearchTxtBox, "Enter Policy text field");
-		ExtentReporter.logger.log(LogStatus.INFO, "Click policy in right corner of screen");
-		enterTextIn(driver, policySearchTxtBox, policyNo, "Enter Policy text field");
-		click(driver, searchBtn, "Search button");
-		invisibilityOfLoader(driver);
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		if(verifyPolicyListDispOnQAEnv(driver,policyList)==true){
-			//clickButton(driver, policyList, "First policy from Searched Policies");
-			Actions action = new Actions(driver);
-			action.click(policyList).build().perform();
-		}
-		ExtentReporter.logger.log(LogStatus.INFO, "Enter Policy # into Policy entry box, Click Search.");
-	}
-
-	public boolean verifyPolicyListDispOnQAEnv(WebDriver driver, WebElement policyList) {
-		try{
-		if (policyList.isDisplayed()) {
-			return true;
-		}
-		else {return false;}
-		}catch(Exception e){
-			return false;
-		}
-	}
-
+	
 	public void invisibilityOfLoader(WebDriver driver) {
 
 		try {
@@ -514,18 +478,51 @@ public class CommonAction implements CommonActionInterface {
 					// System.out.println("cell found");
 					Row dataRow = dataSheet.getRow(rowNum);
 					Cell dataCell = dataRow.getCell(cellNumber);
-					returnCellValue = dataCell.getStringCellValue();
-					break;
-				}
+					if (dataCell == null ) {
+						// This cell is empty
+						//testDataObject.put(headerCell.getStringCellValue().toLowerCase(), "");
+						returnCellValue = "";
+					} else {
+						// This cell has data in it
 
-			} // for loop - cellNumber
-			inputStream.close();
-			FileOutputStream outputStream = new FileOutputStream(excelFilePath);
-			workbook.write(outputStream);
-			workbook.close();
-			outputStream.flush();
-			outputStream.close();
-		} catch (NoSuchElementException e) {
+						switch(dataCell.getCellTypeEnum())
+						{
+						case STRING:
+							returnCellValue = dataCell.getStringCellValue();
+							/*testDataObject.put(headerCell.getStringCellValue().toLowerCase(), dataCell.getStringCellValue());*/
+							break;
+						case NUMERIC:
+							dataCell.setCellType(CellType.STRING);
+							returnCellValue = dataCell.getStringCellValue();
+							/*testDataObject.put(headerCell.getStringCellValue().toLowerCase(), Double.toString(dataCell.getNumericCellValue()));*/
+							break;
+						case BLANK:
+							returnCellValue = "";
+							/*testDataObject.put(headerCell.getStringCellValue().toLowerCase(), "");*/
+							break;
+						case _NONE:
+							returnCellValue = "";
+							/*testDataObject.put(headerCell.getStringCellValue().toLowerCase(), "");*/
+							break;
+						default:
+							returnCellValue = "";
+							/*testDataObject.put(headerCell.getStringCellValue(), "");*/
+							break;
+						}//Switch statement
+
+						//returnCellValue = dataCell.getStringCellValue();
+						break;
+					}
+
+				} // for loop - cellNumber
+				inputStream.close();
+				/*FileOutputStream outputStream = new FileOutputStream(excelFilePath);
+				workbook.write(outputStream);
+				workbook.close();
+				outputStream.flush();
+				outputStream.close();*/
+			}
+		}catch (NoSuchElementException e) {
 			e.printStackTrace();
 		}
 		return returnCellValue;
@@ -578,20 +575,20 @@ public class CommonAction implements CommonActionInterface {
 				return false;
 			}
 		} catch (Exception e) {
-			ExtentReporter.logger.log(LogStatus.FAIL, "Page Loader is not displayed.");
+			ExtentReporter.logger.log(LogStatus.INFO, "Page Loader is not displayed.");
 		}
 		return false;
 	}
 
-	
+
 	public void refreshAPage(WebDriver driver){
 		driver.navigate().refresh();
 	}
-	
-	
+
+
 	public void saveOption(WebDriver driver, WebElement saveOptionBtn, WebElement saveAsDropDown,
 			WebElement saveOKBtn, WebElement exitOK, String saveAsValue)
-			throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
+					throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
 		Thread.sleep(2000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options");
 		waitForElementToLoad(driver, 15, saveOptionBtn);
@@ -599,6 +596,7 @@ public class CommonAction implements CommonActionInterface {
 		Thread.sleep(2000);
 		switchToFrameUsingId(driver, "popupframe1");
 		getPageTitle(driver, "Save As");
+		ExtentReporter.logger.log(LogStatus.INFO, "Save as Official window displays");
 		selectDropdownByVisibleText(driver, saveAsDropDown, saveAsValue, "Selected " + saveAsValue);
 		ExtentReporter.logger.log(LogStatus.INFO, "Select " + saveAsValue + " Click [OK]");
 		clickButton(driver, saveOKBtn, "Save");
@@ -606,10 +604,37 @@ public class CommonAction implements CommonActionInterface {
 		switchToParentWindowfromframe(driver);
 		switchToFrameUsingId(driver, "popupframe1");
 		Thread.sleep(5000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Save as Official window displays");
+		ExtentReporter.logger.log(LogStatus.INFO, "Policy Has been saved as official message is displayed");
 		clickButton(driver, exitOK, "Workflow exit OK");
+		invisibilityOfLoader(driver);
 		switchToParentWindowfromframe(driver);
 		Thread.sleep(2000);
 	}
 
+	public void policySearch(WebDriver driver, String policyNo, WebElement policySearchTxtBox, WebElement searchBtn,WebElement policyList) {
+		clearTextBox(driver, policySearchTxtBox, "Enter Policy text field");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click policy in right corner of screen");
+		enterTextIn(driver, policySearchTxtBox, policyNo, "Enter Policy text field");
+		click(driver, searchBtn, "Search button");
+		invisibilityOfLoader(driver);
+		if(verifyPolicyListDispOnQAEnv(driver,policyList)==true){
+			//clickButton(driver, policyList, "First policy from Searched Policies");
+			Actions action = new Actions(driver);
+			action.click(policyList).build().perform();
+		}else{
+			clickButton(driver, policyList, "policyNo");
+		}
+	}
+
+
+	public boolean verifyPolicyListDispOnQAEnv(WebDriver driver, WebElement policyList) {
+		try{
+			if (policyList.isDisplayed()) {
+				return true;
+			}
+			else {return false;}
+		}catch(Exception e){
+			return false;
+		}
+	}
 }

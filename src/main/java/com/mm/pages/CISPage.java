@@ -210,18 +210,19 @@ public class CISPage extends CommonAction {
 		waitForElementToLoad(driver, 10, clientLastName);
 		enterTextIn(driver, clientLastName, oCISPageDTO.clientLastName, "Last/Org Name");
 		enterTextIn(driver, clientFirstName, oCISPageDTO.clientFirstName, "First Name");
-		click(driver, searchButton, "Search");
+		clickButton(driver, searchButton, "Search");
 		ExtentReporter.logger.log(LogStatus.INFO, "Search results returned");
 		invisibilityOfLoader(driver);
+		Thread.sleep(3000);
 		getPageTitle(driver, EntityListPageTitle);
 		//Get list of client IDs based on environment 'BTS OR QA' and store in List WebElement
-		List <WebElement>clientIDEntityList =driver.findElements(By.xpath("//span[@id='CCLIENT_NAME'] | //div[@title='"+oCISPageDTO.clientIDValue+"']//div"));
+	/*	List <WebElement>clientIDEntityList =driver.findElements(By.xpath("//span[@id='CCLIENT_NAME'] | //div[@title='"+oCISPageDTO.clientIDValue+"']//div"));
 		try{
 		visibilityOfElement(driver, clientNameEntityList.get(0), "Client name");
 		visibilityOfElement(driver, clientIDEntityList.get(0), "Client ID");
 		}catch(Exception e){
 			throw new NoSuchElementException();
-		}
+		}*/
 		// Searching the client using client name and matching id
 		boolean flag = false;
 		try {
@@ -274,34 +275,29 @@ public class CISPage extends CommonAction {
 
 						// compare if tab menu text is equal to menu option from
 						// excel sheet
-						if (tabMenuOption1.get(j).getAttribute("innerHTML")
-								.equalsIgnoreCase(oCISPageDTO.allMenuOptions.get(k))) {
+						if (tabMenuOption1.get(j).getAttribute("innerHTML").equalsIgnoreCase(oCISPageDTO.allMenuOptions.get(k))) {
 							waitForElementToLoad(driver, 10, selectedMainTab);
 							JavascriptExecutor executor1 = (JavascriptExecutor) driver;
 							// click on tab main tab and then click on tab menu
 							executor1.executeScript("arguments[0].click();", selectedMainTab);
-							ExtentReporter.logger.log(LogStatus.INFO,
-									oCISPageDTO.allMenuOptions.get(k) + " window opens");
+							ExtentReporter.logger.log(LogStatus.INFO,oCISPageDTO.allMenuOptions.get(k) + " window opens");
 							executor1.executeScript("arguments[0].click();", tabMenuOption1.get(j));
 							invisibilityOfLoader(driver);
 							Thread.sleep(2000);
 							// verifying the page title of an open window
-							verifyPageTitleForTheOpenWindow(displayedWindowTitle,
-									oCISPageDTO.windowTitlesForSubMenuTabs.get(k) + " " + oCISPageDTO.clientNameValue,
+							verifyPageTitleForTheOpenWindow(displayedWindowTitle,oCISPageDTO.windowTitlesForSubMenuTabs.get(k) + " " + oCISPageDTO.clientNameValue,
 									oCISPageDTO.allMenuOptions.get(k));
 						}
 					} else {
 						if (tabMenuOption.get(j).getAttribute("innerHTML").equals(oCISPageDTO.allMenuOptions.get(k))) {
 							// click on tab menu option (when main tab is not in
 							// selected mode)
-							ExtentReporter.logger.log(LogStatus.INFO,
-									oCISPageDTO.allMenuOptions.get(k) + " window opens");
+							ExtentReporter.logger.log(LogStatus.INFO,oCISPageDTO.allMenuOptions.get(k) + " window opens");
 							executor.executeScript("arguments[0].click();", tabMenuOption.get(j));
 							invisibilityOfLoader(driver);
 							Thread.sleep(2000);
 							// verifying the page title of an open window
-							verifyPageTitleForTheOpenWindow(displayedWindowTitle,
-									oCISPageDTO.windowTitlesForSubMenuTabs.get(k) + " " + oCISPageDTO.clientNameValue,
+							verifyPageTitleForTheOpenWindow(displayedWindowTitle,oCISPageDTO.windowTitlesForSubMenuTabs.get(k) + " " + oCISPageDTO.clientNameValue,
 									oCISPageDTO.allMenuOptions.get(k));
 						}
 					}
@@ -346,19 +342,30 @@ public class CISPage extends CommonAction {
 	// each tab that is selected
 	public void verifyPageTitleForTheOpenWindow(WebElement tabTitleElement, String tabTitle, String tabName) throws InterruptedException {
 		Thread.sleep(2000);
-		//waitForElementToLoad(driver, 10, tabTitleElement);
+		waitForElementToLoad(driver, 10, tabTitleElement);
 
-		// verify if tab title matches with tab title from excel sheet and log
-		// message
+		// verify if actual tab title matches with tab title from excel sheet and log message
 		if (tabTitleElement.getAttribute("innerHTML").trim().equals(tabTitle)) {
 			ExtentReporter.logger.log(LogStatus.PASS,
 					tabName + " page title is as expected i.e. " + tabTitleElement.getAttribute("innerHTML").trim());
-		} else {
+		} else{
+			
+			//Files tab title changes if the claim is available, so below if handles changed title
+			String filesTabPartialTitle="Claims for ";
+			if(tabTitleElement.getAttribute("innerHTML").contains(filesTabPartialTitle)){
+					
+					if(tabTitleElement.getAttribute("innerHTML").trim().equals(filesTabPartialTitle+oCISPageDTO.clientNameValue))
+						
+					ExtentReporter.logger.log(LogStatus.PASS,tabName + " page title is as expected i.e. " + tabTitleElement.getAttribute("innerHTML").trim());
+				
+			}else{
 			ExtentReporter.logger.log(LogStatus.FAIL, tabName + " page title did not match, expected was " + tabTitle
 					+ " but found " + tabTitleElement.getAttribute("innerHTML").trim());
 		}
 	}
+}
 
+	
 	// verify that Menu tab is displayed and return boolean value
 	public Boolean verifyelementDisplay(WebElement pageElement) {
 		try {

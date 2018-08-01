@@ -17,7 +17,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelUtil {
-	String xlFilePath = System.getProperty("user.dir")+"\\src\\main\\resources\\BTS_Form_Data.xlsx";
+	String xlFilePath = System.getProperty("user.dir")+"\\src\\main\\resources\\Form_Data.xlsx";
 	
 	ExcelApiTest eat = null;
 	List<String> listRowData =null;
@@ -34,12 +34,12 @@ public class ExcelUtil {
 		//Browse through all columns
 		for (int j = 0; j < columns; j++) {
 			//Read the ColumnName
-			String sColumnName = eat.getCellData(sheetName, j, 0).toLowerCase();
+			String sColumnName = eat.getCellData(sheetName, j, 0).toString().toLowerCase();
 			listRowData = new ArrayList<String>();
 			
 			//Read All rows
 			for (int i = 1; i < rows; i++) {
-				listRowData.add(eat.getCellData(sheetName, j, i));
+				listRowData.add(eat.getCellData(sheetName, j, i).toString());
 				//ToDo- Check if the field is blank, don't add in list
 			}			
 			//Populate the HashMap

@@ -18,6 +18,7 @@ public class PolicyIndicationPageDTO {
 	public List<String> form;
 	public List<String> sharedGroupCoverage;
 	public List<String> sharedGroupDescription;
+	public String coverageLimit;
 	public String policyAction;
 	public String producer;
 	public String riskCountry;

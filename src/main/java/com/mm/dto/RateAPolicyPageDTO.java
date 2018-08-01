@@ -25,6 +25,7 @@ public class RateAPolicyPageDTO {
 	public String viewModeWIP;
 	public String policyAction;
 	public String endorsementReason;
+	public String endorsementComment;
 	public String policyNum;
 	
 	
