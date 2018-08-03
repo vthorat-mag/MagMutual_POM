@@ -104,10 +104,15 @@ public class HomePage extends CommonAction {
 
 	@FindBy(id = "PM_SPOL_SEARCH")
 	WebElement searchCriteria;
+	@FindBy(id = "CPOLICYSTATUSLOVLABEL")
+	List<WebElement> policyStatus;
 
-	//@FindBy(xpath = "//a[@class='gridcontent']//span[@id='CPOLICYNO']") - BTS
-	@FindBy(xpath="//a[@class='gridcontent']//span[@id='CPOLICYNO'] | //a[@id='findPolicyListGrid_CPOLICYNO_0_HREF']")  // QA
+	// @FindBy(xpath = "//a[@class='gridcontent']//span[@id='CPOLICYNO']") - BTS
+	@FindBy(xpath = "//*[@id='findPolicyListGrid_CPOLICYNO_0_HREF'] | //a[@class='gridcontent']//span[@id='CPOLICYNO']")
 	WebElement policyNumFromPolicyCount;
+	
+	@FindBy(id = "CPOLICYNO")
+	List<WebElement> policyName;
 
 	@FindBy(id = "pageTitleForpageHeaderForPolicyFolder") // seperate for BTS and QA
 	WebElement pageHeaderForPolicyFolder; 
@@ -242,32 +247,36 @@ public class HomePage extends CommonAction {
 
 	
 	// Search a policy using Search Criteria tab and select a policy from count
-	// tab
-	public String policySearchUsingSearchCriteria() throws Exception {
-		verifyLogoIsAvailable();
-		waitForElementToLoad(driver, 20, policyOrQuoteNum);
-		clearTextBox(driver, policyOrQuoteNum, "Policy/Quote#");
+		// tab
+		public String policySearchUsingSearchCriteria() throws Exception {
+			verifyLogoIsAvailable();
+			waitForElementToLoad(driver, 20, policyOrQuoteNum);
+			clearTextBox(driver, policyOrQuoteNum, "Policy/Quote#");
 
-		// Enter policy number in Policy/Quote# text field
-		enterTextIn(driver, policyOrQuoteNum, homepageDTO.policyNo, "Policy/Quote#");
-		ExtentReporter.logger.log(LogStatus.INFO, "Policy # displays correctly under Policy Count tab");
-		clickButton(driver, searchCriteria, "Search");
-		Thread.sleep(2000);
-		// Select the first policy from the search results under Count tab
-		ExtentReporter.logger.log(LogStatus.INFO, "Full Policy displays when web cycles to active policy window");
-		//selectValue(driver, policyNumFromPolicyCount, homepageDTO.policyNum);
-		click(driver, policyNumFromPolicyCount, homepageDTO.policyNo);
-		invisibilityOfLoader(driver);
-		rateapolicyPage = new RateApolicyPage(driver);
+			// Enter policy number in Policy/Quote# text field
+			enterTextIn(driver, policyOrQuoteNum, homepageDTO.policyNum, "Policy/Quote#");
+			ExtentReporter.logger.log(LogStatus.INFO, "Policy # displays correctly under Policy Count tab");
+			clickButton(driver, searchCriteria, "Search");
+			Thread.sleep(2000);
+			// Select the first policy from the search results under Count tab
+			ExtentReporter.logger.log(LogStatus.INFO, "Full Policy displays when web cycles to active policy window");
+			//selectValue(driver, policyNumFromPolicyCount, homepageDTO.policyNum);
+			for(int i = 0; i<policyStatus.size();i++) {
+				if(policyStatus.get(i).getAttribute("innerHTML").trim().equals("Active"))
+				{
+					click(driver, policyName.get(i), homepageDTO.policyNum);
+				}
+			}
+			invisibilityOfLoader(driver);
+			rateapolicyPage = new RateApolicyPage(driver);
 
-		// Verify that page title is correct
-		String policyNumber = rateapolicyPage.policyNo();
-	    getPageTitleWithPolicyNumber(driver, policyNumber);
+			// Verify that page title is correct
+			String policyNumber = rateapolicyPage.policyNo();
+			getPageTitleWithPolicyNumber(driver, policyNumber);
 
-		return policyNumber;
+			return policyNumber;
 
-	}
-	
+		}
 	
 	// Move to Policy tab and select Create New option from menu
 	public HomePage create_New()

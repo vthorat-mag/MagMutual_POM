@@ -570,7 +570,7 @@ public class PolicyIndicationPage extends CommonAction {
 		for (int coverageTitleCount = 0; coverageTitleCount < hospitalIndicationDTO.coverageTitle
 				.size(); coverageTitleCount++) {
 			String ProfLiabCoverage="Prof Liab-Out";
-			Thread.sleep(4000);
+			Thread.sleep(3000);
 			// Get coverage count from the grid on coverage page
 			for (int i = 0; i < coverageList.size(); i++) {
 				// Compare if the coverage from excel sheet column is same as
@@ -585,14 +585,13 @@ public class PolicyIndicationPage extends CommonAction {
 							hospitalIndicationDTO.coverageTitle.get(coverageTitleCount));
 					// Assert.assertTrue(coverageList.get(i).isSelected(),coverageList.get(i)+"is
 					// NOt selected");
-					// TODO - change hard coded value in if statement
 					// Add Retro Date for selected coverage except "Prof
 					// Liab-Out".
 					if (hospitalIndicationDTO.coverageTitle.get(coverageTitleCount) != ProfLiabCoverage) {
 						try {
 							Thread.sleep(1000);
 							if (Retro_Date.isDisplayed()) {
-								Thread.sleep(1000);
+								Thread.sleep(2000);
 								enterDataIn(driver, Retro_Date,
 										hospitalIndicationDTO.retroDateValue.get(coverageTitleCount), "Retro Date");
 							}

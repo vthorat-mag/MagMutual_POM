@@ -346,19 +346,39 @@ public class PolicyQuotePage extends CommonAction {
 		return new PolicyQuotePage(driver);
 	}
 	
-	//Click preview tab.
-	public PDFReader clickPreviewTab() throws InterruptedException
-	{
-		invisibilityOfLoader(driver); 
-		Thread.sleep(3000);
-    	ExtentReporter.logger.log(LogStatus.INFO, "Click [Preview]");
-	//	ExtentReporter.logger.log(LogStatus.INFO, "Verify CHG 08 form is displayed and information that was entered is on form");
-		clickButton(driver, PreviewTab, "Preview");
-		invisibilityOfLoader(driver);
-		Thread.sleep(8000);
-		return new PDFReader(driver);
-	}
+	// Click preview tab.
+		public PDFReader clickPreviewTab(String policyNumber) throws InterruptedException {
+			invisibilityOfLoader(driver);
+			Thread.sleep(3000);
+			ExtentReporter.logger.log(LogStatus.INFO, "Click [Preview]");
+			// ExtentReporter.logger.log(LogStatus.INFO, "Verify CHG 08 form is displayed
+			// and information that was entered is on form");
+			clickButton(driver, PreviewTab, "Preview");
+			invisibilityOfLoader(driver);
+			Thread.sleep(10000);
+			verifySaveAsPopUp(policyNumber);
+			Thread.sleep(5000);
+			return new PDFReader(driver);
+		}
 
+		// this method will verify saveAs pop up displayed or not
+		public void verifySaveAsPopUp(String policyNo) {
+			try {
+				WebElement iframeEle = driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]"));
+				if (iframeEle.isDisplayed())
+				{
+					switchToFrameUsingElement(driver,iframeEle);
+					clickButton(driver, okPolicySaveAsWIPPopup, "Ok");
+				}
+				else
+				{
+					ExtentReporter.logger.log(LogStatus.INFO, "Save as Pop up window is not displayed.");
+				}
+
+			} catch (Exception e) {
+				ExtentReporter.logger.log(LogStatus.INFO, "Save as Pop up window is not displayed.");
+			}
+		}
 		
 	//Select the policy Action from DDL
 	public PolicyQuotePage selectPolicyAction() throws Exception{
