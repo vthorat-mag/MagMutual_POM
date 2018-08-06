@@ -60,8 +60,9 @@ public class PolicySubmissionPage extends CommonAction {
 	// Select Copy from Action value from Action drop down.
 	public PolicySubmissionPage copyFromPolicyActionDropDown(String policyNum)
 			throws IllegalArgumentException, IllegalAccessException, SecurityException, InterruptedException {
+		Thread.sleep(2000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy");
-		selectDropdownByVisibleText(driver,policyAction, policysubmissionpageDTO.valueOfPolicyActionCopy, "Policy Action");
+		selectDropdownByValue(driver,policyAction, policysubmissionpageDTO.valueOfPolicyActionCopy, "Policy Action");
 		Thread.sleep(3000);
 		return new PolicySubmissionPage(driver);
 
@@ -70,7 +71,7 @@ public class PolicySubmissionPage extends CommonAction {
 	// Change policy phase to indication.
 	public PolicySubmissionPage changePhaseToIndicationAndAddQuoteDescription()
 			throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
-		Thread.sleep(3000);
+		Thread.sleep(6000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Change Policy Phase to Indication");
 		selectDropdownByValue(driver,policyPhase, policysubmissionpageDTO.indicationPhaseValue, "Phase");
 		enterTextIn(driver, Quote_Description, policysubmissionpageDTO.quoteDescription, "Quote Description");

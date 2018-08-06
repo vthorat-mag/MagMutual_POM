@@ -176,6 +176,7 @@ public class HomePage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Search Policy Screen is opened");
 		waitForElementToLoad(driver, 10, Policy_Tab_Home);
 		click(driver, Policy_Tab_Home, "Policy tab");
+		Thread.sleep(2000);
 		getPageTitle(driver, findPOlicyPageTitleActualText);
 		return new HomePage(driver);
 	}
@@ -307,8 +308,8 @@ public class HomePage extends CommonAction {
 	}
 	
 	public HomePage selectEntity(String parentWindow) throws Exception{
-		Thread.sleep(2000);
-		waitForElementToLoad(driver, 60, Select_Entity_Checkbox);
+		Thread.sleep(6000);
+		invisibilityOfLoader(driver);
 		ExtentReporter.logger.log(LogStatus.INFO, "Risk is selected");
 		clickButton(driver, Select_Entity_Checkbox, "Select Entity Checkbox");
 		ExtentReporter.logger.log(LogStatus.INFO, "Select Policy Type Window displays");

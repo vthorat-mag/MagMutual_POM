@@ -69,6 +69,7 @@ public class CommonAction implements CommonActionInterface {
 			js.executeScript("arguments[0].click();", pageElement);
 		} catch (Exception e) {
 			ExtentReporter.logger.log(LogStatus.FAIL, value + " element is not found.");
+			Assert.assertTrue(false);
 		}
 	}
 
@@ -86,7 +87,7 @@ public class CommonAction implements CommonActionInterface {
 			ExtentReporter.logger.log(LogStatus.INFO, "Control switched back to parent window.");
 		} catch (Exception e) {
 			e.printStackTrace();
-			ExtentReporter.logger.log(LogStatus.WARNING, "Error while switching to parent window.");
+			ExtentReporter.logger.log(LogStatus.INFO, "Error while switching to parent window.");
 		}
 	}
 
@@ -97,7 +98,7 @@ public class CommonAction implements CommonActionInterface {
 			ExtentReporter.logger.log(LogStatus.INFO, "Control switched to frame.");
 		} catch (Exception e) {
 			e.printStackTrace();
-			ExtentReporter.logger.log(LogStatus.WARNING, "Error while switching to frame.");
+			ExtentReporter.logger.log(LogStatus.INFO, "Error while switching to frame.");
 		}
 
 	}
@@ -109,7 +110,7 @@ public class CommonAction implements CommonActionInterface {
 			ExtentReporter.logger.log(LogStatus.INFO, "Control switched to frame.");
 		} catch (Exception e) {
 			e.printStackTrace();
-			ExtentReporter.logger.log(LogStatus.WARNING, "Error while switching to frame.");
+			ExtentReporter.logger.log(LogStatus.INFO, "Error while switching to frame.");
 		}
 	}
 	
@@ -133,7 +134,7 @@ public class CommonAction implements CommonActionInterface {
 			ExtentReporter.logger.log(LogStatus.PASS, "User Switched to default frame.");
 		} catch (Exception e) {
 			e.printStackTrace();
-			ExtentReporter.logger.log(LogStatus.FAIL, "Error while switching to default frame.");
+			ExtentReporter.logger.log(LogStatus.INFO, "Error while switching to default frame.");
 		}
 	}
 
@@ -160,6 +161,7 @@ public class CommonAction implements CommonActionInterface {
 		} catch (Exception e) {
 			e.printStackTrace();
 			ExtentReporter.logger.log(LogStatus.FAIL, textField + " element is not found.");
+			Assert.assertTrue(false);
 		}
 	}
 
@@ -176,6 +178,7 @@ public class CommonAction implements CommonActionInterface {
 		} catch (Exception e) {
 			e.printStackTrace();
 			ExtentReporter.logger.log(LogStatus.FAIL, textField + " element is not found.");
+			Assert.assertTrue(false);
 		}
 	}
 
@@ -183,12 +186,13 @@ public class CommonAction implements CommonActionInterface {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, Medium);
 			wait.until(ExpectedConditions.elementToBeClickable(pageElement));
-			JavascriptExecutor js = (JavascriptExecutor) driver;
 			Assert.assertTrue(pageElement.isDisplayed(), buttonName + " button is Not displayed on screen.");
+			JavascriptExecutor js = (JavascriptExecutor) driver;
 			js.executeScript("arguments[0].click();", pageElement);
 			ExtentReporter.logger.log(LogStatus.PASS, "clicked on button / Link- " + buttonName);
 		} catch (Exception e) {
 			ExtentReporter.logger.log(LogStatus.FAIL, buttonName + " element is not found.");
+			Assert.assertTrue(false);
 		}
 	}
 
@@ -273,6 +277,7 @@ public class CommonAction implements CommonActionInterface {
 		} catch (Exception e) {
 			e.printStackTrace();
 			ExtentReporter.logger.log(LogStatus.FAIL, textField + " element is not found.");
+			Assert.assertTrue(false);
 		}
 	}
 
@@ -291,6 +296,7 @@ public class CommonAction implements CommonActionInterface {
 		} catch (Exception e) {
 			e.printStackTrace();
 			ExtentReporter.logger.log(LogStatus.FAIL, ElementName + " element is not found on page.");
+			Assert.assertTrue(false);
 		}
 	}
 
@@ -305,6 +311,7 @@ public class CommonAction implements CommonActionInterface {
 		} catch (Exception e) {
 			e.printStackTrace();
 			ExtentReporter.logger.log(LogStatus.FAIL, text + " is not displayed on page");
+			Assert.assertTrue(false);
 		}
 	}
 
@@ -322,6 +329,11 @@ public class CommonAction implements CommonActionInterface {
 				driver.switchTo().window(currentWindow);
 				driver.manage().window().maximize();
 				ExtentReporter.logger.log(LogStatus.INFO, "Control is switched to pop up window");
+			}
+			else
+			{
+				ExtentReporter.logger.log(LogStatus.WARNING, "Error while switcing control to pop up window");
+				//Assert.assertTrue(false);
 			}
 		}
 		Thread.sleep(2000);
@@ -345,7 +357,7 @@ public class CommonAction implements CommonActionInterface {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			ExtentReporter.logger.log(LogStatus.FAIL, "No value is selected from " + label + " drop down list");
+			ExtentReporter.logger.log(LogStatus.FAIL, DropDownOption+" value is NOT selected from " + label + " drop down list");
 			Assert.assertTrue(false);
 		}
 	}
@@ -418,7 +430,6 @@ public class CommonAction implements CommonActionInterface {
              driver.switchTo().alert();
              return true;
              }catch(NoAlertPresentException ex){
-            	 Assert.assertTrue(false,"Alert is not present.");
                    return false;
              }
          }
@@ -449,6 +460,7 @@ public class CommonAction implements CommonActionInterface {
 			}
 		} catch (Exception e) {
 			ExtentReporter.logger.log(LogStatus.WARNING, "Page is taking longer time than usual for loading.");
+			Assert.assertTrue(false);
 		}
 	}
 
@@ -501,6 +513,7 @@ public class CommonAction implements CommonActionInterface {
 		} catch (NoSuchElementException e) {
 			e.printStackTrace();
 			Assert.assertTrue(false,"Error while reading data from excel sheet.");
+			Assert.assertTrue(false);
 			
 		}
 		return returnCellValue;
@@ -573,7 +586,7 @@ public class CommonAction implements CommonActionInterface {
 		waitForElementToLoad(driver, 15, saveOptionBtn);
 		clickButton(driver, saveOptionBtn, "Save Option");
 		invisibilityOfLoader(driver);
-		Thread.sleep(5000);
+		Thread.sleep(8000);
 		WebElement iframeEle = driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]"));
 		//switchToFrameUsingId(driver, "popupframe1");
 		switchToFrameUsingElement(driver, iframeEle);

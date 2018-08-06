@@ -108,7 +108,7 @@ public class RateApolicyPage extends CommonAction {
 	@FindBy(xpath = "//select[@name='paymentPlanId']")
 	WebElement paymentPlan;
 
-	@FindBy(xpath = "//div[@class='horizontalButtonCollection']//input[@id='PM_BILLNG_SAVE']")
+	@FindBy(xpath = "//div[@class='horizontalButtonCollection']//input[@id='PM_BILLNG_SAVE'] | //input[@id = 'FM_BILLING_SETUP_SAVE']")
 	WebElement billingSetupSaveBtn;
 
 	@FindBy(xpath = "//a[@id='PM_PT_VIEWCVG']//span[@class='tabWithNoDropDownImage']")
@@ -581,13 +581,16 @@ public class RateApolicyPage extends CommonAction {
 	// Billing setup flow code.
 		public RateApolicyPage billingSetup() throws Exception {
 			invisibilityOfLoader(driver);
-			Thread.sleep(3000);
+			Thread.sleep(5000);
+			String policyNo = policyNo();
 			ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions-->Select Billing Setup");
 			selectDropdownByValue(driver, policyAction, rateApolicyPageDTO.valueOfPolicyActionBillingSetup,
 					"Policy Action");
 			invisibilityOfLoader(driver);
-			Thread.sleep(8000);
-			switchToFrameUsingId(driver, "popupframe1");
+			Thread.sleep(4000);
+			//switchToFrameUsingId(driver, "popupframe1");
+			switchToFrameUsingElement(driver,
+					driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]")));
 			getPageTitle(driver, manageBillingSetupPageTitle);
 			ExtentReporter.logger.log(LogStatus.INFO, "Payment plan dropdown: Select A-Monthly");// Quarterly for copy to
 																									// quote
@@ -745,7 +748,7 @@ public class RateApolicyPage extends CommonAction {
 
 	public RateApolicyPage refreshCurrentPage(WebDriver driver) throws Exception {
 		refreshAPage(driver);
-		Thread.sleep(3000);
+		Thread.sleep(6000);
 		if (isAlertPresent(driver)) {
 			acceptAlert(driver);
 			Thread.sleep(1000);
@@ -777,7 +780,7 @@ public class RateApolicyPage extends CommonAction {
 
 	// Rate a functionality flow.
 	public PolicyQuotePage rateFunctionality(String policyNo) throws Exception {
-
+		invisibilityOfLoader(driver);
 		Thread.sleep(1000);
 		clickButton(driver, rateBtn, "Rate Tab");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Rate].");

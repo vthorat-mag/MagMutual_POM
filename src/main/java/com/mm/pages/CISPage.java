@@ -439,13 +439,13 @@ public class CISPage extends CommonAction {
 
 	// Select zip code from pop up window and validate on parent window
 	public CISPage selectZipCode() throws Exception {
-		Thread.sleep(2000);
+		Thread.sleep(4000);
 		// switch to new window using get window handle
 		String parentwindow = switchToWindow(driver);
 		WebElement zipCode = driver.findElement(By.xpath("//input[@value='" + oCISPageDTO.zipCode + "']"));
 		// select zip code from pop up window
-		click(driver, zipCode, "ZipCode");
-		click(driver, OkButton, "OK button");
+		clickButton(driver, zipCode, "ZipCode");
+		clickButton(driver, OkButton, "OK button");
 		Thread.sleep(1000);
 		// navigate back to parent window
 		switchToParentWindowfromotherwindow(driver, parentwindow);
