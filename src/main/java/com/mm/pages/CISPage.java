@@ -386,7 +386,7 @@ public class CISPage extends CommonAction {
 	// Move to Quick Add button and select Add Organization menu
 	public CISPage navigateToAddOrgPage() throws Exception {
 		Thread.sleep(2000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Add Organization Quick Entry window displays");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Quick Add Dropdown and  then select Add Organization. Add Organization Quick Entry window displays");
 		Actions action = new Actions(driver);
 		action.moveToElement(quickAdd).build().perform();
 		JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -412,8 +412,10 @@ public class CISPage extends CommonAction {
 	public String addOrganizationInformation() throws Exception {
 
 		getPageTitle(driver, AddOrganizationPageTitle);
-		ExtentReporter.logger.log(LogStatus.INFO, "Organization information is added");
-		String OrganizationName = oCISPageDTO.OrgName + randomNumGenerator();
+		ExtentReporter.logger.log(LogStatus.INFO, "Enter/select below information\n Organization: Enter Org Name (Automated Hospital (date))\n"+
+				"DOI: Enter Today's Date\n Classification: Select Med Facility\n Class Eff. From Date: Today's Date\n Class Eff. To Date: 01/01/3000\n Organization information is added");
+		
+		String OrganizationName = oCISPageDTO.OrgName + randomNumGenerator(3,"123456789");
 		enterTextIn(driver, orgName, OrganizationName, "Org Name");
 		enterTextIn(driver, dateOfBirth, oCISPageDTO.dateOfBirth, "DOI");
 		selectDropdownByVisibleText(driver, classification, oCISPageDTO.Classification, "Classfication");
@@ -425,7 +427,10 @@ public class CISPage extends CommonAction {
 
 	// Add org address in Address section
 	public CISPage addOrgAddress() throws Exception {
-		ExtentReporter.logger.log(LogStatus.INFO, "Address is entered");
+		ExtentReporter.logger.log(LogStatus.INFO, "Enter below information under Address criteria Select\n"+ 
+		"Country: USA Address\n Address Type: Policy Address\n Address) Line 1: Generate random number and street name City: Atlanta (zip code pop-up screen displays)"+
+		"State: GA\n County: Select any county from DDL\n Zip: Select any Zip Code from pop-up screen\n Addr. Eff From Date: Select Today's date (defaults)\n Address is entered");
+		
 		selectDropdownByValue(driver, addressType1, oCISPageDTO.addrType, "Add_Type1");
 		enterTextIn(driver, addrLine1, oCISPageDTO.addressLine1, "Line1");
 		enterTextIn(driver, City, oCISPageDTO.City, "city");
@@ -454,11 +459,13 @@ public class CISPage extends CommonAction {
 
 	// Add phone number in phone section
 	public CISPage addPhoneNumber() throws Exception {
-		ExtentReporter.logger.log(LogStatus.INFO, "Phone number is added");
+		ExtentReporter.logger.log(LogStatus.INFO, "Enter below information under\n"
+				+ " Phone Address1-\n Phone No.Type: Enter Office Telephone\n Area Code: 770\n Phone Number: ###-#### format\n Phone number is added");
+		
 		enterTextIn(driver, phoneNumType, oCISPageDTO.phoneNumType, "Phone Num Type");
 		enterTextIn(driver, areaCode, oCISPageDTO.areaCode, "Area Code");
 		enterTextIn(driver, phoneNum, oCISPageDTO.phoneNumber, "Phone number");
-		ExtentReporter.logger.log(LogStatus.INFO, "Organization is added");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click [Save and Close]. Organization is added");
 		click(driver, Save, "Save button");
 		return new CISPage(driver);
 	}

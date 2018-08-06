@@ -775,10 +775,11 @@ public class RateApolicyPage extends CommonAction {
 	public PolicyQuotePage rateFunctionality(String policyNo) throws Exception {
 
 		Thread.sleep(1000);
-		clickButton(driver, rateBtn, "Rate Tab");
-		ExtentReporter.logger.log(LogStatus.INFO, "Click [Rate].");
+		
+		ExtentReporter.logger.log(LogStatus.INFO, "Click green rate button in center of screen. Rate window validates and save, View Premium pop up window displays with correct rates");
+		clickButton(driver, rateBtn, "Rate");
+		Thread.sleep(4000);
 		invisibilityOfLoader(driver);
-		Thread.sleep(3000);
 		// If Product Notify Window appears then it will switch to window and
 		// select 'Yes' from that window and close window
 		if (verifyProductNotifyWindowDisplayed(policyNo).equals("true")) {
@@ -794,7 +795,7 @@ public class RateApolicyPage extends CommonAction {
 			}
 			// If Product Notify Window does not appear it will log info in
 			// report and move ahead.
-		} else {
+		} /*else {
 			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window is NOT dispalyed to user.");
 		}*/
 		

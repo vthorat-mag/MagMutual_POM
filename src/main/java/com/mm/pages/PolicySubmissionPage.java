@@ -90,11 +90,10 @@ public class PolicySubmissionPage extends CommonAction {
 	// Update policy details for a policy and change policy phase from
 	// Submission to Indication.
 	public PolicyIndicationPage updatePolicyDetails() throws Exception {
-		invisibilityOfLoader(driver);
 		Thread.sleep(5000);
-		//TODO-add get page title
-		//waitForElementToLoad(driver, 20, Phase);
-	    //Change policy type to Indication and add organization type as Hospital from DDL
+		invisibilityOfLoader(driver);
+		//getPageTitle(driver, expectedPageTitle)
+		//Change policy type to Indication and add organization type as Hospital from DDL
 		selectDropdownByValue(driver, Phase, policysubmissionpageDTO.policyPhase, "Phase");
 		selectDropdownByValue(driver, Org_Type, policysubmissionpageDTO.organisationType, "Organisation Type");
 		Thread.sleep(2000);

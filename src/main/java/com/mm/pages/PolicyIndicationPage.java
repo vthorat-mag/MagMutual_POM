@@ -26,7 +26,7 @@ public class PolicyIndicationPage extends CommonAction {
 	String ExcelPath = System.getProperty("user.dir") + "\\src\\main\\resources\\QA_Form_Data.xlsx";
 
 	@FindBy(id = "PM_COMMON_TABS_SAVEWIP")
-	WebElement Save_WIP;
+	WebElement saveWIP;
 
 	@FindBy(id = "PM_QT_UNDW_PUP")
 	WebElement Underwriter;
@@ -258,7 +258,9 @@ public class PolicyIndicationPage extends CommonAction {
 	public List<WebElement> open_Underwriter() throws InterruptedException {
 
 		ExtentReporter.logger.log(LogStatus.INFO, "Underwriter window displays");
-		waitForElementToLoad(driver, 30, Underwriter);
+		//waitForElementToLoad(driver, 30, Underwriter);
+		Thread.sleep(3000);
+		invisibilityOfLoader(driver);
 		clickButton(driver, Underwriter, "Underwriter button");
 		Thread.sleep(4000);
 
@@ -274,7 +276,7 @@ public class PolicyIndicationPage extends CommonAction {
 		getPageTitle(driver, maintainUnderwritingTeamPageTitle);
 
 		// Get count of underwriterNames from excel file
-		for (int underwritercount = 0; underwritercount < hospitalIndicationDTO.underwriterName.size()/3; underwritercount++) {
+		for (int underwritercount = 0; underwritercount < hospitalIndicationDTO.underwriterName.size()/2; underwritercount++) {
 
 			ExtentReporter.logger.log(LogStatus.INFO, "Add Underwriter window displays");
 			waitForElementToLoad(driver, 30, Add_Underwriter);
@@ -350,7 +352,7 @@ public class PolicyIndicationPage extends CommonAction {
 		switchToParentWindowfromframe(driver);
 		Thread.sleep(3000);
 		ExtentReporter.logger.log(LogStatus.INFO, "WIP is saved");
-		click(driver, Save_WIP, "Save WIP button");
+		click(driver, saveWIP, "Save WIP button");
 		return new PolicyIndicationPage(driver);
 	}
 
@@ -446,7 +448,7 @@ public class PolicyIndicationPage extends CommonAction {
 						// Add Retro date and premium amount for the selected
 						// coverage
 						if (Retro_Date.isDisplayed()) {
-							clearTextBox(driver, coverageLimitCode,"Coverage Limit Code");
+							//clearTextBox(driver, coverageLimitCode,"Coverage Limit Code");
 							selectDropdownByVisibleText(driver, coverageLimitCode, hospitalIndicationDTO.coverageLimit, "Coverage Limit Code");
 							clearTextBox(driver, Premium, "Premium Amount");
 							enterDataIn(driver, Premium, hospitalIndicationDTO.premiumAmount.get(retroDateCount),
@@ -528,6 +530,7 @@ public class PolicyIndicationPage extends CommonAction {
 
 		// Get coverage count from the excel sheet column
 		for (int coverageCount = 0; coverageCount < hospitalIndicationDTO.coverage.size(); coverageCount++) {
+			invisibilityOfLoader(driver);
 			Thread.sleep(5000);
 			// Get coverage count from the grid list on coverage page
 			for (int i = 0; i < coverageList.size(); i++) {
@@ -552,6 +555,8 @@ public class PolicyIndicationPage extends CommonAction {
 						Thread.sleep(1000);
 						enterDataIn(driver, Retro_Date, hospitalIndicationDTO.retroDate.get(coverageCount),
 								"Retro Date");
+						clickButton(driver, saveWIP, "Save WIP"); //Not in rally test steps
+						invisibilityOfLoader(driver);
 
 					} // else add only premium for selected coverage
 					else if (Premium.isDisplayed()) {
@@ -570,7 +575,8 @@ public class PolicyIndicationPage extends CommonAction {
 		for (int coverageTitleCount = 0; coverageTitleCount < hospitalIndicationDTO.coverageTitle
 				.size(); coverageTitleCount++) {
 			String ProfLiabCoverage="Prof Liab-Out";
-			Thread.sleep(4000);
+			Thread.sleep(5000);
+			
 			// Get coverage count from the grid on coverage page
 			for (int i = 0; i < coverageList.size(); i++) {
 				// Compare if the coverage from excel sheet column is same as
@@ -583,18 +589,22 @@ public class PolicyIndicationPage extends CommonAction {
 					// select the coverage if it matches
 					selectValue(driver, coverageList.get(i),
 							hospitalIndicationDTO.coverageTitle.get(coverageTitleCount));
+					
 					// Assert.assertTrue(coverageList.get(i).isSelected(),coverageList.get(i)+"is
 					// NOt selected");
-					// TODO - change hard coded value in if statement
+					
 					// Add Retro Date for selected coverage except "Prof
 					// Liab-Out".
-					if (hospitalIndicationDTO.coverageTitle.get(coverageTitleCount) != ProfLiabCoverage) {
+					if (!hospitalIndicationDTO.coverageTitle.get(coverageTitleCount).trim().equals(ProfLiabCoverage)) {
 						try {
 							Thread.sleep(1000);
 							if (Retro_Date.isDisplayed()) {
-								Thread.sleep(1000);
+								Thread.sleep(2000);
 								enterDataIn(driver, Retro_Date,
 										hospitalIndicationDTO.retroDateValue.get(coverageTitleCount), "Retro Date");
+								verifyValueFromField(driver, Retro_Date,hospitalIndicationDTO.retroDateValue.get(coverageTitleCount), "value", "Retro Date");
+								clickButton(driver, saveWIP, "Save WIP"); //Not in rally test steps
+								invisibilityOfLoader(driver);
 							}
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -621,7 +631,7 @@ public class PolicyIndicationPage extends CommonAction {
 		clickButton(driver, Add_CoverageClass, "Add button for coverage class");
 		Thread.sleep(4000);
 		switchToFrameUsingId(driver, "popupframe1");
-		Thread.sleep(4000);
+		Thread.sleep(3000);
 		// Search the coverage class from pop up window and if it matches select
 		// check box
 		for (int i = 0; i < selectCoverageClassChkBox.size(); i++) {
@@ -698,7 +708,7 @@ public class PolicyIndicationPage extends CommonAction {
 			clickButton(driver, manuscriptPageCloseBtn, "Manu Script page Close");
 			switchToParentWindowfromframe(driver);
 			Thread.sleep(2000);
-			click(driver, Save_WIP, "Save WIP");
+			click(driver, saveWIP, "Save WIP");
 			Thread.sleep(2000);
 		}
 		return new PolicyIndicationPage(driver);
@@ -726,10 +736,10 @@ public class PolicyIndicationPage extends CommonAction {
 				.size() / 3; sharedGroupCoverageCount++) {
 
 			// Click on 'Add' button from pop up to add shared group
-			Thread.sleep(2000);
+			Thread.sleep(4000);
 			ExtentReporter.logger.log(LogStatus.INFO, "Line is added to Shared Group");
 			click(driver, Add_Shared_Group, "Add button for Shared group");
-			Thread.sleep(1000);
+			Thread.sleep(2000);
 			selectDropdownByVisibleText(driver, Desc_Shared_Group,
 					hospitalIndicationDTO.sharedGroupDescription.get(sharedGroupCoverageCount),
 					"Shared group description");
@@ -740,6 +750,7 @@ public class PolicyIndicationPage extends CommonAction {
 			ExtentReporter.logger.log(LogStatus.INFO, "Select Shared Group Detail window displays");
 			click(driver, Add_Shared_Group_Details, "Add button for Shared Group details");
 			Thread.sleep(3000);
+			invisibilityOfLoader(driver);
 			List<WebElement> firstName = driver.findElements(By.id("popupframe1"));
 			driver.switchTo().frame(firstName.get(0));
 			Thread.sleep(2000);
@@ -779,6 +790,8 @@ public class PolicyIndicationPage extends CommonAction {
 		click(driver, Save_Limit_Sharing, "Save button");
 		ExtentReporter.logger.log(LogStatus.INFO, "Limit Sharing Window Closes");
 		click(driver, Close_Limit_Sharing, "Close button");
+		Thread.sleep(2000);
+		
 		switchToParentWindowfromframe(driver);
 		return new RateApolicyPage(driver);
 	}

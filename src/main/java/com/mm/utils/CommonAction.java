@@ -113,14 +113,14 @@ public class CommonAction implements CommonActionInterface {
 		}
 	}
 	
-	public void  captureScreenshot(WebDriver driver) throws IOException 
+	public void  captureScreenshot(WebDriver driver,String imageFileName) throws IOException 
 	{
 		CommonUtilities commUtil = new CommonUtilities();
 		TakesScreenshot ts=(TakesScreenshot)driver;
 		
 		File source =ts.getScreenshotAs(OutputType.FILE);
 		
-		File destination=new File("C://SmokeTestFM//"+commUtil.getSystemDatemmddyyyy()+"_CreateFMAccount.png");
+		File destination=new File("C://ScreenShotsSmokeTest//"+commUtil.getSystemDatemmddyyyy()+"_"+imageFileName+".png");
 				
 		FileUtils.copyFile(source, destination);
 		
@@ -144,8 +144,8 @@ public class CommonAction implements CommonActionInterface {
 
 		return selectedDDLValue;
 	}
-	public String randomNumGenerator() {
-		return RandomStringUtils.random(3, "1234567890");
+	public String randomNumGenerator(int digit, String numbers) {
+		return RandomStringUtils.random(digit,numbers);
 	}
 
 
@@ -183,12 +183,13 @@ public class CommonAction implements CommonActionInterface {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, Medium);
 			wait.until(ExpectedConditions.elementToBeClickable(pageElement));
-			JavascriptExecutor js = (JavascriptExecutor) driver;
 			Assert.assertTrue(pageElement.isDisplayed(), buttonName + " button is Not displayed on screen.");
+			JavascriptExecutor js = (JavascriptExecutor) driver;
 			js.executeScript("arguments[0].click();", pageElement);
 			ExtentReporter.logger.log(LogStatus.PASS, "clicked on button / Link- " + buttonName);
 		} catch (Exception e) {
 			ExtentReporter.logger.log(LogStatus.FAIL, buttonName + " element is not found.");
+			Assert.assertTrue(false,"Failed to click on "+pageElement);
 		}
 	}
 
@@ -226,7 +227,7 @@ public class CommonAction implements CommonActionInterface {
 				if ((getPageTitleFromPage.get(i).getAttribute("innerHTML").trim().equals(expectedPageTitle))) {
 					ExtentReporter.logger.log(LogStatus.PASS,
 							getPageTitleFromPage.get(i).getAttribute("innerHTML").trim()
-							+ " is sucessfully displayed.");
+							+ " page is sucessfully displayed.");
 					break;
 				}
 			}
@@ -281,7 +282,7 @@ public class CommonAction implements CommonActionInterface {
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
 			Assert.assertTrue(pageElement.isDisplayed(), textField + " is displayed");
 			pageElement.clear();
-			ExtentReporter.logger.log(LogStatus.PASS, "Cleared the initial contents from " + textField);
+			ExtentReporter.logger.log(LogStatus.PASS, "Cleared the initial contents from field" + textField);
 		} catch (Exception e) {
 			e.printStackTrace();
 			ExtentReporter.logger.log(LogStatus.FAIL, textField + " element is not found.");
@@ -303,6 +304,7 @@ public class CommonAction implements CommonActionInterface {
 		} catch (Exception e) {
 			e.printStackTrace();
 			ExtentReporter.logger.log(LogStatus.FAIL, ElementName + " element is not found on page.");
+			Assert.assertTrue(false,"Failed to click on " +pageElement);
 		}
 	}
 
@@ -425,8 +427,8 @@ public class CommonAction implements CommonActionInterface {
 
 	public void acceptAlert(WebDriver driver) {
 
-		Alert saveAlert = driver.switchTo().alert();
-		saveAlert.accept();
+		Alert alert = driver.switchTo().alert();
+		alert.accept();
 	}
 
 	public static boolean isAlertPresent(WebDriver driver) throws InterruptedException{
