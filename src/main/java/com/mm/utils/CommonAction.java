@@ -582,7 +582,7 @@ public class CommonAction implements CommonActionInterface {
 			WebElement saveOKBtn, WebElement exitOK, String saveAsValue,String policyNo)
 			throws Exception {
 		Thread.sleep(2000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options & verify Save as window displays.");
 		waitForElementToLoad(driver, 15, saveOptionBtn);
 		clickButton(driver, saveOptionBtn, "Save Option");
 		invisibilityOfLoader(driver);
@@ -592,7 +592,7 @@ public class CommonAction implements CommonActionInterface {
 		switchToFrameUsingElement(driver, iframeEle);
 		getPageTitle(driver, "Save As");
 		selectDropdownByValue(driver, saveAsDropDown, saveAsValue, "Selected " + saveAsValue);
-		ExtentReporter.logger.log(LogStatus.INFO, "Select " + saveAsValue + " Click [OK]");
+		ExtentReporter.logger.log(LogStatus.INFO, "Select " + saveAsValue + " Click [OK]& verify Message is closed and WIP is saved as"+ saveAsValue);
 		clickButton(driver, saveOKBtn, "Save");
 		invisibilityOfLoader(driver);
 		Thread.sleep(5000);
@@ -609,6 +609,7 @@ public class CommonAction implements CommonActionInterface {
 	}
 
 	public void policySearch(WebDriver driver, String policyNo, WebElement policySearchTxtBox, WebElement searchBtn,WebElement policyList) {
+		ExtentReporter.logger.log(LogStatus.PASS, "Enter in active Hospital/Facility policy number in Enter Policy # entry box from previous Indication test case, Click Search. Policy Will display" );
 		clearTextBox(driver, policySearchTxtBox, "Enter Policy text field");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click policy in right corner of screen");
 		enterTextIn(driver, policySearchTxtBox, policyNo, "Enter Policy text field");

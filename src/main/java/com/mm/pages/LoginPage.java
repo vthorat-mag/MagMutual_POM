@@ -49,7 +49,7 @@ public class LoginPage extends CommonAction{
 		ExtentReporter.logger.log(LogStatus.INFO, "Accessing the URL - http://oasiscloud2017t:8081/oas17bts/CS/login.jsp");
 		driver.manage().deleteAllCookies();
 		driver.manage().window().maximize();
-		
+		ExtentReporter.logger.log(LogStatus.PASS, "Log into QA Environment Enter Username: Enter Password: And verifyt user sucessfully loggedIn.");
 		//Entering User Name.
 		try{
 			Assert.assertTrue(userName.isDisplayed(), "User Name Field is displayed.");

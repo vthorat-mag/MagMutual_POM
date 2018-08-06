@@ -44,6 +44,7 @@ public class PDFReader extends CommonAction {
 	public PDFReader savePDF() throws IOException, InterruptedException {
 		//invisibilityOfLoader(driver);
 		Thread.sleep(6000);
+		ExtentReporter.logger.log(LogStatus.INFO, "Click the Save button on the PDF to save the results & verify PDF is saved");
 		String[] savePDFPath = 
 				{System.getProperty("user.dir") + "\\src\\main\\resources\\StoredPDF\\pdfDocument.pdf"};
 		String[] executionPath = {System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\savePdf.exe"};

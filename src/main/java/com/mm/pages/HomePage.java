@@ -173,7 +173,7 @@ public class HomePage extends CommonAction {
 	// Navigate to policy page from Policy tab.
 	public HomePage navigateToPolicyPage() throws Exception {
 		verifyLogoIsAvailable();
-		ExtentReporter.logger.log(LogStatus.INFO, "Search Policy Screen is opened");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click policy in right corner of screen & verify search Policy Screen is opened");
 		waitForElementToLoad(driver, 10, Policy_Tab_Home);
 		click(driver, Policy_Tab_Home, "Policy tab");
 		Thread.sleep(2000);
