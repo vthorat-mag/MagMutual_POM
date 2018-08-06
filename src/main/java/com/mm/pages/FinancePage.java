@@ -8,6 +8,7 @@ import java.util.Date;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.commons.exec.util.StringUtils;
 import org.apache.http.impl.client.EntityEnclosingRequestWrapper;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -26,6 +27,8 @@ import com.mm.utils.ExcelUtil;
 import com.mm.utils.ExtentReporter;
 import com.mm.utils.PDFReader;
 import com.relevantcodes.extentreports.LogStatus;
+
+import bsh.StringUtil;
 
 public class FinancePage extends CommonAction {
 
@@ -87,7 +90,7 @@ public class FinancePage extends CommonAction {
 	@FindBy(id = "CACCOUNTNO")
 	WebElement firstAccount;
 
-	@FindBy(xpath = "//a[@id='URL_CACCOUNTNO']//span")
+	@FindBy(id="CACCOUNTNO")
 	List<WebElement> accountNumList;
 
 	@FindBy(xpath = "//li[@id='FM_BILLING_ADMIN']//a[@class='fNiv isParent']//span")
@@ -137,6 +140,16 @@ public class FinancePage extends CommonAction {
 
 	@FindBy(xpath = "//*[@id = 'btnSaveAsCSV'] | //input[@name='btnSaveAsCSV']")
 	List<WebElement> exportExcelLink;
+	
+	@FindBy(id = "CPRODUCTCOVERAGEDESC")
+	List<WebElement> coverageList;
+
+	@FindBy(xpath = "//select[@id='PM_POLICY_FOLDER_AG'] | //select[@id='PM_QT_POLICY_FOLDER_AG']")
+	WebElement policyActionDDL;
+	
+	
+	/*@FindBy(xpath = "//table[@id='coverageListGrid']//tbody//td//div[@id='CPRODUCTCOVERAGEDESC']")
+	List<WebElement> coverageList;*/
 	
 	@FindBy(name = "cancellationDate")
 	WebElement cancelDateOnCancelPopUp;
@@ -261,7 +274,6 @@ public class FinancePage extends CommonAction {
 	@FindBy(id = "FM_MAINT_ACCT_SAVE")
 	WebElement saveMaintAction;
 
-	//@FindBy(xpath = "//span[@class='tabWithNoDropDownImage']")
 	@FindBy(id = "FM_FULL_INQ_RECV_TAB")
 	WebElement receivableTab;
 	
@@ -289,12 +301,6 @@ public class FinancePage extends CommonAction {
 	@FindBy(id = "FM_FULL_INQ_ACC_INV")
 	WebElement invoicesButton;
 
-	@FindBy(id = "CPRODUCTCOVERAGEDESC")
-	List<WebElement> coverageList;
-
-	@FindBy(xpath = "//select[@id='PM_POLICY_FOLDER_AG'] | //select[@id='PM_QT_POLICY_FOLDER_AG']")
-	WebElement policyActionDDL;
-
 	@FindBy(name = "effectiveFromDate")
 	WebElement effectiveFromDate;
 
@@ -316,7 +322,6 @@ public class FinancePage extends CommonAction {
 	
 	public FinancePage searchAccountUsingSearchCriteria() throws Exception{
 		
-		getPageTitle(driver, accountSearchPageTitle);
 		enterTextIn(driver, accountHolder,financePageDTO.accountHolderName, "Account Holder");
 		clickButton(driver, searchBtn, "Search");
 		invisibilityOfLoader(driver);
@@ -324,17 +329,18 @@ public class FinancePage extends CommonAction {
 	}
 	
 	
-	public void selectLastAccountFromAccountList(){
-		
-		int lastAccountFromList=accountNumList.size();
+	public FinancePage selectLastAccountFromAccountList() throws Exception{
+		Thread.sleep(3000);
+		int lastAccountFromList=(accountNumList.size()-1);
 		
 		selectValue(driver, accountNumList.get(lastAccountFromList),
 				"Account Number " + accountNumList.get(lastAccountFromList).getAttribute("innerHTML").trim());
 		invisibilityOfLoader(driver);
+		return new FinancePage(driver);
 	}
 	
-	
-	public void maintainAccount() throws InterruptedException {
+	//Select Maintain Account menu from Account menu list and edit the account information
+	public FinancePage maintainAccount() throws Exception {
 
 		Thread.sleep(2000);
 		Actions act = new Actions(driver);
@@ -343,13 +349,34 @@ public class FinancePage extends CommonAction {
 		jse.executeScript("arguments[0].click();", maintainAccount);
 
 		Thread.sleep(2000);
-		selectDropdownByVisibleText(driver, billingFrequencyDDL, "Bi-Monthly", "Billing Frequency");
+		selectDropdownByVisibleText(driver, billingFrequencyDDL, financePageDTO.billingFrequency, "Billing Frequency");
 		clearTextBox(driver, startDate, "Start Date");
-		enterDataIn(driver, startDate, "0301", "Start Date");
-		clearTextBox(driver, leadDays, "Lead Days");
-		enterDataIn(driver, leadDays, "9", "Lead Days");
-		clickButton(driver, saveMaintAction, "Save");
+		CommonUtilities comUtil = new CommonUtilities();
+		String sysDate=comUtil.getSystemDatemmddyyyy();
+		String todaysdate = sysDate.substring(0, 4);
+		//String today=StringUtils.substring(sysDate, 0, 4);
+		enterDataIn(driver, startDate, todaysdate, "Start Date");
+		
+		int leadDaysValue=Integer.valueOf(leadDays.getAttribute("value"));
+		int randomNewValue =Integer.valueOf(randomNumGenerator(1,"123456789"));
 
+		if(randomNewValue==leadDaysValue){
+			randomNewValue++;
+		if(randomNewValue >10){
+			randomNewValue=1;
+		}
+		}
+		
+		String leadDaysNewValue =Integer.toString(randomNewValue);
+		clearTextBox(driver, leadDays, "Lead Days");
+		enterDataIn(driver, leadDays, leadDaysNewValue, "Lead Days");
+		clickButton(driver, saveMaintAction, "Save");
+		Thread.sleep(3000);
+		if(isAlertPresent(driver)){
+			acceptAlert(driver);
+		}
+		
+		return new FinancePage(driver);
 	}
 
 	// Search Account from Search Account text field on Finance Home Page.
@@ -380,6 +407,7 @@ public class FinancePage extends CommonAction {
 		return new FinancePage(driver);
 	}
 
+	
 	public FinancePage onDemandInvoice() throws Exception {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Billing Admin>On Demand Invoice.");
 		navigatetoMenuItemPage(driver, billingAdminMenu, onDemandInvoiceMenuOption);
@@ -834,9 +862,10 @@ public class FinancePage extends CommonAction {
 		return new FinancePage(driver);
 	}
 	
-	public void captureSaveScreenshotofMantainAccountpage() throws IOException
+	public void captureSaveScreenshotofMantainAccountpage() throws Exception
 	{
-		captureScreenshot(driver);
+		invisibilityOfLoader(driver);
+		captureScreenshot(driver, financePageDTO.screenShotName);
 	}
 	
 }

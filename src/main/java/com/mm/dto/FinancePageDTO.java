@@ -6,6 +6,10 @@ import MMTestCase.SmokeTestCase;
 
 public class FinancePageDTO {
 
+	public String screenShotName;
+	public String billingFrequency;
+	public String AccountType;
+	public String LastOrgName;
 	public String policyNum;
 	public Object currentBalance;
 	public String accountNumber;
@@ -35,7 +39,6 @@ public class FinancePageDTO {
 	public String coverageNameFromGrid;
 	public String retroDate;
 	public String effectiveDate;
-	public String policyAction;
 	public String endorsementReason;
 	public String endorsementComment;
 	public String accountHolderName;

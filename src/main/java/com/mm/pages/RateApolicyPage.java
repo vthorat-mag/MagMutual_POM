@@ -754,12 +754,41 @@ public class RateApolicyPage extends CommonAction {
 
 	// If Product Notify Window appears then it will switch to window and
 	// select 'Yes' from that window and close window
-	public void handleProducNotifyWindow(String policyNo) {
+	public void handleProducNotifyWindow(String policyNo)
+	{
+				if (verifyProductNotifyWindowDisplayed(policyNo).equals("true")) {
+					try {
+						selectDropdownByValue(driver, productNotifyDropDown, rateApolicyPageDTO.productNotifyValue,
+								"product notify");
+						Thread.sleep(3000);
+						clickButton(driver, prodNotifyClose, "Product Notify Close");
+						ExtentReporter.logger.log(LogStatus.PASS, "Product Notify Window is dispalyed to user.");
+						ExtentReporter.logger.log(LogStatus.PASS, " Yes selected from Product Notify dorp down.");
+					} catch (Exception e) {
+						ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window is NOT dispalyed to user.");
+					}
+					// If Product Notify Window does not appear it will log info in
+					// report and move ahead.
+				} else {
+					ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window is NOT dispalyed to user.");
+				}
+	}
+
+    
+    // Rate a functionality flow.
+	public PolicyQuotePage rateFunctionality(String policyNo) throws Exception {
+		Thread.sleep(1000);
+		ExtentReporter.logger.log(LogStatus.INFO, "Click green rate button in center of screen. Rate window validates and save, View Premium pop up window displays with correct rates");
+    clickButton(driver, rateBtn, "Rate Tab");
+		invisibilityOfLoader(driver);
+		Thread.sleep(3000);
+		// If Product Notify Window appears then it will switch to window and
+		// select 'Yes' from that window and close window
 		if (verifyProductNotifyWindowDisplayed(policyNo).equals("true")) {
 			try {
 				selectDropdownByValue(driver, productNotifyDropDown, rateApolicyPageDTO.productNotifyValue,
 						"product notify");
-				Thread.sleep(3000);
+				Thread.sleep(1000);
 				clickButton(driver, prodNotifyClose, "Product Notify Close");
 				ExtentReporter.logger.log(LogStatus.PASS, "Product Notify Window is dispalyed to user.");
 				ExtentReporter.logger.log(LogStatus.PASS, " Yes selected from Product Notify dorp down.");
@@ -771,24 +800,13 @@ public class RateApolicyPage extends CommonAction {
 		} else {
 			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window is NOT dispalyed to user.");
 		}
-	}
-
-	// Rate a functionality flow.
-	public PolicyQuotePage rateFunctionality(String policyNo) throws Exception {
-		invisibilityOfLoader(driver);
-		Thread.sleep(1000);
-		clickButton(driver, rateBtn, "Rate Tab");
-		ExtentReporter.logger.log(LogStatus.INFO, "Click [Rate] & verify & verify Rate window opens.");
-		Thread.sleep(5000);
-
-		handleProducNotifyWindow(policyNo);
-		Thread.sleep(10000);
+		Thread.sleep(2000);
 		switchToParentWindowfromframe(driver);
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]")));
 		Thread.sleep(2000);
-		// Close the View Premium window
-		ExtentReporter.logger.log(LogStatus.INFO, "Click [Close] and ok & verify Window closes.");
+		//Close the View Premium window
+		ExtentReporter.logger.log(LogStatus.INFO, "Click [Close]");
 		clickButton(driver, closeBtnOnViewPremiumPopup, "Close");
 		invisibilityOfLoader(driver);
 		switchToParentWindowfromframe(driver);
@@ -799,6 +817,7 @@ public class RateApolicyPage extends CommonAction {
 		switchToParentWindowfromframe(driver);
 		return new PolicyQuotePage(driver);
 	}
+
 
 	// PDF verification flow.
 	public RateApolicyPage pdfVerify() throws Exception {
