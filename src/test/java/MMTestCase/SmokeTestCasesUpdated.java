@@ -257,7 +257,7 @@ public class SmokeTestCasesUpdated {
 		PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
 		String policyNumber = policybinderpage.policyNo();
 
-		policybinderpage.endorsementFromActionDropDown().endorsPolicy(policyNumber).identifyPhase()
+		policybinderpage.endorsementFromActionDropDown().endorsePolicy(policyNumber).identifyPhase()
 				.rateFunctionality(policyNumber).saveOption(policyNumber).clickPreviewTab(policybinderpage.policyNo())
 				.savePDF().verifyPdfContent();
 		exlUtil.writeData("TC42399", "PolicyNum", policyNumber, 1, ExcelPath);

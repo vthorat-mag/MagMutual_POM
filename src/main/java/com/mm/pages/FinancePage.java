@@ -319,18 +319,20 @@ public class FinancePage extends CommonAction {
 		financePageDTO = new FinancePageDTO();
 	}
 
-	
+	//Search the account number using Account Holder name
 	public FinancePage searchAccountUsingSearchCriteria() throws Exception{
 		
+		ExtentReporter.logger.log(LogStatus.INFO, "Using the account holder from TC42251"+" Enter name "+financePageDTO.accountHolderName+" in accountholder search box. Click [Search]. Verify Search Results are displayed");
 		enterTextIn(driver, accountHolder,financePageDTO.accountHolderName, "Account Holder");
 		clickButton(driver, searchBtn, "Search");
 		invisibilityOfLoader(driver);
 		return new FinancePage(driver);
 	}
 	
-	
+	//Select the last account from the account list shown in search results
 	public FinancePage selectLastAccountFromAccountList() throws Exception{
 		Thread.sleep(3000);
+		ExtentReporter.logger.log(LogStatus.INFO, "Click on the last account number. Verify All Transaction Inquiry screen opens");
 		int lastAccountFromList=(accountNumList.size()-1);
 		
 		selectValue(driver, accountNumList.get(lastAccountFromList),
@@ -343,35 +345,49 @@ public class FinancePage extends CommonAction {
 	public FinancePage maintainAccount() throws Exception {
 
 		Thread.sleep(2000);
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Account>Maintain Account. Verify Maintain Account page is opened");
+		//Hover over Account tab and select maintainAccount menu option
 		Actions act = new Actions(driver);
 		act.moveToElement(accountMenuTab).build().perform();
 		JavascriptExecutor jse = (JavascriptExecutor) driver;
 		jse.executeScript("arguments[0].click();", maintainAccount);
-
+		ExtentReporter.logger.log(LogStatus.INFO, "Select Billing Frequency DDL and change from current monthly to new quarterly. Verify Billing Frequency is changed quarterly");
 		Thread.sleep(2000);
 		selectDropdownByVisibleText(driver, billingFrequencyDDL, financePageDTO.billingFrequency, "Billing Frequency");
+		
+		//Start date is the month and day of the current date i.e. MMdd
+		ExtentReporter.logger.log(LogStatus.INFO, "Change Start date (mmdd) Example 0101 to currentdate(format has to be 0000). Verify Start date is changed to current date");
 		clearTextBox(driver, startDate, "Start Date");
 		CommonUtilities comUtil = new CommonUtilities();
 		String sysDate=comUtil.getSystemDatemmddyyyy();
 		String todaysdate = sysDate.substring(0, 4);
-		//String today=StringUtils.substring(sysDate, 0, 4);
 		enterDataIn(driver, startDate, todaysdate, "Start Date");
-		
+		ExtentReporter.logger.log(LogStatus.INFO, "Change Lead Days from current number to another number accordingly(example 1 to 10). Verify Lead days is changed to different number");
+		//convert lead days field current value and random generated value from string to int for comparison
 		int leadDaysValue=Integer.valueOf(leadDays.getAttribute("value"));
 		int randomNewValue =Integer.valueOf(randomNumGenerator(1,"123456789"));
 
+		//New value to be entered (randomNewValue) and current lead days value should be different and between 1 to 10.
 		if(randomNewValue==leadDaysValue){
 			randomNewValue++;
 		if(randomNewValue >10){
 			randomNewValue=1;
+			}
 		}
-		}
-		
+		//covert new value to string
 		String leadDaysNewValue =Integer.toString(randomNewValue);
+		
 		clearTextBox(driver, leadDays, "Lead Days");
 		enterDataIn(driver, leadDays, leadDaysNewValue, "Lead Days");
+		return new FinancePage(driver);
+	}
+	
+	//Save the changes made to Account in maintain Account method.
+	public FinancePage saveAccountInformation() throws Exception{
+		ExtentReporter.logger.log(LogStatus.INFO, "Click [Save]. Verify Account Information is saved message appears");
 		clickButton(driver, saveMaintAction, "Save");
 		Thread.sleep(3000);
+		ExtentReporter.logger.log(LogStatus.INFO,"Click [OK]. Verify Message is closed and changes are saved");
 		if(isAlertPresent(driver)){
 			acceptAlert(driver);
 		}
@@ -698,11 +714,6 @@ public class FinancePage extends CommonAction {
 		return new HomePage(driver);
 	}
 	
-	//This method will navigate to PolicyPage.
-	public void navigateTOPolicyPageFromHeader()
-	{
-		
-	}
 	
 	//below method will cancel UMB_PL_Coverage.
 	public FinancePage selectUMBCoverage() throws Exception
@@ -864,8 +875,10 @@ public class FinancePage extends CommonAction {
 	
 	public void captureSaveScreenshotofMantainAccountpage() throws Exception
 	{
+		ExtentReporter.logger.log(LogStatus.INFO, "Take screenshot of account, save the name as "+financePageDTO.screenShotName+" in folder SmokeTestFM");
 		invisibilityOfLoader(driver);
 		captureScreenshot(driver, financePageDTO.screenShotName);
+		ExtentReporter.logger.log(LogStatus.INFO, "Upload screenshot to Rally");
 	}
 	
 }

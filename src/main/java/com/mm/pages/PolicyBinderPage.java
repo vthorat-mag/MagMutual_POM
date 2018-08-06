@@ -296,13 +296,13 @@ public class PolicyBinderPage extends CommonAction {
 	}
 
 	public RateApolicyPage endorseAPolicyforRateApolicyPage(String policyNum) throws Exception{
-		endorsPolicy(policyNum);
+		endorsePolicy(policyNum);
 		return new RateApolicyPage(driver);
 	}
 	
 	
 	// Endorse Policy Flow.
-	public PolicyBinderPage endorsPolicy(String policyNum) throws Exception {
+	public PolicyBinderPage endorsePolicy(String policyNum) throws Exception {
 		Thread.sleep(3000);
 		/*switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNum + "')]")));*/
