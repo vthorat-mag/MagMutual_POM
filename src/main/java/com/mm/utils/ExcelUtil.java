@@ -16,6 +16,8 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.relevantcodes.extentreports.LogStatus;
+
 public class ExcelUtil {
 	String xlFilePath = System.getProperty("user.dir")+"\\src\\main\\resources\\Form_Data.xlsx";
 	
@@ -62,7 +64,7 @@ public class ExcelUtil {
 	public void writeData(String testCaseId, String columnName, String cellValue, int rowNum,String saveDataFilePath) throws Exception {
 		String excelFilePath = saveDataFilePath;
 		FileInputStream inputStream;
-
+		ExtentReporter.logger.log(LogStatus.INFO, "Note the policy number to use in the next test case - "+testCaseId);
 		inputStream = new FileInputStream(new File(excelFilePath));
 		try {
 

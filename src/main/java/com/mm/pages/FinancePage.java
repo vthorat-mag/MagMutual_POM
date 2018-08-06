@@ -139,13 +139,14 @@ public class FinancePage extends CommonAction {
 	WebElement jumpButton;
 
 	@FindBy(xpath = "//*[@id = 'btnSaveAsCSV'] | //input[@name='btnSaveAsCSV']")
-	WebElement exportExcelLink;
+	List<WebElement> exportExcelLink;
 	
 	@FindBy(id = "CPRODUCTCOVERAGEDESC")
 	List<WebElement> coverageList;
 
 	@FindBy(xpath = "//select[@id='PM_POLICY_FOLDER_AG'] | //select[@id='PM_QT_POLICY_FOLDER_AG']")
 	WebElement policyActionDDL;
+	
 	
 	/*@FindBy(xpath = "//table[@id='coverageListGrid']//tbody//td//div[@id='CPRODUCTCOVERAGEDESC']")
 	List<WebElement> coverageList;*/
@@ -659,7 +660,7 @@ public class FinancePage extends CommonAction {
 	//this method will download excel sheet
 	public FinancePage downloadExcel(String fileName) throws Exception
 	{
-		clickButton(driver, exportExcelLink, "Export Excel");
+		clickButton(driver, exportExcelLink.get(0), "Export Excel");
 		exlUtil.downloadExcel();
 		copyFile(fileName);
 		return new FinancePage(driver);
@@ -670,7 +671,7 @@ public class FinancePage extends CommonAction {
 		public FinancePage downloadExcelPollTxnInq(String fileName) throws Exception
 		{
 			Thread.sleep(3000);
-			clickButton(driver, exportExcelLink, "Export Excel");
+			clickButton(driver, exportExcelLink.get(1), "Export Excel");
 			exlUtil.downloadExcel();
 			copyFile(fileName);
 			return new FinancePage(driver);
@@ -750,10 +751,10 @@ public class FinancePage extends CommonAction {
 	}
 	
 	//this method will click on preview button.
-	public PDFReader openPDF() throws Exception
+	public PDFReader openPDF(String policyNo) throws Exception
 	{
 		PolicyQuotePage policyquotepage = new PolicyQuotePage(driver);
-		policyquotepage.clickPreviewTab();
+		policyquotepage.clickPreviewTab(policyNo);
 		return new PDFReader(driver);
 	}
 	
@@ -761,7 +762,7 @@ public class FinancePage extends CommonAction {
 	public HomePage savePolicyAsWIP() throws Exception
 	{
 		saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn,Exit_Ok, financePageDTO.saveOption,policyNo);
-		clickButton(driver, exportExcelLink, "Export Excel");
+		clickButton(driver, exportExcelLink.get(0), "Export Excel");
 		exlUtil.downloadExcel();
 		copyFile(alltransactionlistafterpaymentcreditExcelName);
 		return new HomePage(driver);

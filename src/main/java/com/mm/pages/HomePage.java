@@ -104,10 +104,15 @@ public class HomePage extends CommonAction {
 
 	@FindBy(id = "PM_SPOL_SEARCH")
 	WebElement searchCriteria;
+	@FindBy(id = "CPOLICYSTATUSLOVLABEL")
+	List<WebElement> policyStatus;
 
-	//@FindBy(xpath = "//a[@class='gridcontent']//span[@id='CPOLICYNO']") - BTS
-	@FindBy(xpath="//a[@class='gridcontent']//span[@id='CPOLICYNO'] | //a[@id='findPolicyListGrid_CPOLICYNO_0_HREF']")  // QA
+	// @FindBy(xpath = "//a[@class='gridcontent']//span[@id='CPOLICYNO']") - BTS
+	@FindBy(xpath = "//*[@id='findPolicyListGrid_CPOLICYNO_0_HREF'] | //a[@class='gridcontent']//span[@id='CPOLICYNO']")
 	WebElement policyNumFromPolicyCount;
+	
+	@FindBy(id = "CPOLICYNO")
+	List<WebElement> policyName;
 
 	@FindBy(id = "pageTitleForpageHeaderForPolicyFolder") // seperate for BTS and QA
 	WebElement pageHeaderForPolicyFolder; 
@@ -168,10 +173,11 @@ public class HomePage extends CommonAction {
 
 	// Navigate to policy page from Policy tab.
 	public HomePage navigateToPolicyPage() throws Exception {
-		ExtentReporter.logger.log(LogStatus.INFO, "Click policy in right corner of screen. Search Policy Screen is opened");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click policy in right corner of screen & verify search Policy Screen is opened");
 		waitForElementToLoad(driver, 10, Policy_Tab_Home);
 		click(driver, Policy_Tab_Home, "Policy tab");
-		getPageTitle(driver, findPolicyPageTitleActualText);
+		Thread.sleep(2000);
+  	getPageTitle(driver, findPolicyPageTitleActualText);
 		return new HomePage(driver);
 	}
 

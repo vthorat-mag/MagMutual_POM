@@ -448,7 +448,6 @@ public class PolicyIndicationPage extends CommonAction {
 						// Add Retro date and premium amount for the selected
 						// coverage
 						if (Retro_Date.isDisplayed()) {
-							//clearTextBox(driver, coverageLimitCode,"Coverage Limit Code");
 							selectDropdownByVisibleText(driver, coverageLimitCode, hospitalIndicationDTO.coverageLimit, "Coverage Limit Code");
 							clearTextBox(driver, Premium, "Premium Amount");
 							enterDataIn(driver, Premium, hospitalIndicationDTO.premiumAmount.get(retroDateCount),
@@ -589,13 +588,14 @@ public class PolicyIndicationPage extends CommonAction {
 					// select the coverage if it matches
 					selectValue(driver, coverageList.get(i),
 							hospitalIndicationDTO.coverageTitle.get(coverageTitleCount));
-					
+					clickButton(driver, Save_WIP, "Save WIP");
+					invisibilityOfLoader(driver);
+					Thread.sleep(1000);
 					// Assert.assertTrue(coverageList.get(i).isSelected(),coverageList.get(i)+"is
 					// NOt selected");
-					
 					// Add Retro Date for selected coverage except "Prof
 					// Liab-Out".
-					if (!hospitalIndicationDTO.coverageTitle.get(coverageTitleCount).trim().equals(ProfLiabCoverage)) {
+					if (!hospitalIndicationDTO.coverageTitle.get(coverageTitleCount).equals(ProfLiabCoverage)) {
 						try {
 							Thread.sleep(1000);
 							if (Retro_Date.isDisplayed()) {
@@ -603,8 +603,9 @@ public class PolicyIndicationPage extends CommonAction {
 								enterDataIn(driver, Retro_Date,
 										hospitalIndicationDTO.retroDateValue.get(coverageTitleCount), "Retro Date");
 								verifyValueFromField(driver, Retro_Date,hospitalIndicationDTO.retroDateValue.get(coverageTitleCount), "value", "Retro Date");
-								clickButton(driver, saveWIP, "Save WIP"); //Not in rally test steps
+								clickButton(driver, Save_WIP, "Save WIP");
 								invisibilityOfLoader(driver);
+								Thread.sleep(1000);
 							}
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -622,14 +623,15 @@ public class PolicyIndicationPage extends CommonAction {
 	public void addCoverageClass() throws InterruptedException {
 
 		ExtentReporter.logger.log(LogStatus.INFO, "Coverage Class Tab Displays");
-		waitForElementToLoad(driver, 10, Coverage_Class_tab);
+		invisibilityOfLoader(driver);
+		Thread.sleep(2000);
 		clickButton(driver, Coverage_Class_tab, "Coverage class tab");
 		Thread.sleep(3000);
 
 		// Click 'Add' button for coverage class and move to pop up window
 		ExtentReporter.logger.log(LogStatus.INFO, "Select Coverage class window displays");
 		clickButton(driver, Add_CoverageClass, "Add button for coverage class");
-		Thread.sleep(4000);
+		Thread.sleep(2000);
 		switchToFrameUsingId(driver, "popupframe1");
 		Thread.sleep(3000);
 		// Search the coverage class from pop up window and if it matches select
@@ -684,7 +686,7 @@ public class PolicyIndicationPage extends CommonAction {
 					driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
 
 			// Search manuscript Form from pop up window and select check box
-			Thread.sleep(5000);
+			Thread.sleep(3000);
 			for (int i = 0; i < manuscriptAddListformName.size(); i++) {
 				if (manuscriptAddListformName.get(i).getAttribute("innerHTML")
 						.equals(hospitalIndicationDTO.form.get(coverageNameCount))) {
@@ -696,10 +698,10 @@ public class PolicyIndicationPage extends CommonAction {
 			ExtentReporter.logger.log(LogStatus.INFO, "Window closes and forms are attached to Policy");
 			clickButton(driver, manuscriptAddListDoneBtn, "Done");
 			switchToParentWindowfromframe(driver);
-			Thread.sleep(3000);
+			Thread.sleep(2000);
 			switchToFrameUsingElement(driver,
 					driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
-			Thread.sleep(2000);
+			Thread.sleep(1000);
 
 			// Save manuscript and close the window
 			clickButton(driver, manuscriptPageSaveBtn, "Manu Script page Save");
@@ -736,7 +738,7 @@ public class PolicyIndicationPage extends CommonAction {
 				.size() / 3; sharedGroupCoverageCount++) {
 
 			// Click on 'Add' button from pop up to add shared group
-			Thread.sleep(4000);
+			Thread.sleep(5000);
 			ExtentReporter.logger.log(LogStatus.INFO, "Line is added to Shared Group");
 			click(driver, Add_Shared_Group, "Add button for Shared group");
 			Thread.sleep(2000);

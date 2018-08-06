@@ -157,7 +157,7 @@ public class PolicyQuotePage extends CommonAction {
 	public PolicyQuotePage CopyOptionFromActionDropDown() throws Exception
 	{
 		Thread.sleep(6000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy>Ok");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy>Ok and verify Policy displays in Indication phase.");
 		selectDropdownByValue(driver, policyAction, policyquotepageDTO.valueOfPolicyActionCopy, "Policy Action");
 		return new PolicyQuotePage(driver);
 	}
@@ -178,9 +178,10 @@ public class PolicyQuotePage extends CommonAction {
 	public void coverageDetailsSelect() throws InterruptedException
 	{
 		Thread.sleep(3000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Click Coverage tab");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Coverage tab & verify Coverage tab is displayed.");
 		clickButton(driver, coverageTab, "Coverage");
 		Thread.sleep(3000);
+		ExtentReporter.logger.log(LogStatus.INFO, "Select Primary risk in DDL if not selected & verify Primary risk is selected and coverages are displayed.");
 		Assert.assertEquals(coverageList.get(0).getAttribute("innerHTML"),policyquotepageDTO.riskType, "Coverage for Primary Risk is NOT displayed");
 	}
 	
@@ -249,37 +250,7 @@ public class PolicyQuotePage extends CommonAction {
 		Thread.sleep(3000);
 		RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
 		rateapolicypage.rateFunctionality(policyNo);
-		
-/*		ExtentReporter.logger.log(LogStatus.INFO, "Click [Rate]");
-		clickButton(driver, rateBtn, "Rate Tab");
-		invisibilityOfLoader(driver);
-		Thread.sleep(4000);
-		try{
-			switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
-			selectDropdownByValue(driver, productNotifyDropDown, ProductNotifyValue, "product notify");
-			Thread.sleep(1000);
-			clickButton(driver, prodNotifyClose, "Product Notify Close");
-			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window dispalyed to user.");
-			ExtentReporter.logger.log(LogStatus.PASS, " Yes selection from Product Notify dorp down.");
-		}catch (Exception e)
-		{
-			ExtentReporter.logger.log(LogStatus.FAIL, "Product Notify Window is NOT dispalyed to user.");
-		}
-		Thread.sleep(2000);
-		//switchToParentWindowfromframe(driver);
-		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
-		//switchToFrameUsingId(driver,"popupframe1");
-		Thread.sleep(2000);
-		//Verify page title for View Premium[Rate Btn.]
-		getPageTitle(driver, "View Premium");
-		clickButton(driver, closeBtnOnViewPremiumPopup, "Close");
-		Thread.sleep(2000);
-		switchToParentWindowfromframe(driver);
-		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
-		clickButton(driver, okPolicySaveAsWIPPopup, "Ok");
-		ExtentReporter.logger.log(LogStatus.INFO, "Click [Close] click [Ok]");
-		switchToParentWindowfromframe(driver);
-*/		return new PolicyQuotePage(driver);
+		return new PolicyQuotePage(driver);
 	}
 	
 
@@ -287,21 +258,6 @@ public class PolicyQuotePage extends CommonAction {
 	//We need to call multiple times with different values, so we are passing values in test case call 
 	public PolicyQuotePage saveOption(String saveAsPolicyValue,String PolicyNo) throws Exception
 	{
-		/*	Thread.sleep(5000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options");
-		waitForElementToLoad(driver, 15, saveOptionBtn);
-		clickButton(driver, saveOptionBtn, "Save Option");
-		Thread.sleep(4000);
-		switchToFrameUsingId(driver, "popupframe1");
-		getPageTitle(driver, "Save As");
-		selectDropdownByVisibleText(driver, saveAsDropDown, policyquotepageDTO.saveAsPolicyValue, "Selected "+saveAsPolicyValue);
-		//Verify Save as value selected from DDL is correct
-		//verifyValueFromField(driver, saveAsDropDown, policyquotepageDTO.saveAsPolicyValue,"value");
-		ExtentReporter.logger.log(LogStatus.INFO,  "Select "+saveAsPolicyValue+" Click [OK]");
-		clickButton(driver, saveOptionOkBtn, "Save");
-		switchToParentWindowfromframe(driver);
-		Thread.sleep(3000);*/
-		
 		saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn,exitOK, saveAsPolicyValue, PolicyNo);
 		return new PolicyQuotePage(driver);
 }
@@ -341,24 +297,44 @@ public class PolicyQuotePage extends CommonAction {
 	public PolicyQuotePage changePhaseToQuote() throws Exception
 	{
 		Thread.sleep(4000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Change Phase from Indication to Quote");
+		ExtentReporter.logger.log(LogStatus.INFO, "Change Phase from Indication to Quote & verify Phase is changed from Indication to Quote.");
 		selectDropdownByValue(driver, policyPhase, policyquotepageDTO.quotePhaseValue, "Phase");
 		return new PolicyQuotePage(driver);
 	}
 	
-	//Click preview tab.
-	public PDFReader clickPreviewTab() throws InterruptedException
-	{
-		invisibilityOfLoader(driver); 
-		Thread.sleep(3000);
-    	ExtentReporter.logger.log(LogStatus.INFO, "Click [Preview]");
-	//	ExtentReporter.logger.log(LogStatus.INFO, "Verify CHG 08 form is displayed and information that was entered is on form");
-		clickButton(driver, PreviewTab, "Preview");
-		invisibilityOfLoader(driver);
-		Thread.sleep(8000);
-		return new PDFReader(driver);
-	}
+	// Click preview tab.
+		public PDFReader clickPreviewTab(String policyNumber) throws InterruptedException {
+			invisibilityOfLoader(driver);
+			Thread.sleep(3000);
+			ExtentReporter.logger.log(LogStatus.INFO, "Click [Preview]& verify Preview window displays with Form Printing on Quote Form's List");
+			// ExtentReporter.logger.log(LogStatus.INFO, "Verify CHG 08 form is displayed
+			// and information that was entered is on form");
+			clickButton(driver, PreviewTab, "Preview");
+			invisibilityOfLoader(driver);
+			Thread.sleep(10000);
+			verifySaveAsPopUp(policyNumber);
+			Thread.sleep(5000);
+			return new PDFReader(driver);
+		}
 
+		// this method will verify saveAs pop up displayed or not
+		public void verifySaveAsPopUp(String policyNo) {
+			try {
+				WebElement iframeEle = driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]"));
+				if (iframeEle.isDisplayed())
+				{
+					switchToFrameUsingElement(driver,iframeEle);
+					clickButton(driver, okPolicySaveAsWIPPopup, "Ok");
+				}
+				else
+				{
+					ExtentReporter.logger.log(LogStatus.INFO, "Save as Pop up window is not displayed.");
+				}
+
+			} catch (Exception e) {
+				ExtentReporter.logger.log(LogStatus.INFO, "Save as Pop up window is not displayed.");
+			}
+		}
 		
 	//Select the policy Action from DDL
 	public PolicyQuotePage selectPolicyAction() throws Exception{
