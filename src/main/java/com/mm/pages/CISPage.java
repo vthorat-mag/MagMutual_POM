@@ -208,11 +208,13 @@ public class CISPage extends CommonAction {
 		public CISPage searchAndSelectAClientName() throws Exception {
 
 			waitForElementToLoad(driver, 10, clientLastName);
+			ExtentReporter.logger.log(LogStatus.INFO, "Enter "+oCISPageDTO.clientLastName+" in the Last Name field. Enter "+oCISPageDTO.clientFirstName+" in the First Name field"
+
+					+"Click search. Verify Search results returned");
 			enterTextIn(driver, clientLastName, oCISPageDTO.clientLastName, "Last/Org Name");
 			enterTextIn(driver, clientFirstName, oCISPageDTO.clientFirstName, "First Name");
 			Thread.sleep(2000);
 			click(driver, searchButton, "Search");
-			ExtentReporter.logger.log(LogStatus.INFO, "Search results returned");
 			invisibilityOfLoader(driver);
 			Thread.sleep(3000);
 			getPageTitle(driver, EntityListPageTitle);
@@ -233,7 +235,7 @@ public class CISPage extends CommonAction {
 					// name whose id matches
 					if (clientNameEntityList.get(i).getAttribute("innerHTML").trim().equals(oCISPageDTO.clientNameValue)
 							&& clientIDEntityList.get(i).getAttribute("innerHTML").trim().equals(oCISPageDTO.clientIDValue)) {
-						ExtentReporter.logger.log(LogStatus.INFO, "CIS Demographic Client screen opens");
+						ExtentReporter.logger.log(LogStatus.INFO, "Click on "+oCISPageDTO.clientNameValue+". Verify CIS Demographic Client screen opens");
 						click(driver, clientNameEntityList.get(i), oCISPageDTO.clientNameValue);
 						flag = true;
 						break;
@@ -268,7 +270,7 @@ public class CISPage extends CommonAction {
 					for (int k = 0; k < oCISPageDTO.allMenuOptions.size(); k++) {
 
 						// verify if the main tab displayed is selected
-						if (verifyelementDisplay(selectedMainTab) == true) {
+						if (verifyElementDisplays(selectedMainTab) == true) {
 							// Reinitialize the tab menu options elements to avoid
 							// stale element
 							List<WebElement> tabMenuOption1 = driver.findElements(By.xpath(
@@ -279,11 +281,11 @@ public class CISPage extends CommonAction {
 							if (tabMenuOption1.get(j).getAttribute("innerHTML")
 									.equalsIgnoreCase(oCISPageDTO.allMenuOptions.get(k))) {
 								waitForElementToLoad(driver, 10, selectedMainTab);
+								ExtentReporter.logger.log(LogStatus.INFO,"Click on "+oCISPageDTO.mainTabList.get(i)+" drop down and Select "
+								+ oCISPageDTO.allMenuOptions.get(k) + ". Verify " +oCISPageDTO.allMenuOptions.get(k)+" window opens");
 								JavascriptExecutor executor1 = (JavascriptExecutor) driver;
 								// click on tab main tab and then click on tab menu
 								executor1.executeScript("arguments[0].click();", selectedMainTab);
-								ExtentReporter.logger.log(LogStatus.INFO,
-										oCISPageDTO.allMenuOptions.get(k) + " window opens");
 								executor1.executeScript("arguments[0].click();", tabMenuOption1.get(j));
 								invisibilityOfLoader(driver);
 								Thread.sleep(2000);
@@ -296,8 +298,8 @@ public class CISPage extends CommonAction {
 							if (tabMenuOption.get(j).getAttribute("innerHTML").equals(oCISPageDTO.allMenuOptions.get(k))) {
 								// click on tab menu option (when main tab is not in
 								// selected mode)
-								ExtentReporter.logger.log(LogStatus.INFO,
-										oCISPageDTO.allMenuOptions.get(k) + " window opens");
+								ExtentReporter.logger.log(LogStatus.INFO,"Click on "+oCISPageDTO.mainTabList.get(i)+" drop down and Select "
+								+ oCISPageDTO.allMenuOptions.get(k) + ". Verify " +oCISPageDTO.allMenuOptions.get(k)+" window opens");
 								executor.executeScript("arguments[0].click();", tabMenuOption.get(j));
 								invisibilityOfLoader(driver);
 								Thread.sleep(2000);
@@ -327,8 +329,10 @@ public class CISPage extends CommonAction {
 				try {
 					// click on tab name when it matches with name from excel
 					// sheet
+					ExtentReporter.logger.log(LogStatus.INFO,"Click on "+oCISPageDTO.allMenuOptions.get(i)+
+							". Verify " +oCISPageDTO.allMenuOptions.get(i)+" window opens");
+					
 					JavascriptExecutor executor1 = (JavascriptExecutor) driver;
-					ExtentReporter.logger.log(LogStatus.INFO, oCISPageDTO.allMenuOptions.get(i) + " window opens");
 					executor1.executeScript("arguments[0].click();", agencyMainTab);
 					Thread.sleep(2000);
 					// verify the page title when the tab window opens
@@ -373,7 +377,7 @@ public class CISPage extends CommonAction {
 
 	
 	// verify that Menu tab is displayed and return boolean value
-	public Boolean verifyelementDisplay(WebElement pageElement) {
+	public Boolean verifyElementDisplays(WebElement pageElement) {
 		try {
 			if (pageElement.isEnabled())
 				return true;

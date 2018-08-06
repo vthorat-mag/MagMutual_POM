@@ -95,13 +95,15 @@ public class PolicySubmissionPage extends CommonAction {
 		invisibilityOfLoader(driver);
 		//getPageTitle(driver, expectedPageTitle)
 		//Change policy type to Indication and add organization type as Hospital from DDL
+		ExtentReporter.logger.log(LogStatus.INFO, "In Policy Detail tab,Select/Enter the below information:"
+				+ " Phase: Indication, Organization Type: Hospital,Hospital Discovery Period Rating %: 2 "+
+				"Quote Description: Automated Test. Click Save WIP Button. Verify Indication saved as WIP");
 		selectDropdownByValue(driver, Phase, policysubmissionpageDTO.policyPhase, "Phase");
 		selectDropdownByValue(driver, Org_Type, policysubmissionpageDTO.organisationType, "Organisation Type");
 		Thread.sleep(2000);
 		//Add Discovery period rating, Quote Description and save as WIP
 		enterTextIn(driver, Hosp_Disc_Period_Rating,policysubmissionpageDTO.discoveryPeriodRating, "Discovery_Period Rating");
 		enterTextIn(driver, Quote_Description, policysubmissionpageDTO.quoteDescription, "Quote Description");
-		ExtentReporter.logger.log(LogStatus.INFO, "Indication saved as WIP");
 		click(driver, Save_WIP, "Save WIP button");
 		return new PolicyIndicationPage(driver);
 	}

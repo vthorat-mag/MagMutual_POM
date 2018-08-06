@@ -104,8 +104,7 @@ public class SmokeTestCase extends BrowserTypes {
 		testDataMap = excelUtil.testData(method.getName());
 	}
 
-	//TODO-Extent logs
-	//@Test(description = "Claims - Verify that user is allowed to change	Billing Parameter for an Existing Account", groups = {
+	//@Test(description = "Claims - Verify that user is allowed to change Billing Parameter for an Existing Account", groups = {
 	//	 "Smoke Test" })
 	public void TC42403() throws Exception {
 			LoginPageDTO lpDTO = new LoginPageDTO();
@@ -115,6 +114,7 @@ public class SmokeTestCase extends BrowserTypes {
 			.searchAccountUsingSearchCriteria()
 			.selectLastAccountFromAccountList()
 			.maintainAccount()
+			.saveAccountInformation()
 			.captureSaveScreenshotofMantainAccountpage();
 		}
 	
@@ -150,7 +150,7 @@ public class SmokeTestCase extends BrowserTypes {
 		financePage.selectCoverageFromGridList()
 		.selectAddCoverageButton();
 		policyIndicationPage.selectCoverageFromPopupListAddDatePremium(nextDay).closeAddCoverageWindow();
-		rateApolicyPage.refreshCurrentPage(driver).rateFunctionality(policyNum).clickPreviewTab().savePDF();
+		rateApolicyPage.refreshCurrentPage(driver).rateFunctionality(policyNum).clickPreviewTab(policyNum).savePDF();
 		policyQuotePage.saveOptionOfficial(policyNum);
 		homePage.navigateToFinancePageFromHeaderLink()
 		.searchPolicyOnFinanceHomePage()
@@ -228,7 +228,7 @@ public class SmokeTestCase extends BrowserTypes {
 	}
 
 	
-	@Test(description= "Verify Add Organization",groups = { "Smoke Test" })
+	//@Test(description= "Verify Add Organization",groups = { "Smoke Test" })
 	public void TC42404() throws Exception {
 		LoginPage loginpage = new LoginPage(driver);
 		LoginPageDTO lpDTO = new LoginPageDTO();
@@ -254,7 +254,7 @@ public class SmokeTestCase extends BrowserTypes {
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageUsingHeaderPolicyLink().searchPolicyRateAPolicyPage();
 		String policyNo = rateapolicypage.policyNo();
 		rateapolicypage.coverageDetailSelectForCinCom().cincomFlow(policyNo).rateFunctionality(policyNo)
-				.clickPreviewTab().savePDF().verifyPdfContent();
+				.clickPreviewTab(policyNo).savePDF().verifyPdfContent();
 	}
 
 	// QA HPL Test Case.
@@ -267,7 +267,7 @@ public class SmokeTestCase extends BrowserTypes {
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageUsingHeaderPolicyLink().searchPolicyRateAPolicyPage();
 		String policyNo = rateapolicypage.policyNo();
 		rateapolicypage.coverageDetailSelectForCinCom().cincomFlow(policyNo).rateFunctionality(policyNo)
-				.clickPreviewTab().savePDF().verifyPdfContent();
+				.clickPreviewTab(policyNo).savePDF().verifyPdfContent();
 		// TODO - CINCOM page in QA is different than BTS page hence need
 		// confirmation from onshore team.
 	}
@@ -284,7 +284,7 @@ public class SmokeTestCase extends BrowserTypes {
 		String policyNum = homepage.policySearchUsingSearchCriteria();
 		RateApolicyPage rateapolicyPage = new RateApolicyPage(driver);
 		String policyNumber = rateapolicyPage.checkPolicyViewModeAndUpdateCoverage(policyNum);
-		rateapolicyPage.rateFunctionality(policyNumber).clickPreviewTab().savePDF().verifyPdfContent();
+		rateapolicyPage.rateFunctionality(policyNumber).clickPreviewTab(policyNumber).savePDF().verifyPdfContent();
 	}
 
 	// @Test(description = "HPL - Binder", groups = { "Smoke Test" })
@@ -299,7 +299,7 @@ public class SmokeTestCase extends BrowserTypes {
 				.billingSetup().coverageDetailsSelect();
 		String policyNumber = rateapolicyPage.policyNo();
 		rateapolicyPage.coverageUpdates(policyNumber);
-		rateapolicyPage.rateFunctionality(policyNumber).clickPreviewTab().savePDF().verifyPdfContent().saveOption(policyNumber);
+		rateapolicyPage.rateFunctionality(policyNumber).clickPreviewTab(policyNumber).savePDF().verifyPdfContent().saveOption(policyNumber);
 	}
 
 	// @Test(priority=1, description="Hospital Claim - Verify Change Claim
@@ -325,8 +325,8 @@ public class SmokeTestCase extends BrowserTypes {
 		PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
 		String policyNumber = policybinderpage.policyNo();
 
-		policybinderpage.endorsementFromActionDropDown().endorsPolicy(policyNumber).identifyPhase()
-				.rateFunctionality(policyNumber).saveOption(policyNumber).exit_SaveOption().clickPreviewTab().savePDF()
+		policybinderpage.endorsementFromActionDropDown().endorsePolicy(policyNumber).identifyPhase()
+				.rateFunctionality(policyNumber).saveOption(policyNumber).exit_SaveOption().clickPreviewTab(policyNumber).savePDF()
 				.verifyPdfContent();
 	}
 
@@ -355,7 +355,7 @@ public class SmokeTestCase extends BrowserTypes {
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageUsingHeaderPolicyLink().searchPolicyRateAPolicyPage();
 
 		String PolicyNo = rateapolicypage.policyNo();
-		rateapolicypage.policyEndorsement(PolicyNo).rateFunctionality(PolicyNo).clickPreviewTab().savePDF()
+		rateapolicypage.policyEndorsement(PolicyNo).rateFunctionality(PolicyNo).clickPreviewTab(PolicyNo).savePDF()
 				.verifyPdfContent();
 	}
 
@@ -412,7 +412,7 @@ public class SmokeTestCase extends BrowserTypes {
 
 		rateapolicyPage.coverageUpdates(policyNumber);
 		policyquotepage.rateFunctionality(policyNumber).saveOption(policyquotepagedto.secondSaveAsPolicyDDLValue,policyNumber)
-				.exit_SaveOption().clickPreviewTab().savePDF().verifyPdfContent();
+				.exit_SaveOption().clickPreviewTab(policyNumber).savePDF().verifyPdfContent();
 	}
 
 	//TODO- make info statements generic
@@ -437,9 +437,9 @@ public class SmokeTestCase extends BrowserTypes {
 		policyQuotePage.saveOptionOfficial(policyNumber);
 		rateApolicyPage.AcceptFromActionDropDown().billingSetup().refreshCurrentPage(driver)
 				.rateFunctionality(policybinderpage.policyNo()).saveOptionOfficial(policyNumber);
-		policybinderpage.endorsementFromActionDropDown().endorseAPolicy()
+		policybinderpage.endorsementFromActionDropDown().endorsePolicy(policyNumber)
 				.rateFunctionality(policybinderpage.policyNo());
-		policyQuotePage.clickPreviewTab().savePDF();
+		policyQuotePage.clickPreviewTab(policybinderpage.policyNo()).savePDF();
 		policyQuotePage.saveOptionOfficial(policyNumber);
 	}
 
@@ -462,15 +462,17 @@ public class SmokeTestCase extends BrowserTypes {
 		List<WebElement> firstFrame = policyindicationpage.open_Underwriter();
 
 		policyindicationpage.add_Underwriter(firstFrame).closeUnderwriter().addAgent().addRiskInformation()
-				.selectCoverageTab().selectAddCoverageButton().selectCoverageFromPopupListAddDatePremium(hospitalIndicationDTO.retroDate.get(0)).closeAddCoverageWindow()
+				.selectCoverageTab().selectAddCoverageButton().selectCoverageFromPopupListAddDatePremium(hospitalIndicationDTO.retroDate.get(0))
+				.closeAddCoverageWindow()
 				.selectCoverageFromGridList().addCoverageClass();
 
 		String PolicyNo = policyindicationpage.policyNo();
 
 		policyindicationpage.coverageUpdates(PolicyNo).openLimitSharingTab(PolicyNo).addSharedGroup(PolicyNo)
 				.closeLimitSharingtab().rateFunctionality(PolicyNo);
-		policyQuotePage.clickPreviewTab().savePDF().verifyPdfContent();
+		policyQuotePage.clickPreviewTab(PolicyNo).savePDF().verifyPdfContent();
 		policyQuotePage.saveOptionOfficial(PolicyNo);
+		//TODO- Note policy number
 	}
 	
 	// QA Test case 
@@ -500,7 +502,7 @@ public class SmokeTestCase extends BrowserTypes {
 
 			policyindicationpage.coverageUpdates(PolicyNo).openLimitSharingTab(PolicyNo).addSharedGroup(PolicyNo)
 					.closeLimitSharingtab().rateFunctionality(PolicyNo);
-			policyQuotePage.clickPreviewTab().savePDF().verifyPdfContent();
+			policyQuotePage.clickPreviewTab(PolicyNo).savePDF().verifyPdfContent();
 			policyQuotePage.saveOptionOfficial(PolicyNo);
 		}
 
@@ -522,8 +524,8 @@ public class SmokeTestCase extends BrowserTypes {
 		loginpage = new LoginPage(driver);
 		String PolicyNo = "9865321";
 		loginpage.loginToeOasis(UserName, PassWord).navigateToPolicyPageFromPolicyBinderPage()
-				.searchPolicyPolicyBinderPage().endorsPolicy(PolicyNo).rateFunctionality(PolicyNo).saveOption(PolicyNo)
-				.clickPreviewTab().savePDF().verifyPdfContent();
+				.searchPolicyPolicyBinderPage().endorsePolicy(PolicyNo).rateFunctionality(PolicyNo).saveOption(PolicyNo)
+				.clickPreviewTab(PolicyNo).savePDF().verifyPdfContent();
 	}
 
 	// DTO code is not implemented as this is not part of scope.
@@ -556,14 +558,14 @@ public class SmokeTestCase extends BrowserTypes {
 	public void TC42248() throws Exception {
 
 		FinancePage financepage = new FinancePage(driver);
-		// RateApolicyPage ratepolicypage = new RateApolicyPage(driver);
+		RateApolicyPage rateAPolicyPage = new RateApolicyPage(driver);
 		LoginPageDTO lpDTO = new LoginPageDTO();
 		LoginPage loginpage = new LoginPage(driver);
 		FinancePageDTO financePagedto = new FinancePageDTO();
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToFinancePageFromHeaderLink()
 				.receivableDownload(financePagedto.CreditInstallmentBeforeFileName).naviagetToPolicyFromHeaderLink()
 				.searchPolicyRateAPolicyPage().coverageDetailsSelect();
-		financepage.selectUMBCoverage().selectCancelFromPolicyActionDDL().rateFunctionality().openPDF().savePDF();
+		financepage.selectUMBCoverage().selectCancelFromPolicyActionDDL().rateFunctionality().openPDF(rateAPolicyPage.policyNo()).savePDF();
 		financepage.savePolicyAsWIP().navigateToFinancePageFromHeaderLink().searchPolicyOnFinanceHomePage()
 				.openFirstAccount().downloadExcel(financePagedto.CancelledCoverageTransactionFileName)
 				.receivableDownload(financePagedto.CreditInstallmentAfterFileName);

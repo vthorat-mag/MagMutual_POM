@@ -232,7 +232,7 @@ public class HomePage extends CommonAction {
 	// Navigate to Finance page from header link
 	public FinancePage navigateToFinancePageFromHeaderLink() throws Exception{
 		Thread.sleep(3000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Click Finance in right corner of screen");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Finance in right corner of screen. Verify Finance page opens");
 		clickButton(driver, financePageLink, "Finance Link");
 		invisibilityOfLoader(driver);
 		Thread.sleep(5000);
@@ -295,9 +295,9 @@ public class HomePage extends CommonAction {
 		waitForElementToLoad(driver, 20, Last_Org_Name);
 		getPageTitle(driver, entitySelectSearchPageTitle);
 		visibilityOfElement(driver, Last_Org_Name, "Last Org Name on Entity Select Search window");
+		ExtentReporter.logger.log(LogStatus.INFO, "Enter New Organization that was just created (ex.Automated Hospital(date)).Verify list will populate of risk to select Organization with today's date");
 		enterTextIn(driver, Last_Org_Name, lastOrgNameValue, "Last Org Name");
 		enterDataIn(driver, vendorID, vendorIDValue, "Vendor ID");
-		ExtentReporter.logger.log(LogStatus.INFO, "List is populated of risk to select Organization with today's date");
 		click(driver, searchEntityBtn, "Search button");
 		return new HomePage(driver);
 	}
@@ -305,9 +305,9 @@ public class HomePage extends CommonAction {
 	public HomePage selectEntity(String parentWindow) throws Exception{
 		Thread.sleep(6000);
 		invisibilityOfLoader(driver);
-		ExtentReporter.logger.log(LogStatus.INFO, "Risk is selected");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click the checkbox next to the name to select the risk. Verify Risk is selected");
 		clickButton(driver, Select_Entity_Checkbox, "Select Entity Checkbox");
-		ExtentReporter.logger.log(LogStatus.INFO, "Select Policy Type Window displays");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Select. Verify Select Policy Type Window displays");
 		Thread.sleep(1000);
 		click(driver, Select_Entity, "Select button");
 	//	Thread.sleep(2000);
@@ -329,17 +329,19 @@ public class HomePage extends CommonAction {
 		Thread.sleep(2000);
 		switchToFrameUsingId(driver, "popupframe1");    //  for BTS
 		Thread.sleep(2000);
+		ExtentReporter.logger.log(LogStatus.INFO, "Enter/Select the below information Effective Date: Enter Today's Date"+
+				"Issue Company: Select 'Professional Security Insurance' " 
+				+"Issue State:Select GA. Click Search. Verify Policy Type window will display below");
 		//getPageTitle(driver, selectPolicyTypePageTitle);      
 		//TODO- clarify, Page title is different in QA
 		//Verify Select Policy Type window appeared, enter Effective date,Issue company,state and click Search
 		enterTextIn(driver, Effe_Date, homepageDTO.effectiveFromDate, "Effective Date");
 		selectDropdownByValue(driver, Issue_Comp, homepageDTO.issueCompany, "Issue Company");
 		selectDropdownByValue(driver, Issue_State_Code, homepageDTO.issueState, "Issue State");
-		ExtentReporter.logger.log(LogStatus.INFO, "Policy Type window will display below");
 		click(driver, Policy_Search, "Search button for policy type");
 		Thread.sleep(2000);
 		click(driver, Policy_type, "Policy Type");
-		ExtentReporter.logger.log(LogStatus.INFO, "Policy Folder window is opened");
+		ExtentReporter.logger.log(LogStatus.INFO, "Select(Highlight) Policy Type: Institution. Click Done. Verify Policy Folder window will open");
 		click(driver, createPolicyDoneBtn, "Done button");
 		
 		switchToParentWindowfromframe(driver);                    // for BTS
@@ -353,16 +355,18 @@ public class HomePage extends CommonAction {
 		Thread.sleep(2000);
 		String parentWindow = switchToWindow(driver);     
 		Thread.sleep(2000);
+		ExtentReporter.logger.log(LogStatus.INFO, "Enter/Select the below information Effective Date: Enter Today's Date"+
+				"Issue Company: Select 'Professional Security Insurance' " 
+				+"Issue State:Select GA. Click Search. Verify Policy Type window will display below");
 		//getPageTitle(driver, selectPolicyTypePageTitle);           //TODO- clarify, Page title is different in QA
 		//Verify Select Policy Type window appeared, enter Effective date,Issue company,state and click Search
 		enterTextIn(driver, Effe_Date, homepageDTO.effectiveFromDate, "Effective Date");
 		selectDropdownByValue(driver, Issue_Comp, homepageDTO.issueCompany, "Issue Company");
 		selectDropdownByValue(driver, Issue_State_Code, homepageDTO.issueState, "Issue State");
-		ExtentReporter.logger.log(LogStatus.INFO, "Policy Type window will display below");
 		click(driver, Policy_Search, "Search button for policy type");
 		Thread.sleep(2000);
+		ExtentReporter.logger.log(LogStatus.INFO, "Select(Highlight) Policy Type: Institution. Click Done. Verify Policy Folder window will open");
 		click(driver, Policy_type, "Policy Type");
-		ExtentReporter.logger.log(LogStatus.INFO, "Policy Folder window is opened");
 		click(driver, createPolicyDoneBtn, "Done button");
 		
 		switchToParentWindowfromotherwindow(driver, parentWindow);  //For QA
@@ -374,9 +378,7 @@ public class HomePage extends CommonAction {
 	// Select Create Quote option from POlicy tab menu
 	public String create_Quote() throws InterruptedException {
 		Thread.sleep(2000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Entity Select Search window opens");
-		// clickButton(driver, Create_Quote, "Create Quote from Policy Menu");
-
+		ExtentReporter.logger.log(LogStatus.INFO, "Hover over Policy on blue menu bar Move mouse over Create New to display sub menu Select Create Quote.Verify Entity Select Search window opens");
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("arguments[0].click();", Create_Quote);
 		String parentWindow = switchToWindow(driver);
