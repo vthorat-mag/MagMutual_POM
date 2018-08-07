@@ -18,6 +18,7 @@ public class PolicyQuotePageDTO {
 	public String saveAsPolicyValueOfficial;
 	public String policyActionValue;
 	public String productNotifyValue;
+	public String quoteDescriptionText;
 	public List <String> coverages;
 	public List <String> phases;
 

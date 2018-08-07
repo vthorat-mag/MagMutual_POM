@@ -224,6 +224,12 @@ public class RateApolicyPage extends CommonAction {
 
 	@FindBy(id = "policyPhaseCode_VALUE_CONTAINER")
 	WebElement phaseNonEditableField;
+	
+	@FindBy(xpath="//span[@id='policyWrittenPremiumROSPAN1']")
+	WebElement writtenPremium;
+	
+	@FindBy(id="CWRITTENPREMIUM")
+	List <WebElement> cwWrittenPremiumOnViewPremium;
 
 	// For policy add forms TC42399
 
@@ -512,7 +518,7 @@ public class RateApolicyPage extends CommonAction {
 
 	// Select Accept option from "Action Drop Down".
 		public RateApolicyPage AcceptFromActionDropDown() throws Exception {
-			ExtentReporter.logger.log(LogStatus.INFO, "Select Accept from the dropdown screen -- Click Ok & verify Policy is editable.");
+			ExtentReporter.logger.log(LogStatus.INFO, "Select Accept from the dropdown screen.Same type of policy exists for the period. Continue? message displays. Click Ok & verify Policy is editable.");
 			Thread.sleep(3000);
 			selectDropdownByValue(driver, policyAction, rateApolicyPageDTO.valueOfPolicyActionAccept,
 					"Policy Action");
@@ -520,11 +526,12 @@ public class RateApolicyPage extends CommonAction {
 			Thread.sleep(5000);
 
 			if (isAlertPresent(driver)==true) {
-
+			
 				String actualAlertText = getAlertText(driver);
 				// TODO-compare actual and expected text.
-				ExtentReporter.logger.log(LogStatus.INFO, actualAlertText);
+				ExtentReporter.logger.log(LogStatus.INFO,"Alert message "+actualAlertText+". Click Ok. Phase displays Binder");
 				acceptAlert(driver);
+				
 			}
 			else
 			{
@@ -592,7 +599,7 @@ public class RateApolicyPage extends CommonAction {
 			switchToFrameUsingElement(driver,
 					driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]")));
 			getPageTitle(driver, manageBillingSetupPageTitle);
-			ExtentReporter.logger.log(LogStatus.INFO, "Payment plan dropdown: Select A-Monthly");// Quarterly for copy to
+			ExtentReporter.logger.log(LogStatus.INFO, "Payment plan dropdown:"+rateApolicyPageDTO.paymentPlanValue+". Verify "+rateApolicyPageDTO.paymentPlanValue+" billing plan is selected");
 																									// quote
 			selectDropdownByValue(driver, paymentPlan, rateApolicyPageDTO.paymentPlanValue, "Payment Plan");
 			Thread.sleep(2000);
@@ -778,8 +785,13 @@ public class RateApolicyPage extends CommonAction {
     // Rate a functionality flow.
 	public PolicyQuotePage rateFunctionality(String policyNo) throws Exception {
 		Thread.sleep(1000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Click green rate button in center of screen. Rate window validates and save, View Premium pop up window displays with correct rates");
-    clickButton(driver, rateBtn, "Rate Tab");
+		//Get value of Written Premium from Policy page to compare with Written premium from View premium window.
+		
+		ExtentReporter.logger.log(LogStatus.PASS, "Captured value of Written Premium from Policy Page.");
+		String writtenPremiumAmount= writtenPremium.getAttribute("innerHTML").trim();
+		
+		ExtentReporter.logger.log(LogStatus.INFO, "Click rate button in center of screen. Rate window validates and save, View Premium pop up window displays with correct rates");
+		clickButton(driver, rateBtn, "Rate Tab");
 		invisibilityOfLoader(driver);
 		Thread.sleep(3000);
 		// If Product Notify Window appears then it will switch to window and
@@ -805,15 +817,28 @@ public class RateApolicyPage extends CommonAction {
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]")));
 		Thread.sleep(2000);
-		//Close the View Premium window
-		ExtentReporter.logger.log(LogStatus.INFO, "Click [Close]");
-		clickButton(driver, closeBtnOnViewPremiumPopup, "Close");
-		invisibilityOfLoader(driver);
-		switchToParentWindowfromframe(driver);
-		switchToFrameUsingElement(driver,
-				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]")));
-		Thread.sleep(3000);
-		clickButton(driver, okPolicySaveAsWIPPopup, "Ok");
+		//Get the number of last row of Written premium from View premium window
+		int lastRowOfWrittenPremium=cwWrittenPremiumOnViewPremium.size()-1;
+		//Compare Writtem premium from policy page with Written premium from View premium window
+		Thread.sleep(1000);
+			if(writtenPremiumAmount.equals(cwWrittenPremiumOnViewPremium.get(lastRowOfWrittenPremium).getAttribute("innerHTML").trim())){
+		
+				ExtentReporter.logger.log(LogStatus.PASS, "Premium rate on View Premium window matches with Written premium rate on policy Page. i.e. "+writtenPremiumAmount);
+				//Close the View Premium window
+				ExtentReporter.logger.log(LogStatus.INFO, "Click [Close]");
+				clickButton(driver, closeBtnOnViewPremiumPopup, "Close");
+				invisibilityOfLoader(driver);
+				switchToParentWindowfromframe(driver);
+				switchToFrameUsingElement(driver,
+						driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]")));
+				Thread.sleep(3000);
+				ExtentReporter.logger.log(LogStatus.INFO, "Policy is saved in WIP status");
+				clickButton(driver, okPolicySaveAsWIPPopup, "Ok");
+		}else{
+			ExtentReporter.logger.log(LogStatus.FAIL, "Written Premium Amount in View Premium window did not match, expected is :"+writtenPremiumAmount);
+			Assert.assertTrue(false);
+		}
+		
 		switchToParentWindowfromframe(driver);
 		return new PolicyQuotePage(driver);
 	}

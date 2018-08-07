@@ -254,7 +254,7 @@ public class HomePage extends CommonAction {
 		waitForElementToLoad(driver, 20, policyOrQuoteNum);
 
 		// Enter policy number in Policy/Quote# text field
-		ExtentReporter.logger.log(LogStatus.INFO, "Enter in Hospital or Facility # from 'Issue Policy Form' test case, click Search. Policy # displays correctly under Policy Count tab");
+		ExtentReporter.logger.log(LogStatus.INFO, "Enter in Hospital or Facility # from 'Issue Policy Form' test case, click Search. Verify Policy # displays correctly under Policy Count tab");
 		clearTextBox(driver, policyOrQuoteNum, "Policy/Quote#");
 		enterTextIn(driver, policyOrQuoteNum, homepageDTO.policyNo, "Policy/Quote#");
 		clickButton(driver, searchCriteria, "Search");

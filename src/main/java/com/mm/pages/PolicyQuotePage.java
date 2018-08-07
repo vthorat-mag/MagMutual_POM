@@ -46,7 +46,7 @@ public class PolicyQuotePage extends CommonAction {
 	@FindBy(id="pageTitleForpageHeaderForPolicyFolder")
 	WebElement pageHeaderForPolicyFolder;
 	
-	@FindBy(id="PM_QT_POLICY_FOLDER_AG")
+	@FindBy(xpath="//select[@id='PM_POLICY_FOLDER_AG']")
 	WebElement policyAction;
 	
 	@FindBy(id="PM_CPT_TRAN_OK")
@@ -134,8 +134,10 @@ public class PolicyQuotePage extends CommonAction {
 	@FindBy(xpath = "//select[@name='policyNavLevelCode']//option[@value='RISK']")
 	WebElement verifyRisk;
 	
-	@FindBy(xpath="//span[@class='txtOrange']")
-	WebElement loader;
+	@FindBy(name="transactionComment")
+	WebElement quoteDescription;
+	
+	
 	
   // This is a constructor for PolicyQuotePage class to initialize page elments and DTO object
 	public PolicyQuotePage(WebDriver driver)throws Exception
@@ -312,6 +314,7 @@ public class PolicyQuotePage extends CommonAction {
 			clickButton(driver, PreviewTab, "Preview");
 			invisibilityOfLoader(driver);
 			Thread.sleep(10000);
+			ExtentReporter.logger.log(LogStatus.INFO, "Click the x to close the Preview screen. Verify Preview screen closes");
 			verifySaveAsPopUp(policyNumber);
 			Thread.sleep(5000);
 			return new PDFReader(driver);
@@ -337,15 +340,18 @@ public class PolicyQuotePage extends CommonAction {
 		}
 		
 	//Select the policy Action from DDL
-	public PolicyQuotePage selectPolicyAction() throws Exception{
+	public PolicyQuotePage selectPolicyActionAndAddDescription() throws Exception{
 		Thread.sleep(4000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Capture Transaction Details window opens");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Renewal. Verify Capture Transaction Details window opens");
 		selectDropdownByVisibleText(driver, policyAction, policyquotepageDTO.policyActionValue, "Policy Action");
 		Thread.sleep(2000);
+		invisibilityOfLoader(driver);
 		switchToFrameUsingId(driver, "popupframe1");
+		ExtentReporter.logger.log(LogStatus.INFO, "Enter Quote Description: "+policyquotepageDTO.quoteDescriptionText+ "Click [OK].Verify Text is entered and Policy is ready for renewal");
+		enterTextIn(driver, quoteDescription, policyquotepageDTO.quoteDescriptionText, "Enter Quote Description");
+		Thread.sleep(2000);
 		return new PolicyQuotePage(driver);
 		
-		//ToDo- Enter Quote Description- Renewal
 	}
 		
 	//Switch to second frame from first frame

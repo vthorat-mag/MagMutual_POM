@@ -272,7 +272,7 @@ public class PolicyBinderPage extends CommonAction {
 	// Select Endorsement from "Action DropoDown".
 	public PolicyBinderPage endorsementFromActionDropDown() throws Exception {
 		Thread.sleep(3000);
-		ExtentReporter.logger.log(LogStatus.PASS, "Click Policy Actions > Select value from the dropdown screen.");
+		ExtentReporter.logger.log(LogStatus.PASS, "Select Policy Actions-> Endorsement. Verify Endorse policy window displays.");
 		selectDropdownByValue(driver, policyAction, policybinderpageDTO.valueOfPolicyActionEndorse, "Policy Action");
 		return new PolicyBinderPage(driver);
 	}
@@ -280,15 +280,15 @@ public class PolicyBinderPage extends CommonAction {
 	// Select Copy To Quote from "Action DropoDown".
 	public PolicySubmissionPage copyToQuoteFromActionDropDown(String policyNum) throws Exception {
 		Thread.sleep(2000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy to Quote");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy to Quote. Verify Policy folder shows a new number, Phase show Submission.");
 		selectDropdownByValue(driver, policyAction, policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action");
+		Thread.sleep(5000);
 		invisibilityOfLoader(driver);
-		Thread.sleep(8000);
 		String getUpdatedPolicyNo = policyNo();
 		Thread.sleep(1000);
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + getUpdatedPolicyNo + "')]")));
-		ExtentReporter.logger.log(LogStatus.INFO, "Click [OK]");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click [OK]. Verify Policy folder shows a new number, Phase show Submission.");
 		click(driver, Exit_Ok, "OK button");
 		Thread.sleep(2000);
 		switchToParentWindowfromframe(driver);
