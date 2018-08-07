@@ -1,8 +1,9 @@
 package com.mm.dto;
 
 import java.util.List;
+import java.util.Map;
 
-import MMTestCase.SmokeTestCase;
+import MMTestCase.SmokeTestCasesUpdated;
 
 public class PolicyIndicationPageDTO {
 
@@ -29,36 +30,20 @@ public class PolicyIndicationPageDTO {
 	public String exposureUnit;
 	
 	
-public PolicyIndicationPageDTO() throws IllegalArgumentException, IllegalAccessException, SecurityException{
-		
-		for (int iFC=0; iFC < PolicyIndicationPageDTO.class.getFields().length; iFC++) 
-		{
-			if (SmokeTestCase.testDataMap.containsKey(PolicyIndicationPageDTO.class.getFields()[iFC].getName().toLowerCase()))
-			{
-			if(PolicyIndicationPageDTO.class.getFields()[iFC].getType().toString().toLowerCase().contains("java.util.list"))
-				//ToDo - Check if the field is blank, don't add in list
-			{
-				try{
-				PolicyIndicationPageDTO.class.getFields()[iFC].set(this, SmokeTestCase.testDataMap.get(PolicyIndicationPageDTO.class.getFields()[iFC].getName().toLowerCase()));
-			
-				}catch(Exception e){
-				 e.printStackTrace();
-				 System.out.println(SmokeTestCase.testDataMap.get(PolicyIndicationPageDTO.class.getFields()[iFC].getName()));
-				}
-				
-			}else				
-			{
-				try{
-				PolicyIndicationPageDTO.class.getFields()[iFC].set(this, SmokeTestCase.testDataMap.get(PolicyIndicationPageDTO.class.getFields()[iFC].getName().toLowerCase()).get(0));
-				
-				}catch(Exception e){
-					 e.printStackTrace();
-					 System.out.println(SmokeTestCase.testDataMap.get(PolicyIndicationPageDTO.class.getFields()[iFC].getName()));
-						}
-				
-				}
-			
-			}
+public PolicyIndicationPageDTO(Map<String, List<String>> excelData) throws IllegalArgumentException, IllegalAccessException, SecurityException{
+
+	for(int i = 0; i<= ClaimsDTO.class.getFields().length-1; i++) {
+		try {
+			//System.out.println(ClaimsDTO.class.getFields()[i].getName().toLowerCase());
+			ClaimsDTO.class.getFields()[i].set(this, excelData.get(ClaimsDTO.class.getFields()[i].getName().toLowerCase()));
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		}
+
 		}
 	}
 }

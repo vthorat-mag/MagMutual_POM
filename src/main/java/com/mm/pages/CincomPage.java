@@ -15,6 +15,7 @@ import com.mm.dto.CincomPageDTO;
 import com.mm.utils.CommonAction;
 import com.mm.utils.CommonUtilities;
 import com.mm.utils.ExtentReporter;
+import com.mm.utils.TestCaseDetails;
 import com.relevantcodes.extentreports.LogStatus;
 
 public class CincomPage extends CommonAction {
@@ -95,7 +96,7 @@ public class CincomPage extends CommonAction {
 	public CincomPage(WebDriver driver) throws IllegalArgumentException, IllegalAccessException, SecurityException {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
-		cincomedto = new CincomPageDTO();
+		cincomedto = new CincomPageDTO(TestCaseDetails.testDataDictionary);
 	}
 
 	public RateApolicyPage cincomFlow(String PolicyNo) throws Exception {

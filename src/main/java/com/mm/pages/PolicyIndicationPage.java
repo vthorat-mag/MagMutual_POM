@@ -10,6 +10,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
 import com.mm.utils.ExtentReporter;
+import com.mm.utils.TestCaseDetails;
 import com.mm.dto.PolicyIndicationPageDTO;
 import com.mm.utils.CommonAction;
 import com.relevantcodes.extentreports.LogStatus;
@@ -251,7 +252,7 @@ public class PolicyIndicationPage extends CommonAction {
 
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
-		hospitalIndicationDTO = new PolicyIndicationPageDTO();
+		hospitalIndicationDTO = new PolicyIndicationPageDTO(TestCaseDetails.testDataDictionary);
 	}
 
 	// Select Underwriter button from Policy tab and move to pop up window frame

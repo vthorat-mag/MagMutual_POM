@@ -1,31 +1,32 @@
 package com.mm.dto;
 
-import MMTestCase.SmokeTestCase;
+import java.util.List;
+import java.util.Map;
 
 public class PolicySubmissionPageDTO {
-	
+
 	public String policyPhase;
 	public String organisationType;
 	public String discoveryPeriodRating;
 	public String quoteDescription;
 	public String valueOfPolicyActionCopy;
 	public String indicationPhaseValue;
-	
-	
-public PolicySubmissionPageDTO() throws IllegalArgumentException, IllegalAccessException, SecurityException{
-		
-	
-		for (int iFC=0; iFC < PolicySubmissionPageDTO.class.getFields().length; iFC++)
-		{
-			if (SmokeTestCase.testDataMap.containsKey(PolicySubmissionPageDTO.class.getFields()[iFC].getName().toLowerCase()))
-			{
-			try{
-			PolicySubmissionPageDTO.class.getFields()[iFC].set(this, SmokeTestCase.testDataMap.get(PolicySubmissionPageDTO.class.getFields()[iFC].getName().toLowerCase()).get(0));
-			}catch(Exception e){
+
+	public PolicySubmissionPageDTO(Map<String, List<String>> excelData) {
+
+		for (int i = 0; i <= PolicySubmissionPageDTO.class.getFields().length - 1; i++) {
+			try {
+				// System.out.println(PolicySubmissionPageDTO.class.getFields()[i].getName().toLowerCase());
+				PolicySubmissionPageDTO.class.getFields()[i].set(this,
+						excelData.get(PolicySubmissionPageDTO.class.getFields()[i].getName().toLowerCase()));
+			} catch (IllegalArgumentException e) {
 				e.printStackTrace();
-				System.out.println(SmokeTestCase.testDataMap.get(PolicySubmissionPageDTO.class.getFields()[iFC].getName()));
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (SecurityException e) {
+				e.printStackTrace();
 			}
+
 		}
 	}
-  }
 }

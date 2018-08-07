@@ -17,6 +17,7 @@ import org.testng.Assert;
 import com.mm.dto.HomePageDTO;
 import com.mm.utils.CommonAction;
 import com.mm.utils.ExtentReporter;
+import com.mm.utils.TestCaseDetails;
 import com.mm.utils.CommonAction;
 import com.relevantcodes.extentreports.LogStatus;
 
@@ -142,7 +143,7 @@ public class HomePage extends CommonAction {
 	public HomePage(WebDriver driver) throws IllegalArgumentException, IllegalAccessException, SecurityException {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
-		homepageDTO = new HomePageDTO();
+		homepageDTO = new HomePageDTO(TestCaseDetails.testDataDictionary);
 	}
 
 	// Verify logo is present on page.
@@ -254,7 +255,7 @@ public class HomePage extends CommonAction {
 		waitForElementToLoad(driver, 20, policyOrQuoteNum);
 
 		// Enter policy number in Policy/Quote# text field
-		ExtentReporter.logger.log(LogStatus.INFO, "Enter in Hospital or Facility # from 'Issue Policy Form' test case, click Search. Policy # displays correctly under Policy Count tab");
+		ExtentReporter.logger.log(LogStatus.INFO, "Enter in Hospital or Facility # from 'Issue Policy Form' test case, click Search. Verify Policy # displays correctly under Policy Count tab");
 		clearTextBox(driver, policyOrQuoteNum, "Policy/Quote#");
 		enterTextIn(driver, policyOrQuoteNum, homepageDTO.policyNo, "Policy/Quote#");
 		clickButton(driver, searchCriteria, "Search");

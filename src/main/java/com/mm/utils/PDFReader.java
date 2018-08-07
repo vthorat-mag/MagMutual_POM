@@ -57,7 +57,7 @@ public class PDFReader extends CommonAction {
 	{
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
-		pdfreaderdto = new pdfReaderDTO();
+		pdfreaderdto = new pdfReaderDTO(TestCaseDetails.testDataDictionary);
 	}
 
 	//Logic to verify PDF content.

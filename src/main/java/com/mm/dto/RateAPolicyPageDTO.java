@@ -1,8 +1,9 @@
 package com.mm.dto;
 
 import java.util.List;
+import java.util.Map;
 
-import MMTestCase.SmokeTestCase;
+import MMTestCase.SmokeTestCasesUpdated;
 
 public class RateAPolicyPageDTO {
 
@@ -25,39 +26,25 @@ public class RateAPolicyPageDTO {
 	public String viewModeWIP;
 	public String policyAction;
 	public String endorsementReason;
-	public String endorsementComment;
 	public String policyNum;
 	public String policyNo;
-	
-	
-	
-	public RateAPolicyPageDTO() throws IllegalArgumentException, IllegalAccessException, SecurityException{
+	public String endorsementComment;
 
-		for (int iFC = 0; iFC < RateAPolicyPageDTO.class.getFields().length; iFC++) {
+	public RateAPolicyPageDTO(Map<String, List<String>> excelData) {
 
-			if (SmokeTestCase.testDataMap.containsKey(RateAPolicyPageDTO.class.getFields()[iFC].getName().toLowerCase()))
-			{
-				if (RateAPolicyPageDTO.class.getFields()[iFC].getType().toString().toLowerCase().contains("java.util.list")) {
-					try {
-						RateAPolicyPageDTO.class.getFields()[iFC].set(this,
-								SmokeTestCase.testDataMap.get(RateAPolicyPageDTO.class.getFields()[iFC].getName().toLowerCase()));
-
-					} catch (Exception e) {
-						e.printStackTrace();
-						System.out.println(SmokeTestCase.testDataMap.get(RateAPolicyPageDTO.class.getFields()[iFC].getName()));
-					}
-
-				} else {
-					try {
-						RateAPolicyPageDTO.class.getFields()[iFC].set(this, SmokeTestCase.testDataMap
-								.get(RateAPolicyPageDTO.class.getFields()[iFC].getName().toLowerCase()).get(0));
-
-					} catch (Exception e) {
-						e.printStackTrace();
-						System.out.println(SmokeTestCase.testDataMap.get(RateAPolicyPageDTO.class.getFields()[iFC].getName()));
-					}
-				}
+		for (int i = 0; i <= RateAPolicyPageDTO.class.getFields().length - 1; i++) {
+			try {
+				// System.out.println(RateAPolicyPageDTO.class.getFields()[i].getName().toLowerCase());
+				RateAPolicyPageDTO.class.getFields()[i].set(this,
+						excelData.get(RateAPolicyPageDTO.class.getFields()[i].getName().toLowerCase()));
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (SecurityException e) {
+				e.printStackTrace();
 			}
+
 		}
 	}
 }
