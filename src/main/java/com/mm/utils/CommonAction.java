@@ -224,7 +224,6 @@ public class CommonAction implements CommonActionInterface {
 		invisibilityOfLoader(driver);
 		Thread.sleep(3000);
 		List<WebElement> getPageTitleFromPage = driver.findElements(By.xpath("//div[@class='pageTitle']"));
-		WebDriverWait wait = new WebDriverWait(driver, High);
 		try {
 			int i=0;
 			for (i = 0; i < getPageTitleFromPage.size(); i++) {
@@ -583,11 +582,12 @@ public class CommonAction implements CommonActionInterface {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options & verify Save as window displays.");
 		waitForElementToLoad(driver, 15, saveOptionBtn);
 		clickButton(driver, saveOptionBtn, "Save Option");
+		Thread.sleep(3000);
 		invisibilityOfLoader(driver);
-		Thread.sleep(8000);
-		WebElement iframeEle = driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]"));
-		//switchToFrameUsingId(driver, "popupframe1");
-		switchToFrameUsingElement(driver, iframeEle);
+		Thread.sleep(2000);
+		//WebElement iframeEle = driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]"));
+		switchToFrameUsingId(driver, "popupframe1");
+		//switchToFrameUsingElement(driver, iframeEle);
 		getPageTitle(driver, "Save As");
 		selectDropdownByValue(driver, saveAsDropDown, saveAsValue, "Selected " + saveAsValue);
 		ExtentReporter.logger.log(LogStatus.INFO, "Select " + saveAsValue + " Click [OK]& verify Message is closed and WIP is saved as"+ saveAsValue);
@@ -606,12 +606,14 @@ public class CommonAction implements CommonActionInterface {
 		Thread.sleep(2000);
 	}
 
-	public void policySearch(WebDriver driver, String policyNo, WebElement policySearchTxtBox, WebElement searchBtn,WebElement policyList) {
-		ExtentReporter.logger.log(LogStatus.PASS, "Enter in active Hospital/Facility policy number in Enter Policy # entry box from previous Indication test case, Click Search. Policy Will display" );
-		clearTextBox(driver, policySearchTxtBox, "Enter Policy text field");
-		ExtentReporter.logger.log(LogStatus.INFO, "Click policy in right corner of screen");
-		enterTextIn(driver, policySearchTxtBox, policyNo, "Enter Policy text field");
+	public void policySearch(WebDriver driver, String policyNo, WebElement policySearchTxtBox, WebElement searchBtn,WebElement policyList) throws Exception{
+		ExtentReporter.logger.log(LogStatus.INFO, "Enter in active Hospital/Facility policy number in Enter Policy # entry box, Click Search. Policy Will display" );
+		clearTextBox(driver, policySearchTxtBox, "Enter Policy # text field");
+		enterTextIn(driver, policySearchTxtBox, policyNo, "Enter Policy # text field");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click search button and Verify full policy page is displayed");
 		click(driver, searchBtn, "Search button");
+		
+		Thread.sleep(1000);
 		invisibilityOfLoader(driver);
 		if(verifyPolicyListDispOnQAEnv(driver,policyList)==true){
 			//clickButton(driver, policyList, "First policy from Searched Policies");

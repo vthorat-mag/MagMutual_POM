@@ -309,16 +309,17 @@ public class SmokeTestCasesUpdated {
 		exlUtil.writeData("TC42400", "PolicyNum", PolicyNo, 1, ExcelPath);
 	}
 
+	
 	@Test(description = "Hospital Renewal", groups = { "Smoke Test" }, priority = 11)
 	public void TC42400() throws Exception {
-		// String policy_no = " ";
+		// String policy_no = ""; 09100510, 09100511, 09100512, 09100514
 		LoginPageDTO lpDTO = new LoginPageDTO();
 		RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
 		LoginPage loginpage = new LoginPage(driver);
 		ExcelUtil exlUtil = new ExcelUtil();
 		PolicyQuotePageDTO policyquotepageDTO = new PolicyQuotePageDTO();
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageFromrateApolicyPage()
-				.searchPolicyPolicyQuotePage().selectPolicyAction().save_CaptureTransactionDetails()
+				.searchPolicyPolicyQuotePage().selectPolicyActionAndAddDescription().save_CaptureTransactionDetails()
 				.saveOption(policyquotepageDTO.saveAsPolicyDDLValue, rateapolicypage.policyNo()).switchToNextFrame()
 				.save_CaptureTransactionDetails()
 				.saveOption(policyquotepageDTO.secondSaveAsPolicyDDLValue, rateapolicypage.policyNo()).product_Notify()

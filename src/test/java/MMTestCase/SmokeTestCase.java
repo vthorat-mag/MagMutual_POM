@@ -378,20 +378,21 @@ public class SmokeTestCase extends BrowserTypes {
 	}
 
 
-	// @Test(description="Hospital Renewal", groups = {"Smoke Test"})
+	@Test(description="Hospital Renewal", groups = {"Smoke Test"})
 	public void TC42400() throws Exception {
-		//TODO- Get policy number
+		//TODO- Get policy number//09100510, 09100511, 09100512, 09100514
 		String policyNo = " ";
 		LoginPageDTO lpDTO = new LoginPageDTO();
 		LoginPage loginpage = new LoginPage(driver);
 		PolicyQuotePageDTO policyquotepageDTO = new PolicyQuotePageDTO();
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageFromrateApolicyPage()
-				.searchPolicyPolicyQuotePage().selectPolicyAction().save_CaptureTransactionDetails()
+				.searchPolicyPolicyQuotePage().selectPolicyActionAndAddDescription().save_CaptureTransactionDetails()
 				.saveOption(policyquotepageDTO.saveAsPolicyDDLValue,policyNo).switchToNextFrame()
 				.save_CaptureTransactionDetails().saveOption(policyquotepageDTO.secondSaveAsPolicyDDLValue,policyNo)
 				.product_Notify().exit_SaveOption();
 	}
 
+	
 	// @Test(description = "Hospital Quote", groups = { "Smoke Test" })
 	public void TC42238() throws Exception {
 		LoginPageDTO lpDTO;
