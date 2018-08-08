@@ -109,14 +109,14 @@ public class CincomPage extends CommonAction {
 				}
 			}
 		}
-		ExtentReporter.logger.log(LogStatus.INFO, "Click [Optional Forms]");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click [Optional Forms] & verify Manuscript Information window displays");
 		Thread.sleep(4000);
 		clickButton(driver, optionalFormBtn, "Optional Form");
 		// invisibilityOfLoader(driver, PageloaderSymbol);
 		Thread.sleep(3000);
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
-		ExtentReporter.logger.log(LogStatus.INFO, "Click [Add].");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click [Add] & verify Add Manuscript window opens.");
 
 		clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
 
@@ -140,16 +140,27 @@ public class CincomPage extends CommonAction {
 					driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
 			ExtentReporter.logger.log(LogStatus.INFO, "Enter additional text: " + cincomedto.phase.get(k) + "");
 			enterTextIn(driver, addText, cincomedto.phase.get(k) + " form added.", "Aditional Text");
+			ExtentReporter.logger.log(LogStatus.INFO, "Select [Save]");
 			clickButton(driver, manuscriptPageSaveBtn, "Manu Script page Save");
 			Thread.sleep(4000);
-
+			ExtentReporter.logger.log(LogStatus.INFO, "Click the Data Entry button & verify Manuscript Information window displays");
 			clickButton(driver, dataEntryBtn, "Data Entry");
 			Thread.sleep(4000);
 			String parentWindowId = switchToWindow(driver);
+			ExtentReporter.logger.log(LogStatus.INFO, "Enter in Title_HFLHPLCHGGE: 'Automated Test CHGGE'");
 			titleHFLHPLCHGGE.clear();
 			enterTextIn(driver, titleHFLHPLCHGGE, "Automated Test CHGGE", " Cincom Title");
+			ExtentReporter.logger.log(LogStatus.INFO, "Select the Free_Form_CHGGE_Begin check box an enter the following text in the box: \r\n" + 
+					"\r\n" + 
+					"'Automated Test Case {Today's Date}\r\n" + 
+					"This test is to\r\n" + 
+					"\r\n" + 
+					"Adds the form \r\n" + 
+					"Enter data entry \r\n" + 
+					"Verify Bulletpoints display as entered. '");
 			clickButton(driver, freeFormCHGGEBeginChkBox, "freeFormCHGGEBeginChkBox");
 			Thread.sleep(2000);
+			ExtentReporter.logger.log(LogStatus.INFO, "Select Font Family: Arial Select Font Size: 10pt");
 			JavascriptExecutor executor = (JavascriptExecutor) driver;
 			executor.executeScript("tinyMCE.activeEditor.setContent('<p>Automated Test Case {"
 					+ comUtil.getSystemDatemm_dd_yyyy()
@@ -157,7 +168,9 @@ public class CincomPage extends CommonAction {
 			executor.executeScript("document.getElementById('mceu_43-open').innerHTML = 'Arial';");
 			executor.executeScript("document.getElementById('mceu_44-open').innerHTML = '10pt';", "");
 			driver.switchTo().defaultContent();
+			ExtentReporter.logger.log(LogStatus.INFO, "Click [Delivery Options] & verify Check Spelling window will appear.");
 			clickButton(driver, DelOptions, "Delivery Options");
+			ExtentReporter.logger.log(LogStatus.INFO, "Click Ingore All(Might have to do it multiple times) & verify Check Spelling window is closes.");
 			boolean chkspellpopupvalue = verifyCheckSpellingPopup();
 			if (chkspellpopupvalue == true) {
 				do {
@@ -165,6 +178,7 @@ public class CincomPage extends CommonAction {
 					Thread.sleep(1000);
 				} while (verifyCheckSpellingPopup() == true);
 			}
+			ExtentReporter.logger.log(LogStatus.INFO, "Click [Deliver] Exit out of window  & Return code: 0 message appears, Exit out of window.");
 			clickButton(driver, DelOptions, "Delivery Options");
 			clickButton(driver, deliverBtn, "deliver button");
 			visibilityOfElement(driver, sucessMsg, "Sucess Message");

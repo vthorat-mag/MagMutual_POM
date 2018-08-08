@@ -716,8 +716,9 @@ public class PolicyIndicationPage extends CommonAction {
 			Thread.sleep(2000);
 			ExtentReporter.logger.log(LogStatus.INFO, "Form is saved to coverage and window closes");
 			clickButton(driver, manuscriptPageCloseBtn, "Manu Script page Close");
-			switchToParentWindowfromframe(driver);
 			Thread.sleep(2000);
+			invisibilityOfLoader(driver);
+			switchToParentWindowfromframe(driver);
 			click(driver, saveWIP, "Save WIP");
 			Thread.sleep(2000);
 		}

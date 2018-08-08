@@ -324,16 +324,17 @@ public class CommonAction implements CommonActionInterface {
 															// window handle
 		Thread.sleep(3000);
 		for (String currentWindow : handles) {
+			try {
 			if (!currentWindow.equals(parentWindow)) {
 				driver.switchTo().window(currentWindow);
 				driver.manage().window().maximize();
 				ExtentReporter.logger.log(LogStatus.INFO, "Control is switched to pop up window");
 			}
-			else
+			}catch(Exception e)
 			{
-				ExtentReporter.logger.log(LogStatus.WARNING, "Error while switcing control to pop up window");
-				//Assert.assertTrue(false);
+				ExtentReporter.logger.log(LogStatus.WARNING, "Error while switching control to pop up window");
 			}
+			
 		}
 		Thread.sleep(2000);
 		return parentWindow;
