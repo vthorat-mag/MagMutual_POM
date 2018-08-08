@@ -9,14 +9,17 @@
 <table>
 <tr><th>Test</th><th># Passed</th><th># Skipped</th><th># Failed</th><th>Time (ms)</th><th>Included Groups</th><th>Excluded Groups</th></tr>
 <tr><th colspan="7">Default suite</th></tr>
-<tr><td><a href="#t0">Default test</a></td><td class="num">0</td><td class="num">0</td><td class="num attn">1</td><td class="num">84,248</td><td></td><td></td></tr>
+<tr><td><a href="#t0">Default test</a></td><td class="num">0</td><td class="num">0</td><td class="num attn">1</td><td class="num">77,270</td><td></td><td></td></tr>
 </table>
-<table id='summary'><thead><tr><th>Class</th><th>Method</th><th>Start</th><th>Time (ms)</th></tr></thead><tbody><tr><th colspan="4">Default suite</th></tr></tbody><tbody id="t0"><tr><th colspan="4">Default test &#8212; failed</th></tr><tr class="failedeven"><td rowspan="1">MMTestCase.SmokeTestCase</td><td><a href="#m0">TC42250</a></td><td rowspan="1">1531408934040</td><td rowspan="1">78962</td></tr></tbody>
+<table id='summary'><thead><tr><th>Class</th><th>Method</th><th>Start</th><th>Time (ms)</th></tr></thead><tbody><tr><th colspan="4">Default suite</th></tr></tbody><tbody id="t0"><tr><th colspan="4">Default test &#8212; failed</th></tr><tr class="failedeven"><td rowspan="1">MMTestCase.SmokeTestCase</td><td><a href="#m0">TC42244</a></td><td rowspan="1">1533733446500</td><td rowspan="1">73994</td></tr></tbody>
 </table>
-<h2>Default test</h2><h3 id="m0">MMTestCase.SmokeTestCase#TC42250</h3><table class="result"><tr><th>Exception</th></tr><tr><td><div class="stacktrace">java.lang.NullPointerException
-	at com.mm.utils.CommonAction.getDataFromExcel(CommonAction.java:461)
-	at com.mm.pages.FinancePage.onDemandInvoice(FinancePage.java:255)
-	at MMTestCase.SmokeTestCase.TC42250(SmokeTestCase.java:128)
+<h2>Default test</h2><h3 id="m0">MMTestCase.SmokeTestCase#TC42244</h3><table class="result"><tr><th>Exception</th></tr><tr><td><div class="stacktrace">java.lang.AssertionError: Quote value not available in drop down list expected [true] but found [false]
+	at org.testng.Assert.fail(Assert.java:96)
+	at org.testng.Assert.failNotEquals(Assert.java:776)
+	at org.testng.Assert.assertTrue(Assert.java:44)
+	at com.mm.utils.CommonAction.selectDropdownByValue(CommonAction.java:360)
+	at com.mm.pages.PolicyQuotePage.changePolicyPhase(PolicyQuotePage.java:318)
+	at MMTestCase.SmokeTestCase.TC42244(SmokeTestCase.java:122)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)

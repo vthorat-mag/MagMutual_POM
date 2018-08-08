@@ -49,7 +49,7 @@
               <ul>
                 <li>
                   <a href="#" class="navigator-link " panel-name="test-xml-Default_suite">
-                    <span>C:\Users\VTHORAT\AppData\Local\Temp\6\testng-eclipse--861838805\testng-customsuite.xml</span>
+                    <span>C:\Users\vbhalsing\AppData\Local\Temp\63\testng-eclipse-1616825326\testng-customsuite.xml</span>
                   </a> <!-- navigator-link  -->
                 </li>
                 <li>
@@ -102,7 +102,7 @@
                     <div class="method-list-content failed suite-Default_suite">
                       <span>
                         <img width="3%" src="failed.png"/>
-                        <a href="#" class="method navigator-link" panel-name="suite-Default_suite" title="MMTestCase.SmokeTestCase" hash-for-method="TC42250">TC42250</a> <!-- method navigator-link -->
+                        <a href="#" class="method navigator-link" panel-name="suite-Default_suite" title="MMTestCase.SmokeTestCase" hash-for-method="TC42244">TC42244</a> <!-- method navigator-link -->
                       </span>
                       <br/>
                     </div> <!-- method-list-content failed suite-Default_suite -->
@@ -125,13 +125,16 @@
             <div class="main-panel-content rounded-window-bottom">
               <div class="method">
                 <div class="method-content">
-                  <a name="TC42250">
-                  </a> <!-- TC42250 -->
-                  <span class="method-name">TC42250</span>
-                  <div class="stack-trace">java.lang.NullPointerException
-	at com.mm.utils.CommonAction.getDataFromExcel(CommonAction.java:461)
-	at com.mm.pages.FinancePage.onDemandInvoice(FinancePage.java:255)
-	at MMTestCase.SmokeTestCase.TC42250(SmokeTestCase.java:128)
+                  <a name="TC42244">
+                  </a> <!-- TC42244 -->
+                  <span class="method-name">TC42244</span>
+                  <div class="stack-trace">java.lang.AssertionError: Quote value not available in drop down list expected [true] but found [false]
+	at org.testng.Assert.fail(Assert.java:96)
+	at org.testng.Assert.failNotEquals(Assert.java:776)
+	at org.testng.Assert.assertTrue(Assert.java:44)
+	at com.mm.utils.CommonAction.selectDropdownByValue(CommonAction.java:360)
+	at com.mm.pages.PolicyQuotePage.changePolicyPhase(PolicyQuotePage.java:318)
+	at MMTestCase.SmokeTestCase.TC42244(SmokeTestCase.java:122)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
@@ -160,7 +163,7 @@
 
 </div> <!-- stack-trace -->
                   <em>
-(FM - Hospital Verify On Demand Invoice, Create Batch and Post Batch)                  </em>
+(Hospital - Add multiple risks)                  </em>
                 </div> <!-- method-content -->
               </div> <!-- method -->
             </div> <!-- main-panel-content rounded-window-bottom -->
@@ -168,7 +171,7 @@
         </div> <!-- panel Default_suite -->
         <div panel-name="test-xml-Default_suite" class="panel">
           <div class="main-panel-header rounded-window-top">
-            <span class="header-content">C:\Users\VTHORAT\AppData\Local\Temp\6\testng-eclipse--861838805\testng-customsuite.xml</span>
+            <span class="header-content">C:\Users\vbhalsing\AppData\Local\Temp\63\testng-eclipse-1616825326\testng-customsuite.xml</span>
           </div> <!-- main-panel-header rounded-window-top -->
           <div class="main-panel-content rounded-window-bottom">
             <pre>
@@ -205,7 +208,7 @@
               <span class="test-group-name">Smoke Test</span>
               <br/>
               <div class="method-in-group">
-                <span class="method-in-group-name">TC42250</span>
+                <span class="method-in-group-name">TC42244</span>
                 <br/>
               </div> <!-- method-in-group -->
             </div> <!-- test-group -->
@@ -227,9 +230,9 @@ data.addColumn('string', 'Class');
 data.addColumn('number', 'Time (ms)');
 data.addRows(1);
 data.setCell(0, 0, 0)
-data.setCell(0, 1, 'TC42250')
+data.setCell(0, 1, 'TC42244')
 data.setCell(0, 2, 'MMTestCase.SmokeTestCase')
-data.setCell(0, 3, 78962);
+data.setCell(0, 3, 73994);
 window.suiteTableData['Default_suite']= { tableData: data, tableDiv: 'times-div-Default_suite'}
 return data;
 }
@@ -266,22 +269,22 @@ return data;
                 <span class="method-start">0 ms</span>
               </div> <!-- configuration-class before -->
               <div class="configuration-method before">
-                <span class="method-name">Setup(public void MMTestCase.SmokeTestCase.TC42250() throws java.lang.Exception)</span>
-                <span class="method-start">1150 ms</span>
+                <span class="method-name">Setup(public void MMTestCase.SmokeTestCase.TC42244() throws java.lang.Exception)</span>
+                <span class="method-start">19 ms</span>
               </div> <!-- configuration-method before -->
               <div class="test-method">
                 <img src="failed.png">
                 </img>
-                <span class="method-name">TC42250</span>
-                <span class="method-start">1915 ms</span>
+                <span class="method-name">TC42244</span>
+                <span class="method-start">895 ms</span>
               </div> <!-- test-method -->
               <div class="configuration-method after">
-                <span class="method-name">logoffFromAppclication([TestResult name=TC42250 status=FAILURE method=SmokeTestCase.TC42250()[pri:0, instance:MMTestCase.Sm...)</span>
-                <span class="method-start">80888 ms</span>
+                <span class="method-name">logoffFromAppclication([TestResult name=TC42244 status=FAILURE method=SmokeTestCase.TC42244()[pri:0, instance:MMTestCase.Sm...)</span>
+                <span class="method-start">74892 ms</span>
               </div> <!-- configuration-method after -->
               <div class="configuration-class after">
                 <span class="method-name">closeBrowser</span>
-                <span class="method-start">84235 ms</span>
+                <span class="method-start">77259 ms</span>
               </div> <!-- configuration-class after -->
           </div> <!-- main-panel-content rounded-window-bottom -->
         </div> <!-- panel -->

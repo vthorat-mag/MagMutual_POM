@@ -27,7 +27,7 @@ public class PolicyIndicationPageDTO {
 	public String policyForms;
 	public String coverageClass;
 	public String exposureUnit;
-	
+	public String riskTypeValue;
 	
 public PolicyIndicationPageDTO() throws IllegalArgumentException, IllegalAccessException, SecurityException{
 		

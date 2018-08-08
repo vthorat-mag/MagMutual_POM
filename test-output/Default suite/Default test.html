@@ -57,9 +57,9 @@ function toggleAllBoxes() {
 <tr>
 <td>Tests passed/Failed/Skipped:</td><td>0/1/0</td>
 </tr><tr>
-<td>Started on:</td><td>Thu Jul 12 11:22:12 EDT 2018</td>
+<td>Started on:</td><td>Wed Aug 08 09:04:05 EDT 2018</td>
 </tr>
-<tr><td>Total time:</td><td>84 seconds (84248 ms)</td>
+<tr><td>Total time:</td><td>77 seconds (77270 ms)</td>
 </tr><tr>
 <td>Included groups:</td><td></td>
 </tr><tr>
@@ -75,11 +75,14 @@ function toggleAllBoxes() {
 <td><b>Instance</b></td>
 </tr>
 <tr>
-<td title='MMTestCase.SmokeTestCase.TC42250()'><b>TC42250</b><br>Test class: MMTestCase.SmokeTestCase<br>Test method: FM - Hospital Verify On Demand Invoice, Create Batch and Post Batch</td>
-<td><div><pre>java.lang.NullPointerException
-	at com.mm.utils.CommonAction.getDataFromExcel(CommonAction.java:461)
-	at com.mm.pages.FinancePage.onDemandInvoice(FinancePage.java:255)
-	at MMTestCase.SmokeTestCase.TC42250(SmokeTestCase.java:128)
+<td title='MMTestCase.SmokeTestCase.TC42244()'><b>TC42244</b><br>Test class: MMTestCase.SmokeTestCase<br>Test method: Hospital - Add multiple risks</td>
+<td><div><pre>java.lang.AssertionError: Quote value not available in drop down list expected [true] but found [false]
+	at org.testng.Assert.fail(Assert.java:96)
+	at org.testng.Assert.failNotEquals(Assert.java:776)
+	at org.testng.Assert.assertTrue(Assert.java:44)
+	at com.mm.utils.CommonAction.selectDropdownByValue(CommonAction.java:360)
+	at com.mm.pages.PolicyQuotePage.changePolicyPhase(PolicyQuotePage.java:318)
+	at MMTestCase.SmokeTestCase.TC42244(SmokeTestCase.java:122)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
@@ -105,11 +108,14 @@ function toggleAllBoxes() {
 	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:114)
 	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
 	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
-</pre></div><a href='#' onClick='toggleBox("stack-trace1198817209", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
-<div class='stack-trace' id='stack-trace1198817209'><pre>java.lang.NullPointerException
-	at com.mm.utils.CommonAction.getDataFromExcel(CommonAction.java:461)
-	at com.mm.pages.FinancePage.onDemandInvoice(FinancePage.java:255)
-	at MMTestCase.SmokeTestCase.TC42250(SmokeTestCase.java:128)
+</pre></div><a href='#' onClick='toggleBox("stack-trace415565467", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace415565467'><pre>java.lang.AssertionError: Quote value not available in drop down list expected [true] but found [false]
+	at org.testng.Assert.fail(Assert.java:96)
+	at org.testng.Assert.failNotEquals(Assert.java:776)
+	at org.testng.Assert.assertTrue(Assert.java:44)
+	at com.mm.utils.CommonAction.selectDropdownByValue(CommonAction.java:360)
+	at com.mm.pages.PolicyQuotePage.changePolicyPhase(PolicyQuotePage.java:318)
+	at MMTestCase.SmokeTestCase.TC42244(SmokeTestCase.java:122)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
@@ -136,8 +142,8 @@ function toggleAllBoxes() {
 	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
 	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
 </pre></div></td>
-<td>78</td>
-<td>MMTestCase.SmokeTestCase@662b4c69</td></tr>
+<td>73</td>
+<td>MMTestCase.SmokeTestCase@78123e82</td></tr>
 </table><p>
 </body>
 </html>

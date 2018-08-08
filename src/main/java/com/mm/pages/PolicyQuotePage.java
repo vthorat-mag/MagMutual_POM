@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.poi.util.SystemOutLogger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -32,6 +33,8 @@ public class PolicyQuotePage extends CommonAction {
 	String saveAsPolicyValue="OFFICIAL";
 	String QuotePhaseValue="QUOTE";
 	String ProductNotifyValue="Y";
+	String saveASWindowTitle="Save As";
+	String captureTranxDetailsWindowTitle="Capture Transaction Details";
 
 	
 	@FindBy(name="globalSearch")
@@ -50,7 +53,7 @@ public class PolicyQuotePage extends CommonAction {
 	WebElement policyAction;
 	
 	@FindBy(id="PM_CPT_TRAN_OK")
-	WebElement capt_Tranx_Ok;
+	WebElement captTranxOk;
 	
 	@FindBy(xpath="//a[@id='PM_PT_VIEWCVG']//span[@class='tabWithNoDropDownImage']")
 	WebElement coverageTab;
@@ -137,6 +140,8 @@ public class PolicyQuotePage extends CommonAction {
 	@FindBy(name="transactionComment")
 	WebElement quoteDescription;
 	
+	@FindBy(id="PM_COMMON_TABS_ACCPTQUOTE")
+	WebElement applyButton;
 	
 	
   // This is a constructor for PolicyQuotePage class to initialize page elments and DTO object
@@ -295,12 +300,22 @@ public class PolicyQuotePage extends CommonAction {
 		return new PolicyQuotePage(driver);
 	}
 	
+	
+	public PolicyQuotePage applyChanges() throws Exception{
+		Thread.sleep(2000);
+		invisibilityOfLoader(driver);
+		clickButton(driver, applyButton, "Apply");
+		return new PolicyQuotePage(driver);
+	}
+	
+	
 	//Change phase to Quote.
-	public PolicyQuotePage changePhaseToQuote() throws Exception
+	public PolicyQuotePage changePolicyPhase(String newPhaseValue) throws Exception
 	{
-		Thread.sleep(4000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Change Phase from Indication to Quote & verify Phase is changed from Indication to Quote.");
-		selectDropdownByValue(driver, policyPhase, policyquotepageDTO.quotePhaseValue, "Phase");
+		Thread.sleep(3000);
+		invisibilityOfLoader(driver);
+		ExtentReporter.logger.log(LogStatus.INFO, "Change Phase to "+newPhaseValue+" & verify Phase is changed to "+newPhaseValue);
+		selectDropdownByValue(driver, policyPhase, newPhaseValue, "Phase");
 		return new PolicyQuotePage(driver);
 	}
 	
@@ -308,7 +323,7 @@ public class PolicyQuotePage extends CommonAction {
 		public PDFReader clickPreviewTab(String policyNumber) throws InterruptedException {
 			invisibilityOfLoader(driver);
 			Thread.sleep(3000);
-			ExtentReporter.logger.log(LogStatus.INFO, "Click [Preview]& verify Preview window displays with Form Printing on Quote Form's List");
+			ExtentReporter.logger.log(LogStatus.INFO, "Click [Preview] & verify Preview window displays with Form Printing on Quote Form's List");
 			// ExtentReporter.logger.log(LogStatus.INFO, "Verify CHG 08 form is displayed
 			// and information that was entered is on form");
 			clickButton(driver, PreviewTab, "Preview");
@@ -347,7 +362,8 @@ public class PolicyQuotePage extends CommonAction {
 		Thread.sleep(2000);
 		invisibilityOfLoader(driver);
 		switchToFrameUsingId(driver, "popupframe1");
-		ExtentReporter.logger.log(LogStatus.INFO, "Enter Quote Description: "+policyquotepageDTO.quoteDescriptionText+ "Click [OK].Verify Text is entered and Policy is ready for renewal");
+		getPageTitle(driver, captureTranxDetailsWindowTitle);
+		ExtentReporter.logger.log(LogStatus.INFO, "Enter Quote Description: "+policyquotepageDTO.quoteDescriptionText+ ". Click [OK].Verify Text is entered and Policy is ready for renewal");
 		enterTextIn(driver, quoteDescription, policyquotepageDTO.quoteDescriptionText, "Enter Quote Description");
 		Thread.sleep(2000);
 		return new PolicyQuotePage(driver);
@@ -368,7 +384,7 @@ public class PolicyQuotePage extends CommonAction {
 	public PolicyQuotePage save_CaptureTransactionDetails () throws Exception{
 		
 		Thread.sleep(3000);
-		click(driver, capt_Tranx_Ok, "Ok button for Renewal");
+		click(driver, captTranxOk, "Ok button. Verify policy is ready for Renewal");
 		switchToParentWindowfromframe(driver);
 		return new PolicyQuotePage(driver);
 	}
@@ -382,4 +398,47 @@ public class PolicyQuotePage extends CommonAction {
 		invisibilityOfLoader(driver);
 		return new PolicyQuotePage(driver);
 	}
+	
+	
+	public PolicyQuotePage saveOptionAndCaptureTransactionDetails(String saveAsValue,String policyNo) throws Exception{
+		saveOptionAndHandleCaptureTransactionDetails(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn,exitOK, saveAsValue, policyNo);
+		return new PolicyQuotePage(driver);
+	}
+	
+	public void saveOptionAndHandleCaptureTransactionDetails(WebDriver driver, WebElement saveOptionBtn, WebElement saveAsDropDown,
+			WebElement saveOKBtn, WebElement exitOK, String saveAsValue,String policyNo)
+			throws Exception {
+		Thread.sleep(2000);
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options & verify Save as window displays.");
+		waitForElementToLoad(driver, 15, saveOptionBtn);
+		clickButton(driver, saveOptionBtn, "Save Option");
+		Thread.sleep(3000);
+		invisibilityOfLoader(driver);
+		Thread.sleep(2000);
+		WebElement iframeElement = driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]"));
+		//switchToFrameUsingId(driver, "popupframe1");
+		switchToFrameUsingElement(driver, iframeElement);
+		getPageTitle(driver, saveASWindowTitle);
+		ExtentReporter.logger.log(LogStatus.INFO, "Select "+saveAsValue+" from drop down list");
+		selectDropdownByValue(driver, saveAsDropDown, saveAsValue, "Selected "+saveAsValue);
+		ExtentReporter.logger.log(LogStatus.INFO, "Select " + saveAsValue + " Click [OK] & verify Message is closed and WIP is saved as"+ saveAsValue);
+		clickButton(driver, saveOKBtn, "OK");
+		switchToParentWindowfromframe(driver);
+		Thread.sleep(3000);
+		invisibilityOfLoader(driver);		
+		List <WebElement> iframeEle1 = driver.findElements(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]"));
+		switchToFrameUsingElement(driver, iframeEle1.get(1));
+		Thread.sleep(1000);
+		getPageTitle(driver, captureTranxDetailsWindowTitle);
+		if(captTranxOk.isDisplayed()){
+			clickButton(driver, captTranxOk, "OK");
+		}else{
+			Assert.assertTrue(false, "Capture Transaction Details window is not present.");
+		}
+		switchToParentWindowfromframe(driver);
+		Thread.sleep(2000);
+	}
+	
+	
+	
 }

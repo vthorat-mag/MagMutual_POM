@@ -52,7 +52,7 @@ public FinancePageDTO() throws IllegalArgumentException, IllegalAccessException,
 
 			if (FinancePageDTO.class.getFields()[iFC].getType().toString().toLowerCase().contains("java.util.list")) {
 				
-			//	if (SmokeTestCase.testDataMap.containsKey(FinancePageDTO.class.getFields()[iFC].getName().toLowerCase()))		{
+			//	if (SmokeTestCase.testDataMap.containsKey(FinancePageDTO.class.getFields()[iFC].getName().toLowerCase())){		{
 				try {
 					FinancePageDTO.class.getFields()[iFC].set(this,
 							SmokeTestCase.testDataMap.get(FinancePageDTO.class.getFields()[iFC].getName().toLowerCase()));
@@ -61,7 +61,7 @@ public FinancePageDTO() throws IllegalArgumentException, IllegalAccessException,
 					e.printStackTrace();
 				}
 
-			} 
+			}
 			else if (FinancePageDTO.class.getFields()[iFC].getType().toString().toLowerCase().contains("int")) {
 				try {
 					FinancePageDTO.class.getFields()[iFC].set(this, Integer.parseInt(SmokeTestCase.testDataMap
@@ -80,6 +80,8 @@ public FinancePageDTO() throws IllegalArgumentException, IllegalAccessException,
 					e.printStackTrace();
 				}
 			}
+				
 		}
 	}
-  }
+}
+  

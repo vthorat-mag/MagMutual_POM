@@ -5,8 +5,8 @@
     <classes>
       <class name="MMTestCase.SmokeTestCase">
         <methods>
-          <include name="TC42250"/>
           <include name="beforeClass"/>
+          <include name="TC42244"/>
           <include name="logoffFromAppclication"/>
           <include name="closeBrowser"/>
           <include name="Setup"/>

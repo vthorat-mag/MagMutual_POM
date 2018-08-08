@@ -23,6 +23,7 @@ public class PolicyIndicationPage extends CommonAction {
 	String maintainUnderwritingTeamPageTitle = "Maintain Underwriting Team";
 	String addUnderwriterPageTitle = "Add Underwriter";
 	String limitSharingPageTitle = "Limit Sharing";
+	String selectRiskTypeWindowTitle ="Select Risk Type";
 	String ExcelPath = System.getProperty("user.dir") + "\\src\\main\\resources\\QA_Form_Data.xlsx";
 
 	@FindBy(id = "PM_COMMON_TABS_SAVEWIP")
@@ -243,6 +244,13 @@ public class PolicyIndicationPage extends CommonAction {
 
 	@FindBy(id = "PM_LIMIT_SHARING_CLOSE")
 	WebElement Close_Limit_Sharing;
+	
+	@FindBy(id="PM_QT_RISK_ADD")
+	WebElement addRiskbtn;
+	
+	@FindBy(id="CRISKTYPEDESC")
+	List <WebElement> riskTypeList; 
+	
 
 	// Constructor to initialize driver, page elements and DTO PageObject for
 	// PolicyIndicationPage
@@ -408,6 +416,7 @@ public class PolicyIndicationPage extends CommonAction {
 		return new PolicyIndicationPage(driver);
 	}
 
+	
 	// Select Coverage tab, click on Add button and switch to pop up window
 	public PolicyIndicationPage selectCoverageTab() throws Exception {
 
@@ -808,4 +817,42 @@ public class PolicyIndicationPage extends CommonAction {
 		switchToParentWindowfromframe(driver);
 		return new RateApolicyPage(driver);
 	}
+	
+	
+	
+	public void selectRiskType(String policyNo) throws Exception{
+		
+		clickButton(driver, addRiskbtn, "Add");
+		Thread.sleep(2000);
+		invisibilityOfLoader(driver);
+		WebElement iframeEle = driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]"));
+		switchToFrameUsingElement(driver, iframeEle);
+		getPageTitle(driver, selectRiskTypeWindowTitle);
+		boolean flag=false;
+		try{
+		for(int i=0;i<riskTypeList.size();i++){
+			
+			if(riskTypeList.get(i).getAttribute("innerHTML").equals(hospitalIndicationDTO.riskTypeValue)){
+				
+				selectValue(driver, riskTypeList.get(i), hospitalIndicationDTO.riskTypeValue);
+				ExtentReporter.logger.log(LogStatus.PASS, hospitalIndicationDTO.riskTypeValue+" is selected from Risk Type List");
+				flag=true;
+				break;
+			}
+		}
+			if(flag==false){
+			throw new Exception();
+			}
+		}catch(Exception e){
+			ExtentReporter.logger.log(LogStatus.FAIL, hospitalIndicationDTO.riskTypeValue+" is not available in Risk Type List");			
+		}
+		
+		switchToParentWindowfromframe(driver);
+		String Blank="";
+		HomePage homePage= new HomePage(driver);
+		homePage.searchEntity(Blank,Blank);
+		String parentWindow = switchToWindow(driver);
+		homePage.selectEntity(parentWindow);
+	}
+	
 }
