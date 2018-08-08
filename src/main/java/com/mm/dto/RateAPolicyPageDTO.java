@@ -33,16 +33,35 @@ public class RateAPolicyPageDTO {
 	public RateAPolicyPageDTO(Map<String, List<String>> excelData) {
 
 		for (int i = 0; i <= RateAPolicyPageDTO.class.getFields().length - 1; i++) {
-			try {
-				// System.out.println(RateAPolicyPageDTO.class.getFields()[i].getName().toLowerCase());
-				RateAPolicyPageDTO.class.getFields()[i].set(this,
-						excelData.get(RateAPolicyPageDTO.class.getFields()[i].getName().toLowerCase()));
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				e.printStackTrace();
+			if (RateAPolicyPageDTO.class.getFields()[i].getType().toString().toLowerCase().contains("java.util.list")) {
+
+				// if
+				// (excelData.containsKey(RateAPolicyPageDTO.class.getFields()[i].getName().toLowerCase())){
+				// {
+				try {
+					RateAPolicyPageDTO.class.getFields()[i].set(this,
+							excelData.get(RateAPolicyPageDTO.class.getFields()[i].getName().toLowerCase()));
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+			} else if (RateAPolicyPageDTO.class.getFields()[i].getType().toString().toLowerCase().contains("int")) {
+				try {
+					RateAPolicyPageDTO.class.getFields()[i].set(this, Integer.parseInt(
+							excelData.get(RateAPolicyPageDTO.class.getFields()[i].getName().toLowerCase()).get(0)));
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else {
+				try {
+					RateAPolicyPageDTO.class.getFields()[i].set(this,
+							excelData.get(RateAPolicyPageDTO.class.getFields()[i].getName().toLowerCase()).get(0));
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 
 		}

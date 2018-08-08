@@ -15,17 +15,36 @@ public class CincomPageDTO {
 		
 		for(int i = 0; i<= CincomPageDTO.class.getFields().length-1; i++)
 		{
-			try {
-				//System.out.println(CincomPageDTO.class.getFields()[i].getName().toLowerCase());
-				CincomPageDTO.class.getFields()[i].set(this, excelData.get(CincomPageDTO.class.getFields()[i].getName().toLowerCase()));
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				e.printStackTrace();
+			if (CincomPageDTO.class.getFields()[i].getType().toString().toLowerCase().contains("java.util.list")) {
+
+				// if
+				// (excelData.containsKey(CincomPageDTO.class.getFields()[i].getName().toLowerCase())){
+				// {
+				try {
+					CincomPageDTO.class.getFields()[i].set(this,
+							excelData.get(CincomPageDTO.class.getFields()[i].getName().toLowerCase()));
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+			} else if (CincomPageDTO.class.getFields()[i].getType().toString().toLowerCase().contains("int")) {
+				try {
+					CincomPageDTO.class.getFields()[i].set(this, Integer.parseInt(
+							excelData.get(CincomPageDTO.class.getFields()[i].getName().toLowerCase()).get(0)));
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else {
+				try {
+					CincomPageDTO.class.getFields()[i].set(this,
+							excelData.get(CincomPageDTO.class.getFields()[i].getName().toLowerCase()).get(0));
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
-			
 		}
 	}
 }

@@ -29,18 +29,36 @@ public class PolicyBinderPageDTO {
 	public PolicyBinderPageDTO(Map<String, List<String>> excelData) {
 
 		for (int i = 0; i <= PolicyBinderPageDTO.class.getFields().length - 1; i++) {
-			try {
-				// System.out.println(PolicyBinderPageDTO.class.getFields()[i].getName().toLowerCase());
-				PolicyBinderPageDTO.class.getFields()[i].set(this,
-						excelData.get(PolicyBinderPageDTO.class.getFields()[i].getName().toLowerCase()));
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				e.printStackTrace();
-			}
+			if (PolicyBinderPageDTO.class.getFields()[i].getType().toString().toLowerCase().contains("java.util.list")) {
 
+				// if
+				// (excelData.containsKey(PolicyBinderPageDTO.class.getFields()[i].getName().toLowerCase())){
+				// {
+				try {
+					PolicyBinderPageDTO.class.getFields()[i].set(this,
+							excelData.get(PolicyBinderPageDTO.class.getFields()[i].getName().toLowerCase()));
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+			} else if (PolicyBinderPageDTO.class.getFields()[i].getType().toString().toLowerCase().contains("int")) {
+				try {
+					PolicyBinderPageDTO.class.getFields()[i].set(this, Integer.parseInt(
+							excelData.get(PolicyBinderPageDTO.class.getFields()[i].getName().toLowerCase()).get(0)));
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else {
+				try {
+					PolicyBinderPageDTO.class.getFields()[i].set(this,
+							excelData.get(PolicyBinderPageDTO.class.getFields()[i].getName().toLowerCase()).get(0));
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 	}

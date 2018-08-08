@@ -173,8 +173,6 @@ public class SmokeTestCasesUpdated {
 		exlUtil.writeData("TC42238", "PolicyNum", PolicyNo, 1, ExcelPath);
 	}
 
-	// DTO done
-
 	@Test(description = "Hospital Quote", groups = { "Smoke Test" }, priority = 4)
 	public void TC42238() throws Exception {
 		LoginPageDTO lpDTO;
@@ -194,10 +192,11 @@ public class SmokeTestCasesUpdated {
 		String policyNumber = policyquotepage.policyNo();
 
 		rateapolicyPage.coverageUpdates(policyNumber);
+		exlUtil.writeData("TC42242", "PolicyNum", policyNumber, 1, ExcelPath);
 		policyquotepage.rateFunctionality(policyNumber)
 				.saveOption(policyquotepagedto.secondSaveAsPolicyDDLValue, policyNumber).clickPreviewTab(policyNumber)
 				.savePDF().verifyPdfContent();
-		exlUtil.writeData("TC42242", "PolicyNum", policyNumber, 1, ExcelPath);
+		//exlUtil.writeData("TC42242", "PolicyNum", policyNumber, 1, ExcelPath);
 	}
 
 	@Test(description = "HPL Binder", groups = { "Smoke Test" }, priority = 5)
@@ -212,10 +211,10 @@ public class SmokeTestCasesUpdated {
 				.searchPolicyRateAPolicyPage().AcceptFromActionDropDown().identifyPhase().billingSetup()
 				.coverageDetailsSelect();
 		String policyNumber = rateapolicyPage.policyNo();
+		exlUtil.writeData("TC42245", "PolicyNum", policyNumber, 1, ExcelPath);
 		rateapolicyPage.coverageUpdates(policyNumber);
 		rateapolicyPage.rateFunctionality(policyNumber).clickPreviewTab(policyNumber).savePDF().verifyPdfContent()
 				.saveOption(policyNumber);
-		exlUtil.writeData("TC42245", "PolicyNum", policyNumber, 1, ExcelPath);
 	}
 
 	@Test(description = "Hospital Copy to Quote", groups = { "Smoke Test" }, priority = 6)
@@ -244,9 +243,9 @@ public class SmokeTestCasesUpdated {
 				.rateFunctionality(policybinderpage.policyNo()).saveOptionOfficial(policybinderpage.policyNo());
 		policybinderpage.endorsementFromActionDropDown().endorseAPolicyforRateApolicyPage(policyNumber)
 				.rateFunctionality(policybinderpage.policyNo());
+		exlUtil.writeData("TC42665", "PolicyNum", policybinderpage.policyNo(), 1, ExcelPath);
 		policyQuotePage.clickPreviewTab(policybinderpage.policyNo()).savePDF();
 		policyQuotePage.saveOptionOfficial(policybinderpage.policyNo());
-		exlUtil.writeData("TC42665", "PolicyNum", policyNumber, 1, ExcelPath);
 	}
 
 	@Test(description = "Hospital Issue Policy Forms", groups = { "Smoke Test" }, priority = 7)
@@ -266,7 +265,7 @@ public class SmokeTestCasesUpdated {
 		exlUtil.writeData("TC42399", "PolicyNum", policyNumber, 1, ExcelPath);
 	}
 
-	@Test(description = "Hospital Verify Attach Form", groups = { "Smoke Test" }, priority = 8)
+	/*@Test(description = "Hospital Verify Attach Form", groups = { "Smoke Test" }, priority = 8)
 	public void TC42399() throws Exception {
 
 		LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
@@ -357,7 +356,7 @@ public class SmokeTestCasesUpdated {
 		policybinderpage = new PolicyBinderPage(driver);
 		// String ClaimNumber = rateapolicyPage.policyNo();
 		policybinderpage.navigatetoClaimsPage().searchClaim().statusChange(rateapolicyPage.policyNo());
-	}
+	}*/
 
 	@AfterMethod(alwaysRun = true)
 	public void logoffFromAppclication(ITestResult result)
