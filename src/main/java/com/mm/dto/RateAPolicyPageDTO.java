@@ -29,6 +29,7 @@ public class RateAPolicyPageDTO {
 	public String policyNum;
 	public String policyNo;
 	public String endorsementComment;
+	public String backUpPolicyNum;
 
 	public RateAPolicyPageDTO(Map<String, List<String>> excelData) {
 

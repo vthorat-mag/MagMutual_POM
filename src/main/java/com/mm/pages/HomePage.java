@@ -105,6 +105,7 @@ public class HomePage extends CommonAction {
 
 	@FindBy(id = "PM_SPOL_SEARCH")
 	WebElement searchCriteria;
+	
 	@FindBy(id = "CPOLICYSTATUSLOVLABEL")
 	List<WebElement> policyStatus;
 
@@ -263,6 +264,29 @@ public class HomePage extends CommonAction {
 		// Select the first policy from the search results under Count tab
 		ExtentReporter.logger.log(LogStatus.INFO, "Click the Policy number under Policy/Quote# column. Full Policy displays when web cycles to active policy window");
 		click(driver, policyNumFromPolicyCount, homepageDTO.policyNum);
+		invisibilityOfLoader(driver);
+		rateapolicyPage = new RateApolicyPage(driver);
+
+		// Verify that page title is correct
+		String policyNumber = rateapolicyPage.policyNo();
+	    getPageTitleWithPolicyNumber(driver, policyNumber);
+
+		return policyNumber;
+
+	}
+	
+	public String backUpPolicySearchUsingSearchCriteria() throws Exception {
+		waitForElementToLoad(driver, 20, policyOrQuoteNum);
+
+		// Enter policy number in Policy/Quote# text field
+		ExtentReporter.logger.log(LogStatus.INFO, "Enter in Hospital or Facility # from 'Issue Policy Form' test case, click Search. Verify Policy # displays correctly under Policy Count tab");
+		clearTextBox(driver, policyOrQuoteNum, "Policy/Quote#");
+		enterTextIn(driver, policyOrQuoteNum, homepageDTO.policyNum, "Policy/Quote#");
+		clickButton(driver, searchCriteria, "Search");
+		Thread.sleep(2000);
+		// Select the first policy from the search results under Count tab
+		ExtentReporter.logger.log(LogStatus.INFO, "Click the Policy number under Policy/Quote# column. Full Policy displays when web cycles to active policy window");
+		click(driver, policyNumFromPolicyCount, homepageDTO.backUpPpolicyNum);
 		invisibilityOfLoader(driver);
 		rateapolicyPage = new RateApolicyPage(driver);
 
