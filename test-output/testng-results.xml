@@ -1,29 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="0" ignored="0" total="1" passed="1">
+<testng-results skipped="0" failed="1" ignored="0" total="1" passed="0">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="33868" started-at="2018-05-04T08:39:05Z" finished-at="2018-05-04T08:39:39Z">
+  <suite name="Default suite" duration-ms="77270" started-at="2018-08-08T13:04:05Z" finished-at="2018-08-08T13:05:22Z">
     <groups>
+      <group name="Smoke Test">
+        <method signature="SmokeTestCase.TC42244()[pri:0, instance:MMTestCase.SmokeTestCase@78123e82]" name="TC42244" class="MMTestCase.SmokeTestCase"/>
+      </group> <!-- Smoke Test -->
     </groups>
-    <test name="Default test" duration-ms="33868" started-at="2018-05-04T08:39:05Z" finished-at="2018-05-04T08:39:39Z">
-      <class name="SmokeTestCase">
-        <test-method status="PASS" signature="loginToeOasis()[pri:0, instance:SmokeTestCase@14555e0a]" name="loginToeOasis" is-config="true" duration-ms="4055" started-at="2018-05-04T08:39:05Z" finished-at="2018-05-04T08:39:09Z">
+    <test name="Default test" duration-ms="77270" started-at="2018-08-08T13:04:05Z" finished-at="2018-08-08T13:05:22Z">
+      <class name="MMTestCase.SmokeTestCase">
+        <test-method status="PASS" signature="beforeClass()[pri:0, instance:MMTestCase.SmokeTestCase@78123e82]" name="beforeClass" is-config="true" duration-ms="10" started-at="2018-08-08T13:04:05Z" finished-at="2018-08-08T13:04:05Z">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- loginToeOasis -->
-        <test-method status="PASS" signature="TC42404()[pri:0, instance:SmokeTestCase@14555e0a]" name="TC42404" duration-ms="23215" started-at="2018-05-04T08:39:09Z" description="Verify Add Organization" finished-at="2018-05-04T08:39:33Z">
+        </test-method> <!-- beforeClass -->
+        <test-method status="PASS" signature="Setup(java.lang.reflect.Method)[pri:0, instance:MMTestCase.SmokeTestCase@78123e82]" name="Setup" is-config="true" duration-ms="876" started-at="2018-08-08T13:04:05Z" finished-at="2018-08-08T13:04:06Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[public void MMTestCase.SmokeTestCase.TC42244() throws java.lang.Exception]]>
+              </value>
+            </param>
+          </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- TC42404 -->
-        <test-method status="PASS" signature="logoffFromAppclication()[pri:0, instance:SmokeTestCase@14555e0a]" name="logoffFromAppclication" is-config="true" duration-ms="515" started-at="2018-05-04T08:39:33Z" finished-at="2018-05-04T08:39:33Z">
+        </test-method> <!-- Setup -->
+        <test-method status="FAIL" signature="TC42244()[pri:0, instance:MMTestCase.SmokeTestCase@78123e82]" name="TC42244" duration-ms="73994" started-at="2018-08-08T13:04:06Z" description="Hospital - Add multiple risks" finished-at="2018-08-08T13:05:20Z">
+          <exception class="java.lang.AssertionError">
+            <message>
+              <![CDATA[Quote value not available in drop down list expected [true] but found [false]]]>
+            </message>
+            <full-stacktrace>
+              <![CDATA[java.lang.AssertionError: Quote value not available in drop down list expected [true] but found [false]
+at org.testng.Assert.fail(Assert.java:96)
+at org.testng.Assert.failNotEquals(Assert.java:776)
+at org.testng.Assert.assertTrue(Assert.java:44)
+at com.mm.utils.CommonAction.selectDropdownByValue(CommonAction.java:360)
+at com.mm.pages.PolicyQuotePage.changePolicyPhase(PolicyQuotePage.java:318)
+at MMTestCase.SmokeTestCase.TC42244(SmokeTestCase.java:122)
+at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+at java.lang.reflect.Method.invoke(Unknown Source)
+at org.testng.internal.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:124)
+at org.testng.internal.Invoker.invokeMethod(Invoker.java:580)
+at org.testng.internal.Invoker.invokeTestMethod(Invoker.java:716)
+at org.testng.internal.Invoker.invokeTestMethods(Invoker.java:988)
+at org.testng.internal.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:125)
+at org.testng.internal.TestMethodWorker.run(TestMethodWorker.java:109)
+at org.testng.TestRunner.privateRun(TestRunner.java:648)
+at org.testng.TestRunner.run(TestRunner.java:505)
+at org.testng.SuiteRunner.runTest(SuiteRunner.java:455)
+at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:450)
+at org.testng.SuiteRunner.privateRun(SuiteRunner.java:415)
+at org.testng.SuiteRunner.run(SuiteRunner.java:364)
+at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:84)
+at org.testng.TestNG.runSuitesSequentially(TestNG.java:1208)
+at org.testng.TestNG.runSuitesLocally(TestNG.java:1137)
+at org.testng.TestNG.runSuites(TestNG.java:1049)
+at org.testng.TestNG.run(TestNG.java:1017)
+at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:114)
+at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:251)
+at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:77)
+]]>
+            </full-stacktrace>
+          </exception> <!-- java.lang.AssertionError -->
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- TC42244 -->
+        <test-method status="PASS" signature="logoffFromAppclication(org.testng.ITestResult)[pri:0, instance:MMTestCase.SmokeTestCase@78123e82]" name="logoffFromAppclication" is-config="true" duration-ms="2366" started-at="2018-08-08T13:05:20Z" finished-at="2018-08-08T13:05:22Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[[TestResult name=TC42244 status=FAILURE method=SmokeTestCase.TC42244()[pri:0, instance:MMTestCase.SmokeTestCase@78123e82] output={null}]]]>
+              </value>
+            </param>
+          </params>
           <reporter-output>
           </reporter-output>
         </test-method> <!-- logoffFromAppclication -->
-        <test-method status="PASS" signature="closeBrowser()[pri:0, instance:SmokeTestCase@14555e0a]" name="closeBrowser" is-config="true" duration-ms="6067" started-at="2018-05-04T08:39:33Z" finished-at="2018-05-04T08:39:39Z">
+        <test-method status="PASS" signature="closeBrowser()[pri:0, instance:MMTestCase.SmokeTestCase@78123e82]" name="closeBrowser" is-config="true" duration-ms="0" started-at="2018-08-08T13:05:22Z" finished-at="2018-08-08T13:05:22Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- closeBrowser -->
-      </class> <!-- SmokeTestCase -->
+      </class> <!-- MMTestCase.SmokeTestCase -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>

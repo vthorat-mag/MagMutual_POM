@@ -49,5 +49,20 @@
 	    <artifactId>fontbox</artifactId>
 	    <version>2.0.8</version>
 	</dependency>
+	
+	<dependency>
+    	<groupId>com.rallydev.rest</groupId>
+    	<artifactId>rally-rest-api</artifactId>
+    	<version>2.2.1</version>
+	</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-io -->
+<dependency>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-io</artifactId>
+    <version>1.3.2</version>
+</dependency>
+	
+	
   </dependencies>
 </project>

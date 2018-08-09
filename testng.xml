@@ -1,26 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Mag Mutual's Sanity Suite execution" parallel="tests" thread-count="1">
-  <listeners>
- 	<listener class-name="com.mm.listeners.testListeners"></listener>
-  </listeners>
-  
-  <test name="Mag Mutual's Sanity Test Cases.">
-    <classes>
-      <class name="MMTestCase.SmokeTestCase">
-      	<methods> 
-      		<include name = "TC42404" />
-      	</methods>
-      </class>
-    </classes>
-  </test> <!-- Test -->
-  <test name="Mag Mutual's Sanity Test Cases 1.">
-    <classes>
-      <class name="MMTestCase.SmokeTestCase">
-      		<methods> 
-      			<include name = "TC42239" />
-      		</methods>
-      </class>
-    </classes>
-  </test> <!-- Test -->
+<suite name="MagMutualSuite" parallel="methods" thread-count="1">
+	<listeners>
+		<listener class-name="com.mm.listeners.ListnerClass" />
+	</listeners>
+	<test name="Test" parallel = "methods" thread-count="2">
+		<classes>
+			<class name="MMTestCase.SmokeTestCasesUpdated" />
+		</classes>
+	</test> <!-- Test -->
 </suite> <!-- Suite -->
