@@ -388,7 +388,18 @@ public class PolicyQuotePage extends CommonAction {
 		Thread.sleep(4000);
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Click Policy Actions>Renewal. Verify Capture Transaction Details window opens");
-		selectDropdownByVisibleText(driver, policyAction, policyquotepageDTO.policyActionValue, "Policy Action");
+		
+		if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.policyActionValue, "Policy Action").equals("false")) {
+			RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
+			RateAPolicyPageDTO rateApolicyPageDTO = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
+			rateapolicypage.searchBackUpPolicy();
+			PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
+			//policybinderpage.copyToQuoteFromActionDropDown(rateApolicyPageDTO.backUpPolicyNum);
+			selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.policyActionValue, "Policy Action");
+		}
+		
+		
+		//selectDropdownByVisibleText(driver, policyAction, policyquotepageDTO.policyActionValue, "Policy Action");
 		Thread.sleep(2000);
 		invisibilityOfLoader(driver);
 		switchToFrameUsingId(driver, "popupframe1");

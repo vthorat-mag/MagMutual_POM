@@ -42,6 +42,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
+import com.mm.pages.PolicyBinderPage;
 import com.mm.pages.PolicyQuotePage;
 import com.mm.pages.RateApolicyPage;
 import com.relevantcodes.extentreports.LogStatus;
@@ -368,7 +369,6 @@ public class CommonAction implements CommonActionInterface {
 			wait.until(ExpectedConditions.visibilityOf(element));
 			Thread.sleep(4000);
 			Assert.assertTrue(element.isDisplayed(),element.getText()+" is not displaye on page.");
-			Assert.assertTrue(element.isDisplayed(),element.getText()+" is not displaye on page.");
 			Select Sel = new Select(element);
 			Sel.selectByValue(DropDownOption);
 			ExtentReporter.logger.log(LogStatus.PASS, DropDownOption+" value is selected from " + label + " drop down list");
@@ -646,6 +646,7 @@ public class CommonAction implements CommonActionInterface {
 		}
 
 	public void policySearch(WebDriver driver, String policyNo, WebElement policySearchTxtBox, WebElement searchBtn,WebElement policyList) throws Exception{
+		PolicyBinderPage policybinderpage = new PolicyBinderPage(driver); 
 		ExtentReporter.logger.log(LogStatus.INFO, "Enter in active Hospital/Facility policy number in Enter Policy # entry box, Click Search. Policy Will display" );
 		clearTextBox(driver, policySearchTxtBox, "Enter Policy # text field");
 		enterTextIn(driver, policySearchTxtBox, policyNo, "Enter Policy # text field");
@@ -662,11 +663,33 @@ public class CommonAction implements CommonActionInterface {
 			Assert.assertTrue(false, "Policy is not available, please enter another/correct policy Number.");
 		}
 		else{
-			getPageTitle(driver, "Policy Folder "+policyNo);
+			getPageTitle(driver, "Policy Folder "+policybinderpage.policyNo());
 			ExtentReporter.logger.log(LogStatus.INFO, "Policy list is displayed after policy Search");
 		}
 	}
 
+	public void claimsSearch(WebDriver driver, String policyNo, WebElement policySearchTxtBox, WebElement searchBtn,WebElement policyList) throws Exception{
+		PolicyBinderPage policybinderpage = new PolicyBinderPage(driver); 
+		ExtentReporter.logger.log(LogStatus.INFO, "Enter in active Hospital/Facility policy number in Enter Policy # entry box, Click Search. Policy Will display" );
+		clearTextBox(driver, policySearchTxtBox, "Enter Policy # text field");
+		enterTextIn(driver, policySearchTxtBox, policyNo, "Enter Policy # text field");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click search button and Verify full policy page is displayed");
+		click(driver, searchBtn, "Search button");
+		Thread.sleep(1000);
+		invisibilityOfLoader(driver);
+		if(verifyPolicyListDispOnQAEnv(driver,policyList)==true){
+			//clickButton(driver, policyList, "First policy from Searched Policies");
+			Actions action = new Actions(driver);
+			action.click(policyList).build().perform();
+		}else if(verifypolicyNotDisplayErrorMsg(driver).equals("trrue")){
+			ExtentReporter.logger.log(LogStatus.FAIL, "Policy is not available, please enter another/correct policy Number.");
+			Assert.assertTrue(false, "Policy is not available, please enter another/correct policy Number.");
+		}
+		else{
+			getPageTitle(driver, "Claim Folder "+policybinderpage.policyNo());
+			ExtentReporter.logger.log(LogStatus.INFO, "Policy list is displayed after policy Search");
+		}
+	}
 
 	public boolean verifyPolicyListDispOnQAEnv(WebDriver driver, WebElement policyList) {
 		try{

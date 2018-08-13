@@ -109,14 +109,14 @@ public class SmokeTestCase extends BrowserTypes {
 	
 	@Test(description = "Hospital - Add multiple risks", groups = { "Smoke Test" })
 	public void TC42244() throws Exception {
-			LoginPageDTO lpDTO = new LoginPageDTO();
+			LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
 			LoginPage loginpage = new LoginPage(driver);
 			RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
 			PolicyBinderPage policyBinderPage = new PolicyBinderPage(driver);
 			PolicyQuotePage policyQuotePage = new PolicyQuotePage(driver);
 			PolicyIndicationPage policyIndicationPage= new PolicyIndicationPage(driver);
 			PolicySubmissionPage policySubmissionPage = new PolicySubmissionPage(driver); 
-			PolicyQuotePageDTO policyQuotePageDTO = new PolicyQuotePageDTO();
+			PolicyQuotePageDTO policyQuotePageDTO = new PolicyQuotePageDTO(TestCaseDetails.testDataDictionary);
 			loginpage.loginToeOasis(lpDTO.username, lpDTO.password)
 			.navigateToPolicyPageUsingHeaderPolicyLink()
 			.searchPolicyPolicyBinderPage()
@@ -412,10 +412,10 @@ public class SmokeTestCase extends BrowserTypes {
 	public void TC42400() throws Exception {
 		//TODO- Get policy number//09100510, 09100511, 09100512, 09100514
 		
-		LoginPageDTO lpDTO = new LoginPageDTO();
+		LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
 		LoginPage loginpage = new LoginPage(driver);
 		PolicyQuotePage policyQuotePage = new PolicyQuotePage(driver);
-		PolicyQuotePageDTO policyquotepageDTO = new PolicyQuotePageDTO();
+		PolicyQuotePageDTO policyquotepageDTO = new PolicyQuotePageDTO(TestCaseDetails.testDataDictionary);
 		PolicyBinderPage policyBinderPage = new PolicyBinderPage(driver);
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageFromrateApolicyPage()
 				.searchPolicyPolicyQuotePage().selectPolicyActionAndAddDescription().save_CaptureTransactionDetails();
@@ -460,7 +460,7 @@ public class SmokeTestCase extends BrowserTypes {
 		PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
 		RateApolicyPage rateApolicyPage = new RateApolicyPage(driver);
 		PolicyQuotePage policyQuotePage = new PolicyQuotePage(driver);
-		PolicyQuotePageDTO policyquotepagedto= new PolicyQuotePageDTO();
+		PolicyQuotePageDTO policyquotepagedto= new PolicyQuotePageDTO(TestCaseDetails.testDataDictionary);
 		
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageFromrateApolicyPage()
 				.searchPolicyRateAPolicyPage();
