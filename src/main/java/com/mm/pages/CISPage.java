@@ -17,6 +17,7 @@ import org.testng.Assert;
 
 import com.mm.utils.ExcelUtil;
 import com.mm.utils.ExtentReporter;
+import com.mm.utils.TestCaseDetails;
 import com.relevantcodes.extentreports.LogStatus;
 import com.relevantcodes.extentreports.model.ExceptionInfo;
 import com.mm.dto.CISPageDTO;
@@ -201,117 +202,119 @@ public class CISPage extends CommonAction {
 	public CISPage(WebDriver driver) throws Exception {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
-		oCISPageDTO = new CISPageDTO();
+		oCISPageDTO = new CISPageDTO(TestCaseDetails.testDataDictionary);
 	}
 
 	// Search and Select the client name from the Entity List
-	public CISPage searchAndSelectAClientName() throws Exception {
+		public CISPage searchAndSelectAClientName() throws Exception {
 
-		waitForElementToLoad(driver, 10, clientLastName);
-		enterTextIn(driver, clientLastName, oCISPageDTO.clientLastName, "Last/Org Name");
-		enterTextIn(driver, clientFirstName, oCISPageDTO.clientFirstName, "First Name");
-		Thread.sleep(2000);
-		click(driver, searchButton, "Search");
-		ExtentReporter.logger.log(LogStatus.INFO, "Search results returned");
-		invisibilityOfLoader(driver);
-		Thread.sleep(3000);
-		getPageTitle(driver, EntityListPageTitle);
-		//Get list of client IDs based on environment 'BTS OR QA' and store in List WebElement
-		List <WebElement>clientIDEntityList =driver.findElements(By.xpath("//div[@id='CCLIENT_ID'] | //div[@title='"+oCISPageDTO.clientIDValue+"']//div"));
-		try{
-		visibilityOfElement(driver, clientNameEntityList.get(0), "Client name");
-		visibilityOfElement(driver, clientIDEntityList.get(0), "Client ID");
-		}catch(Exception e){
-			throw new NoSuchElementException();
-		}
-		// Searching the client using client name and matching id
-		boolean flag = false;
-		try {
-			for (int i = 0; i < clientNameEntityList.size(); i++) {
+			waitForElementToLoad(driver, 10, clientLastName);
+			ExtentReporter.logger.log(LogStatus.INFO, "Enter "+oCISPageDTO.clientLastName+" in the Last Name field. Enter "+oCISPageDTO.clientFirstName+" in the First Name field"
 
-				// compare the client name with the client id and select client
-				// name whose id matches
-				if (clientNameEntityList.get(i).getAttribute("innerHTML").trim().equals(oCISPageDTO.clientNameValue)
-						&& clientIDEntityList.get(i).getAttribute("innerHTML").trim().equals(oCISPageDTO.clientIDValue)) {
-					ExtentReporter.logger.log(LogStatus.INFO, "CIS Demographic Client screen opens");
-					click(driver, clientNameEntityList.get(i), oCISPageDTO.clientNameValue);
-					flag = true;
-					break;
+					+"Click search. Verify Search results returned");
+			enterTextIn(driver, clientLastName, oCISPageDTO.clientLastName, "Last/Org Name");
+			enterTextIn(driver, clientFirstName, oCISPageDTO.clientFirstName, "First Name");
+			Thread.sleep(2000);
+			click(driver, searchButton, "Search");
+			invisibilityOfLoader(driver);
+			Thread.sleep(3000);
+			getPageTitle(driver, EntityListPageTitle);
+			//Get list of client IDs based on environment 'BTS OR QA' and store in List WebElement
+			List <WebElement>clientIDEntityList =driver.findElements(By.xpath("//div[@id='CCLIENT_ID'] | //div[@title='"+oCISPageDTO.clientIDValue+"']//div"));
+			try{
+			visibilityOfElement(driver, clientNameEntityList.get(0), "Client name");
+			visibilityOfElement(driver, clientIDEntityList.get(0), "Client ID");
+			}catch(Exception e){
+				throw new NoSuchElementException();
+			}
+			// Searching the client using client name and matching id
+			boolean flag = false;
+			try {
+				for (int i = 0; i < clientNameEntityList.size(); i++) {
+
+					// compare the client name with the client id and select client
+					// name whose id matches
+					if (clientNameEntityList.get(i).getAttribute("innerHTML").trim().equals(oCISPageDTO.clientNameValue)
+							&& clientIDEntityList.get(i).getAttribute("innerHTML").trim().equals(oCISPageDTO.clientIDValue)) {
+						ExtentReporter.logger.log(LogStatus.INFO, "Click on "+oCISPageDTO.clientNameValue+". Verify CIS Demographic Client screen opens");
+						click(driver, clientNameEntityList.get(i), oCISPageDTO.clientNameValue);
+						flag = true;
+						break;
+					}
 				}
+				if (flag == false) {
+					throw new Exception("Client Name is not listed in search result");
+				}
+			} catch (Exception exception) {
+				ExtentReporter.logger.log(LogStatus.FAIL,
+						"Client name with matching ID is not available in the Entity List");
 			}
-			if (flag == false) {
-				throw new Exception("Client Name is not listed in search result");
-			}
-		} catch (Exception exception) {
-			ExtentReporter.logger.log(LogStatus.FAIL,
-					"Client name with matching ID is not available in the Entity List");
+			return new CISPage(driver);
 		}
-		return new CISPage(driver);
-	}
 
-	// Verify that all main tabs having menu options are opened and page title
-	// is verified
-	public CISPage verifyPagesHavingMenuOnPersonPageAreDisplayed() throws Exception {
-		Thread.sleep(3000);
-		JavascriptExecutor executor = (JavascriptExecutor) driver;
+		// Verify that all main tabs having menu options are opened and page title
+		// is verified
+		public CISPage verifyPagesHavingMenuOnPersonPageAreDisplayed() throws Exception {
+			Thread.sleep(3000);
+			JavascriptExecutor executor = (JavascriptExecutor) driver;
 
-		// Get list of main tabs from Excel sheet column
-		for (int i = 0; i < oCISPageDTO.mainTabList.size(); i++) {
-			// Get the list of all sub tabs under the selected main tab from
-			// application
-			List<WebElement> tabMenuOption = driver.findElements(
-					By.xpath("//ul[@id='tabSubMenuForCI_" + oCISPageDTO.mainTabList.get(i).trim() + "_TG']//span"));
+			// Get list of main tabs from Excel sheet column
+			for (int i = 0; i < oCISPageDTO.mainTabList.size(); i++) {
+				// Get the list of all sub tabs under the selected main tab from
+				// application
+				List<WebElement> tabMenuOption = driver.findElements(
+						By.xpath("//ul[@id='tabSubMenuForCI_" + oCISPageDTO.mainTabList.get(i).trim() + "_TG']//span"));
 
-			// Get the count of all sub tabs under selected main tab
-			for (int j = 0; j < tabMenuOption.size(); j++) {
-				// Get list of all sub tabs from excel sheet
-				for (int k = 0; k < oCISPageDTO.allMenuOptions.size(); k++) {
+				// Get the count of all sub tabs under selected main tab
+				for (int j = 0; j < tabMenuOption.size(); j++) {
+					// Get list of all sub tabs from excel sheet
+					for (int k = 0; k < oCISPageDTO.allMenuOptions.size(); k++) {
 
-					// verify if the main tab displayed is selected
-					if (verifyelementDisplay(selectedMainTab) == true) {
-						// Reinitialize the tab menu options elements to avoid
-						// stale element
-						List<WebElement> tabMenuOption1 = driver.findElements(By.xpath(
-								"//ul[@id='tabSubMenuForCI_" + oCISPageDTO.mainTabList.get(i).trim() + "_TG']//span"));
+						// verify if the main tab displayed is selected
+						if (verifyElementDisplays(selectedMainTab) == true) {
+							// Reinitialize the tab menu options elements to avoid
+							// stale element
+							List<WebElement> tabMenuOption1 = driver.findElements(By.xpath(
+									"//ul[@id='tabSubMenuForCI_" + oCISPageDTO.mainTabList.get(i).trim() + "_TG']//span"));
 
-						// compare if tab menu text is equal to menu option from
-						// excel sheet
-						if (tabMenuOption1.get(j).getAttribute("innerHTML")
-								.equalsIgnoreCase(oCISPageDTO.allMenuOptions.get(k))) {
-							waitForElementToLoad(driver, 10, selectedMainTab);
-							JavascriptExecutor executor1 = (JavascriptExecutor) driver;
-							// click on tab main tab and then click on tab menu
-							executor1.executeScript("arguments[0].click();", selectedMainTab);
-							ExtentReporter.logger.log(LogStatus.INFO,
-									oCISPageDTO.allMenuOptions.get(k) + " window opens");
-							executor1.executeScript("arguments[0].click();", tabMenuOption1.get(j));
-							invisibilityOfLoader(driver);
-							Thread.sleep(2000);
-							// verifying the page title of an open window
-							verifyPageTitleForTheOpenWindow(displayedWindowTitle,
-									oCISPageDTO.windowTitlesForSubMenuTabs.get(k) + " " + oCISPageDTO.clientNameValue,
-									oCISPageDTO.allMenuOptions.get(k));
-						}
-					} else {
-						if (tabMenuOption.get(j).getAttribute("innerHTML").equals(oCISPageDTO.allMenuOptions.get(k))) {
-							// click on tab menu option (when main tab is not in
-							// selected mode)
-							ExtentReporter.logger.log(LogStatus.INFO,
-									oCISPageDTO.allMenuOptions.get(k) + " window opens");
-							executor.executeScript("arguments[0].click();", tabMenuOption.get(j));
-							invisibilityOfLoader(driver);
-							Thread.sleep(2000);
-							// verifying the page title of an open window
-							verifyPageTitleForTheOpenWindow(displayedWindowTitle,
-									oCISPageDTO.windowTitlesForSubMenuTabs.get(k) + " " + oCISPageDTO.clientNameValue,
-									oCISPageDTO.allMenuOptions.get(k));
+							// compare if tab menu text is equal to menu option from
+							// excel sheet
+							if (tabMenuOption1.get(j).getAttribute("innerHTML")
+									.equalsIgnoreCase(oCISPageDTO.allMenuOptions.get(k))) {
+								waitForElementToLoad(driver, 10, selectedMainTab);
+								ExtentReporter.logger.log(LogStatus.INFO,"Click on "+oCISPageDTO.mainTabList.get(i)+" drop down and Select "
+								+ oCISPageDTO.allMenuOptions.get(k) + ". Verify " +oCISPageDTO.allMenuOptions.get(k)+" window opens");
+								JavascriptExecutor executor1 = (JavascriptExecutor) driver;
+								// click on tab main tab and then click on tab menu
+								executor1.executeScript("arguments[0].click();", selectedMainTab);
+								executor1.executeScript("arguments[0].click();", tabMenuOption1.get(j));
+								invisibilityOfLoader(driver);
+								Thread.sleep(2000);
+								// verifying the page title of an open window
+								verifyPageTitleForTheOpenWindow(displayedWindowTitle,
+										oCISPageDTO.windowTitlesForSubMenuTabs.get(k) + " " + oCISPageDTO.clientNameValue,
+										oCISPageDTO.allMenuOptions.get(k));
+							}
+						} else {
+							if (tabMenuOption.get(j).getAttribute("innerHTML").equals(oCISPageDTO.allMenuOptions.get(k))) {
+								// click on tab menu option (when main tab is not in
+								// selected mode)
+								ExtentReporter.logger.log(LogStatus.INFO,"Click on "+oCISPageDTO.mainTabList.get(i)+" drop down and Select "
+								+ oCISPageDTO.allMenuOptions.get(k) + ". Verify " +oCISPageDTO.allMenuOptions.get(k)+" window opens");
+								executor.executeScript("arguments[0].click();", tabMenuOption.get(j));
+								invisibilityOfLoader(driver);
+								Thread.sleep(2000);
+								// verifying the page title of an open window
+								verifyPageTitleForTheOpenWindow(displayedWindowTitle,
+										oCISPageDTO.windowTitlesForSubMenuTabs.get(k) + " " + oCISPageDTO.clientNameValue,
+										oCISPageDTO.allMenuOptions.get(k));
+							}
 						}
 					}
 				}
 			}
+			return new CISPage(driver);
 		}
-		return new CISPage(driver);
-	}
 
 	// Verify that main tab not having menu options is opened and page title is
 	// verified
@@ -327,8 +330,10 @@ public class CISPage extends CommonAction {
 				try {
 					// click on tab name when it matches with name from excel
 					// sheet
+					ExtentReporter.logger.log(LogStatus.INFO,"Click on "+oCISPageDTO.allMenuOptions.get(i)+
+							". Verify " +oCISPageDTO.allMenuOptions.get(i)+" window opens");
+					
 					JavascriptExecutor executor1 = (JavascriptExecutor) driver;
-					ExtentReporter.logger.log(LogStatus.INFO, oCISPageDTO.allMenuOptions.get(i) + " window opens");
 					executor1.executeScript("arguments[0].click();", agencyMainTab);
 					Thread.sleep(2000);
 					// verify the page title when the tab window opens
@@ -348,21 +353,32 @@ public class CISPage extends CommonAction {
 	// each tab that is selected
 	public void verifyPageTitleForTheOpenWindow(WebElement tabTitleElement, String tabTitle, String tabName) throws InterruptedException {
 		Thread.sleep(2000);
-		//waitForElementToLoad(driver, 10, tabTitleElement);
+		waitForElementToLoad(driver, 10, tabTitleElement);
 
-		// verify if tab title matches with tab title from excel sheet and log
-		// message
+		// verify if actual tab title matches with tab title from excel sheet and log message
 		if (tabTitleElement.getAttribute("innerHTML").trim().equals(tabTitle)) {
 			ExtentReporter.logger.log(LogStatus.PASS,
 					tabName + " page title is as expected i.e. " + tabTitleElement.getAttribute("innerHTML").trim());
-		} else {
+		} else{
+			
+			//Files tab title changes if the claim is available, so below if handles changed title
+			String filesTabPartialTitle="Claims for ";
+			if(tabTitleElement.getAttribute("innerHTML").contains(filesTabPartialTitle)){
+					
+					if(tabTitleElement.getAttribute("innerHTML").trim().equals(filesTabPartialTitle+oCISPageDTO.clientNameValue))
+						
+					ExtentReporter.logger.log(LogStatus.PASS,tabName + " page title is as expected i.e. " + tabTitleElement.getAttribute("innerHTML").trim());
+				
+			}else{
 			ExtentReporter.logger.log(LogStatus.FAIL, tabName + " page title did not match, expected was " + tabTitle
 					+ " but found " + tabTitleElement.getAttribute("innerHTML").trim());
 		}
 	}
+}
 
+	
 	// verify that Menu tab is displayed and return boolean value
-	public Boolean verifyelementDisplay(WebElement pageElement) {
+	public Boolean verifyElementDisplays(WebElement pageElement) {
 		try {
 			if (pageElement.isEnabled())
 				return true;
@@ -378,7 +394,7 @@ public class CISPage extends CommonAction {
 	// Move to Quick Add button and select Add Organization menu
 	public CISPage navigateToAddOrgPage() throws Exception {
 		Thread.sleep(2000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Add Organization Quick Entry window displays");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Quick Add Dropdown and  then select Add Organization. Add Organization Quick Entry window displays");
 		Actions action = new Actions(driver);
 		action.moveToElement(quickAdd).build().perform();
 		JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -404,8 +420,10 @@ public class CISPage extends CommonAction {
 	public String addOrganizationInformation() throws Exception {
 
 		getPageTitle(driver, AddOrganizationPageTitle);
-		ExtentReporter.logger.log(LogStatus.INFO, "Organization information is added");
-		String OrganizationName = oCISPageDTO.OrgName + randomNumGenerator();
+		ExtentReporter.logger.log(LogStatus.INFO, "Enter/select below information\n Organization: Enter Org Name (Automated Hospital (date))\n"+
+				"DOI: Enter Today's Date\n Classification: Select Med Facility\n Class Eff. From Date: Today's Date\n Class Eff. To Date: 01/01/3000\n Organization information is added");
+		
+		String OrganizationName = oCISPageDTO.OrgName + randomNumGenerator(3,"123456789");
 		enterTextIn(driver, orgName, OrganizationName, "Org Name");
 		enterTextIn(driver, dateOfBirth, oCISPageDTO.dateOfBirth, "DOI");
 		selectDropdownByVisibleText(driver, classification, oCISPageDTO.Classification, "Classfication");
@@ -417,7 +435,10 @@ public class CISPage extends CommonAction {
 
 	// Add org address in Address section
 	public CISPage addOrgAddress() throws Exception {
-		ExtentReporter.logger.log(LogStatus.INFO, "Address is entered");
+		ExtentReporter.logger.log(LogStatus.INFO, "Enter below information under Address criteria Select\n"+ 
+		"Country: USA Address\n Address Type: Policy Address\n Address) Line 1: Generate random number and street name City: Atlanta (zip code pop-up screen displays)"+
+		"State: GA\n County: Select any county from DDL\n Zip: Select any Zip Code from pop-up screen\n Addr. Eff From Date: Select Today's date (defaults)\n Address is entered");
+		
 		selectDropdownByValue(driver, addressType1, oCISPageDTO.addrType, "Add_Type1");
 		enterTextIn(driver, addrLine1, oCISPageDTO.addressLine1, "Line1");
 		enterTextIn(driver, City, oCISPageDTO.City, "city");
@@ -428,13 +449,13 @@ public class CISPage extends CommonAction {
 
 	// Select zip code from pop up window and validate on parent window
 	public CISPage selectZipCode() throws Exception {
-		Thread.sleep(2000);
+		Thread.sleep(4000);
 		// switch to new window using get window handle
 		String parentwindow = switchToWindow(driver);
 		WebElement zipCode = driver.findElement(By.xpath("//input[@value='" + oCISPageDTO.zipCode + "']"));
 		// select zip code from pop up window
-		click(driver, zipCode, "ZipCode");
-		click(driver, OkButton, "OK button");
+		clickButton(driver, zipCode, "ZipCode");
+		clickButton(driver, OkButton, "OK button");
 		Thread.sleep(1000);
 		// navigate back to parent window
 		switchToParentWindowfromotherwindow(driver, parentwindow);
@@ -446,11 +467,13 @@ public class CISPage extends CommonAction {
 
 	// Add phone number in phone section
 	public CISPage addPhoneNumber() throws Exception {
-		ExtentReporter.logger.log(LogStatus.INFO, "Phone number is added");
+		ExtentReporter.logger.log(LogStatus.INFO, "Enter below information under\n"
+				+ " Phone Address1-\n Phone No.Type: Enter Office Telephone\n Area Code: 770\n Phone Number: ###-#### format\n Phone number is added");
+		
 		enterTextIn(driver, phoneNumType, oCISPageDTO.phoneNumType, "Phone Num Type");
 		enterTextIn(driver, areaCode, oCISPageDTO.areaCode, "Area Code");
 		enterTextIn(driver, phoneNum, oCISPageDTO.phoneNumber, "Phone number");
-		ExtentReporter.logger.log(LogStatus.INFO, "Organization is added");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click [Save and Close]. Organization is added");
 		click(driver, Save, "Save button");
 		return new CISPage(driver);
 	}

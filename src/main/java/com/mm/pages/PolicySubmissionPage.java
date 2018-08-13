@@ -12,6 +12,7 @@ import com.mm.dto.PolicySubmissionPageDTO;
 import com.mm.utils.CommonAction;
 import com.mm.utils.ExtentReporter;
 import com.mm.utils.PDFReader;
+import com.mm.utils.TestCaseDetails;
 import com.relevantcodes.extentreports.LogStatus;
 
 public class PolicySubmissionPage extends CommonAction {
@@ -54,14 +55,15 @@ public class PolicySubmissionPage extends CommonAction {
 			throws IllegalArgumentException, IllegalAccessException, SecurityException {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
-		policysubmissionpageDTO = new PolicySubmissionPageDTO();
+		policysubmissionpageDTO = new PolicySubmissionPageDTO(TestCaseDetails.testDataDictionary);
 	}
 
 	// Select Copy from Action value from Action drop down.
 	public PolicySubmissionPage copyFromPolicyActionDropDown(String policyNum)
 			throws IllegalArgumentException, IllegalAccessException, SecurityException, InterruptedException {
-		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy");
-		selectDropdownByVisibleText(driver,policyAction, policysubmissionpageDTO.valueOfPolicyActionCopy, "Policy Action");
+		Thread.sleep(2000);
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy. Verify Phase is editable.");
+		selectDropdownByValue(driver,policyAction, policysubmissionpageDTO.valueOfPolicyActionCopy, "Policy Action");
 		Thread.sleep(3000);
 		return new PolicySubmissionPage(driver);
 
@@ -70,9 +72,10 @@ public class PolicySubmissionPage extends CommonAction {
 	// Change policy phase to indication.
 	public PolicySubmissionPage changePhaseToIndicationAndAddQuoteDescription()
 			throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
-		Thread.sleep(3000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Change Policy Phase to Indication");
+		Thread.sleep(6000);
+		ExtentReporter.logger.log(LogStatus.INFO, "Change Policy Phase to Indication. Verify Policy is changed from Submission to Indication");
 		selectDropdownByValue(driver,policyPhase, policysubmissionpageDTO.indicationPhaseValue, "Phase");
+		ExtentReporter.logger.log(LogStatus.INFO, "Enter "+policysubmissionpageDTO.quoteDescription+" in the Quote Description. Verify "+policysubmissionpageDTO.quoteDescription+" is entered in Quote Description.");
 		enterTextIn(driver, Quote_Description, policysubmissionpageDTO.quoteDescription, "Quote Description");
 		Thread.sleep(1000);
 		return new PolicySubmissionPage(driver);
@@ -90,18 +93,19 @@ public class PolicySubmissionPage extends CommonAction {
 	// Update policy details for a policy and change policy phase from
 	// Submission to Indication.
 	public PolicyIndicationPage updatePolicyDetails() throws Exception {
-		invisibilityOfLoader(driver);
 		Thread.sleep(5000);
-		//TODO-add get page title
-		//waitForElementToLoad(driver, 20, Phase);
-	    //Change policy type to Indication and add organization type as Hospital from DDL
+		invisibilityOfLoader(driver);
+		//getPageTitle(driver, expectedPageTitle)
+		//Change policy type to Indication and add organization type as Hospital from DDL
+		ExtentReporter.logger.log(LogStatus.INFO, "In Policy Detail tab,Select/Enter the below information:"
+				+ " Phase: Indication, Organization Type: Hospital,Hospital Discovery Period Rating %: 2 "+
+				"Quote Description: Automated Test. Click Save WIP Button. Verify Indication saved as WIP");
 		selectDropdownByValue(driver, Phase, policysubmissionpageDTO.policyPhase, "Phase");
 		selectDropdownByValue(driver, Org_Type, policysubmissionpageDTO.organisationType, "Organisation Type");
 		Thread.sleep(2000);
 		//Add Discovery period rating, Quote Description and save as WIP
 		enterTextIn(driver, Hosp_Disc_Period_Rating,policysubmissionpageDTO.discoveryPeriodRating, "Discovery_Period Rating");
 		enterTextIn(driver, Quote_Description, policysubmissionpageDTO.quoteDescription, "Quote Description");
-		ExtentReporter.logger.log(LogStatus.INFO, "Indication saved as WIP");
 		click(driver, Save_WIP, "Save WIP button");
 		return new PolicyIndicationPage(driver);
 	}

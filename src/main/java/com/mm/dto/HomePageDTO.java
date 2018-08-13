@@ -1,8 +1,9 @@
 package com.mm.dto;
 
 import java.util.List;
+import java.util.Map;
 
-import MMTestCase.SmokeTestCase;
+import MMTestCase.SmokeTestCasesUpdated;
 
 public class HomePageDTO {
 
@@ -11,20 +12,41 @@ public class HomePageDTO {
 	public String issueCompany;
 	public String issueState;
 	public String policyNum;
+	public String policyNo;
+	public String clientFirstName;
+	public String clientLastName;
 
+	public HomePageDTO(Map<String, List<String>> excelData) {
 
-	public HomePageDTO() throws IllegalArgumentException, IllegalAccessException, SecurityException{
+		for (int i = 0; i <= HomePageDTO.class.getFields().length - 1; i++) {
+			if (HomePageDTO.class.getFields()[i].getType().toString().toLowerCase().contains("java.util.list")) {
 
-		for (int iFC=0; iFC < HomePageDTO.class.getFields().length; iFC++)
-		{
-			if (SmokeTestCase.testDataMap.containsKey(HomePageDTO.class.getFields()[iFC].getName().toLowerCase()))
-			{
-				try{
-					HomePageDTO.class.getFields()[iFC].set(this, SmokeTestCase.testDataMap.get(HomePageDTO.class.getFields()[iFC].getName().toLowerCase()).get(0));
+				// if
+				// (excelData.containsKey(HomePageDTO.class.getFields()[i].getName().toLowerCase())){
+				// {
+				try {
+					HomePageDTO.class.getFields()[i].set(this,
+							excelData.get(HomePageDTO.class.getFields()[i].getName().toLowerCase()));
 
-				}catch(Exception e){
+				} catch (Exception e) {
 					e.printStackTrace();
-					//	 System.out.println(SmokeTestCase.testDataMap.get(HomePageDTO.class.getFields()[iFC].getName()));
+				}
+
+			} else if (HomePageDTO.class.getFields()[i].getType().toString().toLowerCase().contains("int")) {
+				try {
+					HomePageDTO.class.getFields()[i].set(this, Integer.parseInt(
+							excelData.get(HomePageDTO.class.getFields()[i].getName().toLowerCase()).get(0)));
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else {
+				try {
+					HomePageDTO.class.getFields()[i].set(this,
+							excelData.get(HomePageDTO.class.getFields()[i].getName().toLowerCase()).get(0));
+
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		}

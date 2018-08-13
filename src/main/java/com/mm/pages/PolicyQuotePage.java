@@ -1,5 +1,7 @@
 package com.mm.pages;
 
+import static org.testng.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -19,381 +21,381 @@ import org.testng.Assert;
 
 import com.mm.utils.ExtentReporter;
 import com.mm.utils.PDFReader;
+import com.mm.utils.TestCaseDetails;
 import com.mm.dto.PolicyQuotePageDTO;
 import com.mm.utils.CommonAction;
 import com.relevantcodes.extentreports.LogStatus;
 
 public class PolicyQuotePage extends CommonAction {
-	
+
 	WebDriver driver;
 	PolicyQuotePageDTO policyquotepageDTO;
-	
-	String valueOfPolicyActionCopy = "javascript:copyQuote();";
-	String saveAsPolicyValue="OFFICIAL";
-	String QuotePhaseValue="QUOTE";
-	String ProductNotifyValue="Y";
 
-	
-	@FindBy(name="globalSearch")
+	String valueOfPolicyActionCopy = "javascript:copyQuote();";
+	String saveAsPolicyValue = "OFFICIAL";
+	String QuotePhaseValue = "QUOTE";
+	String ProductNotifyValue = "Y";
+	String PDFErrorMsgContains = "Error occurred";
+
+	@FindBy(name = "globalSearch")
 	WebElement Policy_Search;
 
-	@FindBy(name="search")
+	@FindBy(name = "search")
 	WebElement Search_btn;
-	
-	@FindBy(id="findPolicyListGrid_CPOLICYNO_0_HREF")  // QA
+
+	@FindBy(id = "findPolicyListGrid_CPOLICYNO_0_HREF") // QA
 	WebElement policyList;
-	
-	@FindBy(id="pageTitleForpageHeaderForPolicyFolder")
+
+	@FindBy(id = "pageTitleForpageHeaderForPolicyFolder")
 	WebElement pageHeaderForPolicyFolder;
-	
-	@FindBy(id="PM_QT_POLICY_FOLDER_AG")
+
+	@FindBy(xpath = "//div[@id='globalDropdownActionItems']//select[@class='globalActionItemList'] |//select[@id='PM_POLICY_FOLDER_AG']")
 	WebElement policyAction;
-	
-	@FindBy(id="PM_CPT_TRAN_OK")
+
+	@FindBy(id = "PM_CPT_TRAN_OK")
 	WebElement capt_Tranx_Ok;
-	
-	@FindBy(xpath="//a[@id='PM_PT_VIEWCVG']//span[@class='tabWithNoDropDownImage']")
+
+	@FindBy(xpath = "//a[@id='PM_PT_VIEWCVG']//span[@class='tabWithNoDropDownImage']")
 	WebElement coverageTab;
-	
+
 	@FindBy(xpath = "//table[@id='coverageListGrid']//tbody//td//div[@id='CPRODUCTCOVERAGEDESC']")
 	List<WebElement> coverageList;
-	
+
 	@FindBy(xpath = "//input[@id='PM_QT_MANU_PUP']")
 	WebElement optionalFormBtn;
-	
+
 	@FindBy(xpath = "//table[@id='maintainManuscriptListGrid']")
-	WebElement 	manuscriptList;
-	
-	@FindBy(xpath="//table[@id='maintainManuscriptListGrid']//div[@id='CFORMTYPECODELOVLABEL']")
+	WebElement manuscriptList;
+
+	@FindBy(xpath = "//table[@id='maintainManuscriptListGrid']//div[@id='CFORMTYPECODELOVLABEL']")
 	WebElement manuscriptPageFirstItem;
-	
-	@FindBy(id="PM_MANU_DELETE")
+
+	@FindBy(id = "PM_MANU_DELETE")
 	WebElement manuscriptPageDeleteBtn;
-	
-	@FindBy(id="PM_MANU_ADD")
+
+	@FindBy(id = "PM_MANU_ADD")
 	WebElement manuscriptPageAddBtn;
-	
-	@FindBy(xpath="//table[@id='selectManuscriptGrid']//tr//div[@id='CSHORTDESCRIPTION']")
+
+	@FindBy(xpath = "//table[@id='selectManuscriptGrid']//tr//div[@id='CSHORTDESCRIPTION']")
 	List<WebElement> manuscriptAddListformName;
-	
-	@FindBy(xpath="//table[@id='selectManuscriptGrid']//tr//input[@name='chkCSELECT_IND']")
+
+	@FindBy(xpath = "//table[@id='selectManuscriptGrid']//tr//input[@name='chkCSELECT_IND']")
 	List<WebElement> manuscriptAddListformNameChkBox;
-	
-	@FindBy(id="PM_SEL_MANU_DONE")
+
+	@FindBy(id = "PM_SEL_MANU_DONE")
 	WebElement manuscriptAddListDoneBtn;
-	
-	@FindBy(id="PM_MANU_SAVE")
+
+	@FindBy(id = "PM_MANU_SAVE")
 	WebElement manuscriptPageSaveBtn;
-	
-	@FindBy(id="PM_MANU_CLOSE")
+
+	@FindBy(id = "PM_MANU_CLOSE")
 	WebElement manuscriptPageCloseBtn;
-	
-	@FindBy(id="PM_COMMON_TABS_RATE")
+
+	@FindBy(id = "PM_COMMON_TABS_RATE")
 	WebElement rateBtn;
-	
-	@FindBy(id="PM_VIEW_PREM_CLOSE")
+
+	@FindBy(id = "PM_VIEW_PREM_CLOSE")
 	WebElement closeBtnOnViewPremiumPopup;
-	
-	@FindBy(name="workflowExit_Ok")
+
+	@FindBy(name = "workflowExit_Ok")
 	WebElement okPolicySaveAsWIPPopup;
-	
-	@FindBy(id="PM_COMMON_TABS_SAVE")
+
+	@FindBy(id = "PM_COMMON_TABS_SAVE")
 	WebElement saveOptionBtn;
-	
-	@FindBy(xpath="//select[@name='saveAsCode']")
+
+	@FindBy(xpath = "//select[@name='saveAsCode']")
 	WebElement saveAsDropDown;
-	
-	@FindBy(id="PM_SAVE_OPTION_OK")
+
+	@FindBy(id = "PM_SAVE_OPTION_OK")
 	WebElement saveOptionOkBtn;
-	
-	@FindBy(name="workflowExit_Ok")
+
+	@FindBy(name = "workflowExit_Ok")
 	WebElement exitOK;
-	
-	@FindBy(name="policyPhaseCode")
+
+	@FindBy(name = "policyPhaseCode")
 	WebElement policyPhase;
-	
-	@FindBy(id ="PM_QT_POLICY_FOLDER_AG")
+
+	@FindBy(id = "PM_QT_POLICY_FOLDER_AG")
 	WebElement PolicyActionDropDown;
-	
-//	@FindBy(xpath="//select[contains(@name,'confirmed')]")
-	@FindBy(name="483865737.confirmed")
+
+	// @FindBy(xpath="//select[contains(@name,'confirmed')]")
+	@FindBy(name = "483865737.confirmed")
 	WebElement productNotifyDropDown;
-	
-	@FindBy(id="PM_NOTIFY_CLOSE")
+
+	@FindBy(id = "PM_NOTIFY_CLOSE")
 	WebElement prodNotifyClose;
-	
-	@FindBy(name="additionalText")
+
+	@FindBy(name = "additionalText")
 	WebElement addText;
-	
-	@FindBy(id="PM_COMMON_TABS_PREVIEW")
+
+	@FindBy(id = "PM_COMMON_TABS_PREVIEW")
 	WebElement PreviewTab;
-	
-	@FindBy(xpath="//div[@aria-describedby='newpopup1']")
+
+	@FindBy(xpath = "//iframe[contains(@src,'process=preview&transLogId')]")
+	WebElement pdfErrorForm;
+
+	@FindBy(xpath = "//body")
+	WebElement pdfErrorMsg;
+
+	@FindBy(xpath = "//div[@aria-describedby='newpopup1']")
 	WebElement pdfPane;
-	
+
 	@FindBy(xpath = "//select[@name='policyNavLevelCode']//option[@value='RISK']")
 	WebElement verifyRisk;
-	
-	@FindBy(xpath="//span[@class='txtOrange']")
-	WebElement loader;
-	
-  // This is a constructor for PolicyQuotePage class to initialize page elments and DTO object
-	public PolicyQuotePage(WebDriver driver)throws Exception
-	{
-		this.driver=driver;
+
+	@FindBy(name = "transactionComment")
+	WebElement quoteDescription;
+
+	// This is a constructor for PolicyQuotePage class to initialize page elments
+	// and DTO object
+	public PolicyQuotePage(WebDriver driver) throws Exception {
+		this.driver = driver;
 		PageFactory.initElements(driver, this);
-		policyquotepageDTO = new PolicyQuotePageDTO();
+		policyquotepageDTO = new PolicyQuotePageDTO(TestCaseDetails.testDataDictionary);
 	}
-	
-	//Identify Policy number from page.
-	public String policyNo()
-	{
+
+	// Identify Policy number from page.
+	public String policyNo() {
 		String profileNoLable = pageHeaderForPolicyFolder.getAttribute("innerHTML");
-		String[] portfolioNo = profileNoLable.split(" ",3);
+		String[] portfolioNo = profileNoLable.split(" ", 3);
 		return portfolioNo[2];
 	}
-	
-	//Select Copy to action from "Action DropDown".
-	public PolicyQuotePage CopyOptionFromActionDropDown() throws Exception
-	{
+
+	// Select Copy to action from "Action DropDown".
+	public PolicyQuotePage CopyOptionFromActionDropDown() throws Exception {
 		Thread.sleep(6000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy>Ok");
+		invisibilityOfLoader(driver);
+		ExtentReporter.logger.log(LogStatus.INFO,
+				"Click Policy Actions>Copy>Ok and verify Policy displays in Indication phase.");
 		selectDropdownByValue(driver, policyAction, policyquotepageDTO.valueOfPolicyActionCopy, "Policy Action");
 		return new PolicyQuotePage(driver);
 	}
-	
-	//Search Policy from Search Policy text field.
-	public RateApolicyPage searchPolicy( String policy_no) throws Exception
-	{
+
+	// Search Policy from Search Policy text field.
+	public RateApolicyPage searchPolicy(String policy_no) throws Exception {
 		Thread.sleep(3000);
-		policySearch(driver, policy_no,Policy_Search, Search_btn,policyList);
-		String actual=getText(driver,pageHeaderForPolicyFolder);
+		policySearch(driver, policy_no, Policy_Search, Search_btn, policyList);
+		String actual = getText(driver, pageHeaderForPolicyFolder);
 		ExtentReporter.logger.log(LogStatus.INFO, "Policy # dispalys correctly under Policy Folder");
-		Assert.assertEquals(actual, "Policy Folder "+policy_no, "The policy "+policy_no+" is Not available.");
+		Assert.assertEquals(actual, "Policy Folder " + policy_no, "The policy " + policy_no + " is Not available.");
 		Thread.sleep(3000);
 		return new RateApolicyPage(driver);
 	}
-	
-	//Coverage details flow.
-	public void coverageDetailsSelect() throws InterruptedException
-	{
+
+	// Coverage details flow.
+	public void coverageDetailsSelect() throws InterruptedException {
 		Thread.sleep(3000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Click Coverage tab");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Coverage tab & verify Coverage tab is displayed.");
 		clickButton(driver, coverageTab, "Coverage");
 		Thread.sleep(3000);
-		Assert.assertEquals(coverageList.get(0).getAttribute("innerHTML"),policyquotepageDTO.riskType, "Coverage for Primary Risk is NOT displayed");
+		ExtentReporter.logger.log(LogStatus.INFO,
+				"Select Primary risk in DDL if not selected & verify Primary risk is selected and coverages are displayed.");
+		Assert.assertEquals(coverageList.get(0).getAttribute("innerHTML"), policyquotepageDTO.riskType,
+				"Coverage for Primary Risk is NOT displayed");
 	}
-	
-	//Coverage Update flow.
-	public void coverageUpdates(String CoverageName, String binderForm, String PolicyNo) throws Exception
-	{
-		for (int i = 0; i<coverageList.size();i++)
-		{
-			if(coverageList.get(i).getAttribute("innerHTML").equals(CoverageName))
-			{
-				ExtentReporter.logger.log(LogStatus.INFO, "Select"+ CoverageName +" Coverage.");
-				clickButton(driver, coverageList.get(i),coverageList.get(i).getAttribute("innerHTML"));
+
+	// Coverage Update flow.
+	public void coverageUpdates(String CoverageName, String binderForm, String PolicyNo) throws Exception {
+		for (int i = 0; i < coverageList.size(); i++) {
+			if (coverageList.get(i).getAttribute("innerHTML").equals(CoverageName)) {
+				ExtentReporter.logger.log(LogStatus.INFO, "Select" + CoverageName + " Coverage.");
+				clickButton(driver, coverageList.get(i), coverageList.get(i).getAttribute("innerHTML"));
 				Thread.sleep(4000);
 				break;
 			}
 		}
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Optional Forms]");
 		clickButton(driver, optionalFormBtn, "Optional Form");
-		getPageTitle(driver,"Manuscript Information");
+		getPageTitle(driver, "Manuscript Information");
 		Thread.sleep(4000);
-		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+PolicyNo+"')]")));
-		if (manuscriptList.isDisplayed())
-		{
+		switchToFrameUsingElement(driver,
+				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
+		if (manuscriptList.isDisplayed()) {
 			String firstManuScriptInfoName = manuscriptPageFirstItem.getAttribute("innerHTML");
-			ExtentReporter.logger.log(LogStatus.INFO, "Delete current Indication form, Are you sure you want to delete this? Click Ok");
+			ExtentReporter.logger.log(LogStatus.INFO,
+					"Delete current Indication form, Are you sure you want to delete this? Click Ok");
 			clickButton(driver, manuscriptPageDeleteBtn, "Manu script Delete");
 			driver.switchTo().alert().accept();
-			//Verify first item displayed in manu script list is not displayed in list.
-			Assert.assertEquals(manuscriptPageFirstItem.getAttribute("innerHTML"),firstManuScriptInfoName,"Manuscript lsit first item "+firstManuScriptInfoName+" is not deleted.");
+			// Verify first item displayed in manu script list is not displayed in list.
+			Assert.assertEquals(manuscriptPageFirstItem.getAttribute("innerHTML"), firstManuScriptInfoName,
+					"Manuscript lsit first item " + firstManuScriptInfoName + " is not deleted.");
 			Thread.sleep(2000);
 			ExtentReporter.logger.log(LogStatus.INFO, "Click [Add].");
 			clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
-			
-		}else{
+
+		} else {
 			ExtentReporter.logger.log(LogStatus.INFO, "Click [Add].");
 			clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
 		}
-		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+PolicyNo+"')]")));
+		switchToFrameUsingElement(driver,
+				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
 		Thread.sleep(3000);
-		for(int i=0;i<manuscriptAddListformName.size();i++)
-		{
-			if(manuscriptAddListformName.get(i).getAttribute("innerHTML").equals(binderForm))
-			{
-				ExtentReporter.logger.log(LogStatus.INFO, "Select "+ binderForm +", Click done.");
-				clickButton(driver, manuscriptAddListformNameChkBox.get(i), "check Box for "+binderForm);
+		for (int i = 0; i < manuscriptAddListformName.size(); i++) {
+			if (manuscriptAddListformName.get(i).getAttribute("innerHTML").equals(binderForm)) {
+				ExtentReporter.logger.log(LogStatus.INFO, "Select " + binderForm + ", Click done.");
+				clickButton(driver, manuscriptAddListformNameChkBox.get(i), "check Box for " + binderForm);
 				break;
 			}
 		}
 		clickButton(driver, manuscriptAddListDoneBtn, "Done");
 		Thread.sleep(2000);
 		switchToParentWindowfromframe(driver);
-		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+PolicyNo+"')]")));
-		enterTextIn(driver, addText, binderForm+" form added.", "Aditional Text");
+		switchToFrameUsingElement(driver,
+				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
+		enterTextIn(driver, addText, binderForm + " form added.", "Aditional Text");
 		switchToParentWindowfromframe(driver);
-		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+PolicyNo+"')]")));
-		ExtentReporter.logger.log(LogStatus.INFO, "Enter additional text: "+ binderForm+" form added  Click [Save] and Click [Close].");
+		switchToFrameUsingElement(driver,
+				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
+		ExtentReporter.logger.log(LogStatus.INFO,
+				"Enter additional text: " + binderForm + " form added  Click [Save] and Click [Close].");
 		clickButton(driver, manuscriptPageSaveBtn, "Manu Script page Save");
 		Thread.sleep(2000);
 		clickButton(driver, manuscriptPageCloseBtn, "Manu Script page Close");
 		switchToParentWindowfromframe(driver);
 	}
-	
-	//Rate A functionality flow.
-	public PolicyQuotePage rateFunctionality(String policyNo) throws Exception
-	{
+
+	// Rate A functionality flow.
+	public PolicyQuotePage rateFunctionality(String policyNo) throws Exception {
 		Thread.sleep(3000);
 		RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
 		rateapolicypage.rateFunctionality(policyNo);
-		
-/*		ExtentReporter.logger.log(LogStatus.INFO, "Click [Rate]");
-		clickButton(driver, rateBtn, "Rate Tab");
-		invisibilityOfLoader(driver);
-		Thread.sleep(4000);
-		try{
-			switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
-			selectDropdownByValue(driver, productNotifyDropDown, ProductNotifyValue, "product notify");
-			Thread.sleep(1000);
-			clickButton(driver, prodNotifyClose, "Product Notify Close");
-			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window dispalyed to user.");
-			ExtentReporter.logger.log(LogStatus.PASS, " Yes selection from Product Notify dorp down.");
-		}catch (Exception e)
-		{
-			ExtentReporter.logger.log(LogStatus.FAIL, "Product Notify Window is NOT dispalyed to user.");
-		}
-		Thread.sleep(2000);
-		//switchToParentWindowfromframe(driver);
-		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
-		//switchToFrameUsingId(driver,"popupframe1");
-		Thread.sleep(2000);
-		//Verify page title for View Premium[Rate Btn.]
-		getPageTitle(driver, "View Premium");
-		clickButton(driver, closeBtnOnViewPremiumPopup, "Close");
-		Thread.sleep(2000);
-		switchToParentWindowfromframe(driver);
-		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo="+policyNo+"')]")));
-		clickButton(driver, okPolicySaveAsWIPPopup, "Ok");
-		ExtentReporter.logger.log(LogStatus.INFO, "Click [Close] click [Ok]");
-		switchToParentWindowfromframe(driver);
-*/		return new PolicyQuotePage(driver);
+		return new PolicyQuotePage(driver);
 	}
-	
 
-	//Save option functionality flow.
-	//We need to call multiple times with different values, so we are passing values in test case call 
-	public PolicyQuotePage saveOption(String saveAsPolicyValue,String PolicyNo) throws Exception
-	{
-		/*	Thread.sleep(5000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options");
-		waitForElementToLoad(driver, 15, saveOptionBtn);
-		clickButton(driver, saveOptionBtn, "Save Option");
-		Thread.sleep(4000);
+	// Save option functionality flow.
+	// We need to call multiple times with different values, so we are passing
+	// values in test case call
+	public PolicyQuotePage saveOption(String saveAsPolicyValue, String PolicyNo) throws Exception {
+		saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn, exitOK, saveAsPolicyValue, PolicyNo);
+		return new PolicyQuotePage(driver);
+	}
+
+	public PolicyQuotePage saveOptionOfficial(String PolicyNo) throws Exception {
+
+		saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn, exitOK,
+				policyquotepageDTO.saveAsPolicyValueOfficial, PolicyNo);
+		return new PolicyQuotePage(driver);
+
+	}
+
+	public PolicyQuotePage product_Notify() throws Exception {
+
 		switchToFrameUsingId(driver, "popupframe1");
-		getPageTitle(driver, "Save As");
-		selectDropdownByVisibleText(driver, saveAsDropDown, policyquotepageDTO.saveAsPolicyValue, "Selected "+saveAsPolicyValue);
-		//Verify Save as value selected from DDL is correct
-		//verifyValueFromField(driver, saveAsDropDown, policyquotepageDTO.saveAsPolicyValue,"value");
-		ExtentReporter.logger.log(LogStatus.INFO,  "Select "+saveAsPolicyValue+" Click [OK]");
-		clickButton(driver, saveOptionOkBtn, "Save");
-		switchToParentWindowfromframe(driver);
-		Thread.sleep(3000);*/
-		
-		saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn,exitOK, saveAsPolicyValue, PolicyNo);
-		return new PolicyQuotePage(driver);
-}
+		waitForElementToLoad(driver, 10, productNotifyDropDown);
+		selectDropdownByValue(driver, productNotifyDropDown, policyquotepageDTO.productNotifyValue, "product notify");
+		// Verify Notify value selected from DDL is correct
+		// verifyValueFromField(driver, productNotifyDropDown,
+		// policyquotepageDTO.productNotifyValue,"value");
+		Thread.sleep(1000);
+		ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window dispalyed to user.");
+		clickButton(driver, prodNotifyClose, "Product Notify Close");
+		ExtentReporter.logger.log(LogStatus.PASS, " Yes selected from Product Notify drop down list.");
+		// switchToParentWindowfromframe(driver);
 
-	
-	public PolicyQuotePage saveOptionOfficial(String PolicyNo) throws Exception{
-		
-		saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn,exitOK, policyquotepageDTO.saveAsPolicyValueOfficial,PolicyNo);
-		return new PolicyQuotePage(driver);
-		
-	}
-	
-	
-	public PolicyQuotePage product_Notify() throws Exception{
-		
-			switchToFrameUsingId(driver, "popupframe1");
-			waitForElementToLoad(driver, 10, productNotifyDropDown);
-			selectDropdownByValue(driver, productNotifyDropDown, policyquotepageDTO.productNotifyValue, "product notify");
-			//Verify Notify value selected from DDL is correct
-		//	verifyValueFromField(driver, productNotifyDropDown, policyquotepageDTO.productNotifyValue,"value");
-			Thread.sleep(1000);
-			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window dispalyed to user.");
-			clickButton(driver, prodNotifyClose, "Product Notify Close");
-			ExtentReporter.logger.log(LogStatus.PASS, " Yes selected from Product Notify drop down list.");
-		//	switchToParentWindowfromframe(driver);
-			
-	/*	}catch(Exception e)
-		{
-			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window is NOT dispalyed to user.");
-		//	switchToParentWindowfromframe(driver);
-		}*/
-			
+		/*
+		 * }catch(Exception e) { ExtentReporter.logger.log(LogStatus.INFO,
+		 * "Product Notify Window is NOT dispalyed to user."); //
+		 * switchToParentWindowfromframe(driver); }
+		 */
+
 		return new PolicyQuotePage(driver);
 	}
-	
-	//Change phase to Quote.
-	public PolicyQuotePage changePhaseToQuote() throws Exception
-	{
+
+	// Change phase to Quote.
+	public PolicyQuotePage changePhaseToQuote() throws Exception {
 		Thread.sleep(4000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Change Phase from Indication to Quote");
+		ExtentReporter.logger.log(LogStatus.INFO,
+				"Change Phase from Indication to Quote & verify Phase is changed from Indication to Quote.");
 		selectDropdownByValue(driver, policyPhase, policyquotepageDTO.quotePhaseValue, "Phase");
 		return new PolicyQuotePage(driver);
 	}
-	
-	//Click preview tab.
-	public PDFReader clickPreviewTab() throws InterruptedException
-	{
-		invisibilityOfLoader(driver); 
-		Thread.sleep(3000);
-    	ExtentReporter.logger.log(LogStatus.INFO, "Click [Preview]");
-	//	ExtentReporter.logger.log(LogStatus.INFO, "Verify CHG 08 form is displayed and information that was entered is on form");
-		clickButton(driver, PreviewTab, "Preview");
+
+	// Click preview tab.
+	public PDFReader clickPreviewTab(String policyNumber) throws InterruptedException {
 		invisibilityOfLoader(driver);
-		Thread.sleep(8000);
+		Thread.sleep(3000);
+		ExtentReporter.logger.log(LogStatus.INFO,
+				"Click [Preview]& verify Preview window displays with Form Printing on Form's List");
+		// ExtentReporter.logger.log(LogStatus.INFO, "Verify CHG 08 form is displayed
+		// and information that was entered is on form");
+		clickButton(driver, PreviewTab, "Preview");
+		Thread.sleep(10000);
+		invisibilityOfLoader(driver);
+		verifyPDFgenratedOrNot();
+		ExtentReporter.logger.log(LogStatus.INFO,
+				"Click the x to close the Preview screen. Verify Preview screen closes");
+		verifySaveAsPopUp(policyNumber);
+		Thread.sleep(5000);
 		return new PDFReader(driver);
 	}
 
-		
-	//Select the policy Action from DDL
-	public PolicyQuotePage selectPolicyAction() throws Exception{
+	public void verifyPDFgenratedOrNot() {
+		try {
+			switchToFrameUsingElement(driver, pdfErrorForm);
+			String errorMsgForPDF = pdfErrorMsg.getAttribute("innerHTML");
+			errorMsgForPDF.contains(PDFErrorMsgContains);
+			ExtentReporter.logger.log(LogStatus.FAIL, " Error while generating PDF.");
+			assertTrue(false, "PDF is not generated.");
+		} catch (Exception e) {
+			ExtentReporter.logger.log(LogStatus.INFO, "PDF generated sucessfully.");
+		}
+	}
+
+	// this method will verify saveAs pop up displayed or not
+	public void verifySaveAsPopUp(String policyNo) {
+		try {
+			WebElement iframeEle = driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]"));
+			if (iframeEle.isDisplayed()) {
+				switchToFrameUsingElement(driver, iframeEle);
+				clickButton(driver, okPolicySaveAsWIPPopup, "Ok");
+			} else {
+				ExtentReporter.logger.log(LogStatus.INFO, "Save as Pop up window is not displayed.");
+			}
+
+		} catch (Exception e) {
+			ExtentReporter.logger.log(LogStatus.INFO, "Save as Pop up window is not displayed.");
+		}
+	}
+
+	// Select the policy Action from DDL
+	public PolicyQuotePage selectPolicyActionAndAddDescription() throws Exception {
 		Thread.sleep(4000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Capture Transaction Details window opens");
+		ExtentReporter.logger.log(LogStatus.INFO,
+				"Click Policy Actions>Renewal. Verify Capture Transaction Details window opens");
 		selectDropdownByVisibleText(driver, policyAction, policyquotepageDTO.policyActionValue, "Policy Action");
 		Thread.sleep(2000);
+		invisibilityOfLoader(driver);
 		switchToFrameUsingId(driver, "popupframe1");
+		ExtentReporter.logger.log(LogStatus.INFO, "Enter Quote Description: " + policyquotepageDTO.quoteDescriptionText
+				+ "Click [OK].Verify Text is entered and Policy is ready for renewal");
+		enterTextIn(driver, quoteDescription, policyquotepageDTO.quoteDescriptionText, "Enter Quote Description");
+		Thread.sleep(2000);
 		return new PolicyQuotePage(driver);
-		
-		//ToDo- Enter Quote Description- Renewal
+
 	}
-		
-	//Switch to second frame from first frame
-	public PolicyQuotePage switchToNextFrame() throws Exception{
-		
-		//switchToParentWindowfromframe(driver);
-		
+
+	// Switch to second frame from first frame
+	public PolicyQuotePage switchToNextFrame() throws Exception {
+
+		// switchToParentWindowfromframe(driver);
+
 		List<WebElement> secondFrame = driver.findElements(By.id("popupframe2"));
-     	driver.switchTo().frame(secondFrame.get(0));
-     	return new PolicyQuotePage(driver);
+		driver.switchTo().frame(secondFrame.get(0));
+		return new PolicyQuotePage(driver);
 	}
-	
-	//Save the Transaction details and switch to parent window
-	public PolicyQuotePage save_CaptureTransactionDetails () throws Exception{
-		
+
+	// Save the Transaction details and switch to parent window
+	public PolicyQuotePage save_CaptureTransactionDetails() throws Exception {
+
 		Thread.sleep(3000);
 		click(driver, capt_Tranx_Ok, "Ok button for Renewal");
 		switchToParentWindowfromframe(driver);
 		return new PolicyQuotePage(driver);
 	}
-		
-	//Close the exit window 
-	public PolicyQuotePage exit_SaveOption() throws Exception{
-			
+
+	// Close the exit window
+	public PolicyQuotePage exit_SaveOption() throws Exception {
+
 		waitForElementToLoad(driver, 10, exitOK);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [OK]");
 		clickButton(driver, exitOK, "Exit Ok");

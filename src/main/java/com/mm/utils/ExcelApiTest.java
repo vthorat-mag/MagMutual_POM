@@ -54,7 +54,36 @@ public class ExcelApiTest {
 			sheet = workbook.getSheet(sheetName);
 			row = sheet.getRow(rowNum);
 			cell = row.getCell(colNum);
-			if (cell == null)
+			if (cell == null ) {
+				// This cell is empty
+				//testDataObject.put(headerCell.getStringCellValue().toLowerCase(), "");
+				return "";
+			} else {
+				// This cell has data in it
+
+				switch(cell.getCellTypeEnum())
+				{
+				case STRING:
+					return cell.getStringCellValue();
+				case NUMERIC:
+					cell.setCellType(CellType.STRING);
+					return cell.getStringCellValue();
+					
+				case BLANK:
+					return cell.getStringCellValue();
+					
+				case _NONE:
+					return cell.getStringCellValue();
+					
+				default:
+					return cell.getStringCellValue();
+					
+				}//Switch statement
+
+			}//If-Else statement
+
+
+			/*if (cell == null)
 				return "";
 			else if (cell.getCellTypeEnum() == CellType.STRING)
 				return cell.getStringCellValue();
@@ -70,7 +99,9 @@ public class ExcelApiTest {
 				return "";
 			else
 				return String.valueOf(cell.getBooleanCellValue());
-		} catch (Exception e) {
+		}*/ 
+
+		}	catch (Exception e) {
 			e.printStackTrace();
 			return "row " + rowNum + " or column " + colNum + " does not exist  in Excel";
 		}
@@ -81,7 +112,7 @@ public class ExcelApiTest {
 		ExcelUtil exldata = new ExcelUtil();
 		HashMap<String, List<String>> data = exldata.testData(method.getName());
 		return data;
-		
+
 		// changed string to hashmap for testing
 	}
 }

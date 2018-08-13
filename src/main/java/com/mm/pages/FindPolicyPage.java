@@ -10,6 +10,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
 import com.mm.utils.ExtentReporter;
+import com.mm.utils.TestCaseDetails;
 import com.mm.dto.FindPolicyPageDTO;
 import com.mm.utils.CommonAction;
 import com.relevantcodes.extentreports.LogStatus;
@@ -63,7 +64,7 @@ public class FindPolicyPage extends CommonAction {
 	public FindPolicyPage(WebDriver driver) throws Exception {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
-		FindPolicyPageDTO findpolicypagedto = new FindPolicyPageDTO();
+		FindPolicyPageDTO findpolicypagedto = new FindPolicyPageDTO(TestCaseDetails.testDataDictionary);
 	}
 
 	// Search Policy from filter.

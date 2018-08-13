@@ -16,6 +16,8 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.relevantcodes.extentreports.LogStatus;
+
 public class ExcelUtil {
 	String xlFilePath = System.getProperty("user.dir")+"\\src\\main\\resources\\Form_Data.xlsx";
 	
@@ -34,12 +36,12 @@ public class ExcelUtil {
 		//Browse through all columns
 		for (int j = 0; j < columns; j++) {
 			//Read the ColumnName
-			String sColumnName = eat.getCellData(sheetName, j, 0).toLowerCase();
+			String sColumnName = eat.getCellData(sheetName, j, 0).toString().toLowerCase();
 			listRowData = new ArrayList<String>();
 			
 			//Read All rows
 			for (int i = 1; i < rows; i++) {
-				listRowData.add(eat.getCellData(sheetName, j, i));
+				listRowData.add(eat.getCellData(sheetName, j, i).toString());
 				//ToDo- Check if the field is blank, don't add in list
 			}			
 			//Populate the HashMap
@@ -62,7 +64,7 @@ public class ExcelUtil {
 	public void writeData(String testCaseId, String columnName, String cellValue, int rowNum,String saveDataFilePath) throws Exception {
 		String excelFilePath = saveDataFilePath;
 		FileInputStream inputStream;
-
+		ExtentReporter.logger.log(LogStatus.INFO, "Note the policy number to use in the next test case - "+testCaseId);
 		inputStream = new FileInputStream(new File(excelFilePath));
 		try {
 

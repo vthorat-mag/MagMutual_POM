@@ -44,6 +44,7 @@ public class PDFReader extends CommonAction {
 	public PDFReader savePDF() throws IOException, InterruptedException {
 		//invisibilityOfLoader(driver);
 		Thread.sleep(6000);
+		ExtentReporter.logger.log(LogStatus.INFO, "Click the Save button on the PDF to save the results & verify PDF is saved");
 		String[] savePDFPath = 
 				{System.getProperty("user.dir") + "\\src\\main\\resources\\StoredPDF\\pdfDocument.pdf"};
 		String[] executionPath = {System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\savePdf.exe"};
@@ -56,11 +57,11 @@ public class PDFReader extends CommonAction {
 	{
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
-		pdfreaderdto = new pdfReaderDTO();
+		pdfreaderdto = new pdfReaderDTO(TestCaseDetails.testDataDictionary);
 	}
 
 	//Logic to verify PDF content.
-	public PolicyBinderPage verifyPdfContent(String PolicyNo ) throws Exception {
+	public PolicyBinderPage verifyPdfContent() throws Exception {
 		Thread.sleep(15000);
 		//getPageTitle(driver, "Policy Folder "+PolicyNo);
 		boolean flag = false;
@@ -92,12 +93,13 @@ public class PDFReader extends CommonAction {
 		try {
 			  for (i =0;i<pdfreaderdto.verifyPDFcontent.size();i++)
 				{
-				Assert.assertTrue(parsedText.contains(pdfreaderdto.verifyPDFcontent.get(i)), "Footer dose not content '" + pdfreaderdto.verifyPDFcontent.get(i) + "'.");
+				Assert.assertTrue(parsedText.contains(pdfreaderdto.verifyPDFcontent.get(i)), "PDF dose not content '" + pdfreaderdto.verifyPDFcontent.get(i) + "'.");
 				ExtentReporter.logger.log(LogStatus.INFO, "Verify footer display '" + pdfreaderdto.verifyPDFcontent.get(i) + "'.");
 				break;
 			}
 		}catch (Exception e){
 				ExtentReporter.logger.log(LogStatus.FAIL, "Expceted value  is not present in PDF.");
+				Assert.assertTrue(false);
 		}
 		return new PolicyBinderPage(driver);
 	}
