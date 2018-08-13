@@ -15,6 +15,7 @@ public class HomePageDTO {
 	public String policyNo;
 	public String clientFirstName;
 	public String clientLastName;
+	public String backUpPpolicyNum;
 
 	public HomePageDTO(Map<String, List<String>> excelData) {
 

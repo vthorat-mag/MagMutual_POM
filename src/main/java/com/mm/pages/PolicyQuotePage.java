@@ -23,6 +23,7 @@ import com.mm.utils.ExtentReporter;
 import com.mm.utils.PDFReader;
 import com.mm.utils.TestCaseDetails;
 import com.mm.dto.PolicyQuotePageDTO;
+import com.mm.dto.RateAPolicyPageDTO;
 import com.mm.utils.CommonAction;
 import com.relevantcodes.extentreports.LogStatus;
 
@@ -167,7 +168,15 @@ public class PolicyQuotePage extends CommonAction {
 		invisibilityOfLoader(driver);
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Click Policy Actions>Copy>Ok and verify Policy displays in Indication phase.");
-		selectDropdownByValue(driver, policyAction, policyquotepageDTO.valueOfPolicyActionCopy, "Policy Action");
+		if(selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.valueOfPolicyActionCopy, "Policy Action").equals("false"))
+		{
+			RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
+			RateAPolicyPageDTO rateApolicyPageDTO = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
+			rateapolicypage.searchBackUpPolicy();
+			PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
+			policybinderpage.copyToQuoteFromActionDropDown(rateApolicyPageDTO.backUpPolicyNum);
+			selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.valueOfPolicyActionCopy, "Policy Action");
+		}
 		return new PolicyQuotePage(driver);
 	}
 

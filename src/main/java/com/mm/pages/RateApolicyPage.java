@@ -425,6 +425,10 @@ public class RateApolicyPage extends CommonAction {
 		return new PolicyQuotePage(driver);
 	}
 
+	public void searchBackUpPolicy() throws Exception {
+		searchPolicy(rateApolicyPageDTO.backUpPolicyNum);
+	}
+
 	// Save Rate details code.
 	public RateApolicyPage saveRatedetails() throws Exception {
 		click(driver, RateBtn, "Rate button");
@@ -518,10 +522,18 @@ public class RateApolicyPage extends CommonAction {
 	}
 
 	// Select Accept option from "Action Drop Down".
-		public RateApolicyPage AcceptFromActionDropDown() throws Exception {
-			ExtentReporter.logger.log(LogStatus.INFO, "Select Accept from the dropdown screen.Same type of policy exists for the period. Continue? message displays. Click Ok & verify Policy is editable.");
-			Thread.sleep(3000);
-			selectDropdownByValue(driver, policyAction, rateApolicyPageDTO.valueOfPolicyActionAccept,
+	public RateApolicyPage AcceptFromActionDropDown() throws Exception {
+		ExtentReporter.logger.log(LogStatus.INFO,
+				"Select Accept from the dropdown screen.Same type of policy exists for the period. Continue? message displays. Click Ok & verify Policy is editable.");
+		Thread.sleep(3000);
+		if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction, rateApolicyPageDTO.valueOfPolicyActionAccept,
+				"Policy Action").equals("false")) {
+			RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
+			RateAPolicyPageDTO rateApolicyPageDTO = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
+			rateapolicypage.searchBackUpPolicy();
+			PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
+			policybinderpage.copyToQuoteFromActionDropDown(rateApolicyPageDTO.backUpPolicyNum);
+			selectDropdownByValueFromPolicyActionDDL(driver, policyAction, rateApolicyPageDTO.valueOfPolicyActionAccept,
 					"Policy Action");
 			invisibilityOfLoader(driver);
 			Thread.sleep(5000);
@@ -540,9 +552,9 @@ public class RateApolicyPage extends CommonAction {
 			}
 
 			Assert.assertTrue(policyPhaseBinder.isEnabled(), "Policy" + policyNo() + "is NOT Editable.");
+		}
 			return new RateApolicyPage(driver);
 		}
-
 	public void selectValueFromActionDropDown() {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>" + rateApolicyPageDTO.optionName + ".");
 		selectDropdownByValue(driver, policyAction, rateApolicyPageDTO.optionValue, "Policy Action");
@@ -587,30 +599,32 @@ public class RateApolicyPage extends CommonAction {
 	}
 
 	// Billing setup flow code.
-		public RateApolicyPage billingSetup() throws Exception {
-			invisibilityOfLoader(driver);
-			Thread.sleep(5000);
-			String policyNo = policyNo();
-			ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions-->Select Billing Setup & verify Manage Billing setup window opens.");
-			selectDropdownByValue(driver, policyAction, rateApolicyPageDTO.valueOfPolicyActionBillingSetup,
-					"Policy Action");
-			invisibilityOfLoader(driver);
-			Thread.sleep(4000);
-			//switchToFrameUsingId(driver, "popupframe1");
-			switchToFrameUsingElement(driver,
-					driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]")));
-			getPageTitle(driver, manageBillingSetupPageTitle);
-			ExtentReporter.logger.log(LogStatus.INFO, "Payment plan dropdown:"+rateApolicyPageDTO.paymentPlanValue+". Verify "+rateApolicyPageDTO.paymentPlanValue+" billing plan is selected");
-																									// quote
-			selectDropdownByValue(driver, paymentPlan, rateApolicyPageDTO.paymentPlanValue, "Payment Plan");
-			Thread.sleep(2000);
-			ExtentReporter.logger.log(LogStatus.INFO, "Click [Save] Billing account is setup");
-			clickButton(driver, billingSetupSaveBtn, "Save Button");
-			Thread.sleep(10000);
-			invisibilityOfLoader(driver);
-			switchToParentWindowfromframe(driver);
-			return new RateApolicyPage(driver);
-		}
+	public RateApolicyPage billingSetup() throws Exception {
+		invisibilityOfLoader(driver);
+		Thread.sleep(5000);
+		String policyNo = policyNo();
+		ExtentReporter.logger.log(LogStatus.INFO,
+				"Click Policy Actions-->Select Billing Setup & verify Manage Billing setup window opens.");
+		selectDropdownByValue(driver, policyAction, rateApolicyPageDTO.valueOfPolicyActionBillingSetup,
+				"Policy Action");
+		invisibilityOfLoader(driver);
+		Thread.sleep(4000);
+		// switchToFrameUsingId(driver, "popupframe1");
+		switchToFrameUsingElement(driver,
+				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]")));
+		getPageTitle(driver, manageBillingSetupPageTitle);
+		ExtentReporter.logger.log(LogStatus.INFO, "Payment plan dropdown:" + rateApolicyPageDTO.paymentPlanValue
+				+ ". Verify " + rateApolicyPageDTO.paymentPlanValue + " billing plan is selected");
+		// quote
+		selectDropdownByValue(driver, paymentPlan, rateApolicyPageDTO.paymentPlanValue, "Payment Plan");
+		Thread.sleep(2000);
+		ExtentReporter.logger.log(LogStatus.INFO, "Click [Save] Billing account is setup");
+		clickButton(driver, billingSetupSaveBtn, "Save Button");
+		Thread.sleep(10000);
+		invisibilityOfLoader(driver);
+		switchToParentWindowfromframe(driver);
+		return new RateApolicyPage(driver);
+	}
 
 		// Coverage Details flow.
 		public RateApolicyPage coverageDetailsSelect() throws Exception {
@@ -633,8 +647,8 @@ public class RateApolicyPage extends CommonAction {
 			} catch (Exception e) {
 				ExtentReporter.logger.log(LogStatus.FAIL, "Can not click on Coverage tab.");
 			}
-			return new RateApolicyPage(driver);
-		}
+		return new RateApolicyPage(driver);
+	}
 
 	// Below method is to execute coverage details select method and return
 	// Cincom page object.
@@ -644,74 +658,75 @@ public class RateApolicyPage extends CommonAction {
 	}
 
 	// Coverage updates flow.
-		public void coverageUpdates(String PolicyNo) throws Exception {
-			for (int j = 0; j < rateApolicyPageDTO.coverage.size(); j++) {
-				for (int i = 0; i < coverageList.size(); i++) {
-					if (coverageList.get(i).getAttribute("innerHTML").equals(rateApolicyPageDTO.coverage.get(j))) {
-						clickButton(driver, coverageList.get(i), coverageList.get(i).getAttribute("innerHTML"));
-						ExtentReporter.logger.log(LogStatus.INFO,
-								"Select" + rateApolicyPageDTO.coverage.get(j) + " Coverage  & verify "+rateApolicyPageDTO.coverage.get(j)+" is highlighted");
+	public void coverageUpdates(String PolicyNo) throws Exception {
+		for (int j = 0; j < rateApolicyPageDTO.coverage.size(); j++) {
+			for (int i = 0; i < coverageList.size(); i++) {
+				if (coverageList.get(i).getAttribute("innerHTML").equals(rateApolicyPageDTO.coverage.get(j))) {
+					clickButton(driver, coverageList.get(i), coverageList.get(i).getAttribute("innerHTML"));
+					ExtentReporter.logger.log(LogStatus.INFO, "Select" + rateApolicyPageDTO.coverage.get(j)
+							+ " Coverage  & verify " + rateApolicyPageDTO.coverage.get(j) + " is highlighted");
+					break;
+				}
+			}
+
+			ExtentReporter.logger.log(LogStatus.INFO,
+					"Click [Optional Forms] & verify Manuscript Information window displays.");
+			Thread.sleep(2000);
+			clickButton(driver, optionalFormBtn, "Optional Form");
+			invisibilityOfLoader(driver);
+			Thread.sleep(4000);
+			switchToFrameUsingElement(driver,
+					driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
+			if (manuscriptList.isDisplayed()) {
+				ExtentReporter.logger.log(LogStatus.INFO,
+						"Delete current Indication form, Are you sure you want to delete this? Click Ok & verify Form is deleted.");
+				clickButton(driver, manuscriptPageDeleteBtn, "Manu script Delete");
+				driver.switchTo().alert().accept();
+				Thread.sleep(2000);
+				ExtentReporter.logger.log(LogStatus.INFO, "Click [Add] & verify Add Manuscript window dispalys.");
+				clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
+
+			} else {
+				ExtentReporter.logger.log(LogStatus.INFO, "Click [Add] & verify Add Manuscript window dispalys.");
+				clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
+			}
+			switchToFrameUsingElement(driver,
+					driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
+			Thread.sleep(3000);
+			int coverageIdx = 0;
+			for (int i = 0; i < manuscriptAddListformName.size(); i++) {
+				try {
+					if (manuscriptAddListformName.get(i).getAttribute("innerHTML")
+							.equals(rateApolicyPageDTO.phase.get(j))) {
+						clickButton(driver, manuscriptAddListformNameChkBox.get(i),
+								"check Box for " + rateApolicyPageDTO.phase.get(j));
+						ExtentReporter.logger.log(LogStatus.INFO, "Select " + rateApolicyPageDTO.phase.get(j)
+								+ ", Click done  & verify Window closes and forms are attached to Policy.");
 						break;
 					}
+				} catch (Exception e) {
+					ExtentReporter.logger.log(LogStatus.FAIL, "Required (" + rateApolicyPageDTO.phase.get(i)
+							+ ") ManuScript type is not displayed in Manuscript list.");
 				}
-
-				ExtentReporter.logger.log(LogStatus.INFO, "Click [Optional Forms] & verify Manuscript Information window displays.");
-				Thread.sleep(2000);
-				clickButton(driver, optionalFormBtn, "Optional Form");
-				invisibilityOfLoader(driver);
-				Thread.sleep(4000);
-				switchToFrameUsingElement(driver,
-						driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
-				if (manuscriptList.isDisplayed()) {
-					ExtentReporter.logger.log(LogStatus.INFO,
-							"Delete current Indication form, Are you sure you want to delete this? Click Ok & verify Form is deleted.");
-					clickButton(driver, manuscriptPageDeleteBtn, "Manu script Delete");
-					driver.switchTo().alert().accept();
-					Thread.sleep(2000);
-					ExtentReporter.logger.log(LogStatus.INFO, "Click [Add] & verify Add Manuscript window dispalys.");
-					clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
-
-				} else {
-					ExtentReporter.logger.log(LogStatus.INFO, "Click [Add] & verify Add Manuscript window dispalys.");
-					clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
-				}
-				switchToFrameUsingElement(driver,
-						driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
-				Thread.sleep(3000);
-				int coverageIdx = 0;
-				for (int i = 0; i < manuscriptAddListformName.size(); i++) {
-					try {
-						if (manuscriptAddListformName.get(i).getAttribute("innerHTML")
-								.equals(rateApolicyPageDTO.phase.get(j))) {
-							clickButton(driver, manuscriptAddListformNameChkBox.get(i),
-									"check Box for " + rateApolicyPageDTO.phase.get(j));
-							ExtentReporter.logger.log(LogStatus.INFO,
-									"Select " + rateApolicyPageDTO.phase.get(j) + ", Click done  & verify Window closes and forms are attached to Policy.");
-							break;
-						}
-					} catch (Exception e) {
-						ExtentReporter.logger.log(LogStatus.FAIL, "Required (" + rateApolicyPageDTO.phase.get(i)
-								+ ") ManuScript type is not displayed in Manuscript list.");
-					}
-					coverageIdx = i;
-				}
-				clickButton(driver, manuscriptAddListDoneBtn, "Done");
-				Thread.sleep(4000);
-				switchToParentWindowfromframe(driver);
-				switchToFrameUsingElement(driver,
-						driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
-				ExtentReporter.logger.log(LogStatus.INFO, "Enter additional text: " + rateApolicyPageDTO.phase.get(j)
-						+ " form added  Click [Save] and Click [Close].");
-				enterTextIn(driver, addText, rateApolicyPageDTO.phase.get(j) + " form added.", "Aditional Text");
-				switchToParentWindowfromframe(driver);
-				switchToFrameUsingElement(driver,
-						driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
-				clickButton(driver, manuscriptPageSaveBtn, "Manu Script page Save");
-				Thread.sleep(2000);
-				clickButton(driver, manuscriptPageCloseBtn, "Manu Script page Close");
-				switchToParentWindowfromframe(driver);
+				coverageIdx = i;
 			}
+			clickButton(driver, manuscriptAddListDoneBtn, "Done");
+			Thread.sleep(4000);
+			switchToParentWindowfromframe(driver);
+			switchToFrameUsingElement(driver,
+					driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
+			ExtentReporter.logger.log(LogStatus.INFO, "Enter additional text: " + rateApolicyPageDTO.phase.get(j)
+					+ " form added  Click [Save] and Click [Close].");
+			enterTextIn(driver, addText, rateApolicyPageDTO.phase.get(j) + " form added.", "Aditional Text");
+			switchToParentWindowfromframe(driver);
+			switchToFrameUsingElement(driver,
+					driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
+			clickButton(driver, manuscriptPageSaveBtn, "Manu Script page Save");
+			Thread.sleep(2000);
+			clickButton(driver, manuscriptPageCloseBtn, "Manu Script page Close");
+			switchToParentWindowfromframe(driver);
 		}
+	}
 
 	public String verifyProductNotifyWindowDisplayed(String PolicyNo) {
 		try {
@@ -783,8 +798,27 @@ public class RateApolicyPage extends CommonAction {
 	}
 
     
-    // Rate a functionality flow.
+
+	// Rate a functionality flow.
 	public PolicyQuotePage rateFunctionality(String policyNo) throws Exception {
+		Thread.sleep(2000);
+		invisibilityOfLoader(driver);
+		// TODO - Need to confirm where we have to compare premium value.
+		// refreshCurrentPage(driver);
+		// Get value of Written Premium from Policy page to compare with Written premium
+		// from View premium window.
+
+		// ExtentReporter.logger.log(LogStatus.PASS, "Captured value of Written Premium
+		// from Policy Page.");
+		// String writtenPremiumAmount= writtenPremium.getAttribute("innerHTML").trim();
+
+		ExtentReporter.logger.log(LogStatus.INFO,
+				"Click rate button in center of screen. Rate window validates and save, View Premium pop up window displays with correct rates");
+		Thread.sleep(2000);
+		invisibilityOfLoader(driver);
+		
+		//TODO - Need to confirm where we have to compare premium value.
+		//refreshCurrentPage(driver);
 		Thread.sleep(2000);
 		invisibilityOfLoader(driver);
 		
@@ -817,13 +851,13 @@ public class RateApolicyPage extends CommonAction {
 		} else {
 			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window is NOT dispalyed to user.");
 		}
-		Thread.sleep(2000);
+		Thread.sleep(4000);
 		invisibilityOfLoader(driver);
 		switchToParentWindowfromframe(driver);
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]")));
 		Thread.sleep(3000);
-		//Get the number of last row of Written premium from View premium window
+		// Get the number of last row of Written premium from View premium window
 		int lastRowOfWrittenPremium=cwWrittenPremiumOnViewPremium.size()-1;
 		//Compare Writtem premium from policy page with Written premium from View premium window
 			/*if(writtenPremiumAmount.equals(cwWrittenPremiumOnViewPremium.get(lastRowOfWrittenPremium).getAttribute("innerHTML").trim())){

@@ -170,7 +170,7 @@ public class SmokeTestCasesUpdated {
 				.closeLimitSharingtab().rateFunctionality(PolicyNo);
 		policyQuotePage.clickPreviewTab(PolicyNo).savePDF().verifyPdfContent();
 		policyQuotePage.saveOptionOfficial(PolicyNo);
-		//exlUtil.writeData("TC42238", "PolicyNum", PolicyNo, 1, ExcelPath);
+		exlUtil.writeData("TC42238", "PolicyNum", PolicyNo, 1, ExcelPath);
 	}
 
 	@Test(description = "Hospital Quote", groups = { "Smoke Test" }, priority = 4)
@@ -211,7 +211,7 @@ public class SmokeTestCasesUpdated {
 				.searchPolicyRateAPolicyPage().AcceptFromActionDropDown().identifyPhase().billingSetup()
 				.coverageDetailsSelect();
 		String policyNumber = rateapolicyPage.policyNo();
-		//exlUtil.writeData("TC42245", "PolicyNum", policyNumber, 1, ExcelPath);
+		exlUtil.writeData("TC42245", "PolicyNum", policyNumber, 1, ExcelPath);
 		rateapolicyPage.coverageUpdates(policyNumber);
 		rateapolicyPage.rateFunctionality(policyNumber).clickPreviewTab(policyNumber).savePDF().verifyPdfContent()
 				.saveOption(policyNumber);
@@ -265,7 +265,7 @@ public class SmokeTestCasesUpdated {
 		exlUtil.writeData("TC42399", "PolicyNum", policyNumber, 1, ExcelPath);
 	}
 
-	@Test(description = "Hospital Verify Attach Form", groups = { "Smoke Test" }, priority = 8)
+	/*@Test(description = "Hospital Verify Attach Form", groups = { "Smoke Test" }, priority = 8)
 	public void TC42399() throws Exception {
 
 		LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
@@ -311,7 +311,7 @@ public class SmokeTestCasesUpdated {
 		exlUtil.writeData("TC42400", "PolicyNum", PolicyNo, 1, ExcelPath);
 	}
 
-	/*@Test(description = "Hospital Renewal", groups = { "Smoke Test" }, priority = 11)
+	@Test(description = "Hospital Renewal", groups = { "Smoke Test" }, priority = 11)
 	public void TC42400() throws Exception {
 		String policy_no = "";
 		LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
@@ -356,8 +356,8 @@ public class SmokeTestCasesUpdated {
 		policybinderpage = new PolicyBinderPage(driver);
 		// String ClaimNumber = rateapolicyPage.policyNo();
 		policybinderpage.navigatetoClaimsPage().searchClaim().statusChange(rateapolicyPage.policyNo());
-	}
-*/
+	}*/
+
 	@AfterMethod(alwaysRun = true)
 	public void logoffFromAppclication(ITestResult result)
 			throws IOException, InterruptedException, URISyntaxException {
@@ -368,16 +368,16 @@ public class SmokeTestCasesUpdated {
 			// verdict = "Fail";
 			String screenshotLocation = "C:\\SmokeTestFM\\" + result.getName() + ".png";
 			ExtentReporter.logger.log(LogStatus.FAIL, ExtentReporter.logger.addScreenCapture(screenshotLocation));
-			//ExtentReporter.logger.log(LogStatus.FAIL, result.getName());
+			ExtentReporter.logger.log(LogStatus.FAIL, result.getName());
 			ExtentReporter.logger.log(LogStatus.FAIL, result.getThrowable());
 
 		} else if (ITestResult.SUCCESS == result.getStatus()) {
 			// verdict = "Pass";
 			ExtentReporter.logger.log(LogStatus.INFO, "User is logged out of applciation");
-			//ExtentReporter.logger.log(LogStatus.PASS, result.getName());
+			ExtentReporter.logger.log(LogStatus.PASS, result.getName());
 		} else if (ITestResult.SKIP == result.getStatus()) {
 			// verdict = "Hold";
-			//ExtentReporter.logger.log(LogStatus.SKIP, result.getName());
+			ExtentReporter.logger.log(LogStatus.SKIP, result.getName());
 		}
 		ExtentReporter.report.flush();
 
@@ -398,7 +398,7 @@ public class SmokeTestCasesUpdated {
 	@AfterClass(alwaysRun = true)
 	public void closeBrowser() {
 		ExtentReporter.report.close();
-		driver.quit();
+		// driver.quit();
 	}
 
 }
