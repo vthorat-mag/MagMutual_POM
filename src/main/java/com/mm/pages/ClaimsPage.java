@@ -450,7 +450,7 @@ public class ClaimsPage extends CommonAction {
 		getPageTitle(driver, fileSearchPageTitle);
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Enter Claim # from Hospital Create Claim Test Case(Example 66429) & Click Search.");
-		policySearch(driver, claimsdto.claimNum, claim_Search, Search_btn,policyList);
+		claimsSearch(driver, claimsdto.claimNum, claim_Search, Search_btn,policyList);
 		getPageTitle(driver, "Claim Folder " + claimsdto.claimNum);
 
 		return new ClaimsPage(driver);
@@ -494,9 +494,9 @@ public class ClaimsPage extends CommonAction {
 		// TODO - Need to check below code is required or not as this is
 		// required in case when application is down.
 		// ****************
-		switchToParentWindowfromframe(driver);
+		/*switchToParentWindowfromframe(driver);
 		switchToFrameUsingElement(driver, changeFileStatusFrameEle);
-		click(driver, closeSymbolOnChagneStatusPopup, "Close");
+		click(driver, closeSymbolOnChagneStatusPopup, "Close");*/
 		// *****************************
 
 		Thread.sleep(5000);
@@ -600,7 +600,6 @@ public class ClaimsPage extends CommonAction {
 		switchToParentWindowfromframe(driver);
 		visibilityOfElement(driver, claimNo, "Claim Number");
 		String claimNumber = claimNo.getAttribute("innerHTML");
-		//TODO - save claimNumber to excel
 	}
 	public boolean checkduplicateClaimWindow()
 	{

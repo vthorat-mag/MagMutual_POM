@@ -112,14 +112,12 @@ public class CincomPage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Optional Forms] & verify Manuscript Information window displays");
 		Thread.sleep(4000);
 		clickButton(driver, optionalFormBtn, "Optional Form");
-		// invisibilityOfLoader(driver, PageloaderSymbol);
 		Thread.sleep(3000);
+		invisibilityOfLoader(driver);
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Add] & verify Add Manuscript window opens.");
-
 		clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
-
 		Thread.sleep(4000);
 		invisibilityOfLoader(driver);
 		switchToFrameUsingElement(driver,
