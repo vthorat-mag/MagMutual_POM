@@ -626,30 +626,27 @@ public class RateApolicyPage extends CommonAction {
 		return new RateApolicyPage(driver);
 	}
 
-	// Coverage Details flow.
-	public RateApolicyPage coverageDetailsSelect() throws Exception {
-		try {
-			Thread.sleep(2000);
-			invisibilityOfLoader(driver);
-			ExtentReporter.logger.log(LogStatus.PASS,
-					"Click Coverage tab & verify Coverage for Primary Risk is displayed.");
-			clickButton(driver, coverageTab, "Coverage");
-			invisibilityOfLoader(driver);
-			Thread.sleep(2000);
-			ExtentReporter.logger.log(LogStatus.PASS, "Select Primary risk in DDL if not selected.");
-			if (verifyValueFromField(driver, primaryRisk, rateApolicyPageDTO.listDDLValue, "value",
-					dropDownNameLevel) == true) {
-				ExtentReporter.logger.log(LogStatus.PASS,
-						"Primary risk in" + "'" + "Level" + "'" + "DDL is already selected.");
-			} else {
-				ExtentReporter.logger.log(LogStatus.PASS,
-						"Primary risk in" + "'" + "Level" + "'" + "DDL is NOT selected.");
-				selectDropdownByValue(driver, listDDL, rateApolicyPageDTO.listDDLValue, dropDownNameLevel);
-			}
+		// Coverage Details flow.
+		public RateApolicyPage coverageDetailsSelect() throws Exception {
+			try {
+				ExtentReporter.logger.log(LogStatus.PASS, "Click Coverage tab & verify Coverage for Primary Risk is displayed.");
+				clickButton(driver, coverageTab, "Coverage");
+				invisibilityOfLoader(driver);
+				Thread.sleep(2000);
+				ExtentReporter.logger.log(LogStatus.PASS, "Select Primary risk in DDL if not selected.");
+				if (verifyValueFromField(driver, primaryRisk, rateApolicyPageDTO.listDDLValue, "value",
+						dropDownNameLevel) == true) {
+					ExtentReporter.logger.log(LogStatus.PASS,
+							"Primary risk in" + "'" + "Level" + "'" + "DDL is already selected.");
+				} else {
+					ExtentReporter.logger.log(LogStatus.PASS,
+							"Primary risk in" + "'" + "Level" + "'" + "DDL is NOT selected.");
+					selectDropdownByValue(driver, listDDL, rateApolicyPageDTO.listDDLValue, dropDownNameLevel);
+				}
 
-		} catch (Exception e) {
-			ExtentReporter.logger.log(LogStatus.FAIL, "Can not click on Coverage tab.");
-		}
+			} catch (Exception e) {
+				ExtentReporter.logger.log(LogStatus.FAIL, "Can not click on Coverage tab.");
+			}
 		return new RateApolicyPage(driver);
 	}
 
@@ -780,30 +777,32 @@ public class RateApolicyPage extends CommonAction {
 
 	// If Product Notify Window appears then it will switch to window and
 	// select 'Yes' from that window and close window
-	public void handleProducNotifyWindow(String policyNo) {
-		if (verifyProductNotifyWindowDisplayed(policyNo).equals("true")) {
-			try {
-				selectDropdownByValue(driver, productNotifyDropDown, rateApolicyPageDTO.productNotifyValue,
-						"product notify");
-				Thread.sleep(3000);
-				clickButton(driver, prodNotifyClose, "Product Notify Close");
-				ExtentReporter.logger.log(LogStatus.PASS, "Product Notify Window is dispalyed to user.");
-				ExtentReporter.logger.log(LogStatus.PASS, " Yes selected from Product Notify dorp down.");
-			} catch (Exception e) {
-				ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window is NOT dispalyed to user.");
-			}
-			// If Product Notify Window does not appear it will log info in
-			// report and move ahead.
-		} else {
-			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window is NOT dispalyed to user.");
-		}
+	public void handleProducNotifyWindow(String policyNo)
+	{
+				if (verifyProductNotifyWindowDisplayed(policyNo).equals("true")) {
+					try {
+						selectDropdownByValue(driver, productNotifyDropDown, rateApolicyPageDTO.productNotifyValue,
+								"product notify");
+						Thread.sleep(3000);
+						clickButton(driver, prodNotifyClose, "Product Notify Close");
+						ExtentReporter.logger.log(LogStatus.PASS, "Product Notify Window is dispalyed to user.");
+						ExtentReporter.logger.log(LogStatus.PASS, " Yes selected from Product Notify dorp down.");
+					} catch (Exception e) {
+						ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window is NOT dispalyed to user.");
+					}
+					// If Product Notify Window does not appear it will log info in
+					// report and move ahead.
+				} else {
+					ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window is NOT dispalyed to user.");
+				}
 	}
+
+    
 
 	// Rate a functionality flow.
 	public PolicyQuotePage rateFunctionality(String policyNo) throws Exception {
 		Thread.sleep(2000);
 		invisibilityOfLoader(driver);
-
 		// TODO - Need to confirm where we have to compare premium value.
 		// refreshCurrentPage(driver);
 		// Get value of Written Premium from Policy page to compare with Written premium
@@ -859,28 +858,26 @@ public class RateApolicyPage extends CommonAction {
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]")));
 		Thread.sleep(3000);
 		// Get the number of last row of Written premium from View premium window
-		int lastRowOfWrittenPremium = cwWrittenPremiumOnViewPremium.size() - 1;
-		// Compare Writtem premium from policy page with Written premium from View
-		// premium window
-		/*
-		 * if(writtenPremiumAmount.equals(cwWrittenPremiumOnViewPremium.get(
-		 * lastRowOfWrittenPremium).getAttribute("innerHTML").trim())){
-		 * 
-		 * ExtentReporter.logger.log(LogStatus.PASS,
-		 * "Premium rate on View Premium window matches with Written premium rate on policy Page. i.e. "
-		 * +writtenPremiumAmount); //Close the View Premium window
-		 * ExtentReporter.logger.log(LogStatus.INFO, "Click [Close]");
-		 * clickButton(driver, closeBtnOnViewPremiumPopup, "Close");
-		 * invisibilityOfLoader(driver); switchToParentWindowfromframe(driver);
-		 * switchToFrameUsingElement(driver,
-		 * driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo +
-		 * "')]"))); Thread.sleep(3000); ExtentReporter.logger.log(LogStatus.INFO,
-		 * "Policy is saved in WIP status"); clickButton(driver, okPolicySaveAsWIPPopup,
-		 * "Ok"); }else{ ExtentReporter.logger.log(LogStatus.FAIL,
-		 * "Written Premium Amount in View Premium window did not match, expected is :"
-		 * +writtenPremiumAmount); Assert.assertTrue(false); }
-		 */
-		// Close the View Premium window
+		int lastRowOfWrittenPremium=cwWrittenPremiumOnViewPremium.size()-1;
+		//Compare Writtem premium from policy page with Written premium from View premium window
+			/*if(writtenPremiumAmount.equals(cwWrittenPremiumOnViewPremium.get(lastRowOfWrittenPremium).getAttribute("innerHTML").trim())){
+		
+				ExtentReporter.logger.log(LogStatus.PASS, "Premium rate on View Premium window matches with Written premium rate on policy Page. i.e. "+writtenPremiumAmount);
+				//Close the View Premium window
+				ExtentReporter.logger.log(LogStatus.INFO, "Click [Close]");
+				clickButton(driver, closeBtnOnViewPremiumPopup, "Close");
+				invisibilityOfLoader(driver);
+				switchToParentWindowfromframe(driver);
+				switchToFrameUsingElement(driver,
+						driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]")));
+				Thread.sleep(3000);
+				ExtentReporter.logger.log(LogStatus.INFO, "Policy is saved in WIP status");
+				clickButton(driver, okPolicySaveAsWIPPopup, "Ok");
+		}else{
+			ExtentReporter.logger.log(LogStatus.FAIL, "Written Premium Amount in View Premium window did not match, expected is :"+writtenPremiumAmount);
+			Assert.assertTrue(false);
+		}*/
+		//Close the View Premium window
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Close]");
 		clickButton(driver, closeBtnOnViewPremiumPopup, "Close");
 		invisibilityOfLoader(driver);
