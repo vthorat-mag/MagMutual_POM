@@ -70,6 +70,9 @@ public class HomePage extends CommonAction {
 	@FindBy(id = "CI_ENT_SEL_LST_FORM_SEL")
 	WebElement Select_Entity;
 	
+	@FindBy(id="wfsortCENTITY_TYPE_DESC")
+	WebElement entityType;
+	
 	@FindBy(id="CPOLICYNO")
 	WebElement firstpolicyNumFromPolicyCount;
 
@@ -322,6 +325,15 @@ public class HomePage extends CommonAction {
 
 	}
 
+	
+	public HomePage changeEntityType() throws Exception{
+	
+		clickButton(driver, entityType, "Type column");
+		Thread.sleep(2000);
+		return new HomePage(driver);
+	}
+	
+	
 	// Selecting Policy type by adding Effective date, Issue company,state and
 	// click done.
 	public PolicySubmissionPage selectPolicyTypeForBTS()

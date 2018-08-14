@@ -357,7 +357,7 @@ public class CommonAction implements CommonActionInterface {
 		} catch (Exception e) {
 			e.printStackTrace();
 			ExtentReporter.logger.log(LogStatus.FAIL, DropDownOption+" value is NOT selected from " + label + " drop down list");
-			Assert.assertTrue(false);
+			Assert.assertTrue(false,DropDownOption+" value not available in drop down list");
 		}
 	}
 
@@ -585,9 +585,9 @@ public class CommonAction implements CommonActionInterface {
 		Thread.sleep(3000);
 		invisibilityOfLoader(driver);
 		Thread.sleep(2000);
-		//WebElement iframeEle = driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]"));
-		switchToFrameUsingId(driver, "popupframe1");
-		//switchToFrameUsingElement(driver, iframeEle);
+		WebElement iframeEle = driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]"));
+		//switchToFrameUsingId(driver, "popupframe1");
+		switchToFrameUsingElement(driver, iframeEle);
 		getPageTitle(driver, "Save As");
 		selectDropdownByValue(driver, saveAsDropDown, saveAsValue, "Selected " + saveAsValue);
 		ExtentReporter.logger.log(LogStatus.INFO, "Select " + saveAsValue + " Click [OK]& verify Message is closed and WIP is saved as"+ saveAsValue);

@@ -23,6 +23,7 @@ public class PolicyIndicationPage extends CommonAction {
 	String maintainUnderwritingTeamPageTitle = "Maintain Underwriting Team";
 	String addUnderwriterPageTitle = "Add Underwriter";
 	String limitSharingPageTitle = "Limit Sharing";
+	String selectRiskTypeWindowTitle ="Select Risk Type";
 	String ExcelPath = System.getProperty("user.dir") + "\\src\\main\\resources\\QA_Form_Data.xlsx";
 
 	@FindBy(id = "PM_COMMON_TABS_SAVEWIP")
@@ -71,7 +72,7 @@ public class PolicyIndicationPage extends CommonAction {
 	WebElement Policy_Action;
 
 	@FindBy(id = "PM_AGNT_ADD")
-	WebElement Add_Agent;
+	WebElement addAgent;
 
 	@FindBy(name = "producerAgentLicId")
 	WebElement Producer;
@@ -80,22 +81,22 @@ public class PolicyIndicationPage extends CommonAction {
 	WebElement Save_Agent;
 
 	@FindBy(id = "PM_AGNT_CLOSE")
-	WebElement Close_Agent;
+	WebElement closeAgent;
 
 	@FindBy(xpath = "//a[@id='PM_PT_VIEWRISK']//span")
-	WebElement Risk_tab;
+	WebElement riskTab;
 
 	@FindBy(xpath = "//a[@id='PM_PT_VIEWPOL']//span")
 	WebElement Policy_tab;
 
 	@FindBy(xpath = "//td//div[@id='CRISKTYPECODELOVLABEL']")
-	WebElement Risk_Type;
+	WebElement riskType;
 
 	@FindBy(name = "riskCounty")
-	WebElement Risk_Country;
+	WebElement riskCounty;
 
 	@FindBy(name = "riskClass")
-	WebElement Risk_Speciality;
+	WebElement riskSpeciality;
 
 	@FindBy(xpath = "//a[@id='PM_PT_VIEWCVG']//span")
 	WebElement Coverage_tab;
@@ -243,6 +244,24 @@ public class PolicyIndicationPage extends CommonAction {
 
 	@FindBy(id = "PM_LIMIT_SHARING_CLOSE")
 	WebElement Close_Limit_Sharing;
+	
+	@FindBy(id="PM_QT_RISK_ADD")
+	WebElement addRiskbtn;
+	
+	@FindBy(id="CRISKTYPEDESC")
+	List <WebElement> riskTypeList; 
+	
+	@FindBy(id="PM_SELRISKTYPES")
+	WebElement selectRiskTypeButton;
+	
+	@FindBy(id="CCOVERAGEEFFECTIVEFROMDATE")
+	WebElement coverageEffectiveFromDate;
+	
+	
+	
+	
+	
+	
 
 	// Constructor to initialize driver, page elements and DTO PageObject for
 	// PolicyIndicationPage
@@ -372,7 +391,7 @@ public class PolicyIndicationPage extends CommonAction {
 
 		// Add Agent information and save agent
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Add. Verify Producer Agent Entry window opens");
-		click(driver, Add_Agent, "Add button");
+		click(driver, addAgent, "Add button");
 		Thread.sleep(3000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Select Agent from dropdown list: Verify Agent is selected");
 		//Select producer value using DDL // Add in excel sheet
@@ -384,7 +403,7 @@ public class PolicyIndicationPage extends CommonAction {
 
 		// Close agent and switch to parent window
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Save and Close.Verify Agent is saved to policy and window is closed");
-		click(driver, Close_Agent, "Close button");
+		click(driver, closeAgent, "Close button");
 		switchToParentWindowfromframe(driver);
 		return new PolicyIndicationPage(driver);
 
@@ -394,20 +413,89 @@ public class PolicyIndicationPage extends CommonAction {
 	public PolicyIndicationPage addRiskInformation() throws Exception {
 
 		Thread.sleep(3000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Go to Risk Tab. Verify Risk tab displays");
-		click(driver, Risk_tab, "Risk tab");
-		Thread.sleep(3000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Select Hospital Risk(Defaults). Verify Hospital Risk is highlighted");
-		click(driver, Risk_Type, "Risk Type");
+		List <WebElement> recentlyAddedRiskTypeList=driver.findElements(By.xpath("//td//div[@id='CRISKTYPECODELOVLABEL']"));
+		
+		boolean flag=false;
+		try{
+			for(int i=0;i<recentlyAddedRiskTypeList.size();i++){
+				//TODO- add risk name in indication data sheet
+				if(recentlyAddedRiskTypeList.get(i).getAttribute("innerHTML").trim().equals(hospitalIndicationDTO.riskName)){
+				selectValue(driver, recentlyAddedRiskTypeList.get(i), "Risk Type");
+				flag=true;
+				break;
+				}
+			}
+			if(flag==false){
+			throw new Exception();
+			}
+		}catch(Exception e){
+			ExtentReporter.logger.log(LogStatus.FAIL, hospitalIndicationDTO.riskTypeValue+" is not available in Risk List section of Risk Page.");			
+		}
 		Thread.sleep(3000);
 		ExtentReporter.logger.log(LogStatus.INFO, "For Risk information populate the following: Primary = Yes (defaults)"+
-		"County = Appling,Specialty = Acute Care. Verify Risk information is displayed and selected");
-		// Select Risk country and Risk specialty using DDL
-		selectDropdownByVisibleText(driver, Risk_Country, hospitalIndicationDTO.riskCountry, "Risk Country");
-		selectDropdownByVisibleText(driver, Risk_Speciality, hospitalIndicationDTO.riskSpeciality, "Risk speciality");
+		"County = "+hospitalIndicationDTO.riskCounty+", Specialty = "+hospitalIndicationDTO.riskSpeciality+". Verify Risk information is displayed and selected");
+		// Select Risk County and Risk specialty using DDL
+		selectDropdownByVisibleText(driver, riskCounty, hospitalIndicationDTO.riskCounty, "Risk County");
+		selectDropdownByVisibleText(driver, riskSpeciality, hospitalIndicationDTO.riskSpeciality, "Risk speciality");
+		
+		clickButton(driver, saveWIP, "Save WIP"); //not in test step
 		return new PolicyIndicationPage(driver);
 	}
 
+
+	public PolicyIndicationPage selectRiskTab() throws Exception{
+		
+		Thread.sleep(3000);
+		ExtentReporter.logger.log(LogStatus.INFO, "Go to Risk Tab. Verify Risk tab displays");
+		click(driver, riskTab, "Risk tab");
+		return new PolicyIndicationPage(driver);
+	}
+	
+	
+	//Add Risk type from Risk tab, Search risk and select risk 
+	public PolicyIndicationPage selectRiskTypeFromPopupWindow(String policyNo) throws Exception{
+			
+			clickButton(driver, addRiskbtn, "Add");
+			Thread.sleep(2000);
+			invisibilityOfLoader(driver);
+			WebElement iframeEle = driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]"));
+			switchToFrameUsingElement(driver, iframeEle);
+			getPageTitle(driver, selectRiskTypeWindowTitle);
+			boolean flag=false;
+			try{
+			for(int i=0;i<riskTypeList.size();i++){
+				
+				if(riskTypeList.get(i).getAttribute("innerHTML").equals(hospitalIndicationDTO.riskTypeValue)){
+					
+					selectValue(driver, riskTypeList.get(i), hospitalIndicationDTO.riskTypeValue);
+					ExtentReporter.logger.log(LogStatus.PASS, hospitalIndicationDTO.riskTypeValue+" is selected from Risk Type List");
+					flag=true;
+					break;
+				}
+			}
+				if(flag==false){
+				throw new Exception();
+				}
+			}catch(Exception e){
+				ExtentReporter.logger.log(LogStatus.FAIL, hospitalIndicationDTO.riskTypeValue+" is not available in Risk Type List of window"+selectRiskTypeWindowTitle);			
+			}
+			
+			clickButton(driver, selectRiskTypeButton , "Select");
+			switchToParentWindowfromframe(driver);
+			return new PolicyIndicationPage(driver);
+			
+	}
+	public PolicyIndicationPage searchAndSelectRisk() throws Exception{
+			String Blank="";
+			HomePage homePage= new HomePage(driver);
+			String parentWindow = switchToWindow(driver);
+			homePage.searchEntity(Blank,Blank);
+			homePage.selectEntity(parentWindow);
+			return new PolicyIndicationPage(driver);
+		}
+	
+	
 	// Select Coverage tab, click on Add button and switch to pop up window
 	public PolicyIndicationPage selectCoverageTab() throws Exception {
 
@@ -416,6 +504,7 @@ public class PolicyIndicationPage extends CommonAction {
 		click(driver, Coverage_tab, "Coverage tab");
 		return new PolicyIndicationPage(driver);
 	}
+	
 	public PolicyIndicationPage selectAddCoverageButton() throws Exception {
 		Thread.sleep(1000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Add. Verify Select Coverage window displays");
@@ -808,4 +897,62 @@ public class PolicyIndicationPage extends CommonAction {
 		switchToParentWindowfromframe(driver);
 		return new RateApolicyPage(driver);
 	}
+	
+	
+	
+	public PolicyIndicationPage selectCoverageFromCoverageList() throws Exception{
+
+			// Get coverage count from the excel sheet column
+			for (int coverageCount = 0; coverageCount < hospitalIndicationDTO.coverage.size(); coverageCount++) {
+				invisibilityOfLoader(driver);
+				Thread.sleep(1000);
+				boolean flag=false;
+				try{
+				// Get coverage count from the grid list on coverage page
+				for (int i = 0; i < coverageList.size(); i++) {
+					// compare if the coverage selected from excel sheet is same as
+					// coverage from grid on coverage page
+					if (coverageList.get(i).getAttribute("innerHTML").trim()
+							.equalsIgnoreCase(hospitalIndicationDTO.coverageNameForRisk)) {
+						ExtentReporter.logger.log(LogStatus.INFO,"Select "+
+								hospitalIndicationDTO.coverageNameForRisk + "Verify Coverage is highlighted from Grid");
+						// select the coverage from grid if it matches
+						selectValue(driver, coverageList.get(i), hospitalIndicationDTO.coverageNameForRisk);
+						flag=true;
+						break;
+					}
+				}
+				if(flag==false){
+					throw new Exception();
+				}
+			}
+				catch(Exception e){
+					e.printStackTrace();
+					ExtentReporter.logger.log(LogStatus.FAIL,hospitalIndicationDTO.coverageNameForRisk+" is not available in coverage List");
+				}
+			}	
+			return new PolicyIndicationPage(driver);
+		}
+	
+
+	//Get the date from EffDate column to add in retro date, as the retro date should be <= EffDate
+	public String getTheCoverageEffectiveDate(){
+	
+		String coverageEffectiveDate = coverageEffectiveFromDate.getAttribute("innerHTML").trim();
+		return coverageEffectiveDate;
+	}
+	
+	//Add retro date from Eff Date column
+	public PolicyIndicationPage addRetroactiveDate() throws Exception{
+		
+		enterDataIn(driver, Retro_Date, getTheCoverageEffectiveDate(), "Retro Date");
+		clickButton(driver, saveWIP, "Save WIP");
+		return new PolicyIndicationPage(driver);
+	}
+
+	
 }
+
+
+
+

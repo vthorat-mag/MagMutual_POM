@@ -184,7 +184,7 @@ public class SmokeTestCasesUpdated {
 		loginpage = new LoginPage(driver);
 
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageFromrateApolicyPage()
-				.searchPolicyPolicyQuotePage().CopyOptionFromActionDropDown().changePhaseToQuote()
+				.searchPolicyPolicyQuotePage().CopyOptionFromActionDropDown().changePolicyPhase(policyquotepagedto.quotePhaseValue)
 				.coverageDetailsSelect();
 
 		policyquotepage = new PolicyQuotePage(driver);
@@ -223,6 +223,7 @@ public class SmokeTestCasesUpdated {
 		PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
 		RateApolicyPage rateApolicyPage = new RateApolicyPage(driver);
 		PolicyQuotePage policyQuotePage = new PolicyQuotePage(driver);
+		PolicyQuotePageDTO policyquotepagedto = new PolicyQuotePageDTO();
 		lpDTO = new LoginPageDTO();
 		loginpage = new LoginPage(driver);
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageFromrateApolicyPage()
@@ -234,7 +235,7 @@ public class SmokeTestCasesUpdated {
 				.changePhaseToIndicationAndAddQuoteDescription();
 		rateApolicyPage.rateFunctionality(policybinderpage.policyNo());
 		policyQuotePage.saveOptionOfficial(policybinderpage.policyNo()).CopyOptionFromActionDropDown()
-				.changePhaseToQuote();
+				.changePolicyPhase(policyquotepagedto.quotePhaseValue);
 		rateApolicyPage.rateFunctionality(policybinderpage.policyNo());
 		policyQuotePage.saveOptionOfficial(policybinderpage.policyNo());
 		rateApolicyPage.AcceptFromActionDropDown().billingSetup().refreshCurrentPage(driver)
@@ -312,22 +313,26 @@ public class SmokeTestCasesUpdated {
 	
 	@Test(description = "Hospital Renewal", groups = { "Smoke Test" }, priority = 11)
 	public void TC42400() throws Exception {
-		// String policy_no = ""; 09100510, 09100511, 09100512, 09100514
+		//TODO- Get policy number//09100510, 09100511, 09100512, 09100514
 		LoginPageDTO lpDTO = new LoginPageDTO();
-		RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
 		LoginPage loginpage = new LoginPage(driver);
-		ExcelUtil exlUtil = new ExcelUtil();
+		PolicyQuotePage policyQuotePage = new PolicyQuotePage(driver);
 		PolicyQuotePageDTO policyquotepageDTO = new PolicyQuotePageDTO();
+		PolicyBinderPage policyBinderPage = new PolicyBinderPage(driver);
+		ExcelUtil exlUtil = new ExcelUtil();
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageFromrateApolicyPage()
-				.searchPolicyPolicyQuotePage().selectPolicyActionAndAddDescription().save_CaptureTransactionDetails()
-				.saveOption(policyquotepageDTO.saveAsPolicyDDLValue, rateapolicypage.policyNo()).switchToNextFrame()
-				.save_CaptureTransactionDetails()
-				.saveOption(policyquotepageDTO.secondSaveAsPolicyDDLValue, rateapolicypage.policyNo()).product_Notify()
-				.exit_SaveOption();
-		String PolicyNo = rateapolicypage.policyNo();
-		exlUtil.writeData("TC43666", "PolicyNum", PolicyNo, 1, ExcelPath);
-
+				.searchPolicyPolicyQuotePage().selectPolicyActionAndAddDescription().save_CaptureTransactionDetails();
+				String PolicyNo = policyBinderPage.policyNo();
+				policyQuotePage.saveOptionAndCaptureTransactionDetails(policyquotepageDTO.saveAsPolicyDDLValue,PolicyNo);
+				String policyNum = policyBinderPage.policyNo();
+				policyQuotePage.saveOptionOfficial(policyNum)
+				.applyChanges()
+				.changePolicyPhase(policyquotepageDTO.policyPhaseValue)
+				.saveOptionOfficial(PolicyNo);
+				
+				exlUtil.writeData("TC43666", "PolicyNum", PolicyNo, 1, ExcelPath);
 	}
+
 
 	@Test(description = "Hospital Create Claim", groups = { "Smoke Test" }, priority = 12)
 	public void TC43666() throws Exception {
