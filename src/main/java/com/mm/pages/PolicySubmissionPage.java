@@ -12,6 +12,7 @@ import com.mm.dto.PolicySubmissionPageDTO;
 import com.mm.utils.CommonAction;
 import com.mm.utils.ExtentReporter;
 import com.mm.utils.PDFReader;
+import com.mm.utils.TestCaseDetails;
 import com.relevantcodes.extentreports.LogStatus;
 
 public class PolicySubmissionPage extends CommonAction {
@@ -54,7 +55,7 @@ public class PolicySubmissionPage extends CommonAction {
 			throws IllegalArgumentException, IllegalAccessException, SecurityException {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
-		policysubmissionpageDTO = new PolicySubmissionPageDTO();
+		policysubmissionpageDTO = new PolicySubmissionPageDTO(TestCaseDetails.testDataDictionary);
 	}
 
 	// Select Copy from Action value from Action drop down.

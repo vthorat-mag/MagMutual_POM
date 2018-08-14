@@ -324,16 +324,17 @@ public class CommonAction implements CommonActionInterface {
 															// window handle
 		Thread.sleep(3000);
 		for (String currentWindow : handles) {
+			try {
 			if (!currentWindow.equals(parentWindow)) {
 				driver.switchTo().window(currentWindow);
 				driver.manage().window().maximize();
 				ExtentReporter.logger.log(LogStatus.INFO, "Control is switched to pop up window");
 			}
-			else
+			}catch(Exception e)
 			{
-				ExtentReporter.logger.log(LogStatus.WARNING, "Error while switcing control to pop up window");
-				//Assert.assertTrue(false);
+				ExtentReporter.logger.log(LogStatus.WARNING, "Error while switching control to pop up window");
 			}
+			
 		}
 		Thread.sleep(2000);
 		return parentWindow;
@@ -341,7 +342,6 @@ public class CommonAction implements CommonActionInterface {
 
 	// Select drop down value based on passed parameter driver, element locator
 	// for drop down, DropDown Option and lable of drop down.
-	//TODO-we need to validate if drop down value is selected
 	public void selectDropdownByValue(WebDriver driver, WebElement element, String DropDownOption, String label) {
 
 		try {
@@ -358,6 +358,28 @@ public class CommonAction implements CommonActionInterface {
 			e.printStackTrace();
 			ExtentReporter.logger.log(LogStatus.FAIL, DropDownOption+" value is NOT selected from " + label + " drop down list");
 			Assert.assertTrue(false,DropDownOption+" value not available in drop down list");
+		}
+	}
+	
+	public String selectDropdownByValueFromPolicyActionDDL(WebDriver driver, WebElement element, String DropDownOption, String label) {
+
+		try {
+			WebDriverWait wait = new WebDriverWait(driver, Medium);
+			wait.until(ExpectedConditions.visibilityOf(element));
+			Thread.sleep(4000);
+			Assert.assertTrue(element.isDisplayed(),element.getText()+" is not displaye on page.");
+			Assert.assertTrue(element.isDisplayed(),element.getText()+" is not displaye on page.");
+			Select Sel = new Select(element);
+			Sel.selectByValue(DropDownOption);
+			ExtentReporter.logger.log(LogStatus.PASS, DropDownOption+" value is selected from " + label + " drop down list");
+			return "true";
+
+		} catch (Exception e) {
+			//e.printStackTrace();
+			ExtentReporter.logger.log(LogStatus.WARNING, DropDownOption+" value is NOT available in " + label + " drop down list");
+			ExtentReporter.logger.log(LogStatus.INFO, "Searching for new policy Number as previous policy number does not contain value: "+DropDownOption+" in "+label+" DDL .");
+			//policySearch(driver, policyNo, policySearchTxtBox, searchBtn, policyList);
+			return "false";
 		}
 	}
 
@@ -605,6 +627,23 @@ public class CommonAction implements CommonActionInterface {
 		switchToParentWindowfromframe(driver);
 		Thread.sleep(2000);
 	}
+	
+	public String verifypolicyNotDisplayErrorMsg(WebDriver driver)
+	{
+		String flag = null;
+		try {
+			WebElement policyNotFoudErrorMsg = driver.findElement(By.xpath("//td[@class='errormessage']"));
+			if(policyNotFoudErrorMsg.isDisplayed())
+			{
+				flag = "true";
+			}
+		}
+			catch(Exception e)
+			{
+				flag = "false";
+			}
+		return flag;
+		}
 
 	public void policySearch(WebDriver driver, String policyNo, WebElement policySearchTxtBox, WebElement searchBtn,WebElement policyList) throws Exception{
 		ExtentReporter.logger.log(LogStatus.INFO, "Enter in active Hospital/Facility policy number in Enter Policy # entry box, Click Search. Policy Will display" );
@@ -612,15 +651,19 @@ public class CommonAction implements CommonActionInterface {
 		enterTextIn(driver, policySearchTxtBox, policyNo, "Enter Policy # text field");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click search button and Verify full policy page is displayed");
 		click(driver, searchBtn, "Search button");
-		
 		Thread.sleep(1000);
 		invisibilityOfLoader(driver);
 		if(verifyPolicyListDispOnQAEnv(driver,policyList)==true){
 			//clickButton(driver, policyList, "First policy from Searched Policies");
 			Actions action = new Actions(driver);
 			action.click(policyList).build().perform();
-		}else{
-			ExtentReporter.logger.log(LogStatus.INFO, "Policy list is NOT displayed after policy Search");
+		}else if(verifypolicyNotDisplayErrorMsg(driver).equals("trrue")){
+			ExtentReporter.logger.log(LogStatus.FAIL, "Policy is not available, please enter another/correct policy Number.");
+			Assert.assertTrue(false, "Policy is not available, please enter another/correct policy Number.");
+		}
+		else{
+			getPageTitle(driver, "Policy Folder "+policyNo);
+			ExtentReporter.logger.log(LogStatus.INFO, "Policy list is displayed after policy Search");
 		}
 	}
 

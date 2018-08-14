@@ -1,8 +1,9 @@
 package com.mm.dto;
 
 import java.util.List;
+import java.util.Map;
 
-import MMTestCase.SmokeTestCase;
+import MMTestCase.SmokeTestCasesUpdated;
 
 public class PolicyIndicationPageDTO {
 
@@ -11,7 +12,7 @@ public class PolicyIndicationPageDTO {
 	public List<String> teamMembername;
 	public List<String> coverage;
 	public List<String> retroDate;
-	public List<String>	premiumAmount;
+	public List<String> premiumAmount;
 	public List<String> retroDateValue;
 	public List<String> coverageTitle;
 	public List<String> coverageName;
@@ -31,35 +32,39 @@ public class PolicyIndicationPageDTO {
 	public String riskName;
 	public String coverageNameForRisk;
 	
-public PolicyIndicationPageDTO() throws IllegalArgumentException, IllegalAccessException, SecurityException{
-		
-		for (int iFC=0; iFC < PolicyIndicationPageDTO.class.getFields().length; iFC++) 
-		{
-			if (SmokeTestCase.testDataMap.containsKey(PolicyIndicationPageDTO.class.getFields()[iFC].getName().toLowerCase()))
-			{
-			if(PolicyIndicationPageDTO.class.getFields()[iFC].getType().toString().toLowerCase().contains("java.util.list"))
-				//ToDo - Check if the field is blank, don't add in list
-			{
-				try{
-				PolicyIndicationPageDTO.class.getFields()[iFC].set(this, SmokeTestCase.testDataMap.get(PolicyIndicationPageDTO.class.getFields()[iFC].getName().toLowerCase()));
-			
-				}catch(Exception e){
-				 e.printStackTrace();
-				 System.out.println(SmokeTestCase.testDataMap.get(PolicyIndicationPageDTO.class.getFields()[iFC].getName()));
+	public PolicyIndicationPageDTO(Map<String, List<String>> excelData)
+			throws IllegalArgumentException, IllegalAccessException, SecurityException {
+
+		for (int i = 0; i <= PolicyIndicationPageDTO.class.getFields().length - 1; i++) {
+			if (PolicyIndicationPageDTO.class.getFields()[i].getType().toString().toLowerCase().contains("java.util.list")) {
+
+				// if
+				// (excelData.containsKey(PolicyIndicationPageDTO.class.getFields()[i].getName().toLowerCase())){
+				// {
+				try {
+					PolicyIndicationPageDTO.class.getFields()[i].set(this,
+							excelData.get(PolicyIndicationPageDTO.class.getFields()[i].getName().toLowerCase()));
+
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-				
-			}else				
-			{
-				try{
-				PolicyIndicationPageDTO.class.getFields()[iFC].set(this, SmokeTestCase.testDataMap.get(PolicyIndicationPageDTO.class.getFields()[iFC].getName().toLowerCase()).get(0));
-				
-				}catch(Exception e){
-					 e.printStackTrace();
-					 System.out.println(SmokeTestCase.testDataMap.get(PolicyIndicationPageDTO.class.getFields()[iFC].getName()));
-						}
-				
+
+			} else if (PolicyIndicationPageDTO.class.getFields()[i].getType().toString().toLowerCase().contains("int")) {
+				try {
+					PolicyIndicationPageDTO.class.getFields()[i].set(this, Integer.parseInt(
+							excelData.get(PolicyIndicationPageDTO.class.getFields()[i].getName().toLowerCase()).get(0)));
+
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-			
+			} else {
+				try {
+					PolicyIndicationPageDTO.class.getFields()[i].set(this,
+							excelData.get(PolicyIndicationPageDTO.class.getFields()[i].getName().toLowerCase()).get(0));
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}

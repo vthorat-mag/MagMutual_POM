@@ -26,6 +26,7 @@ import com.mm.utils.CommonUtilities;
 import com.mm.utils.ExcelUtil;
 import com.mm.utils.ExtentReporter;
 import com.mm.utils.PDFReader;
+import com.mm.utils.TestCaseDetails;
 import com.relevantcodes.extentreports.LogStatus;
 
 import bsh.StringUtil;
@@ -316,7 +317,7 @@ public class FinancePage extends CommonAction {
 	public FinancePage(WebDriver driver) throws Exception {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
-		financePageDTO = new FinancePageDTO();
+		financePageDTO = new FinancePageDTO(TestCaseDetails.testDataDictionary);
 	}
 
 	//Search the account number using Account Holder name

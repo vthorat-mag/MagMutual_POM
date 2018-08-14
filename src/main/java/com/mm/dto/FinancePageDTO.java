@@ -1,19 +1,18 @@
 package com.mm.dto;
 
 import java.util.List;
+import java.util.Map;
 
-import MMTestCase.SmokeTestCase;
+import MMTestCase.SmokeTestCasesUpdated;
 
 public class FinancePageDTO {
 
-	public String screenShotName;
-	public String billingFrequency;
-	public String AccountType;
-	public String LastOrgName;
 	public String policyNum;
 	public Object currentBalance;
 	public String accountNumber;
 	public String policyNo;
+	public String AccountType;
+	public String LastOrgName;
 	public String Number;
 	public String Amount;
 	public String TCSheetNumber;
@@ -42,39 +41,38 @@ public class FinancePageDTO {
 	public String endorsementReason;
 	public String endorsementComment;
 	public String accountHolderName;
-	
-	
-	
-public FinancePageDTO() throws IllegalArgumentException, IllegalAccessException, SecurityException{
-		
-		for (int iFC = 0; iFC < FinancePageDTO.class.getFields().length; iFC++) {
-			
+	public String billingFrequency;
+	public String screenShotName;
 
-			if (FinancePageDTO.class.getFields()[iFC].getType().toString().toLowerCase().contains("java.util.list")) {
-				
-			//	if (SmokeTestCase.testDataMap.containsKey(FinancePageDTO.class.getFields()[iFC].getName().toLowerCase())){		{
+	public FinancePageDTO(Map<String, List<String>> excelData) {
+
+		for (int i = 0; i <= FinancePageDTO.class.getFields().length - 1; i++) {
+			if (FinancePageDTO.class.getFields()[i].getType().toString().toLowerCase().contains("java.util.list")) {
+
+				// if
+				// (excelData.containsKey(FinancePageDTO.class.getFields()[i].getName().toLowerCase())){
+				// {
 				try {
-					FinancePageDTO.class.getFields()[iFC].set(this,
-							SmokeTestCase.testDataMap.get(FinancePageDTO.class.getFields()[iFC].getName().toLowerCase()));
+					FinancePageDTO.class.getFields()[i].set(this,
+							excelData.get(FinancePageDTO.class.getFields()[i].getName().toLowerCase()));
 
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 
-			}
-			else if (FinancePageDTO.class.getFields()[iFC].getType().toString().toLowerCase().contains("int")) {
+
+			} else if (FinancePageDTO.class.getFields()[i].getType().toString().toLowerCase().contains("int")) {
 				try {
-					FinancePageDTO.class.getFields()[iFC].set(this, Integer.parseInt(SmokeTestCase.testDataMap
-							.get(FinancePageDTO.class.getFields()[iFC].getName().toLowerCase()).get(0)));
+					FinancePageDTO.class.getFields()[i].set(this, Integer.parseInt(
+							excelData.get(FinancePageDTO.class.getFields()[i].getName().toLowerCase()).get(0)));
 
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-			}
-			else {
+			} else {
 				try {
-					FinancePageDTO.class.getFields()[iFC].set(this, SmokeTestCase.testDataMap
-							.get(FinancePageDTO.class.getFields()[iFC].getName().toLowerCase()).get(0));
+					FinancePageDTO.class.getFields()[i].set(this,
+							excelData.get(FinancePageDTO.class.getFields()[i].getName().toLowerCase()).get(0));
 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -84,4 +82,3 @@ public FinancePageDTO() throws IllegalArgumentException, IllegalAccessException,
 		}
 	}
 }
-  

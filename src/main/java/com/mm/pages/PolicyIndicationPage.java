@@ -10,6 +10,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
 import com.mm.utils.ExtentReporter;
+import com.mm.utils.TestCaseDetails;
 import com.mm.dto.PolicyIndicationPageDTO;
 import com.mm.utils.CommonAction;
 import com.relevantcodes.extentreports.LogStatus;
@@ -270,7 +271,7 @@ public class PolicyIndicationPage extends CommonAction {
 
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
-		hospitalIndicationDTO = new PolicyIndicationPageDTO();
+		hospitalIndicationDTO = new PolicyIndicationPageDTO(TestCaseDetails.testDataDictionary);
 	}
 
 	// Select Underwriter button from Policy tab and move to pop up window frame
@@ -804,8 +805,9 @@ public class PolicyIndicationPage extends CommonAction {
 			Thread.sleep(2000);
 			ExtentReporter.logger.log(LogStatus.INFO, "Form is saved to coverage and window closes");
 			clickButton(driver, manuscriptPageCloseBtn, "Manu Script page Close");
-			switchToParentWindowfromframe(driver);
 			Thread.sleep(2000);
+			invisibilityOfLoader(driver);
+			switchToParentWindowfromframe(driver);
 			click(driver, saveWIP, "Save WIP");
 			Thread.sleep(2000);
 		}

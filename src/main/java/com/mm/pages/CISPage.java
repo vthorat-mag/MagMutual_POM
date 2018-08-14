@@ -17,6 +17,7 @@ import org.testng.Assert;
 
 import com.mm.utils.ExcelUtil;
 import com.mm.utils.ExtentReporter;
+import com.mm.utils.TestCaseDetails;
 import com.relevantcodes.extentreports.LogStatus;
 import com.relevantcodes.extentreports.model.ExceptionInfo;
 import com.mm.dto.CISPageDTO;
@@ -201,7 +202,7 @@ public class CISPage extends CommonAction {
 	public CISPage(WebDriver driver) throws Exception {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
-		oCISPageDTO = new CISPageDTO();
+		oCISPageDTO = new CISPageDTO(TestCaseDetails.testDataDictionary);
 	}
 
 	// Search and Select the client name from the Entity List

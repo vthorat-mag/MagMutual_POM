@@ -1,8 +1,9 @@
 package com.mm.dto;
 
 import java.util.List;
+import java.util.Map;
 
-import MMTestCase.SmokeTestCase;
+import MMTestCase.SmokeTestCasesUpdated;
 
 public class ClaimsDTO {
 
@@ -21,42 +22,51 @@ public class ClaimsDTO {
 	public String clientIDValue;
 	public String clientNameValue;
 	public String seperateCheck;
-	public List <String> transactionType;
-	public List <String> paymentType;
-	public List <String> vendorIDValue;
-	public List <String> taxIDType;
-	public List <String> transactionAmount;
-	public List <String> invoiceNo;
-	public List <String> payeeName;
-	public String  policyNum;
+	public List<String> transactionType;
+	public List<String> paymentType;
+	public List<String> vendorIDValue;
+	public List<String> taxIDType;
+	public List<String> transactionAmount;
+	public List<String> invoiceNo;
+	public List<String> payeeName;
+	public String policyNum;
 	public String CoverageDescription;
 
-	public ClaimsDTO() throws Exception{
+	public ClaimsDTO(Map<String, List<String>> excelData) {
 
-		for (int iFC=0; iFC < ClaimsDTO.class.getFields().length; iFC++) 
-		{
-			if (SmokeTestCase.testDataMap.containsKey(ClaimsDTO.class.getFields()[iFC].getName().toLowerCase()))
-			{
-				if(ClaimsDTO.class.getFields()[iFC].getType().toString().toLowerCase().contains("java.util.list"))
-				{
-					try{
-						ClaimsDTO.class.getFields()[iFC].set(this, SmokeTestCase.testDataMap.get(ClaimsDTO.class.getFields()[iFC].getName().toLowerCase()));
+		for (int i = 0; i <= ClaimsDTO.class.getFields().length - 1; i++) {
+			if (ClaimsDTO.class.getFields()[i].getType().toString().toLowerCase().contains("java.util.list")) {
 
-					}catch(Exception e){
-						e.printStackTrace();
-					}
+				// if
+				// (excelData.containsKey(ClaimsDTO.class.getFields()[i].getName().toLowerCase())){
+				// {
+				try {
+					ClaimsDTO.class.getFields()[i].set(this,
+							excelData.get(ClaimsDTO.class.getFields()[i].getName().toLowerCase()));
 
-				}else				
-				{
-					try{
-						ClaimsDTO.class.getFields()[iFC].set(this, SmokeTestCase.testDataMap.get(ClaimsDTO.class.getFields()[iFC].getName().toLowerCase()).get(0));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 
-					}catch(Exception e){
-						e.printStackTrace();
-					}
+			} else if (ClaimsDTO.class.getFields()[i].getType().toString().toLowerCase().contains("int")) {
+				try {
+					ClaimsDTO.class.getFields()[i].set(this, Integer
+							.parseInt(excelData.get(ClaimsDTO.class.getFields()[i].getName().toLowerCase()).get(0)));
 
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else {
+				try {
+					ClaimsDTO.class.getFields()[i].set(this,
+							excelData.get(ClaimsDTO.class.getFields()[i].getName().toLowerCase()).get(0));
+
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
+
 		}
+
 	}
 }

@@ -20,6 +20,7 @@ import com.mm.dto.RateAPolicyPageDTO;
 import com.mm.utils.CommonAction;
 import com.mm.utils.CommonUtilities;
 import com.mm.utils.ExtentReporter;
+import com.mm.utils.TestCaseDetails;
 import com.relevantcodes.extentreports.LogStatus;
 
 public class ClaimsPage extends CommonAction {
@@ -258,7 +259,7 @@ public class ClaimsPage extends CommonAction {
 	public ClaimsPage(WebDriver driver) throws Exception {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
-		claimsdto = new ClaimsDTO();
+		claimsdto = new ClaimsDTO(TestCaseDetails.testDataDictionary);
 	}
 
 	public ClaimsPage openTransactionTab() throws Exception{
