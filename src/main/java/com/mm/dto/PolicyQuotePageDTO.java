@@ -7,6 +7,7 @@ import MMTestCase.SmokeTestCasesUpdated;
 
 public class PolicyQuotePageDTO {
 
+	public String policyPhaseValue;
 	public String policyactionvalue;
 	public String saveAsPolicyDDLValue;
 	public String secondSaveAsPolicyDDLValue;

@@ -781,11 +781,11 @@ public class RateApolicyPage extends CommonAction {
 	{
 				if (verifyProductNotifyWindowDisplayed(policyNo).equals("true")) {
 					try {
+						ExtentReporter.logger.log(LogStatus.PASS, "Product Notify Window is displayed to user.");
 						selectDropdownByValue(driver, productNotifyDropDown, rateApolicyPageDTO.productNotifyValue,
 								"product notify");
 						Thread.sleep(3000);
 						clickButton(driver, prodNotifyClose, "Product Notify Close");
-						ExtentReporter.logger.log(LogStatus.PASS, "Product Notify Window is dispalyed to user.");
 						ExtentReporter.logger.log(LogStatus.PASS, " Yes selected from Product Notify dorp down.");
 					} catch (Exception e) {
 						ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window is NOT dispalyed to user.");
