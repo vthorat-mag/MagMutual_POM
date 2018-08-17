@@ -2,28 +2,49 @@
 <testng-results skipped="0" failed="0" ignored="0" total="1" passed="1">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="33868" started-at="2018-05-04T08:39:05Z" finished-at="2018-05-04T08:39:39Z">
+  <suite name="Default suite" duration-ms="129192" started-at="2018-07-18T11:11:50Z" finished-at="2018-07-18T11:13:59Z">
     <groups>
+      <group name="Smoke Test">
+        <method signature="SmokeTestCase.TC42240()[pri:0, instance:MMTestCase.SmokeTestCase@fba92d3]" name="TC42240" class="MMTestCase.SmokeTestCase"/>
+      </group> <!-- Smoke Test -->
     </groups>
-    <test name="Default test" duration-ms="33868" started-at="2018-05-04T08:39:05Z" finished-at="2018-05-04T08:39:39Z">
-      <class name="SmokeTestCase">
-        <test-method status="PASS" signature="loginToeOasis()[pri:0, instance:SmokeTestCase@14555e0a]" name="loginToeOasis" is-config="true" duration-ms="4055" started-at="2018-05-04T08:39:05Z" finished-at="2018-05-04T08:39:09Z">
+    <test name="Default test" duration-ms="129192" started-at="2018-07-18T11:11:50Z" finished-at="2018-07-18T11:13:59Z">
+      <class name="MMTestCase.SmokeTestCase">
+        <test-method status="PASS" signature="beforeClass()[pri:0, instance:MMTestCase.SmokeTestCase@fba92d3]" name="beforeClass" is-config="true" duration-ms="783" started-at="2018-07-18T11:11:50Z" finished-at="2018-07-18T11:11:51Z">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- loginToeOasis -->
-        <test-method status="PASS" signature="TC42404()[pri:0, instance:SmokeTestCase@14555e0a]" name="TC42404" duration-ms="23215" started-at="2018-05-04T08:39:09Z" description="Verify Add Organization" finished-at="2018-05-04T08:39:33Z">
+        </test-method> <!-- beforeClass -->
+        <test-method status="PASS" signature="Setup(java.lang.reflect.Method)[pri:0, instance:MMTestCase.SmokeTestCase@fba92d3]" name="Setup" is-config="true" duration-ms="756" started-at="2018-07-18T11:11:51Z" finished-at="2018-07-18T11:11:52Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[public void MMTestCase.SmokeTestCase.TC42240() throws java.lang.Exception]]>
+              </value>
+            </param>
+          </params>
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- TC42404 -->
-        <test-method status="PASS" signature="logoffFromAppclication()[pri:0, instance:SmokeTestCase@14555e0a]" name="logoffFromAppclication" is-config="true" duration-ms="515" started-at="2018-05-04T08:39:33Z" finished-at="2018-05-04T08:39:33Z">
+        </test-method> <!-- Setup -->
+        <test-method status="PASS" signature="TC42240()[pri:0, instance:MMTestCase.SmokeTestCase@fba92d3]" name="TC42240" duration-ms="125461" started-at="2018-07-18T11:11:52Z" description="Verify Hospital Preview Forms" finished-at="2018-07-18T11:13:57Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- TC42240 -->
+        <test-method status="PASS" signature="logoffFromAppclication(org.testng.ITestResult)[pri:0, instance:MMTestCase.SmokeTestCase@fba92d3]" name="logoffFromAppclication" is-config="true" duration-ms="2168" started-at="2018-07-18T11:13:57Z" finished-at="2018-07-18T11:13:59Z">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[[TestResult name=TC42240 status=SUCCESS method=SmokeTestCase.TC42240()[pri:0, instance:MMTestCase.SmokeTestCase@fba92d3] output={null}]]]>
+              </value>
+            </param>
+          </params>
           <reporter-output>
           </reporter-output>
         </test-method> <!-- logoffFromAppclication -->
-        <test-method status="PASS" signature="closeBrowser()[pri:0, instance:SmokeTestCase@14555e0a]" name="closeBrowser" is-config="true" duration-ms="6067" started-at="2018-05-04T08:39:33Z" finished-at="2018-05-04T08:39:39Z">
+        <test-method status="PASS" signature="closeBrowser()[pri:0, instance:MMTestCase.SmokeTestCase@fba92d3]" name="closeBrowser" is-config="true" duration-ms="1" started-at="2018-07-18T11:13:59Z" finished-at="2018-07-18T11:13:59Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- closeBrowser -->
-      </class> <!-- SmokeTestCase -->
+      </class> <!-- MMTestCase.SmokeTestCase -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>
