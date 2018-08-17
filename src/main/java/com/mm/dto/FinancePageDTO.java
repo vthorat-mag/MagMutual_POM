@@ -60,6 +60,7 @@ public class FinancePageDTO {
 					e.printStackTrace();
 				}
 
+
 			} else if (FinancePageDTO.class.getFields()[i].getType().toString().toLowerCase().contains("int")) {
 				try {
 					FinancePageDTO.class.getFields()[i].set(this, Integer.parseInt(
@@ -77,6 +78,7 @@ public class FinancePageDTO {
 					e.printStackTrace();
 				}
 			}
+				
 		}
 	}
 }

@@ -22,13 +22,16 @@ public class PolicyIndicationPageDTO {
 	public String coverageLimit;
 	public String policyAction;
 	public String producer;
-	public String riskCountry;
+	public String riskCounty;
 	public String riskSpeciality;
 	public String coverageFromPopup;
 	public String policyForms;
 	public String coverageClass;
 	public String exposureUnit;
-
+	public String riskTypeValue;
+	public String riskName;
+	public String coverageNameForRisk;
+	
 	public PolicyIndicationPageDTO(Map<String, List<String>> excelData)
 			throws IllegalArgumentException, IllegalAccessException, SecurityException {
 

@@ -33,6 +33,7 @@ import com.mm.pages.LoginPage;
 import com.mm.pages.PolicyBinderPage;
 import com.mm.pages.PolicyIndicationPage;
 import com.mm.pages.PolicyQuotePage;
+import com.mm.pages.PolicySubmissionPage;
 import com.mm.pages.QuickAddOrganisation;
 import com.mm.pages.RateApolicyPage;
 import com.mm.utils.CommonUtilities;
@@ -105,6 +106,34 @@ public class SmokeTestCase extends BrowserTypes {
 		testDataMap = excelUtil.testData(method.getName());
 	}
 
+	
+	@Test(description = "Hospital - Add multiple risks", groups = { "Smoke Test" })
+	public void TC42244() throws Exception {
+			LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
+			LoginPage loginpage = new LoginPage(driver);
+			RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
+			PolicyBinderPage policyBinderPage = new PolicyBinderPage(driver);
+			PolicyQuotePage policyQuotePage = new PolicyQuotePage(driver);
+			PolicyIndicationPage policyIndicationPage= new PolicyIndicationPage(driver);
+			PolicySubmissionPage policySubmissionPage = new PolicySubmissionPage(driver); 
+			PolicyQuotePageDTO policyQuotePageDTO = new PolicyQuotePageDTO(TestCaseDetails.testDataDictionary);
+			loginpage.loginToeOasis(lpDTO.username, lpDTO.password)
+			.navigateToPolicyPageUsingHeaderPolicyLink()
+			.searchPolicyPolicyBinderPage()
+			.copyToQuoteFromActionDropDown(policyBinderPage.policyNo());
+			policySubmissionPage.copyFromPolicyActionDropDown(policyBinderPage.policyNo());
+			policyQuotePage.changePolicyPhase(policyQuotePageDTO.policyPhaseValue);
+			String policyNo= policyBinderPage.policyNo();
+			policyIndicationPage.selectRiskTab()
+			.selectRiskTypeFromPopupWindow(policyNo)
+			.searchAndSelectRisk()
+			.addRiskInformation()
+			.selectCoverageTab()
+			.selectCoverageFromCoverageList()
+			.addRetroactiveDate();
+	}
+	
+	
 	//@Test(description = "Claims - Verify that user is allowed to change Billing Parameter for an Existing Account", groups = {
 	//	 "Smoke Test" })
 	public void TC42403() throws Exception {
@@ -379,18 +408,24 @@ public class SmokeTestCase extends BrowserTypes {
 	}
 
 
-	@Test(description="Hospital Renewal", groups = {"Smoke Test"})
+	//@Test(description="Hospital Renewal", groups = {"Smoke Test"})
 	public void TC42400() throws Exception {
 		//TODO- Get policy number//09100510, 09100511, 09100512, 09100514
-		String policyNo = " ";
+		
 		LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
 		LoginPage loginpage = new LoginPage(driver);
+		PolicyQuotePage policyQuotePage = new PolicyQuotePage(driver);
 		PolicyQuotePageDTO policyquotepageDTO = new PolicyQuotePageDTO(TestCaseDetails.testDataDictionary);
+		PolicyBinderPage policyBinderPage = new PolicyBinderPage(driver);
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageFromrateApolicyPage()
-				.searchPolicyPolicyQuotePage().selectPolicyActionAndAddDescription().save_CaptureTransactionDetails()
-				.saveOption(policyquotepageDTO.saveAsPolicyDDLValue,policyNo).switchToNextFrame()
-				.save_CaptureTransactionDetails().saveOption(policyquotepageDTO.secondSaveAsPolicyDDLValue,policyNo)
-				.product_Notify().exit_SaveOption();
+				.searchPolicyPolicyQuotePage().selectPolicyActionAndAddDescription().save_CaptureTransactionDetails();
+				String PolicyNo = policyBinderPage.policyNo();
+				policyQuotePage.saveOptionAndCaptureTransactionDetails(policyquotepageDTO.saveAsPolicyDDLValue,PolicyNo);
+				String policyNum = policyBinderPage.policyNo();
+				policyQuotePage.saveOptionOfficial(policyNum)
+				.applyChanges()
+				.changePolicyPhase(policyquotepageDTO.policyPhaseValue)
+				.saveOptionOfficial(PolicyNo);
 	}
 
 	
@@ -406,7 +441,7 @@ public class SmokeTestCase extends BrowserTypes {
 		loginpage = new LoginPage(driver);
 
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageFromrateApolicyPage()
-				.searchPolicyPolicyQuotePage().CopyOptionFromActionDropDown().changePhaseToQuote()
+				.searchPolicyPolicyQuotePage().CopyOptionFromActionDropDown().changePolicyPhase(policyquotepagedto.quotePhaseValue)
 				.coverageDetailsSelect();
 
 		policyquotepage = new PolicyQuotePage(driver);
@@ -425,6 +460,7 @@ public class SmokeTestCase extends BrowserTypes {
 		PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
 		RateApolicyPage rateApolicyPage = new RateApolicyPage(driver);
 		PolicyQuotePage policyQuotePage = new PolicyQuotePage(driver);
+		PolicyQuotePageDTO policyquotepagedto= new PolicyQuotePageDTO(TestCaseDetails.testDataDictionary);
 		
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageFromrateApolicyPage()
 				.searchPolicyRateAPolicyPage();
@@ -434,7 +470,7 @@ public class SmokeTestCase extends BrowserTypes {
 		policybinderpage.copyToQuoteFromActionDropDown(policyNumber).copyFromPolicyActionDropDown(policyNumber)
 				.changePhaseToIndicationAndAddQuoteDescription();
 		rateApolicyPage.rateFunctionality(policybinderpage.policyNo());
-		policyQuotePage.saveOptionOfficial(policyNumber).CopyOptionFromActionDropDown().changePhaseToQuote();
+		policyQuotePage.saveOptionOfficial(policyNumber).CopyOptionFromActionDropDown().changePolicyPhase(policyquotepagedto.quotePhaseValue);
 		rateApolicyPage.rateFunctionality(policybinderpage.policyNo());
 		policyQuotePage.saveOptionOfficial(policyNumber);
 		rateApolicyPage.AcceptFromActionDropDown().billingSetup().refreshCurrentPage(driver)
