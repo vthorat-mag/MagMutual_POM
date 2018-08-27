@@ -34,6 +34,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 import com.mm.pages.PolicyBinderPage;
+<<<<<<< HEAD
+=======
+import com.mm.pages.PolicyQuotePage;
+>>>>>>> 49e6e149d680658b12226b37a7ad45a0dcfca5d1
 import com.mm.pages.RateApolicyPage;
 import com.relevantcodes.extentreports.LogStatus;
 
@@ -366,7 +370,11 @@ public class CommonAction implements CommonActionInterface {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, High);
 			wait.until(ExpectedConditions.visibilityOf(element));
+<<<<<<< HEAD
 			//Thread.sleep(2000);
+=======
+			Thread.sleep(4000);
+>>>>>>> 49e6e149d680658b12226b37a7ad45a0dcfca5d1
 			Assert.assertTrue(element.isDisplayed(),element.getText()+" is not displaye on page.");
 			Select Sel = new Select(element);
 			Sel.selectByValue(DropDownOption);
@@ -675,8 +683,11 @@ public class CommonAction implements CommonActionInterface {
 		}
 
 	public void policySearch(WebDriver driver, String policyNo, WebElement policySearchTxtBox, WebElement searchBtn,WebElement policyList) throws Exception{
+<<<<<<< HEAD
 		WebDriverWait wait = new WebDriverWait(driver, High);
 		wait.until(ExpectedConditions.visibilityOf(policySearchTxtBox));
+=======
+>>>>>>> 49e6e149d680658b12226b37a7ad45a0dcfca5d1
 		PolicyBinderPage policybinderpage = new PolicyBinderPage(driver); 
 		ExtentReporter.logger.log(LogStatus.INFO, "Enter in active Hospital/Facility policy number in Enter Policy # entry box, Click Search. Policy Will display" );
 		clearTextBox(driver, policySearchTxtBox, "Enter Policy # text field");

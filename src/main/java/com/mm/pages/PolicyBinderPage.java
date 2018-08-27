@@ -284,15 +284,21 @@ public class PolicyBinderPage extends CommonAction {
 	// Select Endorsement from "Action DropoDown".
 	public PolicyBinderPage endorsementFromActionDropDown() throws Exception {
 		Thread.sleep(3000);
+<<<<<<< HEAD
 		ExtentReporter.logger.log(LogStatus.PASS,
 				"Select Policy Actions-> Endorsement. Verify Endorse policy window displays.");
 		if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
 				policybinderpageDTO.valueOfPolicyActionEndorse, "Policy Action").equals("false")) {
+=======
+		ExtentReporter.logger.log(LogStatus.PASS, "Select Policy Actions-> Endorsement. Verify Endorse policy window displays.");
+		if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policybinderpageDTO.valueOfPolicyActionEndorse, "Policy Action").equals("false")) {
+>>>>>>> 49e6e149d680658b12226b37a7ad45a0dcfca5d1
 			RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
 			RateAPolicyPageDTO rateApolicyPageDTO = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
 			rateapolicypage.searchBackUpPolicy();
 			PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
 			policybinderpage.copyToQuoteFromActionDropDown(rateApolicyPageDTO.backUpPolicyNum);
+<<<<<<< HEAD
 			selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
 					policybinderpageDTO.valueOfPolicyActionEndorse, "Policy Action");
 		}
@@ -312,20 +318,33 @@ public class PolicyBinderPage extends CommonAction {
 				"Policy Action");
 		// selectDropdownByValue(driver, policyAction,
 		// policybinderpageDTO.valueOfPolicyActionEndorse, "Policy Action");
+=======
+			selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policybinderpageDTO.valueOfPolicyActionEndorse, "Policy Action");
+		}
+		
+		//selectDropdownByValue(driver, policyAction, policybinderpageDTO.valueOfPolicyActionEndorse, "Policy Action");
+>>>>>>> 49e6e149d680658b12226b37a7ad45a0dcfca5d1
 		return new PolicyBinderPage(driver);
 	}
 
 	// Select Copy To Quote from "Action DropoDown".
 	public PolicySubmissionPage copyToQuoteFromActionDropDown(String policyNum) throws Exception {
 		Thread.sleep(2000);
+<<<<<<< HEAD
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Click Policy Actions>Copy to Quote. Verify Policy folder shows a new number, Phase show Submission.");
 		if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
 				policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action").equals("false")) {
+=======
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy to Quote. Verify Policy folder shows a new number, Phase show Submission.");
+		if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policybinderpageDTO.valueOfPolicyActionCopyToQuote,
+				"Policy Action").equals("false")) {
+>>>>>>> 49e6e149d680658b12226b37a7ad45a0dcfca5d1
 			RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
 			RateAPolicyPageDTO rateApolicyPageDTO = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
 			rateapolicypage.searchBackUpPolicy();
 			PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
+<<<<<<< HEAD
 			Thread.sleep(2000);
 			policybinderpage.copyToQuoteFromActionDropDownwithoutBackUpPolicy(rateApolicyPageDTO.backUpPolicyNum);
 			selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
@@ -345,12 +364,27 @@ public class PolicyBinderPage extends CommonAction {
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo() + "')]")));
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Click [OK]. Verify Policy folder shows a new number, Phase show Submission.");
+=======
+			policybinderpage.copyToQuoteFromActionDropDown(rateApolicyPageDTO.backUpPolicyNum);
+			selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policybinderpageDTO.valueOfPolicyActionCopyToQuote,
+					"Policy Action");
+		}
+		
+		//selectDropdownByValue(driver, policyAction, policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action");
+		invisibilityOfLoader(driver);
+		Thread.sleep(10000);
+		String getUpdatedPolicyNo = policyNo();
+		switchToFrameUsingElement(driver,
+				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + getUpdatedPolicyNo + "')]")));
+		ExtentReporter.logger.log(LogStatus.INFO, "Click [OK]. Verify Policy folder shows a new number, Phase show Submission.");
+>>>>>>> 49e6e149d680658b12226b37a7ad45a0dcfca5d1
 		click(driver, Exit_Ok, "OK button");
 		Thread.sleep(2000);
 		switchToParentWindowfromframe(driver);
 		return new PolicySubmissionPage(driver);
 	}
 	
+<<<<<<< HEAD
 	// Select Copy To Quote from "Action DropoDown" without backup policyserach.
 		public PolicySubmissionPage copyToQuoteFromActionDropDownwithoutBackUpPolicy(String policyNum) throws Exception {
 			Thread.sleep(2000);
@@ -406,6 +440,22 @@ public class PolicyBinderPage extends CommonAction {
 			// policybinderpage.copyToQuoteFromActionDropDown(rateApolicyPageDTO.backUpPolicyNum);
 			selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
 					policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action");
+=======
+	//Select Copy To Quote from "Action DropoDown" for copy to quote TC.
+	//We don't have to select copy to quote option from action ddl in COpy to quote TC hence separate method is written for backup policy search.
+	public PolicySubmissionPage copyToQuoteFromActionDropDownForCopyToQuoteTC(String policyNum) throws Exception {
+		Thread.sleep(2000);
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy to Quote. Verify Policy folder shows a new number, Phase show Submission.");
+		if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policybinderpageDTO.valueOfPolicyActionCopyToQuote,
+				"Policy Action").equals("false")) {
+			RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
+			RateAPolicyPageDTO rateApolicyPageDTO = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
+			rateapolicypage.searchBackUpPolicy();
+			//PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
+			//policybinderpage.copyToQuoteFromActionDropDown(rateApolicyPageDTO.backUpPolicyNum);
+			selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policybinderpageDTO.valueOfPolicyActionCopyToQuote,
+					"Policy Action");
+>>>>>>> 49e6e149d680658b12226b37a7ad45a0dcfca5d1
 		}
 		Thread.sleep(5000);
 		invisibilityOfLoader(driver);

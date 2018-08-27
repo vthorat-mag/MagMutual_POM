@@ -103,6 +103,7 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 	// Extent report initialization before every test case.
 	@BeforeMethod(alwaysRun = true)
 	public void Setup(Method method) throws Exception {
+<<<<<<< HEAD
 		//Process processKillPdf = Runtime.getRuntime().exec("taskkill /F /IM savePdf.exe");
 		// Process processKillExcel = Runtime.getRuntime().exec("taskkill /F /IM
 		// EXCEL.EXE");
@@ -114,6 +115,16 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 		 * System.out.println(method.getName() + " test case execution started.");
 		 * System.out.println("==============================================");
 		 */
+=======
+		Process processKillPdf = Runtime.getRuntime().exec("taskkill /F /IM savePdf.exe");
+		Process process = Runtime.getRuntime().exec("taskkill /F /IM iexplorer.exe");
+		driver = BrowserTypes.getDriver();
+		ExtentReporter.logger = ExtentReporter.report.startTest(method.getName(),
+				method.getAnnotation(Test.class).description());
+		/*System.out.println("==============================================");
+		System.out.println(method.getName() + " test case execution started.");
+		System.out.println("==============================================");*/
+>>>>>>> 49e6e149d680658b12226b37a7ad45a0dcfca5d1
 		// ExtentReporter.logger = ExtentReporter.report.startTest(method.getName());
 		testcaseFormattedID = method.getName();
 		// Code to populate HashMap from excel
@@ -144,7 +155,7 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 		LoginPage loginpage = new LoginPage(driver);
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToCISPage().searchAndSelectAClientName()
 				.verifyPagesHavingMenuOnPersonPageAreDisplayed().verifyPagesWithoutSubMenu();
-	}
+	}*/
 
 	@Test(description = "Verify Add Organization", groups = { "Smoke Test" }, priority = 2)
 	public void TC42404() throws Exception {
@@ -210,9 +221,14 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 		policyquotepage = new PolicyQuotePage(driver);
 		String policyNumber = policyquotepage.policyNo();
 
+<<<<<<< HEAD
 		//rateapolicyPage.coverageUpdates(policyNumber);
 		policyquotepage.rateFunctionality(policyNumber).clickPreviewTab(policyNumber).savePDF().verifyPdfContent()
 		.saveOption(policyNumber);
+=======
+		rateapolicyPage.coverageUpdates(policyNumber);
+		policyquotepage.rateFunctionality(policyNumber).clickPreviewTab(policyNumber).savePDF().verifyPdfContent().saveOption(policyNumber);
+>>>>>>> 49e6e149d680658b12226b37a7ad45a0dcfca5d1
 		exlUtil.writeData("TC42242", "PolicyNum", policyNumber, 1, ExcelPath);
 	}
 
@@ -249,8 +265,13 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 
 		String policyNumber = policybinderpage.policyNo();
 
+<<<<<<< HEAD
 		policybinderpage.copyToQuoteFromActionDropDownForCopyToQuoteTC(policyNumber)
 				.copyFromPolicyActionDropDown(policyNumber).changePhaseToIndicationAndAddQuoteDescription();
+=======
+		policybinderpage.copyToQuoteFromActionDropDownForCopyToQuoteTC(policyNumber).copyFromPolicyActionDropDown(policyNumber)
+				.changePhaseToIndicationAndAddQuoteDescription();
+>>>>>>> 49e6e149d680658b12226b37a7ad45a0dcfca5d1
 		rateApolicyPage.rateFunctionality(policybinderpage.policyNo());
 		policyQuotePage.saveOptionOfficial(policybinderpage.policyNo()).CopyOptionFromActionDropDownwithoutBackupPolicy()
 				.changePolicyPhase(policyquotepagedto.quotePhaseValue);
@@ -279,16 +300,22 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 
 		policybinderpage.endorsementFromActionDropDown().endorsePolicy(policyNumber).identifyPhase()
 				.rateFunctionality(policybinderpage.policyNo());
+<<<<<<< HEAD
 
 		policyQuotePage.clickPreviewTab(policybinderpage.policyNo()).savePDF().verifyPdfContent()
 				.saveOption(policybinderpage.policyNo());
+=======
+		
+		policyQuotePage.clickPreviewTab(policybinderpage.policyNo())
+				.savePDF().verifyPdfContent().saveOption(policybinderpage.policyNo());
+>>>>>>> 49e6e149d680658b12226b37a7ad45a0dcfca5d1
 		exlUtil.writeData("TC42399", "PolicyNum", policyNumber, 1, ExcelPath);
 		exlUtil.writeData("TC42240", "PolicyNum", policyNumber, 1, ExcelPath);
 		exlUtil.writeData("TC42400", "PolicyNum", policyNumber, 1, ExcelPath);
 		exlUtil.writeData("TC43666", "PolicyNum", policyNumber, 1, ExcelPath);
 	}
 
-	/*@Test(description = "Hospital Verify Attach Form", groups = { "Smoke Test" }, priority = 8)
+	@Test(description = "Hospital Verify Attach Form", groups = { "Smoke Test" }, priority = 8)
 	public void TC42399() throws Exception {
 
 		LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
@@ -327,13 +354,22 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 		loginpage = new LoginPage(driver);
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageUsingHeaderPolicyLink()
 				.searchPolicyRateAPolicyPage();
+<<<<<<< HEAD
 		rateapolicypage.policyEndorsement(rateapolicypage.policyNo()).rateFunctionality(rateapolicypage.policyNo())
 				.clickPreviewTab(rateapolicypage.policyNo()).savePDF().verifyPdfContent();
+=======
+		rateapolicypage.policyEndorsement(rateapolicypage.policyNo()).rateFunctionality(rateapolicypage.policyNo()).clickPreviewTab(rateapolicypage.policyNo()).savePDF()
+				.verifyPdfContent();
+>>>>>>> 49e6e149d680658b12226b37a7ad45a0dcfca5d1
 	}
-
+	
 	@Test(description = "Hospital Renewal", groups = { "Smoke Test" }, priority = 11)
 	public void TC42400() throws Exception {
+<<<<<<< HEAD
 		// TODO- Get policy number//09100510, 0 9100511, 09100512, 09100514
+=======
+		//TODO- Get policy number//09100510, 09100511, 09100512, 09100514
+>>>>>>> 49e6e149d680658b12226b37a7ad45a0dcfca5d1
 		LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
 		LoginPage loginpage = new LoginPage(driver);
 		PolicyQuotePage policyQuotePage = new PolicyQuotePage(driver);
@@ -342,11 +378,21 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 		ExcelUtil exlUtil = new ExcelUtil();
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageFromrateApolicyPage()
 				.searchPolicyPolicyQuotePage().selectPolicyActionAndAddDescription().save_CaptureTransactionDetails();
+<<<<<<< HEAD
 		String PolicyNo = policyBinderPage.policyNo();
 		policyQuotePage.saveOptionAndCaptureTransactionDetails(policyquotepageDTO.saveAsPolicyDDLValue, PolicyNo);
 		String policyNum = policyBinderPage.policyNo();
 		policyQuotePage.saveOptionOfficial(policyNum).applyChanges()
 				.changePolicyPhase(policyquotepageDTO.policyPhaseValue).saveOptionOfficial(PolicyNo);
+=======
+				String PolicyNo = policyBinderPage.policyNo();
+				policyQuotePage.saveOptionAndCaptureTransactionDetails(policyquotepageDTO.saveAsPolicyDDLValue,PolicyNo);
+				String policyNum = policyBinderPage.policyNo();
+				policyQuotePage.saveOptionOfficial(policyNum)
+				.applyChanges()
+				.changePolicyPhase(policyquotepageDTO.policyPhaseValue)
+				.saveOptionOfficial(PolicyNo);
+>>>>>>> 49e6e149d680658b12226b37a7ad45a0dcfca5d1
 	}
 
 	@Test(description = "Hospital Create Claim", groups = { "Smoke Test" }, priority = 12)
@@ -376,6 +422,7 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 		// String ClaimNumber = rateapolicyPage.policyNo();
 		policybinderpage.navigatetoClaimsPage().searchClaim().statusChange(rateapolicyPage.policyNo());
 	}
+<<<<<<< HEAD
 
 	@Test(description = "Hospital Verify Image Right", groups = { "Smoke Test" }, priority = 14)
 	public void TC42243() throws Exception {
@@ -412,6 +459,8 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 				.getInvoiceAmountFromExcel().cashEntry().batchFunction().validateBatch().postBatchFunctionality()
 				.donwloadFinalSheetBySearchingAccountNo();
 	}*/
+=======
+>>>>>>> 49e6e149d680658b12226b37a7ad45a0dcfca5d1
 
 	@AfterMethod(alwaysRun = true)
 	public void logoffFromAppclication(ITestResult result)
@@ -453,11 +502,17 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 
 	@AfterClass(alwaysRun = true)
 	public void closeBrowser() {
+<<<<<<< HEAD
 		ExtentReporter.report.flush();
 		/*
 		 * FailedTCRerun failedtcrun = new FailedTCRerun(); failedtcrun.reRunFailedTC();
 		 */
 		//ExtentReporter.report.close();
+=======
+		/*FailedTCRerun failedtcrun = new FailedTCRerun();
+		failedtcrun.reRunFailedTC();*/
+		ExtentReporter.report.close();
+>>>>>>> 49e6e149d680658b12226b37a7ad45a0dcfca5d1
 		// driver.quit();
 	}
 
