@@ -52,9 +52,10 @@ public class LoginPage extends CommonAction{
 		ExtentReporter.logger.log(LogStatus.PASS, "Log into QA Environment Enter Username: Enter Password: And verifyt user sucessfully loggedIn.");
 		//Entering User Name.
 		try{
-			Assert.assertTrue(userName.isDisplayed(), "User Name Field is displayed.");
-			userName.sendKeys(UserName);
-			ExtentReporter.logger.log(LogStatus.PASS, " User Name is entered in to userName Field");
+			//Assert.assertTrue(userName.isDisplayed(), "User Name Field is displayed.");
+			//userName.sendKeys(UserName);
+			enterTextIn(driver, userName, UserName, "User Name");
+			//ExtentReporter.logger.log(LogStatus.PASS, " User Name is entered in to userName Field");
 		}catch(Exception e)
 		{
 			ExtentReporter.logger.log(LogStatus.FAIL, " Error while entering data into username field.");
@@ -62,10 +63,11 @@ public class LoginPage extends CommonAction{
 		
 		//Entering Password.
 		try{
-			Assert.assertTrue(password.isDisplayed(), "Password Field is displayed.");
-			Thread.sleep(2000);
-			password.sendKeys(PassWord);
-			ExtentReporter.logger.log(LogStatus.PASS, " Password is entered in to password Field");
+			//Assert.assertTrue(password.isDisplayed(), "Password Field is displayed.");
+			Thread.sleep(1000);
+			//password.sendKeys(PassWord);
+			enterTextIn(driver, password, PassWord, "Password");
+			//ExtentReporter.logger.log(LogStatus.PASS, " Password is entered in to password Field");
 		}catch(Exception e)
 		{
 			ExtentReporter.logger.log(LogStatus.FAIL, " Error while entering data into password field.");
@@ -73,9 +75,10 @@ public class LoginPage extends CommonAction{
 
 		//Clicking on login button.
 		try{
-			Assert.assertTrue(password.isDisplayed(), "Login button is displayed.");
-			loginBtn.click();
-			ExtentReporter.logger.log(LogStatus.PASS, "Clicked on Login Button");
+			//Assert.assertTrue(password.isDisplayed(), "Login button is displayed.");
+			//loginBtn.click();
+			clickButton(driver, loginBtn, "Submit");
+			//ExtentReporter.logger.log(LogStatus.PASS, "Clicked on Login Button");
 			}catch(Exception e)
 			{
 				ExtentReporter.logger.log(LogStatus.FAIL, "Issue with login button.");

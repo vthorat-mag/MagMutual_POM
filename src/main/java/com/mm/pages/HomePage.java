@@ -180,9 +180,11 @@ public class HomePage extends CommonAction {
 	public HomePage navigateToPolicyPage() throws Exception {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click policy in right corner of screen & verify search Policy Screen is opened");
 		waitForElementToLoad(driver, 10, Policy_Tab_Home);
+		Thread.sleep(2000);
 		click(driver, Policy_Tab_Home, "Policy tab");
 		Thread.sleep(2000);
-  	getPageTitle(driver, findPolicyPageTitleActualText);
+		invisibilityOfLoader(driver);
+		getPageTitle(driver, findPolicyPageTitleActualText);
 		return new HomePage(driver);
 	}
 
@@ -379,8 +381,12 @@ public class HomePage extends CommonAction {
 		Thread.sleep(2000);
 		click(driver, Policy_type, "Policy Type");
 		ExtentReporter.logger.log(LogStatus.INFO, "Select(Highlight) Policy Type: Institution. Click Done. Verify Policy Folder window will open");
+		Thread.sleep(2000);
 		click(driver, createPolicyDoneBtn, "Done button");
-		
+		if(isAlertPresent(driver)==false){
+			ExtentReporter.logger.log(LogStatus.INFO,"Alert not present.");
+		}
+		invisibilityOfLoader(driver);
 		switchToParentWindowfromframe(driver);                    // for BTS
 		return new PolicySubmissionPage(driver);
 

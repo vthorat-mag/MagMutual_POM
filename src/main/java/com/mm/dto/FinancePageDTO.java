@@ -17,8 +17,13 @@ public class FinancePageDTO {
 	public String Amount;
 	public String TCSheetNumber;
 	public String exportedExcelSheetName;
+	public String testDataColumnName_Numbers;
+	public String testDataColumnName_Amount;
+	public String testDataColumnheader_Amount;
+	public String testDataColumnheader_InvoiceNumber;
 	public String testDataColumnName;
 	public String testDataColumnheader;
+	public String saveFileName;
 	public int rowNumber;
 	public int dataRowNumber;
 	public String dataSheetName;

@@ -13,7 +13,9 @@ import org.testng.ITestResult;
 
 import com.mm.browsers.BrowserTypes;
 import com.mm.utils.ExtentReporter;
+import com.relevantcodes.extentreports.ExtentReports;
 
+import BaseClass.BaseTest;
 import MMTestCase.SmokeTestCasesUpdated;
 
 public class testListners implements ITestListener {
@@ -33,7 +35,7 @@ public class testListners implements ITestListener {
 		ExtentReporter.logger=null;
 		TakesScreenshot ts=(TakesScreenshot)SmokeTestCasesUpdated.driver;
 		File source =ts.getScreenshotAs(OutputType.FILE);
-		String screenshotLocation ="C:\\SmokeTestFM\\"+result.getName()+".png";
+		String screenshotLocation =ExtentReporter.screenshotfolderpath+result.getName()+".png";
 		File destination=new File(screenshotLocation);
 		try {
 			FileUtils.copyFile(source, destination);

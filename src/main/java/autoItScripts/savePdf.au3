@@ -3,11 +3,13 @@ Example()
 
 Func Example()
 
-	Sleep(5000)
-	send("{TAB 9}") 
+	;Sleep(18000)	
+	;send("{TAB 9}") 
 	;send("{ENTER}")
-	Sleep(4000)
-	ControlClick("Policy Information - Internet Explorer","AVPageView","AVL_AVView26")
+	Sleep(2000)
+	WinWaitActive("[CLASS:IEFrame]","",10)
+	ControlClick("[CLASS:IEFrame]","","AVL_AVView26")
+	;WinActivate("[CLASS:IEFrame]","",10)
 	send("{CTRLDOWN}")
 	send("{SHIFTDOWN}")
 	send("{s down}")
@@ -25,7 +27,7 @@ Func Example()
 	else 
 		send("{TAB}")
 	EndIf
-	Sleep(2000)
+	Sleep(5000)
 	send("{TAB 8}") 
 	send("{ENTER}")
 	; Wait 10 seconds for the Run dialogue window to appear.

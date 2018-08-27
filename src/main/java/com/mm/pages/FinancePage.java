@@ -389,8 +389,8 @@ public class FinancePage extends CommonAction {
 		clickButton(driver, saveMaintAction, "Save");
 		Thread.sleep(3000);
 		ExtentReporter.logger.log(LogStatus.INFO,"Click [OK]. Verify Message is closed and changes are saved");
-		if(isAlertPresent(driver)){
-			acceptAlert(driver);
+		if(isAlertPresent(driver)==false){
+			ExtentReporter.logger.log(LogStatus.INFO,"Alert not present.");
 		}
 		
 		return new FinancePage(driver);
@@ -442,14 +442,13 @@ public class FinancePage extends CommonAction {
 		accountNumber = accountNo.getAttribute("innerHTML");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Process].");
 		clickButton(driver, processButton, "Process");
+		Thread.sleep(15000);
 		invisibilityOfLoader(driver);
-		Thread.sleep(8000);
-		switchToFrameUsingId(driver, "popupframe1");
-		/*
-		 * switchToFrameUsingElement(driver,
-		 * driver.findElement(By.xpath("//iframe[contains(@src,'accountNo=" +
-		 * accountNumber + "')]")));
-		 */
+		//switchToFrameUsingId(driver, "popupframe1");
+		
+		 switchToFrameUsingElement(driver,
+		 driver.findElement(By.xpath("//iframe[contains(@src,'&accountNo="+accountNumber+"')]")));
+		 
 		invoiceAmount = invoiceAmt.getAttribute("innerHTML");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Jump].");
 		clickButton(driver, jumpButton, "Jump");
@@ -459,7 +458,7 @@ public class FinancePage extends CommonAction {
 	}
 
 	public FinancePage exportExcelSheet(String saveExcelNameAs) throws Exception {
-
+		Thread.sleep(2000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Export All Transactions to excel");
 		downloadExcel(saveExcelNameAs);
 		return new FinancePage(driver);
@@ -512,6 +511,30 @@ public class FinancePage extends CommonAction {
 		Thread.sleep(3000);
 		return new FinancePage(driver);
 		
+	}
+	
+	public FinancePage getInvoiceAmountFromExcel() throws Exception
+	{
+		Thread.sleep(2000);
+		//below line of code will copy file from temp location to given location
+		copyFile(financePageDTO.saveFileName);
+		//Read invoiceNumber from saved excel sheet.
+		String invoiceNumber = readDataFromExcelSheet(financePageDTO.dataSheetName,
+				financePageDTO.testDataColumnName_Numbers, financePageDTO.dataRowNumber, financePageDTO.exportedExcelSheetName);
+		
+		//Read Amount from saved excel sheet.
+		String Amount = readDataFromExcelSheet(financePageDTO.dataSheetName,
+				financePageDTO.testDataColumnName_Amount, financePageDTO.dataRowNumber, financePageDTO.exportedExcelSheetName);
+		
+		//write invoiceNumber to Form_Dat sheet.
+				writeDataInExcelSheet(invoiceNumber, financePageDTO.TCSheetNumber, financePageDTO.testDataColumnheader_InvoiceNumber,
+						financePageDTO.rowNumber);
+		
+		//write Amount to Form_Dat sheet.
+		writeDataInExcelSheet(Amount, financePageDTO.TCSheetNumber, financePageDTO.testDataColumnheader_Amount,
+						financePageDTO.rowNumber);
+		
+		return new FinancePage(driver);
 	}
 
 	//Get the next day of the due date column from exported excel sheet
@@ -585,7 +608,7 @@ public class FinancePage extends CommonAction {
 	public FinancePage cashEntry() throws Exception {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Payments>Cash Entry");
 		navigatetoMenuItemPage(driver, paymentsMenu, cashEntryMenuOption);
-
+		Thread.sleep(2000);
 		invisibilityOfLoader(driver);
 		getPageTitle(driver, cashEntryPageTitle);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [New]");
@@ -600,7 +623,9 @@ public class FinancePage extends CommonAction {
 										// Alert.
 		Thread.sleep(1000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Ok");
-		acceptAlert(driver);
+		if(isAlertPresent(driver)==false){
+			ExtentReporter.logger.log(LogStatus.INFO,"Alert not present.");
+		}
 		Thread.sleep(1000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Check No: Enter ST12345");
 		enterTextIn(driver, checkNoOnCashEntryPage, checkNo, "Cash Entry Page's Check Number");
@@ -863,10 +888,8 @@ public class FinancePage extends CommonAction {
 		clickButton(driver, SaveBtnOnMaintainActPage, "save");
 		invisibilityOfLoader(driver);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Ok]");
-		if(isAlertPresent(driver)){
-		acceptAlert(driver);
-		}else{
-			ExtentReporter.logger.log(LogStatus.WARNING, "Save Confirmation Alert is NOT displayed"); 
+		if(isAlertPresent(driver)==false){
+			ExtentReporter.logger.log(LogStatus.INFO,"Alert not present.");
 		}
 		invisibilityOfLoader(driver);
 		Thread.sleep(2000);

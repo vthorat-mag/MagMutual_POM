@@ -215,11 +215,7 @@ public class SmokeTestCase extends BrowserTypes {
 		FinancePage financePage = new FinancePage(driver);
 		FinancePageDTO financePageDTO = new FinancePageDTO(TestCaseDetails.testDataDictionary);
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToFinanceHomePage()
-				.searchPolicyOnFinanceHomePage().openFirstAccount().onDemandInvoice().exportExcelSheet("");
-				String cellValue=financePage.readDataFromExcelSheet(financePageDTO.dataSheetName,financePageDTO.testDataColumnName,financePageDTO.dataRowNumber,
-						financePageDTO.exportedExcelSheetName);
-				financePage.writeDataInExcelSheet(cellValue, financePageDTO.TCSheetNumber,financePageDTO.testDataColumnheader,
-						financePageDTO.rowNumber).cashEntry().batchFunction()
+				.searchPolicyOnFinanceHomePage().openFirstAccount().onDemandInvoice().exportExcelSheet("").getInvoiceAmountFromExcel().cashEntry().batchFunction()
 				.validateBatch().postBatchFunctionality().donwloadFinalSheetBySearchingAccountNo();
 	}
 	
