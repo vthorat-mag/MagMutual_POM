@@ -284,10 +284,8 @@ public class PolicyBinderPage extends CommonAction {
 	// Select Endorsement from "Action DropoDown".
 	public PolicyBinderPage endorsementFromActionDropDown() throws Exception {
 		Thread.sleep(3000);
-		ExtentReporter.logger.log(LogStatus.PASS,
-				"Select Policy Actions-> Endorsement. Verify Endorse policy window displays.");
-		if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
-				policybinderpageDTO.valueOfPolicyActionEndorse, "Policy Action").equals("false")) {
+		ExtentReporter.logger.log(LogStatus.PASS, "Select Policy Actions-> Endorsement. Verify Endorse policy window displays.");
+		if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policybinderpageDTO.valueOfPolicyActionEndorse, "Policy Action").equals("false")) {
 			RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
 			RateAPolicyPageDTO rateApolicyPageDTO = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
 			rateapolicypage.searchBackUpPolicy();
@@ -314,7 +312,6 @@ public class PolicyBinderPage extends CommonAction {
 		// policybinderpageDTO.valueOfPolicyActionEndorse, "Policy Action");
 		return new PolicyBinderPage(driver);
 	}
-
 	// Select Copy To Quote from "Action DropoDown".
 	public PolicySubmissionPage copyToQuoteFromActionDropDown(String policyNum) throws Exception {
 		Thread.sleep(2000);
@@ -390,22 +387,20 @@ public class PolicyBinderPage extends CommonAction {
 			}
 		}
 
-	// Select Copy To Quote from "Action DropoDown" for copy to quote TC.
-	// We don't have to select copy to quote option from action ddl in COpy to quote
-	// TC hence separate method is written for backup policy search.
+	//Select Copy To Quote from "Action DropoDown" for copy to quote TC.
+	//We don't have to select copy to quote option from action ddl in COpy to quote TC hence separate method is written for backup policy search.
 	public PolicySubmissionPage copyToQuoteFromActionDropDownForCopyToQuoteTC(String policyNum) throws Exception {
 		Thread.sleep(2000);
-		ExtentReporter.logger.log(LogStatus.INFO,
-				"Click Policy Actions>Copy to Quote. Verify Policy folder shows a new number, Phase show Submission.");
-		if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
-				policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action").equals("false")) {
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy to Quote. Verify Policy folder shows a new number, Phase show Submission.");
+		if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policybinderpageDTO.valueOfPolicyActionCopyToQuote,
+				"Policy Action").equals("false")) {
 			RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
 			RateAPolicyPageDTO rateApolicyPageDTO = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
 			rateapolicypage.searchBackUpPolicy();
-			// PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
-			// policybinderpage.copyToQuoteFromActionDropDown(rateApolicyPageDTO.backUpPolicyNum);
-			selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
-					policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action");
+			//PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
+			//policybinderpage.copyToQuoteFromActionDropDown(rateApolicyPageDTO.backUpPolicyNum);
+			selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policybinderpageDTO.valueOfPolicyActionCopyToQuote,
+					"Policy Action");
 		}
 		Thread.sleep(5000);
 		invisibilityOfLoader(driver);

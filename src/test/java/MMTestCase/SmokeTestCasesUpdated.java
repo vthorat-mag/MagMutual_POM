@@ -144,7 +144,7 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 		LoginPage loginpage = new LoginPage(driver);
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToCISPage().searchAndSelectAClientName()
 				.verifyPagesHavingMenuOnPersonPageAreDisplayed().verifyPagesWithoutSubMenu();
-	}
+	}*/
 
 	@Test(description = "Verify Add Organization", groups = { "Smoke Test" }, priority = 2)
 	public void TC42404() throws Exception {
@@ -209,10 +209,8 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 
 		policyquotepage = new PolicyQuotePage(driver);
 		String policyNumber = policyquotepage.policyNo();
-
-		//rateapolicyPage.coverageUpdates(policyNumber);
-		policyquotepage.rateFunctionality(policyNumber).clickPreviewTab(policyNumber).savePDF().verifyPdfContent()
-		.saveOption(policyNumber);
+		rateapolicyPage.coverageUpdates(policyNumber);
+		policyquotepage.rateFunctionality(policyNumber).clickPreviewTab(policyNumber).savePDF().verifyPdfContent().saveOption(policyNumber);
 		exlUtil.writeData("TC42242", "PolicyNum", policyNumber, 1, ExcelPath);
 	}
 
@@ -249,8 +247,8 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 
 		String policyNumber = policybinderpage.policyNo();
 
-		policybinderpage.copyToQuoteFromActionDropDownForCopyToQuoteTC(policyNumber)
-				.copyFromPolicyActionDropDown(policyNumber).changePhaseToIndicationAndAddQuoteDescription();
+		policybinderpage.copyToQuoteFromActionDropDownForCopyToQuoteTC(policyNumber).copyFromPolicyActionDropDown(policyNumber)
+				.changePhaseToIndicationAndAddQuoteDescription();
 		rateApolicyPage.rateFunctionality(policybinderpage.policyNo());
 		policyQuotePage.saveOptionOfficial(policybinderpage.policyNo()).CopyOptionFromActionDropDownwithoutBackupPolicy()
 				.changePolicyPhase(policyquotepagedto.quotePhaseValue);
@@ -263,7 +261,7 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 		exlUtil.writeData("TC42665", "PolicyNum", policybinderpage.policyNo(), 1, ExcelPath);
 		policyQuotePage.clickPreviewTab(policybinderpage.policyNo()).savePDF();
 		policyQuotePage.saveOptionOfficial(policybinderpage.policyNo());
-	}*/
+	}
 
 	@Test(description = "Hospital Issue Policy Forms", groups = { "Smoke Test" }, priority = 7)
 	public void TC42665() throws Exception {
@@ -279,7 +277,6 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 
 		policybinderpage.endorsementFromActionDropDown().endorsePolicy(policyNumber).identifyPhase()
 				.rateFunctionality(policybinderpage.policyNo());
-
 		policyQuotePage.clickPreviewTab(policybinderpage.policyNo()).savePDF().verifyPdfContent()
 				.saveOption(policybinderpage.policyNo());
 		exlUtil.writeData("TC42399", "PolicyNum", policyNumber, 1, ExcelPath);
@@ -288,7 +285,7 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 		exlUtil.writeData("TC43666", "PolicyNum", policyNumber, 1, ExcelPath);
 	}
 
-	/*@Test(description = "Hospital Verify Attach Form", groups = { "Smoke Test" }, priority = 8)
+	@Test(description = "Hospital Verify Attach Form", groups = { "Smoke Test" }, priority = 8)
 	public void TC42399() throws Exception {
 
 		LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
@@ -330,10 +327,10 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 		rateapolicypage.policyEndorsement(rateapolicypage.policyNo()).rateFunctionality(rateapolicypage.policyNo())
 				.clickPreviewTab(rateapolicypage.policyNo()).savePDF().verifyPdfContent();
 	}
-
+	
 	@Test(description = "Hospital Renewal", groups = { "Smoke Test" }, priority = 11)
 	public void TC42400() throws Exception {
-		// TODO- Get policy number//09100510, 0 9100511, 09100512, 09100514
+		//TODO- Get policy number//09100510, 09100511, 09100512, 09100514
 		LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
 		LoginPage loginpage = new LoginPage(driver);
 		PolicyQuotePage policyQuotePage = new PolicyQuotePage(driver);
@@ -411,7 +408,7 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 				.searchPolicyOnFinanceHomePage().openFirstAccount().onDemandInvoice().exportExcelSheet("")
 				.getInvoiceAmountFromExcel().cashEntry().batchFunction().validateBatch().postBatchFunctionality()
 				.donwloadFinalSheetBySearchingAccountNo();
-	}*/
+	}
 
 	@AfterMethod(alwaysRun = true)
 	public void logoffFromAppclication(ITestResult result)
@@ -458,6 +455,8 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 		 * FailedTCRerun failedtcrun = new FailedTCRerun(); failedtcrun.reRunFailedTC();
 		 */
 		//ExtentReporter.report.close();
+		/*FailedTCRerun failedtcrun = new FailedTCRerun();
+		failedtcrun.reRunFailedTC();*/
 		// driver.quit();
 	}
 

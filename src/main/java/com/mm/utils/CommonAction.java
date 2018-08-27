@@ -34,6 +34,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 import com.mm.pages.PolicyBinderPage;
+import com.mm.pages.PolicyQuotePage;
 import com.mm.pages.RateApolicyPage;
 import com.relevantcodes.extentreports.LogStatus;
 
@@ -366,7 +367,7 @@ public class CommonAction implements CommonActionInterface {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, High);
 			wait.until(ExpectedConditions.visibilityOf(element));
-			//Thread.sleep(2000);
+			Thread.sleep(4000);
 			Assert.assertTrue(element.isDisplayed(),element.getText()+" is not displaye on page.");
 			Select Sel = new Select(element);
 			Sel.selectByValue(DropDownOption);
