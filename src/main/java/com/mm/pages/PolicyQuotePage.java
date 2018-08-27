@@ -104,7 +104,7 @@ public class PolicyQuotePage extends CommonAction {
 	@FindBy(name = "workflowExit_Ok")
 	WebElement okPolicySaveAsWIPPopup;
 
-	@FindBy(id = "PM_COMMON_TABS_SAVE")
+	@FindBy(xpath = "//div[@class='horizontalButtonCollection'][1]//input[@value='Save Options'][1]")
 	WebElement saveOptionBtn;
 
 	@FindBy(xpath = "//select[@name='saveAsCode']")
@@ -415,7 +415,7 @@ public class PolicyQuotePage extends CommonAction {
 		
 		
 		//selectDropdownByVisibleText(driver, policyAction, policyquotepageDTO.policyActionValue, "Policy Action");
-		Thread.sleep(2000);
+		Thread.sleep(5000);
 		invisibilityOfLoader(driver);
 		switchToFrameUsingId(driver, "popupframe1");
 		getPageTitle(driver, captureTranxDetailsWindowTitle);

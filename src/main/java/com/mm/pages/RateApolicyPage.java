@@ -275,29 +275,36 @@ public class RateApolicyPage extends CommonAction {
 	// select Reason as 'Issue Policy Forms'
 	public RateApolicyPage policyEndorsement(String PolicyNo) throws Exception {
 		invisibilityOfLoader(driver);
-		// Select Endorsement from Policy Action
-		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Endorsement & Verify Endorsement page opens.");
-		selectDropdownByVisibleText(driver, policyActionDDL, rateApolicyPageDTO.policyAction, "Policy Action");
-		Thread.sleep(2000);
-		// Navigate to pop up frame using policy no.
-		switchToFrameUsingElement(driver,
-				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
-		waitForElementToLoad(driver, 10, endorsementReason);
-		// Enter Data in pop up like Effective Date,Endorsement Reason
-		ExtentReporter.logger.log(LogStatus.INFO,
-				"Enter/Select Below Information: Effective Date:Policy Effective Date Accounting Date: Fixed Date Reason: Issue Policy Forms Comment: Issue Policy Forms");
-		selectDropdownByVisibleText(driver, endorsementReason, rateApolicyPageDTO.endorsementReason, "Reason");
-		enterTextIn(driver, CommentsTxtBoxOnEndorsePolicyPopup, rateApolicyPageDTO.endorsementComment, "Comments");
-		ExtentReporter.logger.log(LogStatus.INFO, "Click [OK].");
-		clickButton(driver, endorsePolicyOK, "OK");
-		switchToParentWindowfromframe(driver);
+		/*
+		 * // Select Endorsement from Policy Action
+		 * ExtentReporter.logger.log(LogStatus.INFO,
+		 * "Click Policy Actions>Endorsement & Verify Endorsement page opens.");
+		 * selectDropdownByVisibleText(driver, policyActionDDL,
+		 * rateApolicyPageDTO.policyAction, "Policy Action"); Thread.sleep(2000); //
+		 * Navigate to pop up frame using policy no. switchToFrameUsingElement(driver,
+		 * driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo +
+		 * "')]"))); waitForElementToLoad(driver, 10, endorsementReason); // Enter Data
+		 * in pop up like Effective Date,Endorsement Reason
+		 * ExtentReporter.logger.log(LogStatus.INFO,
+		 * "Enter/Select Below Information: Effective Date:Policy Effective Date Accounting Date: Fixed Date Reason: Issue Policy Forms Comment: Issue Policy Forms"
+		 * ); selectDropdownByVisibleText(driver, endorsementReason,
+		 * rateApolicyPageDTO.endorsementReason, "Reason"); enterTextIn(driver,
+		 * CommentsTxtBoxOnEndorsePolicyPopup, rateApolicyPageDTO.endorsementComment,
+		 * "Comments"); ExtentReporter.logger.log(LogStatus.INFO, "Click [OK].");
+		 * clickButton(driver, endorsePolicyOK, "OK");
+		 * switchToParentWindowfromframe(driver);
+		 */
 
+		PolicyBinderPage pbp = new PolicyBinderPage(driver);
+		pbp.endorsementFromActionDropDown();
+		invisibilityOfLoader(driver);
+		AcceptFromActionDropDownwithoutBackupPolicy();
 		return new RateApolicyPage(driver);
 	}
 
 	// Search Policy from Search Policy text field.
 	public RateApolicyPage searchPolicy(String policy_no) throws Exception {
-		//Thread.sleep(3000);
+		// Thread.sleep(3000);
 		policySearch(driver, policy_no, Policy_Search, Search_btn, policyList);
 		String actual = getText(driver, pageHeaderForPolicyFolder.get(0));
 		Thread.sleep(3000);
@@ -369,13 +376,15 @@ public class RateApolicyPage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Manuscript Information Window displays");
 		clickButton(driver, optionalFormBtn, "Optional Form");
 		Thread.sleep(2000);
+		PolicyBinderPage pbp = new PolicyBinderPage(driver);
+		String policyNumber = pbp.policyNo();
 		switchToFrameUsingElement(driver,
-				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
+				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNumber + "')]")));
 		ExtentReporter.logger.log(LogStatus.INFO, "Add Manuscript window displays");
 		clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
 		Thread.sleep(1000);
 		switchToFrameUsingElement(driver,
-				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
+				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNumber + "')]")));
 
 		// Search manuscript Form from pop up window and select check box
 		Thread.sleep(5000);
@@ -391,7 +400,7 @@ public class RateApolicyPage extends CommonAction {
 		clickButton(driver, manuscriptAddListDoneBtn, "Done");
 		switchToParentWindowfromframe(driver);
 		switchToFrameUsingElement(driver,
-				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
+				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNumber + "')]")));
 		Thread.sleep(2000);
 
 		// Verify that form selected from 'Add manuscript' pop up is added under
@@ -417,7 +426,10 @@ public class RateApolicyPage extends CommonAction {
 	}
 
 	public PolicyBinderPage searchPolicyPolicyBinderPage() throws Exception {
-		searchPolicy(rateApolicyPageDTO.policyNum);
+		if(searchPolicy(rateApolicyPageDTO.policyNum).equals("false"))
+				{
+					
+				}
 		return new PolicyBinderPage(driver);
 	}
 
@@ -428,6 +440,8 @@ public class RateApolicyPage extends CommonAction {
 
 	public void searchBackUpPolicy() throws Exception {
 		searchPolicy(rateApolicyPageDTO.backUpPolicyNum);
+		PolicyBinderPage pbp = new PolicyBinderPage(driver);
+		pbp.copyToQuoteFromActionDropDownForCopyToQuoteTC(rateApolicyPageDTO.backUpPolicyNum);
 	}
 
 	// Save Rate details code.
@@ -665,6 +679,7 @@ public class RateApolicyPage extends CommonAction {
 	// Coverage Details flow.
 	public RateApolicyPage coverageDetailsSelect() throws Exception {
 		try {
+			invisibilityOfLoader(driver);
 			ExtentReporter.logger.log(LogStatus.PASS,
 					"Click Coverage tab & verify Coverage for Primary Risk is displayed.");
 			clickButton(driver, coverageTab, "Coverage");
@@ -699,7 +714,7 @@ public class RateApolicyPage extends CommonAction {
 		invisibilityOfLoader(driver);
 		WebDriverWait wait = new WebDriverWait(driver, 180);
 		wait.until(ExpectedConditions.visibilityOf(optionalFormBtn));
-		//Thread.sleep(3000);
+		// Thread.sleep(3000);
 		for (int j = 0; j < rateApolicyPageDTO.coverage.size(); j++) {
 			// Code to select Coverage.
 			try {
@@ -776,11 +791,11 @@ public class RateApolicyPage extends CommonAction {
 			WebDriverWait wait = new WebDriverWait(driver, 180);
 			switchToFrameUsingElement(driver,
 					driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
-			//Thread.sleep(3000);
+			// Thread.sleep(3000);
 			invisibilityOfLoader(driver);
 			List<WebElement> getPageTitleFromPage = driver.findElements(By.xpath("//div[@class='pageTitle']"));
 			try {
-				//wait.until(ExpectedConditions.visibilityOf(productNotifyDropDown));
+				// wait.until(ExpectedConditions.visibilityOf(productNotifyDropDown));
 				int i = 0;
 				for (i = 0; i < getPageTitleFromPage.size(); i++) {
 					if ((getPageTitleFromPage.get(i).getAttribute("innerHTML").trim().equals("Product Notify"))) {
@@ -811,6 +826,8 @@ public class RateApolicyPage extends CommonAction {
 		if (isAlertPresent(driver) == false) {
 			ExtentReporter.logger.log(LogStatus.INFO, "Alert not present.");
 		}
+		Thread.sleep(12000);
+		// visibilityOfElement(driver, pageHeaderForPageTitle, "Page Title");
 
 		return new RateApolicyPage(driver);
 	}
@@ -857,7 +874,7 @@ public class RateApolicyPage extends CommonAction {
 		clickButton(driver, rateBtn, "Rate Tab");
 		Thread.sleep(10000);
 		invisibilityOfLoader(driver);
-		//invisibilityOfProcessesingWindow(driver);
+		// invisibilityOfProcessesingWindow(driver);
 		// If Product Notify Window appears then it will switch to window and
 		// select 'Yes' from that window and close window
 		if (verifyProductNotifyWindowDisplayed(policyNo).equals("true")) {
@@ -881,7 +898,7 @@ public class RateApolicyPage extends CommonAction {
 		switchToParentWindowfromframe(driver);
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]")));
-		//Thread.sleep(3000);
+		// Thread.sleep(3000);
 		// Get the number of last row of Written premium from View premium
 		// window
 		int lastRowOfWrittenPremium = cwWrittenPremiumOnViewPremium.size() - 1;

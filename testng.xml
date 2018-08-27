@@ -3,11 +3,7 @@
 <suite name="MagMutualSuite" parallel="methods" thread-count="1">
 	<listeners>
 		<listener class-name="com.mm.listeners.testListners" />
-<<<<<<< HEAD
 		<!-- <listener class-name="com.mm.listeners.AnnotationTransform" /> -->
-=======
-		<listener class-name="com.mm.listeners.AnnotationTransform" />
->>>>>>> 49e6e149d680658b12226b37a7ad45a0dcfca5d1
 	</listeners>
 	<test name="Test" parallel = "methods" thread-count="2">
 		<classes>

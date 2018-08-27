@@ -51,11 +51,11 @@ public class PDFReader extends CommonAction {
 		String[] savePDFPath = 
 				{System.getProperty("user.dir") + "\\src\\main\\resources\\StoredPDF\\pdfDocument.pdf"};
 		String[] executionPath = {System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\savePdf.exe"};
-		Runtime.getRuntime().exec(executionPath).waitFor(15, TimeUnit.SECONDS);
+		Runtime.getRuntime().exec(executionPath).waitFor(30, TimeUnit.SECONDS);
 		if(isAlertPresent(driver)==false)
 		{
 			ExtentReporter.logger.log(LogStatus.INFO,
-					"Alert is NOT present.");
+					"Alert[Optional] is NOT present.");
 		}
 		Thread.sleep(6000);
 		//ProcessBuilder pb = new ProcessBuilder(executionPath);
@@ -110,6 +110,7 @@ public class PDFReader extends CommonAction {
 				ExtentReporter.logger.log(LogStatus.FAIL, pdfreaderdto.verifyPDFcontent.get(i)+" value  is not present in PDF.");
 				Assert.assertTrue(false);
 		}*/
+		switchToParentWindowfromframe(driver);
 		return new PolicyBinderPage(driver);
 	}
 

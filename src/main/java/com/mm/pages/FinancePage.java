@@ -442,7 +442,7 @@ public class FinancePage extends CommonAction {
 		accountNumber = accountNo.getAttribute("innerHTML");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Process].");
 		clickButton(driver, processButton, "Process");
-		Thread.sleep(15000);
+		Thread.sleep(50000);
 		invisibilityOfLoader(driver);
 		//switchToFrameUsingId(driver, "popupframe1");
 		

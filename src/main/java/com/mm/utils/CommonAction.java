@@ -46,9 +46,9 @@ public class CommonAction implements CommonActionInterface {
 
 	// Integer.valueOf(properties.prop.getProperty("Medium"));
 
-	int Low = 30;
-	int Medium = 90;
-	int High = 180;
+	protected int Low = 30;
+	protected int Medium = 90;
+	protected int High = 180;
 	String findPolicyQuotePage = "Find Policy/Quote";
 
 	public void selectValue(WebDriver driver, WebElement pageElement, String value) {
@@ -262,8 +262,14 @@ public class CommonAction implements CommonActionInterface {
 	}
 
 	public String getText(WebDriver driver, WebElement pageElement) {
+		try {
 		WebDriverWait wait = new WebDriverWait(driver, High);
-		//wait.until(ExpectedConditions.visibilityOf(pageElement));
+		wait.until(ExpectedConditions.visibilityOf(pageElement));
+		}
+		catch(Exception e)
+		{
+			Assert.assertTrue(false,pageElement+" element not found.");
+		}
 		return pageElement.getAttribute("innerHTML");
 	}
 
@@ -367,7 +373,7 @@ public class CommonAction implements CommonActionInterface {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, High);
 			wait.until(ExpectedConditions.visibilityOf(element));
-			Thread.sleep(4000);
+			//Thread.sleep(2000);
 			Assert.assertTrue(element.isDisplayed(),element.getText()+" is not displaye on page.");
 			Select Sel = new Select(element);
 			Sel.selectByValue(DropDownOption);
@@ -627,10 +633,11 @@ public class CommonAction implements CommonActionInterface {
 	public void saveOption(WebDriver driver, WebElement saveOptionBtn, WebElement saveAsDropDown,
 			WebElement saveOKBtn, WebElement exitOK, String saveAsValue,String policyNo)
 			throws Exception {
-		Thread.sleep(10000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options & verify Save as window displays.");
-		WebDriverWait wait = new WebDriverWait(driver, 180);
+		Thread.sleep(5000);
+		driver.switchTo().defaultContent();
+		WebDriverWait wait = new WebDriverWait(driver, High);
 		wait.until(ExpectedConditions.visibilityOf(saveOptionBtn));
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options & verify Save as window displays.");
 		//waitForElementToLoad(driver, 15, saveOptionBtn);
 		clickButton(driver, saveOptionBtn, "Save Option");
 		Thread.sleep(3000);
@@ -660,7 +667,7 @@ public class CommonAction implements CommonActionInterface {
 	{
 		String flag = null;
 		try {
-			WebElement policyNotFoudErrorMsg = driver.findElement(By.xpath("//td[@class='errormessage']"));
+			WebElement policyNotFoudErrorMsg = driver.findElement(By.xpath("//td[@class='errormessage'][1]"));
 			WebDriverWait wait = new WebDriverWait(driver, High);
 			wait.until(ExpectedConditions.visibilityOf(policyNotFoudErrorMsg));
 			if(policyNotFoudErrorMsg.isDisplayed())
@@ -675,7 +682,8 @@ public class CommonAction implements CommonActionInterface {
 		return flag;
 		}
 
-	public void policySearch(WebDriver driver, String policyNo, WebElement policySearchTxtBox, WebElement searchBtn,WebElement policyList) throws Exception{
+	public String policySearch(WebDriver driver, String policyNo, WebElement policySearchTxtBox, WebElement searchBtn,WebElement policyList) throws Exception{
+		String flag = null;
 		WebDriverWait wait = new WebDriverWait(driver, High);
 		wait.until(ExpectedConditions.visibilityOf(policySearchTxtBox));
 		PolicyBinderPage policybinderpage = new PolicyBinderPage(driver); 
@@ -691,14 +699,20 @@ public class CommonAction implements CommonActionInterface {
 			//clickButton(driver, policyList, "First policy from Searched Policies");
 			Actions action = new Actions(driver);
 			action.click(policyList).build().perform();
+			flag = "true";
 		}else if(verifypolicyNotDisplayErrorMsg(driver).equals("true")){
-			ExtentReporter.logger.log(LogStatus.FAIL, "Policy is not available, please enter another/correct policy Number.");
-			Assert.assertTrue(false, "Policy is not available, please enter another/correct policy Number.");
+			ExtentReporter.logger.log(LogStatus.WARNING, "Policy is not available, please enter another/correct policy Number.");
+			ExtentReporter.logger.log(LogStatus.INFO, "Searching for backUp policy.");
+			RateApolicyPage rpp = new RateApolicyPage(driver);
+			rpp.searchBackUpPolicy();
+			flag = "false";
 		}
 		else{
 			getPageTitle(driver, "Policy Folder "+policybinderpage.policyNo());
 			ExtentReporter.logger.log(LogStatus.INFO, "Policy list is displayed after policy Search");
+			flag = "true";
 		}
+		return flag;
 	}
 
 	public void claimsSearch(WebDriver driver, String policyNo, WebElement policySearchTxtBox, WebElement searchBtn,WebElement policyList) throws Exception{

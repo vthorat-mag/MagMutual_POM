@@ -65,8 +65,9 @@ public class PolicySubmissionPage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy. Verify Phase is editable.");
 		selectDropdownByValue(driver,policyAction, policysubmissionpageDTO.valueOfPolicyActionCopy, "Policy Action");
 		Thread.sleep(3000);
-		PolicyBinderPage pbp = new PolicyBinderPage(driver);
-		pbp.verifyCpatureTxnDetailsPageDisplayedOrNot(pbp.policyNo());
+		//Below code is for QA env.
+		/*PolicyBinderPage pbp = new PolicyBinderPage(driver);
+		pbp.verifyCpatureTxnDetailsPageDisplayedOrNot(pbp.policyNo());*/
 		return new PolicySubmissionPage(driver);
 
 	}
@@ -95,6 +96,7 @@ public class PolicySubmissionPage extends CommonAction {
 	// Update policy details for a policy and change policy phase from
 	// Submission to Indication.
 	public PolicyIndicationPage updatePolicyDetails() throws Exception {
+		Thread.sleep(6000);
 		Thread.sleep(6000);
 		invisibilityOfLoader(driver);
 		//getPageTitle(driver, expectedPageTitle)

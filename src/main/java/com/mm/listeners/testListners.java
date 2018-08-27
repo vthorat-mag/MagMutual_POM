@@ -32,7 +32,7 @@ public class testListners implements ITestListener {
 	}
 
 	public void onTestFailure(ITestResult result) {
-		ExtentReporter.logger=null;
+		//ExtentReporter.logger=null;
 		TakesScreenshot ts=(TakesScreenshot)SmokeTestCasesUpdated.driver;
 		File source =ts.getScreenshotAs(OutputType.FILE);
 		String screenshotLocation =ExtentReporter.screenshotfolderpath+result.getName()+".png";
