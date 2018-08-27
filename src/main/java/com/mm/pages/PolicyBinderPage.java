@@ -93,7 +93,7 @@ public class PolicyBinderPage extends CommonAction {
 
 	@FindBy(name = "workflowExit_Ok")
 	WebElement Exit_Ok;
-	
+
 	@FindBy(id = "PM_CPT_TRAN_OK")
 	WebElement okBtnCaptureTxnDetails;
 
@@ -248,14 +248,15 @@ public class PolicyBinderPage extends CommonAction {
 		click(driver, selectEntityChkBox, "Insured Name");
 		clickButton(driver, selectBtnOnEntitySelectListPage, "Select");
 
-		// TODO - Need To add below steps once got confirmaiton on query - Cant see
-		// policy No from Policy No drop down field.
+		// TODO - Need To add below steps once got confirmaiton on query - Cant
+		// see policy No from Policy No drop down field.
 		/*
-		 * In the filter criteria section, click the Policy No dropdown and Select
-		 * [Policy number entered in step 3] Click the checkbox next the Prof Liab
-		 * coverage Click Save as Claim Possible duplicate claim screen displays Click
-		 * Save as Claim Claim No displays in the upper left corner. Note (and save for
-		 * later input) the claim number: ****add ########### Click [Close]
+		 * In the filter criteria section, click the Policy No dropdown and
+		 * Select [Policy number entered in step 3] Click the checkbox next the
+		 * Prof Liab coverage Click Save as Claim Possible duplicate claim
+		 * screen displays Click Save as Claim Claim No displays in the upper
+		 * left corner. Note (and save for later input) the claim number:
+		 * ****add ########### Click [Close]
 		 */
 	}
 
@@ -274,8 +275,7 @@ public class PolicyBinderPage extends CommonAction {
 	}
 
 	// Identify Policy number from Page.
-	public String policyNo() throws InterruptedException {
-		Thread.sleep(2000);
+	public String policyNo() {
 		String profileNoLable = pageHeaderForPolicyFolder.getAttribute("innerHTML");
 		String[] portfolioNo = profileNoLable.split(" ", 3);
 		return portfolioNo[2];
@@ -284,8 +284,10 @@ public class PolicyBinderPage extends CommonAction {
 	// Select Endorsement from "Action DropoDown".
 	public PolicyBinderPage endorsementFromActionDropDown() throws Exception {
 		Thread.sleep(3000);
-		ExtentReporter.logger.log(LogStatus.PASS, "Select Policy Actions-> Endorsement. Verify Endorse policy window displays.");
-		if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policybinderpageDTO.valueOfPolicyActionEndorse, "Policy Action").equals("false")) {
+		ExtentReporter.logger.log(LogStatus.PASS,
+				"Select Policy Actions-> Endorsement. Verify Endorse policy window displays.");
+		if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
+				policybinderpageDTO.valueOfPolicyActionEndorse, "Policy Action").equals("false")) {
 			RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
 			RateAPolicyPageDTO rateApolicyPageDTO = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
 			rateapolicypage.searchBackUpPolicy();
@@ -299,19 +301,21 @@ public class PolicyBinderPage extends CommonAction {
 		// policybinderpageDTO.valueOfPolicyActionEndorse, "Policy Action");
 		return new PolicyBinderPage(driver);
 	}
-
+	
 	// Select Endorsement from "Action DropoDown" without searching for backup
-	// policy.
-	public PolicyBinderPage endorsementFromActionDropDownwithoutBackupPolicy() throws Exception {
-		Thread.sleep(3000);
-		ExtentReporter.logger.log(LogStatus.PASS,
-				"Select Policy Actions-> Endorsement. Verify Endorse policy window displays.");
-		selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policybinderpageDTO.valueOfPolicyActionEndorse,
-				"Policy Action");
-		// selectDropdownByValue(driver, policyAction,
-		// policybinderpageDTO.valueOfPolicyActionEndorse, "Policy Action");
-		return new PolicyBinderPage(driver);
-	}
+		// policy.
+		public PolicyBinderPage endorsementFromActionDropDownwithoutBackupPolicy() throws Exception {
+			Thread.sleep(3000);
+			ExtentReporter.logger.log(LogStatus.PASS,
+					"Select Policy Actions-> Endorsement. Verify Endorse policy window displays.");
+			selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policybinderpageDTO.valueOfPolicyActionEndorse,
+					"Policy Action");
+			// selectDropdownByValue(driver, policyAction,
+			// policybinderpageDTO.valueOfPolicyActionEndorse, "Policy Action");
+				selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policybinderpageDTO.valueOfPolicyActionEndorse, "Policy Action");
+			return new PolicyBinderPage(driver);
+}
+
 	// Select Copy To Quote from "Action DropoDown".
 	public PolicySubmissionPage copyToQuoteFromActionDropDown(String policyNum) throws Exception {
 		Thread.sleep(2000);
@@ -323,21 +327,17 @@ public class PolicyBinderPage extends CommonAction {
 			RateAPolicyPageDTO rateApolicyPageDTO = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
 			rateapolicypage.searchBackUpPolicy();
 			PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
-			Thread.sleep(2000);
-			policybinderpage.copyToQuoteFromActionDropDownwithoutBackUpPolicy(rateApolicyPageDTO.backUpPolicyNum);
+			policybinderpage.copyToQuoteFromActionDropDown(rateApolicyPageDTO.backUpPolicyNum);
 			selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
 					policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action");
 		}
 
 		// selectDropdownByValue(driver, policyAction,
 		// policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action");
-		Thread.sleep(5000);
 		invisibilityOfLoader(driver);
-		//invisibilityOfProcessesingWindow(driver);
+		Thread.sleep(10000);
 		String getUpdatedPolicyNo = policyNo();
 		verifyCpatureTxnDetailsPageDisplayedOrNot(getUpdatedPolicyNo);
-		Thread.sleep(8000);
-		invisibilityOfLoader(driver);
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo() + "')]")));
 		ExtentReporter.logger.log(LogStatus.INFO,
@@ -348,22 +348,21 @@ public class PolicyBinderPage extends CommonAction {
 		return new PolicySubmissionPage(driver);
 	}
 	
-	// Select Copy To Quote from "Action DropoDown" without backup policyserach.
+	// Select Copy To Quote from "Action DropoDown".
 		public PolicySubmissionPage copyToQuoteFromActionDropDownwithoutBackUpPolicy(String policyNum) throws Exception {
 			Thread.sleep(2000);
 			ExtentReporter.logger.log(LogStatus.INFO,
 					"Click Policy Actions>Copy to Quote. Verify Policy folder shows a new number, Phase show Submission.");
-				RateAPolicyPageDTO rateApolicyPageDTO = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
-				PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
 				selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
 						policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action");
-			Thread.sleep(15000);
+			// selectDropdownByValue(driver, policyAction,
+			// policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action");
 			invisibilityOfLoader(driver);
-			//invisibilityOfProcessesingWindow(driver);
+			Thread.sleep(10000);
 			String getUpdatedPolicyNo = policyNo();
 			verifyCpatureTxnDetailsPageDisplayedOrNot(getUpdatedPolicyNo);
 			switchToFrameUsingElement(driver,
-					driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + getUpdatedPolicyNo + "')]")));
+					driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo() + "')]")));
 			ExtentReporter.logger.log(LogStatus.INFO,
 					"Click [OK]. Verify Policy folder shows a new number, Phase show Submission.");
 			click(driver, Exit_Ok, "OK button");
@@ -371,49 +370,55 @@ public class PolicyBinderPage extends CommonAction {
 			switchToParentWindowfromframe(driver);
 			return new PolicySubmissionPage(driver);
 		}
-		
-		public void verifyCpatureTxnDetailsPageDisplayedOrNot(String policyNo) throws Exception
-		{
-			switchToFrameUsingElement(driver,
-					driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo+ "')]")));
-			
-			try {
-				if (okBtnCaptureTxnDetails.isDisplayed()) {
-					clickButton(driver, okBtnCaptureTxnDetails, "Captuer Transaction Details Cancel");
-					ExtentReporter.logger.log(LogStatus.INFO, "Capture transaction details displayed.");
-				}
-			} catch (Exception e) {
-				ExtentReporter.logger.log(LogStatus.INFO, "Capture transaction details is NOT displayed.");
-			}
-		}
 
-	//Select Copy To Quote from "Action DropoDown" for copy to quote TC.
-	//We don't have to select copy to quote option from action ddl in COpy to quote TC hence separate method is written for backup policy search.
+
+	// Select Copy To Quote from "Action DropoDown" for copy to quote TC.
+	// We don't have to select copy to quote option from action ddl in COpy to
+	// quote TC hence separate method is written for backup policy search.
 	public PolicySubmissionPage copyToQuoteFromActionDropDownForCopyToQuoteTC(String policyNum) throws Exception {
 		Thread.sleep(2000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy to Quote. Verify Policy folder shows a new number, Phase show Submission.");
-		if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policybinderpageDTO.valueOfPolicyActionCopyToQuote,
-				"Policy Action").equals("false")) {
+		ExtentReporter.logger.log(LogStatus.INFO,
+				"Click Policy Actions>Copy to Quote. Verify Policy folder shows a new number, Phase show Submission.");
+		if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
+				policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action").equals("false")) {
 			RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
 			RateAPolicyPageDTO rateApolicyPageDTO = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
 			rateapolicypage.searchBackUpPolicy();
-			//PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
-			//policybinderpage.copyToQuoteFromActionDropDown(rateApolicyPageDTO.backUpPolicyNum);
-			selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policybinderpageDTO.valueOfPolicyActionCopyToQuote,
-					"Policy Action");
+			// PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
+			// policybinderpage.copyToQuoteFromActionDropDown(rateApolicyPageDTO.backUpPolicyNum);
+			selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
+					policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action");
 		}
 		Thread.sleep(5000);
 		invisibilityOfLoader(driver);
 		String getUpdatedPolicyNo = policyNo();
-		Thread.sleep(4000);
+		verifyCpatureTxnDetailsPageDisplayedOrNot(getUpdatedPolicyNo);
+		Thread.sleep(14000);
+		invisibilityOfLoader(driver);
 		switchToFrameUsingElement(driver,
-				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + getUpdatedPolicyNo + "')]")));
+				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo() + "')]")));
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Click [OK]. Verify Policy folder shows a new number, Phase show Submission.");
-		click(driver, Exit_Ok, "OK button");
+		if (Exit_Ok.isDisplayed()) {
+			click(driver, Exit_Ok, "OK button");
+		}
 		Thread.sleep(2000);
 		switchToParentWindowfromframe(driver);
 		return new PolicySubmissionPage(driver);
+	}
+	public void verifyCpatureTxnDetailsPageDisplayedOrNot(String policyNo) throws Exception
+	{
+		switchToFrameUsingElement(driver,
+				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo+ "')]")));
+		
+		try {
+			if (okBtnCaptureTxnDetails.isDisplayed()) {
+				clickButton(driver, okBtnCaptureTxnDetails, "Captuer Transaction Details Cancel");
+				ExtentReporter.logger.log(LogStatus.INFO, "Capture transaction details displayed.");
+			}
+		} catch (Exception e) {
+			ExtentReporter.logger.log(LogStatus.INFO, "Capture transaction details is NOT displayed.");
+		}
 	}
 
 	public RateApolicyPage endorseAPolicyforRateApolicyPage(String policyNum) throws Exception {
@@ -426,8 +431,8 @@ public class PolicyBinderPage extends CommonAction {
 		Thread.sleep(3000);
 		/*
 		 * switchToFrameUsingElement(driver,
-		 * driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNum +
-		 * "')]")));
+		 * driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" +
+		 * policyNum + "')]")));
 		 */
 		switchToFrameUsingId(driver, "popupframe1");
 		waitForElementToLoad(driver, 10, selectReason);

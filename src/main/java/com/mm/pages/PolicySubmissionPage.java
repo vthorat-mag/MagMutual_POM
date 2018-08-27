@@ -96,6 +96,7 @@ public class PolicySubmissionPage extends CommonAction {
 	// Submission to Indication.
 	public PolicyIndicationPage updatePolicyDetails() throws Exception {
 		Thread.sleep(6000);
+		Thread.sleep(6000);
 		invisibilityOfLoader(driver);
 		//getPageTitle(driver, expectedPageTitle)
 		//Change policy type to Indication and add organization type as Hospital from DDL
