@@ -77,7 +77,7 @@ public class PolicyBinderPage extends CommonAction {
 	WebElement okPolicySaveAsWIPPopup;
 
 	@FindBy(xpath = "//div[@class='horizontalButtonCollection'][1]//input[@value='Save Options'][1]")
-	//@FindBy(xpath = "//input[@id = 'PM_COMMON_TABS_SAVE']")
+	// @FindBy(xpath = "//input[@id = 'PM_COMMON_TABS_SAVE']")
 	WebElement saveOptionBtn;
 
 	@FindBy(xpath = "//select[@name='saveAsCode']")
@@ -269,7 +269,8 @@ public class PolicyBinderPage extends CommonAction {
 	}
 
 	// Identify Policy number from Page.
-	public String policyNo() {
+	public String policyNo() throws InterruptedException {
+		Thread.sleep(2000);
 		String profileNoLable = pageHeaderForPolicyFolder.getAttribute("innerHTML");
 		String[] portfolioNo = profileNoLable.split(" ", 3);
 		return portfolioNo[2];
@@ -285,8 +286,6 @@ public class PolicyBinderPage extends CommonAction {
 			RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
 			RateAPolicyPageDTO rateApolicyPageDTO = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
 			rateapolicypage.searchBackUpPolicy();
-			PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
-			policybinderpage.copyToQuoteFromActionDropDownwithoutBackUpPolicy(rateApolicyPageDTO.backUpPolicyNum);
 			selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
 					policybinderpageDTO.valueOfPolicyActionEndorse, "Policy Action");
 		}
@@ -356,58 +355,17 @@ public class PolicyBinderPage extends CommonAction {
 		// policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action");
 		invisibilityOfLoader(driver);
 		Thread.sleep(10000);
-		String getUpdatedPolicyNo = policyNo();
 		// below commented code is for QA env
 		/*
 		 * if(verifyCpatureTxnDetailsPageDisplayedOrNot(getUpdatedPolicyNo)==false) {
 		 * ExtentReporter.logger.log(LogStatus.INFO,
-		 * "Capture transaction details is NOT displayed."); }
+		 * "Captursaction details is NOT displayed."); }
 		 */
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo() + "')]")));
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Click [OK]. Verify Policy folder shows a new number, Phase show Submission.");
-		click(driver, Exit_Ok, "OK button");
-		Thread.sleep(2000);
-		switchToParentWindowfromframe(driver);
-		return new PolicySubmissionPage(driver);
-	}
-
-	// Select Copy To Quote from "Action DropoDown" for copy to quote TC.
-	// We don't have to select copy to quote option from action ddl in COpy to
-	// quote TC hence separate method is written for backup policy search.
-	public PolicySubmissionPage copyToQuoteFromActionDropDownForCopyToQuoteTC(String policyNum) throws Exception {
-		Thread.sleep(2000);
-		ExtentReporter.logger.log(LogStatus.INFO,
-				"Click Policy Actions>Copy to Quote. Verify Policy folder shows a new number, Phase show Submission.");
-		if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
-				policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action").equals("false")) {
-			RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
-			RateAPolicyPageDTO rateApolicyPageDTO = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
-			rateapolicypage.searchBackUpPolicy();
-			// PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
-			// policybinderpage.copyToQuoteFromActionDropDown(rateApolicyPageDTO.backUpPolicyNum);
-			selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
-					policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action");
-		}
-		Thread.sleep(5000);
-		invisibilityOfLoader(driver);
-		String getUpdatedPolicyNo = policyNo();
-		// below commented code is for QA env
-		/*
-		 * if(verifyCpatureTxnDetailsPageDisplayedOrNot(getUpdatedPolicyNo)==false) {
-		 * ExtentReporter.logger.log(LogStatus.INFO,
-		 * "Capture transaction details is NOT displayed."); }
-		 */
-		Thread.sleep(14000);
-		invisibilityOfLoader(driver);
-		switchToFrameUsingElement(driver,
-				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo() + "')]")));
-		ExtentReporter.logger.log(LogStatus.INFO,
-				"Click [OK]. Verify Policy folder shows a new number, Phase show Submission.");
-		if (Exit_Ok.isDisplayed()) {
-			click(driver, Exit_Ok, "OK button");
-		}
+		clickButton(driver, Exit_Ok, "OK button");
 		Thread.sleep(2000);
 		switchToParentWindowfromframe(driver);
 		return new PolicySubmissionPage(driver);
@@ -444,7 +402,8 @@ public class PolicyBinderPage extends CommonAction {
 		 * "')]")));
 		 */
 		switchToFrameUsingId(driver, "popupframe1");
-		waitForElementToLoad(driver, 10, selectReason);
+		WebDriverWait wait = new WebDriverWait(driver, High);
+		wait.until(ExpectedConditions.visibilityOf(selectReason));
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Click the dropdown by Reason:  Select Issue Policy Forms-->Click [Ok] & verify window closes.");
 		selectDropdownByValue(driver, selectReason, policybinderpageDTO.valueOfSelectReason, "Select Reason");

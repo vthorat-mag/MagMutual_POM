@@ -10,6 +10,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 
 import com.mm.dto.CincomPageDTO;
 import com.mm.utils.CommonAction;
@@ -27,9 +28,9 @@ public class CincomPage extends CommonAction {
 	@FindBy(xpath = "//table[@id='coverageListGrid']//tbody//td//div[@id='CPRODUCTCOVERAGEDESC']")
 	List<WebElement> coverageList;
 
-	@FindBy(id = "PM_MANU_PUP")
+	@FindBy(xpath = "//input[@id = 'PM_MANU_PUP'] | //input[@id='PM_QT_MANU_PUP']")
 	WebElement optionalFormBtn;
-
+	
 	@FindBy(xpath = "//table[@id='maintainManuscriptListGrid']")
 	WebElement manuscriptList;
 
@@ -62,6 +63,9 @@ public class CincomPage extends CommonAction {
 
 	@FindBy(id = "PM_MANU_DTENTRY")
 	WebElement dataEntryBtn;
+	
+	@FindBy(xpath="//div[@id='loginPanel divpanel']")
+	WebElement errorOnCinCOmPage;
 
 	@FindBy(id = "ictextField")
 	WebElement titleHFLHPLCHGGE;
@@ -143,8 +147,22 @@ public class CincomPage extends CommonAction {
 			Thread.sleep(4000);
 			ExtentReporter.logger.log(LogStatus.INFO, "Click the Data Entry button & verify Manuscript Information window displays");
 			clickButton(driver, dataEntryBtn, "Data Entry");
-			Thread.sleep(4000);
 			String parentWindowId = switchToWindow(driver);
+			
+			// Below code will verify if there is an error on cincom page then it will close the current window and fail the test cases else it will execute CINCOM page flow.
+			try {
+				//Assert.assertTrue(!errorOnCinCOmPage.isDisplayed(), "Error while opening Cincom Page.");
+				if(errorOnCinCOmPage.isDisplayed())
+				{
+					throw new Exception();
+				}
+			} catch (Exception e) {
+				ExtentReporter.logger.log(LogStatus.FAIL, "Error while opening Cincom Page.");
+				switchToParentWindowfromotherwindow(driver, parentWindowId);
+				Assert.assertTrue(false);
+				driver.close();
+			}
+			Thread.sleep(4000);
 			ExtentReporter.logger.log(LogStatus.INFO, "Enter in Title_HFLHPLCHGGE: 'Automated Test CHGGE'");
 			titleHFLHPLCHGGE.clear();
 			enterTextIn(driver, titleHFLHPLCHGGE, "Automated Test CHGGE", " Cincom Title");
@@ -182,7 +200,6 @@ public class CincomPage extends CommonAction {
 			visibilityOfElement(driver, sucessMsg, "Sucess Message");
 			driver.close();
 			switchToParentWindowfromotherwindow(driver, parentWindowId);
-
 			switchToFrameUsingElement(driver,
 					driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
 

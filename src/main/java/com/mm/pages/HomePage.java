@@ -181,7 +181,7 @@ public class HomePage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click policy in right corner of screen & verify search Policy Screen is opened");
 		waitForElementToLoad(driver, 10, Policy_Tab_Home);
 		Thread.sleep(2000);
-		click(driver, Policy_Tab_Home, "Policy tab");
+		clickButton(driver, Policy_Tab_Home, "Policy tab");
 		Thread.sleep(2000);
 		invisibilityOfLoader(driver);
 		getPageTitle(driver, findPolicyPageTitleActualText);
@@ -251,7 +251,7 @@ public class HomePage extends CommonAction {
 	// Logout from application.
 	public void logoutFromeOasis() {
 		ExtentReporter.logger.log(LogStatus.INFO, "User is logged out from application");
-		click(driver, logoff, "Logoff button");
+		clickButton(driver, logoff, "Logoff button");
 	}
 
 	
@@ -333,7 +333,7 @@ public class HomePage extends CommonAction {
 	}
 	
 	public HomePage selectEntity(String parentWindow) throws Exception{
-		Thread.sleep(6000);
+		Thread.sleep(8000);
 		invisibilityOfLoader(driver);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click the checkbox next to the name to select the risk. Verify Risk is selected");
 		clickButton(driver, Select_Entity_Checkbox, "Select Entity Checkbox");

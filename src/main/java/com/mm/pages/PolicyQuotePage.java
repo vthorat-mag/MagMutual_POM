@@ -183,7 +183,6 @@ public class PolicyQuotePage extends CommonAction {
 			RateAPolicyPageDTO rateApolicyPageDTO = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
 			rateapolicypage.searchBackUpPolicy();
 			PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
-			policybinderpage.copyToQuoteFromActionDropDownwithoutBackUpPolicy(rateApolicyPageDTO.backUpPolicyNum);
 			selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.valueOfPolicyActionCopy, "Policy Action");
 		}
 		return new PolicyQuotePage(driver);
@@ -344,7 +343,7 @@ public class PolicyQuotePage extends CommonAction {
 	//Change phase to Quote.
 	public PolicyQuotePage changePolicyPhase(String newPhaseValue) throws Exception
 	{
-		//Thread.sleep(3000);
+		Thread.sleep(3000);
 		invisibilityOfLoader(driver);
 		ExtentReporter.logger.log(LogStatus.INFO, "Change Phase to "+newPhaseValue+" & verify Phase is changed to "+newPhaseValue);
 		selectDropdownByValue(driver, policyPhase, newPhaseValue, "Phase");
@@ -354,7 +353,10 @@ public class PolicyQuotePage extends CommonAction {
 	// Click preview tab.
 	public PDFReader clickPreviewTab(String policyNumber) throws InterruptedException {
 		invisibilityOfLoader(driver);
-		//Thread.sleep(3000);
+		//visibilityOfElement(driver, PreviewTab, "Preview Tab");
+		WebDriverWait wait = new WebDriverWait(driver, High);
+		wait.until(ExpectedConditions.visibilityOf(PreviewTab));
+		//Thread.sleep(6000);
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Click [Preview]& verify Preview window displays with Form Printing on Form's List");
 		// ExtentReporter.logger.log(LogStatus.INFO, "Verify CHG 08 form is displayed
@@ -372,6 +374,9 @@ public class PolicyQuotePage extends CommonAction {
 
 	public void verifyPDFgenratedOrNot() {
 		try {
+			
+			WebDriverWait wait = new WebDriverWait(driver, Low);
+			wait.until(ExpectedConditions.elementToBeClickable(pdfErrorForm));
 			switchToFrameUsingElement(driver, pdfErrorForm);
 			String errorMsgForPDF = pdfErrorMsg.getAttribute("innerHTML");
 			errorMsgForPDF.contains(PDFErrorMsgContains);
@@ -407,9 +412,8 @@ public class PolicyQuotePage extends CommonAction {
 		if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.policyActionValue, "Policy Action").equals("false")) {
 			RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
 			RateAPolicyPageDTO rateApolicyPageDTO = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
-			rateapolicypage.searchBackUpPolicy();
+			rateapolicypage.searchPolicy(rateApolicyPageDTO.backUpPolicyNum);
 			PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
-			//policybinderpage.copyToQuoteFromActionDropDown(rateApolicyPageDTO.backUpPolicyNum);
 			selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.policyActionValue, "Policy Action");
 		}
 		

@@ -64,7 +64,7 @@ public class ExcelUtil {
 	public void writeData(String testCaseId, String columnName, String cellValue, int rowNum,String saveDataFilePath) throws Exception {
 		String excelFilePath = saveDataFilePath;
 		FileInputStream inputStream;
-		ExtentReporter.logger.log(LogStatus.INFO, "Note the policy number to use in the next test case - "+testCaseId);
+		ExtentReporter.logger.log(LogStatus.INFO, "Note the policy number to use in the next test case - "+testCaseId +" is "+cellValue);
 		inputStream = new FileInputStream(new File(excelFilePath));
 		try {
 
@@ -76,7 +76,6 @@ public class ExcelUtil {
 			for (int cellNumber = headerRow.getFirstCellNum(); cellNumber <= headerRow.getLastCellNum()
 					- 1; cellNumber++) {
 				Cell headerCell = headerRow.getCell(cellNumber);
-				System.out.println(headerCell.getStringCellValue().toLowerCase());
 				if (headerCell.getStringCellValue().toLowerCase().trim().equals(columnName.toLowerCase())) {
 					Row dataRow = dataSheet.getRow(rowNum);
 					Cell dataCell = dataRow.getCell(cellNumber);

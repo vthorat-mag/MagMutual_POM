@@ -98,16 +98,20 @@ public class CommonAction implements CommonActionInterface {
 
 	}
 
-	public void switchToFrameUsingElement(WebDriver driver, WebElement element) throws Exception {
+	public Boolean switchToFrameUsingElement(WebDriver driver, WebElement element) throws Exception {
+		Boolean flag = null;
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, High);
-			//wait.until(ExpectedConditions.visibilityOf(element));
+			wait.until(ExpectedConditions.visibilityOf(element));
 			driver.switchTo().frame(element);
 			ExtentReporter.logger.log(LogStatus.INFO, "Control switched to frame.");
+			flag = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			ExtentReporter.logger.log(LogStatus.INFO, "Error while switching to frame.");
+			flag =false;
 		}
+		return flag;
 	}
 	
 	public void  captureScreenshot(WebDriver driver,String imageFileName) throws IOException 
@@ -128,9 +132,12 @@ public class CommonAction implements CommonActionInterface {
 		try {
 			driver.switchTo().defaultContent();
 			ExtentReporter.logger.log(LogStatus.PASS, "User Switched to default frame.");
+			//throws new Exception();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			ExtentReporter.logger.log(LogStatus.INFO, "Error while switching to default frame.");
+			Assert.assertTrue(false,"Error while switching to default frame.");
 		}
 	}
 
@@ -640,11 +647,10 @@ public class CommonAction implements CommonActionInterface {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options & verify Save as window displays.");
 		//waitForElementToLoad(driver, 15, saveOptionBtn);
 		clickButton(driver, saveOptionBtn, "Save Option");
-		Thread.sleep(3000);
+		Thread.sleep(5000);
 		invisibilityOfLoader(driver);
-		WebElement iframeEle = driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]"));
 		//switchToFrameUsingId(driver, "popupframe1");
-		switchToFrameUsingElement(driver, iframeEle);
+		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]")));
 		getPageTitle(driver, "Save As");
 		selectDropdownByValue(driver, saveAsDropDown, saveAsValue, "Selected " + saveAsValue);
 		ExtentReporter.logger.log(LogStatus.INFO, "Select " + saveAsValue + " Click [OK]& verify Message is closed and WIP is saved as"+ saveAsValue);
@@ -659,6 +665,7 @@ public class CommonAction implements CommonActionInterface {
 		switchToFrameUsingElement(driver, iframeEle1);
 		ExtentReporter.logger.log(LogStatus.INFO, "Save as Official window displays");
 		clickButton(driver, exitOK, "Workflow exit OK");
+		Thread.sleep(3000);
 		switchToParentWindowfromframe(driver);
 		Thread.sleep(2000);
 	}
@@ -701,7 +708,8 @@ public class CommonAction implements CommonActionInterface {
 			action.click(policyList).build().perform();
 			flag = "true";
 		}else if(verifypolicyNotDisplayErrorMsg(driver).equals("true")){
-			ExtentReporter.logger.log(LogStatus.WARNING, "Policy is not available, please enter another/correct policy Number.");
+			WebElement policyNotFoudErrorMsg = driver.findElement(By.xpath("//td[@class='errormessage'][1]"));
+			ExtentReporter.logger.log(LogStatus.WARNING, "Policy is not available because of error  -"+ policyNotFoudErrorMsg.getAttribute("innerHTML"));
 			ExtentReporter.logger.log(LogStatus.INFO, "Searching for backUp policy.");
 			RateApolicyPage rpp = new RateApolicyPage(driver);
 			rpp.searchBackUpPolicy();

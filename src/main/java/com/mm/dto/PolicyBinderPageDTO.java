@@ -29,34 +29,34 @@ public class PolicyBinderPageDTO {
 	public PolicyBinderPageDTO(Map<String, List<String>> excelData) {
 
 		for (int i = 0; i <= PolicyBinderPageDTO.class.getFields().length - 1; i++) {
-			if (PolicyBinderPageDTO.class.getFields()[i].getType().toString().toLowerCase().contains("java.util.list")) {
+			if (excelData.containsKey(PolicyBinderPageDTO.class.getFields()[i].getName().toLowerCase())) {
+				if (PolicyBinderPageDTO.class.getFields()[i].getType().toString().toLowerCase()
+						.contains("java.util.list")) {
+					try {
+						PolicyBinderPageDTO.class.getFields()[i].set(this,
+								excelData.get(PolicyBinderPageDTO.class.getFields()[i].getName().toLowerCase()));
 
-				// if
-				// (excelData.containsKey(PolicyBinderPageDTO.class.getFields()[i].getName().toLowerCase())){
-				// {
-				try {
-					PolicyBinderPageDTO.class.getFields()[i].set(this,
-							excelData.get(PolicyBinderPageDTO.class.getFields()[i].getName().toLowerCase()));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				} else if (PolicyBinderPageDTO.class.getFields()[i].getType().toString().toLowerCase()
+						.contains("int")) {
+					try {
+						PolicyBinderPageDTO.class.getFields()[i].set(this, Integer.parseInt(excelData
+								.get(PolicyBinderPageDTO.class.getFields()[i].getName().toLowerCase()).get(0)));
 
-			} else if (PolicyBinderPageDTO.class.getFields()[i].getType().toString().toLowerCase().contains("int")) {
-				try {
-					PolicyBinderPageDTO.class.getFields()[i].set(this, Integer.parseInt(
-							excelData.get(PolicyBinderPageDTO.class.getFields()[i].getName().toLowerCase()).get(0)));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				} else {
+					try {
+						PolicyBinderPageDTO.class.getFields()[i].set(this,
+								excelData.get(PolicyBinderPageDTO.class.getFields()[i].getName().toLowerCase()).get(0));
 
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			} else {
-				try {
-					PolicyBinderPageDTO.class.getFields()[i].set(this,
-							excelData.get(PolicyBinderPageDTO.class.getFields()[i].getName().toLowerCase()).get(0));
-
-				} catch (Exception e) {
-					e.printStackTrace();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}

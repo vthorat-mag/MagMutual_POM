@@ -19,8 +19,8 @@ public interface CommonActionInterface {
     String getAttributeValue(WebElement pageElement, String attributeName);
     void click(WebDriver driver, WebElement pageElement, String elementName);
     void switchToFrameUsingId(WebDriver driver, String uniqId) throws InterruptedException;
-    void switchToFrameUsingElement(WebDriver driver, WebElement element) throws Exception;
-    void switchToParentWindowfromframe(WebDriver driver);
+    Boolean switchToFrameUsingElement(WebDriver driver, WebElement element) throws Exception;
+    void switchToParentWindowfromframe(WebDriver driver) throws Exception;
     void visibilityOfElement(WebDriver driver, WebElement pageElement, String text);
     String switchToWindow(WebDriver driver) throws InterruptedException;
     void selectDropdownByValue(WebDriver driver, WebElement Value,String DropDownOption, String name);

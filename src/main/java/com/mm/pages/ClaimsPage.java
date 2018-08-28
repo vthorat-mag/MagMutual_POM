@@ -133,6 +133,9 @@ public class ClaimsPage extends CommonAction {
 
 	@FindBy(xpath = "//input[@name='lossDate']")
 	WebElement accidentDateTextBox;
+	
+	@FindBy(xpath = "//input[@name='date3']")
+	WebElement triageMeetingDateField;
 
 	@FindBy(xpath = "//img[@id='btnFind_insuredFullName']")
 	WebElement insuredSearchIcon;
@@ -489,6 +492,10 @@ public class ClaimsPage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [OK]");
 		Alert alert = driver.switchTo().alert();
 		alert.accept();
+		if(isAlertPresent(driver))
+		{
+			acceptAlert(driver);
+		}
 		Thread.sleep(2000);
 
 		// TODO - Need to check below code is required or not as this is
@@ -551,6 +558,8 @@ public class ClaimsPage extends CommonAction {
 		selectDropdownByValue(driver, lobDropDown, ClaimsDTO.lobDropDownValue, "LOB");
 		ExtentReporter.logger.log(LogStatus.INFO,"Enter 'Test' in the description field ");
 		enterTextIn(driver, descriptionTextBox, ClaimsDTO.description, "Description");
+		ExtentReporter.logger.log(LogStatus.INFO,"Enter today's date in 'Traige Meeting Date' field");
+		enterTextIn(driver, triageMeetingDateField, comUtil.getSystemDatemm_dd_yyyy(), "Triage Meeting Date");
 		ExtentReporter.logger.log(LogStatus.INFO,"Click File Handler dropdown and select Act Super, EJ");
 		selectDropdownByValue(driver, fileHandlerDorpDown, ClaimsDTO.fileHandlerDropDownValue, "File Handler");
 		ExtentReporter.logger.log(LogStatus.INFO,"Click State of Loss dropdown and select GA");
@@ -604,9 +613,14 @@ public class ClaimsPage extends CommonAction {
 	public boolean checkduplicateClaimWindow()
 	{
 		try{
-			switchToFrameUsingElement(driver, changeFileStatusFrameEle);
-			getPageTitle(driver,duplicateClaimPageTitle);
-			return true;
+			if(switchToFrameUsingElement(driver,driver.findElement(By.xpath("//iframe[contains(@id,'popupframe')]")))==true)
+			{
+				getPageTitle(driver,duplicateClaimPageTitle);
+				return true;
+			}else
+			{
+				throw new Exception();
+			}
 		}catch(Exception e)
 		{
 			e.printStackTrace();

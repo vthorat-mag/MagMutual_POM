@@ -31,39 +31,39 @@ public class PolicyIndicationPageDTO {
 	public String riskTypeValue;
 	public String riskName;
 	public String coverageNameForRisk;
-	
+
 	public PolicyIndicationPageDTO(Map<String, List<String>> excelData)
 			throws IllegalArgumentException, IllegalAccessException, SecurityException {
 
 		for (int i = 0; i <= PolicyIndicationPageDTO.class.getFields().length - 1; i++) {
-			if (PolicyIndicationPageDTO.class.getFields()[i].getType().toString().toLowerCase().contains("java.util.list")) {
+			if (excelData.containsKey(PolicyIndicationPageDTO.class.getFields()[i].getName().toLowerCase())) {
+				if (PolicyIndicationPageDTO.class.getFields()[i].getType().toString().toLowerCase()
+						.contains("java.util.list")) {
+					try {
+						PolicyIndicationPageDTO.class.getFields()[i].set(this,
+								excelData.get(PolicyIndicationPageDTO.class.getFields()[i].getName().toLowerCase()));
 
-				// if
-				// (excelData.containsKey(PolicyIndicationPageDTO.class.getFields()[i].getName().toLowerCase())){
-				// {
-				try {
-					PolicyIndicationPageDTO.class.getFields()[i].set(this,
-							excelData.get(PolicyIndicationPageDTO.class.getFields()[i].getName().toLowerCase()));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				} else if (PolicyIndicationPageDTO.class.getFields()[i].getType().toString().toLowerCase()
+						.contains("int")) {
+					try {
+						PolicyIndicationPageDTO.class.getFields()[i].set(this, Integer.parseInt(excelData
+								.get(PolicyIndicationPageDTO.class.getFields()[i].getName().toLowerCase()).get(0)));
 
-			} else if (PolicyIndicationPageDTO.class.getFields()[i].getType().toString().toLowerCase().contains("int")) {
-				try {
-					PolicyIndicationPageDTO.class.getFields()[i].set(this, Integer.parseInt(
-							excelData.get(PolicyIndicationPageDTO.class.getFields()[i].getName().toLowerCase()).get(0)));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				} else {
+					try {
+						PolicyIndicationPageDTO.class.getFields()[i].set(this, excelData
+								.get(PolicyIndicationPageDTO.class.getFields()[i].getName().toLowerCase()).get(0));
 
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			} else {
-				try {
-					PolicyIndicationPageDTO.class.getFields()[i].set(this,
-							excelData.get(PolicyIndicationPageDTO.class.getFields()[i].getName().toLowerCase()).get(0));
-
-				} catch (Exception e) {
-					e.printStackTrace();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}

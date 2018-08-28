@@ -52,38 +52,34 @@ public class FinancePageDTO {
 	public FinancePageDTO(Map<String, List<String>> excelData) {
 
 		for (int i = 0; i <= FinancePageDTO.class.getFields().length - 1; i++) {
-			if (FinancePageDTO.class.getFields()[i].getType().toString().toLowerCase().contains("java.util.list")) {
+			if (excelData.containsKey(FinancePageDTO.class.getFields()[i].getName().toLowerCase())) {
+				if (FinancePageDTO.class.getFields()[i].getType().toString().toLowerCase().contains("java.util.list")) {
+					try {
+						FinancePageDTO.class.getFields()[i].set(this,
+								excelData.get(FinancePageDTO.class.getFields()[i].getName().toLowerCase()));
 
-				// if
-				// (excelData.containsKey(FinancePageDTO.class.getFields()[i].getName().toLowerCase())){
-				// {
-				try {
-					FinancePageDTO.class.getFields()[i].set(this,
-							excelData.get(FinancePageDTO.class.getFields()[i].getName().toLowerCase()));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				} else if (FinancePageDTO.class.getFields()[i].getType().toString().toLowerCase().contains("int")) {
+					try {
+						FinancePageDTO.class.getFields()[i].set(this, Integer.parseInt(
+								excelData.get(FinancePageDTO.class.getFields()[i].getName().toLowerCase()).get(0)));
 
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				} else {
+					try {
+						FinancePageDTO.class.getFields()[i].set(this,
+								excelData.get(FinancePageDTO.class.getFields()[i].getName().toLowerCase()).get(0));
 
-			} else if (FinancePageDTO.class.getFields()[i].getType().toString().toLowerCase().contains("int")) {
-				try {
-					FinancePageDTO.class.getFields()[i].set(this, Integer.parseInt(
-							excelData.get(FinancePageDTO.class.getFields()[i].getName().toLowerCase()).get(0)));
-
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			} else {
-				try {
-					FinancePageDTO.class.getFields()[i].set(this,
-							excelData.get(FinancePageDTO.class.getFields()[i].getName().toLowerCase()).get(0));
-
-				} catch (Exception e) {
-					e.printStackTrace();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
-				
 		}
 	}
 }

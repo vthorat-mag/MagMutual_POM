@@ -403,7 +403,7 @@ public class FinancePage extends CommonAction {
 		getPageTitle(driver, accountSearchPageTitle);
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Using the policy from 'Issue Policy Forms' test case enter Policy number in Policy#: search box and click Search.");
-		enterTextIn(driver, PolicyNoTxtBox, financePageDTO.policyNo, "Policy Number");
+		enterTextIn(driver, PolicyNoTxtBox, financePageDTO.policyNum, "Policy Number");
 		clickButton(driver, searchBtn, "Search");
 		invisibilityOfLoader(driver);
 		Thread.sleep(3000);

@@ -21,7 +21,7 @@ public class ExtentReporter {
 		 //Method to generate Report Folder and File to given FilePath using Framework.properties
 		
 		 String startDateTime = new SimpleDateFormat("ddMMYYHHmmss").format(new Date());
-		 reportFolderPath = "C:\\SmokeTestFM\\".concat(suiteName+"_").concat(startDateTime);
+		 reportFolderPath = "C:\\SmokeTestFM\\".concat(suiteName+"_").concat("_BTS_").concat(startDateTime);
 		 //configProperties.getProperty("ReportFolder")
 		 //Create report folder for every run session
 		 File reportFolder = new File(reportFolderPath.concat("\\Screenshots"));

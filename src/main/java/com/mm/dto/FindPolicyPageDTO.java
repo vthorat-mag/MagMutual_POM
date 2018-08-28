@@ -13,34 +13,33 @@ public class FindPolicyPageDTO {
 	public FindPolicyPageDTO(Map<String, List<String>> excelData) {
 
 		for (int i = 0; i <= FindPolicyPageDTO.class.getFields().length - 1; i++) {
-			if (FindPolicyPageDTO.class.getFields()[i].getType().toString().toLowerCase().contains("java.util.list")) {
+			if (excelData.containsKey(FindPolicyPageDTO.class.getFields()[i].getName().toLowerCase())) {
+				if (FindPolicyPageDTO.class.getFields()[i].getType().toString().toLowerCase()
+						.contains("java.util.list")) {
+					try {
+						FindPolicyPageDTO.class.getFields()[i].set(this,
+								excelData.get(FindPolicyPageDTO.class.getFields()[i].getName().toLowerCase()));
 
-				// if
-				// (excelData.containsKey(FindPolicyPageDTO.class.getFields()[i].getName().toLowerCase())){
-				// {
-				try {
-					FindPolicyPageDTO.class.getFields()[i].set(this,
-							excelData.get(FindPolicyPageDTO.class.getFields()[i].getName().toLowerCase()));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				} else if (FindPolicyPageDTO.class.getFields()[i].getType().toString().toLowerCase().contains("int")) {
+					try {
+						FindPolicyPageDTO.class.getFields()[i].set(this, Integer.parseInt(
+								excelData.get(FindPolicyPageDTO.class.getFields()[i].getName().toLowerCase()).get(0)));
 
-			} else if (FindPolicyPageDTO.class.getFields()[i].getType().toString().toLowerCase().contains("int")) {
-				try {
-					FindPolicyPageDTO.class.getFields()[i].set(this, Integer.parseInt(
-							excelData.get(FindPolicyPageDTO.class.getFields()[i].getName().toLowerCase()).get(0)));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				} else {
+					try {
+						FindPolicyPageDTO.class.getFields()[i].set(this,
+								excelData.get(FindPolicyPageDTO.class.getFields()[i].getName().toLowerCase()).get(0));
 
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			} else {
-				try {
-					FindPolicyPageDTO.class.getFields()[i].set(this,
-							excelData.get(FindPolicyPageDTO.class.getFields()[i].getName().toLowerCase()).get(0));
-
-				} catch (Exception e) {
-					e.printStackTrace();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}
