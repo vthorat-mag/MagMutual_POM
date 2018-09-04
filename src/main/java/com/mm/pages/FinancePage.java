@@ -763,7 +763,8 @@ public class FinancePage extends CommonAction {
 		RateApolicyPage rateapolicypage  = new RateApolicyPage(driver);
 		CommonUtilities commutil = new CommonUtilities();
 		//String policyNo = rateapolicypage.policyNo();
-		selectDropdownByVisibleText(driver, policyActionDDL, financePageDTO.policyAction, "Policy Action");
+		Thread.sleep(2000);
+		selectDropdownByValue(driver, policyActionDDL, financePageDTO.policyAction, "Policy Action");
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + financePageDTO.policyNum + "')]")));
 		Thread.sleep(3000);
@@ -775,6 +776,8 @@ public class FinancePage extends CommonAction {
 		enterTextIn(driver, cancelCommentsCancelPopUp, financePageDTO.cancelComment, "Comments");
 		clickButton(driver, cancelBtnOnCancelPopUp, "Cancel");
 		invisibilityOfLoader(driver);
+		Thread.sleep(3000);
+		switchToParentWindowfromframe(driver);
 		return new FinancePage(driver);
 	}
 	

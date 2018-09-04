@@ -286,6 +286,8 @@ public class PolicyBinderPage extends CommonAction {
 			RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
 			RateAPolicyPageDTO rateApolicyPageDTO = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
 			rateapolicypage.searchBackUpPolicy();
+			/*PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
+			policybinderpage.copyToQuoteFromActionDropDownwithoutBackUpPolicy(rateApolicyPageDTO.backUpPolicyNum);*/
 			selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
 					policybinderpageDTO.valueOfPolicyActionEndorse, "Policy Action");
 		}
@@ -351,8 +353,6 @@ public class PolicyBinderPage extends CommonAction {
 				"Click Policy Actions>Copy to Quote. Verify Policy folder shows a new number, Phase show Submission.");
 		selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
 				policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action");
-		// selectDropdownByValue(driver, policyAction,
-		// policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action");
 		invisibilityOfLoader(driver);
 		Thread.sleep(10000);
 		// below commented code is for QA env
@@ -366,6 +366,46 @@ public class PolicyBinderPage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Click [OK]. Verify Policy folder shows a new number, Phase show Submission.");
 		clickButton(driver, Exit_Ok, "OK button");
+		Thread.sleep(2000);
+		switchToParentWindowfromframe(driver);
+		return new PolicySubmissionPage(driver);
+	}
+
+	// Select Copy To Quote from "Action DropoDown" for copy to quote TC.
+	// We don't have to select copy to quote option from action ddl in COpy to
+	// quote TC hence separate method is written for backup policy search.
+	public PolicySubmissionPage copyToQuoteFromActionDropDownForCopyToQuoteTC(String policyNum) throws Exception {
+		Thread.sleep(2000);
+		ExtentReporter.logger.log(LogStatus.INFO,
+				"Click Policy Actions>Copy to Quote. Verify Policy folder shows a new number, Phase show Submission.");
+		if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
+				policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action").equals("false")) {
+			RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
+			RateAPolicyPageDTO rateApolicyPageDTO = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
+			rateapolicypage.searchBackUpPolicy();
+			// PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
+			// policybinderpage.copyToQuoteFromActionDropDown(rateApolicyPageDTO.backUpPolicyNum);
+			selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
+					policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action");
+		}
+		Thread.sleep(5000);
+		invisibilityOfLoader(driver);
+		String getUpdatedPolicyNo = policyNo();
+		// below commented code is for QA env
+		/*
+		 * if(verifyCpatureTxnDetailsPageDisplayedOrNot(getUpdatedPolicyNo)==false) {
+		 * ExtentReporter.logger.log(LogStatus.INFO,
+		 * "Capture transaction details is NOT displayed."); }
+		 */
+		Thread.sleep(14000);
+		invisibilityOfLoader(driver);
+		switchToFrameUsingElement(driver,
+				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo() + "')]")));
+		ExtentReporter.logger.log(LogStatus.INFO,
+				"Click [OK]. Verify Policy folder shows a new number, Phase show Submission.");
+		if (Exit_Ok.isDisplayed()) {
+			click(driver, Exit_Ok, "OK button");
+		}
 		Thread.sleep(2000);
 		switchToParentWindowfromframe(driver);
 		return new PolicySubmissionPage(driver);

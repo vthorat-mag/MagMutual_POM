@@ -23,7 +23,7 @@ public class ClaimsDTO {
 	public String clientNameValue;
 	public String seperateCheck;
 	public List<String> transactionType;
-	public List<String> paymentType;
+	public String paymentType;
 	public List<String> vendorIDValue;
 	public List<String> taxIDType;
 	public List<String> transactionAmount;

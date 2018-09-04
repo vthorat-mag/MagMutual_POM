@@ -318,10 +318,9 @@ public class RateApolicyPage extends CommonAction {
 			ExtentReporter.logger.log(LogStatus.INFO, "Coverage for Primary Risk is displayed");
 			clickButton(driver, coverageTab, "Coverage Tab");
 			Thread.sleep(3000);
-			waitForElementToLoad(driver, 10, coverageList.get(0));
+			waitForElementToLoad(driver, 30, coverageList.get(0));
 			// If the policy View Mode is official then select Coverage Tab
 		} else if (currentViewMode.equals(rateApolicyPageDTO.viewModeWIP)) {
-
 			clickButton(driver, coverageTab, "Coverage Tab");
 			Thread.sleep(5000);
 			waitForElementToLoad(driver, 30, coverageList.get(0));

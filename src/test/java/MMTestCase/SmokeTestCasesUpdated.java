@@ -128,7 +128,7 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 			e.printStackTrace();
 		}
 	}
-/*
+
 	@Test(description = "Rate a policy that existed before the change or deployment to confirm it still displays as expected", groups = {
 			"Smoke Test" }, priority = 0)
 	public void TC42239() throws Exception {
@@ -289,8 +289,8 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 		policybinderpage.saveOption(policyNo);
 		exlUtil.writeData("TC42399", "PolicyNum", policyNo, 1, ExcelPath);
 		exlUtil.writeData("TC42240", "PolicyNum", policyNo, 1, ExcelPath);
-		exlUtil.writeData("TC42400", "PolicyNum", policyNo, 1, ExcelPath);
-		exlUtil.writeData("TC43666", "PolicyNum", policyNo, 1, ExcelPath);
+		//exlUtil.writeData("TC42400", "PolicyNum", policyNo, 1, ExcelPath);
+		//exlUtil.writeData("TC42666", "PolicyNum", policyNo, 1, ExcelPath); Temprory commented waiting for response from gail that this policy not to use for TC42666
 	}
 
 	@Test(description = "Hospital Verify Interactive Form", groups = { "Smoke Test" }, priority = 8)
@@ -358,7 +358,7 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 	}
 
 	@Test(description = "Hospital Create Claim", groups = { "Smoke Test" }, priority = 12)
-	public void TC43666() throws Exception {
+	public void TC42666() throws Exception {
 
 		LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
 		LoginPage loginpage = new LoginPage(driver);
@@ -408,13 +408,13 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 				.donwloadFinalSheetBySearchingAccountNo();
 	}
 	
-	//@Test(description = "Claims - Enter Transactions", groups = { "Smoke Test" },priority = 16)
+	@Test(description = "Claims - Enter Transactions", groups = { "Smoke Test" },priority = 16)
 	public void TC42252() throws Exception {
 		LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
 		LoginPage loginpage = new LoginPage(driver);
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToClaimsPageFromHomePageLink().searchClaim()
 				.openTransactionTab().addTransactionDataAndSaveTransaction();
-	}*/
+	}
 	
 	@Test(description = "FM - Hospital Verify Credit Applications", groups = {"Smoke Test" },priority = 17)
 		public void TC42248() throws Exception {
@@ -433,7 +433,7 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 					.receivableDownload(financePageDTO.CreditInstallmentAfterFileName);
 		}
 	
-	//@Test(description = "FM - Hospital Verify FM Installment", groups = { "Smoke Test" },priority = 18)
+	@Test(description = "FM - Hospital Verify FM Installment", groups = { "Smoke Test" },priority = 18)
 	public void TC42246()throws Exception {
 		LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
 		LoginPage loginpage = new LoginPage(driver);
@@ -475,7 +475,7 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 		//TODO- upload all excels and pdf to rally.
 	}
 
-	//@Test(description = "Hospital Verify Image Right", groups = { "Smoke Test" }, priority = 19)
+	@Test(description = "Hospital Verify Image Right", groups = { "Smoke Test" }, priority = 19)
 	public void TC42243() throws Exception {
 		LoginPageDTO lpDTO;
 		LoginPage loginpage;
