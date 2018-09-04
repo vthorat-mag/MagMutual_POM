@@ -128,7 +128,7 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 			e.printStackTrace();
 		}
 	}
-/*
+
 	@Test(description = "Rate a policy that existed before the change or deployment to confirm it still displays as expected", groups = {
 			"Smoke Test" }, priority = 0)
 	public void TC42239() throws Exception {
@@ -414,7 +414,7 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 		LoginPage loginpage = new LoginPage(driver);
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToClaimsPageFromHomePageLink().searchClaim()
 				.openTransactionTab().addTransactionDataAndSaveTransaction();
-	}*/
+	}
 	
 	@Test(description = "FM - Hospital Verify Credit Applications", groups = {"Smoke Test" },priority = 17)
 		public void TC42248() throws Exception {
