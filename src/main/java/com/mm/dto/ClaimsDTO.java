@@ -23,7 +23,7 @@ public class ClaimsDTO {
 	public String clientNameValue;
 	public String seperateCheck;
 	public List<String> transactionType;
-	public List<String> paymentType;
+	public String paymentType;
 	public List<String> vendorIDValue;
 	public List<String> taxIDType;
 	public List<String> transactionAmount;
@@ -35,37 +35,34 @@ public class ClaimsDTO {
 	public ClaimsDTO(Map<String, List<String>> excelData) {
 
 		for (int i = 0; i <= ClaimsDTO.class.getFields().length - 1; i++) {
-			if (ClaimsDTO.class.getFields()[i].getType().toString().toLowerCase().contains("java.util.list")) {
+			if (excelData.containsKey(ClaimsDTO.class.getFields()[i].getName().toLowerCase())) {
+				if (ClaimsDTO.class.getFields()[i].getType().toString().toLowerCase().contains("java.util.list")) {
+					try {
+						ClaimsDTO.class.getFields()[i].set(this,
+								excelData.get(ClaimsDTO.class.getFields()[i].getName().toLowerCase()));
 
-				// if
-				// (excelData.containsKey(ClaimsDTO.class.getFields()[i].getName().toLowerCase())){
-				// {
-				try {
-					ClaimsDTO.class.getFields()[i].set(this,
-							excelData.get(ClaimsDTO.class.getFields()[i].getName().toLowerCase()));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				} else if (ClaimsDTO.class.getFields()[i].getType().toString().toLowerCase().contains("int")) {
+					try {
+						ClaimsDTO.class.getFields()[i].set(this, Integer.parseInt(
+								excelData.get(ClaimsDTO.class.getFields()[i].getName().toLowerCase()).get(0)));
 
-			} else if (ClaimsDTO.class.getFields()[i].getType().toString().toLowerCase().contains("int")) {
-				try {
-					ClaimsDTO.class.getFields()[i].set(this, Integer
-							.parseInt(excelData.get(ClaimsDTO.class.getFields()[i].getName().toLowerCase()).get(0)));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				} else {
+					try {
+						ClaimsDTO.class.getFields()[i].set(this,
+								excelData.get(ClaimsDTO.class.getFields()[i].getName().toLowerCase()).get(0));
 
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			} else {
-				try {
-					ClaimsDTO.class.getFields()[i].set(this,
-							excelData.get(ClaimsDTO.class.getFields()[i].getName().toLowerCase()).get(0));
-
-				} catch (Exception e) {
-					e.printStackTrace();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
-
 		}
 
 	}

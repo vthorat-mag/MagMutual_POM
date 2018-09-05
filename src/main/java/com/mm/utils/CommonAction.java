@@ -1,15 +1,10 @@
 package com.mm.utils;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
-import java.awt.AWTException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-
-import org.apache.commons.io.FileUtils;
 import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -17,25 +12,21 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.RandomStringUtils;
-import org.openqa.selenium.Alert;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -55,14 +46,14 @@ public class CommonAction implements CommonActionInterface {
 
 	// Integer.valueOf(properties.prop.getProperty("Medium"));
 
-	int Low = 10;
-	int Medium = 30;
-	int High = 50;
+	protected int Low = 30;
+	protected int Medium = 90;
+	protected int High = 180;
 	String findPolicyQuotePage = "Find Policy/Quote";
 
 	public void selectValue(WebDriver driver, WebElement pageElement, String value) {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, Medium);
+			WebDriverWait wait = new WebDriverWait(driver, High);
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
 			Assert.assertTrue(pageElement.isDisplayed(), pageElement + " is Not displayed on screen.");
 			ExtentReporter.logger.log(LogStatus.PASS, "Selected value " + value);
@@ -75,8 +66,9 @@ public class CommonAction implements CommonActionInterface {
 	}
 
 	public void switchToSecondFramefromFirst(WebDriver driver, String frameID) {
-
 		List<WebElement> secondFrame = driver.findElements(By.id(frameID));
+		WebDriverWait wait = new WebDriverWait(driver, High);
+		wait.until(ExpectedConditions.visibilityOf(secondFrame.get(0)));
 		driver.switchTo().frame(secondFrame.get(0));
 
 	}
@@ -93,8 +85,10 @@ public class CommonAction implements CommonActionInterface {
 	}
 
 	public void switchToFrameUsingId(WebDriver driver, String frameName) throws InterruptedException {
-		Thread.sleep(3000);
 		try {
+			WebElement FrameNameEle = driver.findElement(By.name(frameName));
+			WebDriverWait wait = new WebDriverWait(driver, High);
+			wait.until(ExpectedConditions.visibilityOf(FrameNameEle));
 			driver.switchTo().frame(frameName);
 			ExtentReporter.logger.log(LogStatus.INFO, "Control switched to frame.");
 		} catch (Exception e) {
@@ -104,15 +98,20 @@ public class CommonAction implements CommonActionInterface {
 
 	}
 
-	public void switchToFrameUsingElement(WebDriver driver, WebElement element) throws Exception {
-		Thread.sleep(4000);
+	public Boolean switchToFrameUsingElement(WebDriver driver, WebElement element) throws Exception {
+		Boolean flag = null;
 		try {
+			WebDriverWait wait = new WebDriverWait(driver, High);
+			wait.until(ExpectedConditions.visibilityOf(element));
 			driver.switchTo().frame(element);
 			ExtentReporter.logger.log(LogStatus.INFO, "Control switched to frame.");
+			flag = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			ExtentReporter.logger.log(LogStatus.INFO, "Error while switching to frame.");
+			flag =false;
 		}
+		return flag;
 	}
 	
 	public void  captureScreenshot(WebDriver driver,String imageFileName) throws IOException 
@@ -133,13 +132,18 @@ public class CommonAction implements CommonActionInterface {
 		try {
 			driver.switchTo().defaultContent();
 			ExtentReporter.logger.log(LogStatus.PASS, "User Switched to default frame.");
+			//throws new Exception();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			ExtentReporter.logger.log(LogStatus.INFO, "Error while switching to default frame.");
+			Assert.assertTrue(false,"Error while switching to default frame.");
 		}
 	}
 
 	public String getSelectedTextFromDropDown(WebDriver driver, WebElement dropDownElement) {
+		WebDriverWait wait = new WebDriverWait(driver, High);
+		wait.until(ExpectedConditions.visibilityOf(dropDownElement));
 		Assert.assertTrue(dropDownElement.isDisplayed());
 		Select dropDownList = new Select(dropDownElement);
 		String selectedDDLValue = dropDownList.getFirstSelectedOption().getText();
@@ -154,7 +158,7 @@ public class CommonAction implements CommonActionInterface {
 	// Enter text values in the text field
 	public void enterTextIn(WebDriver driver, WebElement pageElement, String text, String textField) {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, Medium);
+			WebDriverWait wait = new WebDriverWait(driver, High);
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
 			Assert.assertTrue(pageElement.isDisplayed(), textField + " is not displayed on screen.");
 			pageElement.sendKeys(text);
@@ -169,7 +173,7 @@ public class CommonAction implements CommonActionInterface {
 	// Enter the data values which are not text, like date and amount.
 	public void enterDataIn(WebDriver driver, WebElement pageElement, String text, String textField) {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, Medium);
+			WebDriverWait wait = new WebDriverWait(driver, High);
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
 			Assert.assertTrue(pageElement.isDisplayed(), textField + " is not displayed on screen.");
 			pageElement.sendKeys(text);
@@ -185,7 +189,7 @@ public class CommonAction implements CommonActionInterface {
 
 	public void clickButton(WebDriver driver, WebElement pageElement, String buttonName) {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, Medium);
+			WebDriverWait wait = new WebDriverWait(driver, High);
 			wait.until(ExpectedConditions.elementToBeClickable(pageElement));
 			Assert.assertTrue(pageElement.isDisplayed(), buttonName + " button is Not displayed on screen.");
 			JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -210,7 +214,9 @@ public class CommonAction implements CommonActionInterface {
 		// TODO Auto-generated method stub
 	}
 
-	public void navigatetoMenuItemPage(WebDriver driver, WebElement mainMenu, WebElement menuItem) {
+	public void navigatetoMenuItemPage(WebDriver driver, WebElement mainMenu, WebElement menuItem) throws InterruptedException {
+		WebDriverWait wait = new WebDriverWait(driver, High);
+		wait.until(ExpectedConditions.visibilityOf(mainMenu));
 		Assert.assertTrue(mainMenu.isDisplayed());
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("arguments[0].scrollIntoView(true);", mainMenu);
@@ -223,8 +229,10 @@ public class CommonAction implements CommonActionInterface {
 
 	public String getPageTitle(WebDriver driver, String expectedPageTitle) throws InterruptedException {
 		invisibilityOfLoader(driver);
-		Thread.sleep(3000);
+		Thread.sleep(5000);
 		List<WebElement> getPageTitleFromPage = driver.findElements(By.xpath("//div[@class='pageTitle']"));
+		WebDriverWait wait = new WebDriverWait(driver, High);
+		//wait.until(ExpectedConditions.visibilityOfAllElements(getPageTitleFromPage));
 		try {
 			int i=0;
 			for (i = 0; i < getPageTitleFromPage.size(); i++) {
@@ -250,26 +258,31 @@ public class CommonAction implements CommonActionInterface {
 	}
 
 	public String getPageTitleWithPolicyNumber(WebDriver driver, String policyNum) throws InterruptedException {
-		Thread.sleep(5000);
-
 		List<WebElement> pageheaders = driver.findElements(By.xpath("//div[@class='pageTitle']"));
 		WebElement pageLoader = driver.findElement(By.xpath("//span[@class='txtOrange']"));
 		WebDriverWait wait = new WebDriverWait(driver, 40);
-		wait.until(ExpectedConditions.invisibilityOf(pageLoader));
+		/*wait.until(ExpectedConditions.invisibilityOf(pageLoader));
+		wait.until(ExpectedConditions.visibilityOf(pageheaders.get(0)));*/
 		Assert.assertEquals(pageheaders.get(1).getAttribute("innerHTML").trim(), "Policy Folder " + policyNum,
 				"Page title is not matching.");
 		return null;
 	}
 
 	public String getText(WebDriver driver, WebElement pageElement) {
-		WebDriverWait wait = new WebDriverWait(driver, Medium);
+		try {
+		WebDriverWait wait = new WebDriverWait(driver, High);
 		wait.until(ExpectedConditions.visibilityOf(pageElement));
+		}
+		catch(Exception e)
+		{
+			Assert.assertTrue(false,pageElement+" element not found.");
+		}
 		return pageElement.getAttribute("innerHTML");
 	}
 
 	public void clearTextBox(WebDriver driver, WebElement pageElement, String textField) {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, Medium);
+			WebDriverWait wait = new WebDriverWait(driver, High);
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
 			Assert.assertTrue(pageElement.isDisplayed(), textField + " is displayed");
 			pageElement.clear();
@@ -288,7 +301,7 @@ public class CommonAction implements CommonActionInterface {
 
 	public void click(WebDriver driver, WebElement pageElement, String ElementName) {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, Medium);
+			WebDriverWait wait = new WebDriverWait(driver, High);
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
 			Assert.assertTrue(pageElement.isDisplayed(), ElementName + " is not displayed on screen.");
 			pageElement.click();
@@ -303,7 +316,7 @@ public class CommonAction implements CommonActionInterface {
 	public void visibilityOfElement(WebDriver driver, WebElement pageElement, String text) {
 
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, Medium);
+			WebDriverWait wait = new WebDriverWait(driver, High);
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
 			Assert.assertTrue(pageElement.isDisplayed(), "Logo / text " + text + " is not displayed on the page.");
 			ExtentReporter.logger.log(LogStatus.PASS, "Logo / text " + text + " is displayed on page");
@@ -346,9 +359,9 @@ public class CommonAction implements CommonActionInterface {
 	public void selectDropdownByValue(WebDriver driver, WebElement element, String DropDownOption, String label) {
 
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, Medium);
+			WebDriverWait wait = new WebDriverWait(driver, High);
 			wait.until(ExpectedConditions.visibilityOf(element));
-			Thread.sleep(4000);
+			Thread.sleep(2000);
 			Assert.assertTrue(element.isDisplayed(),element.getText()+" is not displaye on page.");
 			Assert.assertTrue(element.isDisplayed(),element.getText()+" is not displaye on page.");
 			Select Sel = new Select(element);
@@ -365,13 +378,16 @@ public class CommonAction implements CommonActionInterface {
 	public String selectDropdownByValueFromPolicyActionDDL(WebDriver driver, WebElement element, String DropDownOption, String label) {
 
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, Medium);
+			WebDriverWait wait = new WebDriverWait(driver, High);
 			wait.until(ExpectedConditions.visibilityOf(element));
-			Thread.sleep(4000);
+			//Thread.sleep(2000);
 			Assert.assertTrue(element.isDisplayed(),element.getText()+" is not displaye on page.");
 			Select Sel = new Select(element);
 			Sel.selectByValue(DropDownOption);
 			ExtentReporter.logger.log(LogStatus.PASS, DropDownOption+" value is selected from " + label + " drop down list");
+			Thread.sleep(4000);
+			/*Alert alert = driver.switchTo().alert();
+       	 	alert.accept();*/
 			return "true";
 
 		} catch (Exception e) {
@@ -386,9 +402,9 @@ public class CommonAction implements CommonActionInterface {
 	public void selectDropdownByVisibleText(WebDriver driver, WebElement element, String DropDownOption, String label) {
 
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, Medium);
+			WebDriverWait wait = new WebDriverWait(driver, High);
 			wait.until(ExpectedConditions.visibilityOf(element));
-			Thread.sleep(4000);
+			Thread.sleep(2000);
 			Assert.assertTrue(element.isDisplayed(),element.getText()+" is not displaye on page.");
 			Select Sel = new Select(element);
 			Sel.selectByVisibleText(DropDownOption);
@@ -397,6 +413,7 @@ public class CommonAction implements CommonActionInterface {
 		} catch (Exception e) {
 			e.printStackTrace();
 			ExtentReporter.logger.log(LogStatus.FAIL, "No value is selected from " + label + " drop down list");
+			Assert.assertTrue(false,"No value is selected from " + label + " drop down list");
 		}
 
 	}
@@ -405,7 +422,7 @@ public class CommonAction implements CommonActionInterface {
 			String attributeName, String fieldName) {
 
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, Medium);
+			WebDriverWait wait = new WebDriverWait(driver, High);
 			wait.until(ExpectedConditions.visibilityOf(pageElement));
 			Assert.assertEquals(pageElement.getAttribute(attributeName).trim(), expectedValue,
 					"Value entered/ selected in " + fieldName + " is NOT as expected. Expected value is "
@@ -440,7 +457,7 @@ public class CommonAction implements CommonActionInterface {
 
 	public void waitForElementToLoad(WebDriver driver, int time, WebElement element) {
 
-		WebDriverWait wait = new WebDriverWait(driver, time);
+		WebDriverWait wait = new WebDriverWait(driver, High);
 		wait.until(ExpectedConditions.visibilityOf(element));
 
 	}
@@ -453,8 +470,10 @@ public class CommonAction implements CommonActionInterface {
 
 	public static boolean isAlertPresent(WebDriver driver) throws InterruptedException{
          try{
-        	 Thread.sleep(5000);
-             driver.switchTo().alert();
+        	 Thread.sleep(2000);
+        	 Alert alert = driver.switchTo().alert();
+        	 alert.accept();
+             
              return true;
              }catch(NoAlertPresentException ex){
                    return false;
@@ -467,13 +486,32 @@ public class CommonAction implements CommonActionInterface {
 		return saveAlertText;
 	}
 
-	public void invisibilityOfLoader(WebDriver driver) {
-
+	public void invisibilityOfLoader(WebDriver driver) throws InterruptedException {
+		int i=0;
+		do {
+			Thread.sleep(2000);
 		try {
 			if (verifypageloaderdisplayedornot(driver) == true) {
 				WebElement pageLoader = driver.findElement(By.xpath("//span[@class='txtOrange']"));
-				WebDriverWait wait = new WebDriverWait(driver, Medium);
+				WebDriverWait wait = new WebDriverWait(driver, High);
+				wait.until(ExpectedConditions.invisibilityOf(pageLoader));
+				ExtentReporter.logger.log(LogStatus.PASS, "Page Loader disappeared sucessfully.");
+				i++;
+			}
+		} catch (Exception e) {
+			ExtentReporter.logger.log(LogStatus.WARNING, "Page is taking longer time than usual for loading.");
+			Assert.assertTrue(false);
+		}
+		}while(i==3);
+	}
+	
+	public void invisibilityOfProcessesingWindow(WebDriver driver) {
+
+		try {
+			if (verifypageloaderdisplayedornot(driver) == true) {
+				WebElement pageLoader = driver.findElement(By.xpath("//td[@class='infomessage']"));
 				Thread.sleep(2000);
+				WebDriverWait wait = new WebDriverWait(driver, High);
 				wait.until(ExpectedConditions.invisibilityOf(pageLoader));
 				ExtentReporter.logger.log(LogStatus.PASS, "Page Loader disappeared sucessfully.");
 			}
@@ -486,11 +524,13 @@ public class CommonAction implements CommonActionInterface {
 	public void copyFile(String saveFilName) {
 		File source = new File("C:\\TempsaveExcel\\OnDemandInvoiceCredit.xlsx");
 		File dest = new File("C:\\SmokeTestFM\\" + saveFilName + ".xlsx");
+		File dest2 = new File("C:\\saveExcel\\" + saveFilName + ".xlsx");
 		try {
 			FileUtils.copyFile(source, dest);
+			FileUtils.copyFile(source, dest2);
 		} catch (IOException e) {
 			e.printStackTrace();
-			Assert.assertTrue(false,"Error while copying file from location C:\\TempsaveExcel\\ TO C:\\SmokeTestFM");
+			Assert.assertTrue(false,"Error while copying file from location C:\\TempsaveExcel\\ TO C:\\SmokeTestFM or C:\\saveExcel");
 		}
 	}
 
@@ -600,16 +640,17 @@ public class CommonAction implements CommonActionInterface {
 	public void saveOption(WebDriver driver, WebElement saveOptionBtn, WebElement saveAsDropDown,
 			WebElement saveOKBtn, WebElement exitOK, String saveAsValue,String policyNo)
 			throws Exception {
-		Thread.sleep(2000);
+		Thread.sleep(5000);
+		driver.switchTo().defaultContent();
+		WebDriverWait wait = new WebDriverWait(driver, High);
+		wait.until(ExpectedConditions.visibilityOf(saveOptionBtn));
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options & verify Save as window displays.");
-		waitForElementToLoad(driver, 15, saveOptionBtn);
+		//waitForElementToLoad(driver, 15, saveOptionBtn);
 		clickButton(driver, saveOptionBtn, "Save Option");
-		Thread.sleep(3000);
+		Thread.sleep(5000);
 		invisibilityOfLoader(driver);
-		Thread.sleep(2000);
-		WebElement iframeEle = driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]"));
 		//switchToFrameUsingId(driver, "popupframe1");
-		switchToFrameUsingElement(driver, iframeEle);
+		switchToFrameUsingElement(driver, driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]")));
 		getPageTitle(driver, "Save As");
 		selectDropdownByValue(driver, saveAsDropDown, saveAsValue, "Selected " + saveAsValue);
 		ExtentReporter.logger.log(LogStatus.INFO, "Select " + saveAsValue + " Click [OK]& verify Message is closed and WIP is saved as"+ saveAsValue);
@@ -624,6 +665,7 @@ public class CommonAction implements CommonActionInterface {
 		switchToFrameUsingElement(driver, iframeEle1);
 		ExtentReporter.logger.log(LogStatus.INFO, "Save as Official window displays");
 		clickButton(driver, exitOK, "Workflow exit OK");
+		Thread.sleep(3000);
 		switchToParentWindowfromframe(driver);
 		Thread.sleep(2000);
 	}
@@ -632,7 +674,9 @@ public class CommonAction implements CommonActionInterface {
 	{
 		String flag = null;
 		try {
-			WebElement policyNotFoudErrorMsg = driver.findElement(By.xpath("//td[@class='errormessage']"));
+			WebElement policyNotFoudErrorMsg = driver.findElement(By.xpath("//td[@class='errormessage'][1]"));
+			WebDriverWait wait = new WebDriverWait(driver, High);
+			wait.until(ExpectedConditions.visibilityOf(policyNotFoudErrorMsg));
 			if(policyNotFoudErrorMsg.isDisplayed())
 			{
 				flag = "true";
@@ -645,12 +689,16 @@ public class CommonAction implements CommonActionInterface {
 		return flag;
 		}
 
-	public void policySearch(WebDriver driver, String policyNo, WebElement policySearchTxtBox, WebElement searchBtn,WebElement policyList) throws Exception{
+	public String policySearch(WebDriver driver, String policyNo, WebElement policySearchTxtBox, WebElement searchBtn,WebElement policyList) throws Exception{
+		String flag = null;
+		WebDriverWait wait = new WebDriverWait(driver, High);
+		wait.until(ExpectedConditions.visibilityOf(policySearchTxtBox));
 		PolicyBinderPage policybinderpage = new PolicyBinderPage(driver); 
 		ExtentReporter.logger.log(LogStatus.INFO, "Enter in active Hospital/Facility policy number in Enter Policy # entry box, Click Search. Policy Will display" );
 		clearTextBox(driver, policySearchTxtBox, "Enter Policy # text field");
 		enterTextIn(driver, policySearchTxtBox, policyNo, "Enter Policy # text field");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click search button and Verify full policy page is displayed");
+		Thread.sleep(1000);
 		click(driver, searchBtn, "Search button");
 		Thread.sleep(1000);
 		invisibilityOfLoader(driver);
@@ -658,14 +706,21 @@ public class CommonAction implements CommonActionInterface {
 			//clickButton(driver, policyList, "First policy from Searched Policies");
 			Actions action = new Actions(driver);
 			action.click(policyList).build().perform();
-		}else if(verifypolicyNotDisplayErrorMsg(driver).equals("trrue")){
-			ExtentReporter.logger.log(LogStatus.FAIL, "Policy is not available, please enter another/correct policy Number.");
-			Assert.assertTrue(false, "Policy is not available, please enter another/correct policy Number.");
+			flag = "true";
+		}else if(verifypolicyNotDisplayErrorMsg(driver).equals("true")){
+			WebElement policyNotFoudErrorMsg = driver.findElement(By.xpath("//td[@class='errormessage'][1]"));
+			ExtentReporter.logger.log(LogStatus.WARNING, "Policy is not available because of error  -"+ policyNotFoudErrorMsg.getAttribute("innerHTML"));
+			ExtentReporter.logger.log(LogStatus.INFO, "Searching for backUp policy.");
+			RateApolicyPage rpp = new RateApolicyPage(driver);
+			rpp.searchBackUpPolicy();
+			flag = "false";
 		}
 		else{
 			getPageTitle(driver, "Policy Folder "+policybinderpage.policyNo());
 			ExtentReporter.logger.log(LogStatus.INFO, "Policy list is displayed after policy Search");
+			flag = "true";
 		}
+		return flag;
 	}
 
 	public void claimsSearch(WebDriver driver, String policyNo, WebElement policySearchTxtBox, WebElement searchBtn,WebElement policyList) throws Exception{

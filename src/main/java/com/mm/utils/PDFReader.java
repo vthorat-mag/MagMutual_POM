@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.TimeUnit;
 
 import javax.management.relation.InvalidRelationServiceException;
 
@@ -19,6 +20,7 @@ import org.apache.pdfbox.io.RandomAccessRead;
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Action;
@@ -32,6 +34,7 @@ import com.mm.pages.RateApolicyPage;
 import com.relevantcodes.extentreports.LogStatus;
 
 import bsh.Parser;
+import okio.Timeout;
 
 public class PDFReader extends CommonAction {
 	CommonUtilities comUtil = new CommonUtilities();
@@ -48,7 +51,13 @@ public class PDFReader extends CommonAction {
 		String[] savePDFPath = 
 				{System.getProperty("user.dir") + "\\src\\main\\resources\\StoredPDF\\pdfDocument.pdf"};
 		String[] executionPath = {System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\savePdf.exe"};
-		Runtime.getRuntime().exec(executionPath);
+		Runtime.getRuntime().exec(executionPath).waitFor(30, TimeUnit.SECONDS);
+		if(isAlertPresent(driver)==false)
+		{
+			ExtentReporter.logger.log(LogStatus.INFO,
+					"Alert[Optional] is NOT present.");
+		}
+		Thread.sleep(6000);
 		//ProcessBuilder pb = new ProcessBuilder(executionPath);
 		return new PDFReader(driver);
 	}
@@ -62,7 +71,7 @@ public class PDFReader extends CommonAction {
 
 	//Logic to verify PDF content.
 	public PolicyBinderPage verifyPdfContent() throws Exception {
-		Thread.sleep(15000);
+		/*Thread.sleep(15000);
 		//getPageTitle(driver, "Policy Folder "+PolicyNo);
 		boolean flag = false;
 		PDFTextStripper pdfStripper = null;
@@ -94,13 +103,14 @@ public class PDFReader extends CommonAction {
 			  for (i =0;i<pdfreaderdto.verifyPDFcontent.size();i++)
 				{
 				Assert.assertTrue(parsedText.contains(pdfreaderdto.verifyPDFcontent.get(i)), "PDF dose not content '" + pdfreaderdto.verifyPDFcontent.get(i) + "'.");
-				ExtentReporter.logger.log(LogStatus.INFO, "Verify footer display '" + pdfreaderdto.verifyPDFcontent.get(i) + "'.");
+				ExtentReporter.logger.log(LogStatus.INFO, "Verify PDF display '" + pdfreaderdto.verifyPDFcontent.get(i) + "'.");
 				break;
 			}
 		}catch (Exception e){
-				ExtentReporter.logger.log(LogStatus.FAIL, "Expceted value  is not present in PDF.");
+				ExtentReporter.logger.log(LogStatus.FAIL, pdfreaderdto.verifyPDFcontent.get(i)+" value  is not present in PDF.");
 				Assert.assertTrue(false);
-		}
+		}*/
+		switchToParentWindowfromframe(driver);
 		return new PolicyBinderPage(driver);
 	}
 

@@ -104,7 +104,7 @@ public class PolicyQuotePage extends CommonAction {
 	@FindBy(name = "workflowExit_Ok")
 	WebElement okPolicySaveAsWIPPopup;
 
-	@FindBy(id = "PM_COMMON_TABS_SAVE")
+	@FindBy(xpath = "//div[@class='horizontalButtonCollection'][1]//input[@value='Save Options'][1]")
 	WebElement saveOptionBtn;
 
 	@FindBy(xpath = "//select[@name='saveAsCode']")
@@ -164,6 +164,8 @@ public class PolicyQuotePage extends CommonAction {
 
 	// Identify Policy number from page.
 	public String policyNo() {
+		WebDriverWait wait = new WebDriverWait(driver, 180);
+		wait.until(ExpectedConditions.elementToBeClickable(pageHeaderForPolicyFolder));
 		String profileNoLable = pageHeaderForPolicyFolder.getAttribute("innerHTML");
 		String[] portfolioNo = profileNoLable.split(" ", 3);
 		return portfolioNo[2];
@@ -171,7 +173,7 @@ public class PolicyQuotePage extends CommonAction {
 
 	// Select Copy to action from "Action DropDown".
 	public PolicyQuotePage CopyOptionFromActionDropDown() throws Exception {
-		Thread.sleep(6000);
+		//Thread.sleep(6000);
 		invisibilityOfLoader(driver);
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Click Policy Actions>Copy>Ok and verify Policy displays in Indication phase.");
@@ -181,11 +183,22 @@ public class PolicyQuotePage extends CommonAction {
 			RateAPolicyPageDTO rateApolicyPageDTO = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
 			rateapolicypage.searchBackUpPolicy();
 			PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
-			policybinderpage.copyToQuoteFromActionDropDown(rateApolicyPageDTO.backUpPolicyNum);
 			selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.valueOfPolicyActionCopy, "Policy Action");
 		}
 		return new PolicyQuotePage(driver);
 	}
+	
+	// Select Copy to action from "Action DropDown" without search for backup policy.
+		public PolicyQuotePage CopyOptionFromActionDropDownwithoutBackupPolicy() throws Exception {
+			Thread.sleep(6000);
+			invisibilityOfLoader(driver);
+			ExtentReporter.logger.log(LogStatus.INFO,
+					"Click Policy Actions>Copy>Ok and verify Policy displays in Indication phase.");
+				selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.valueOfPolicyActionCopy, "Policy Action");
+			return new PolicyQuotePage(driver);
+		}
+	
+	
 
 	// Search Policy from Search Policy text field.
 	public RateApolicyPage searchPolicy(String policy_no) throws Exception {
@@ -200,12 +213,13 @@ public class PolicyQuotePage extends CommonAction {
 
 	// Coverage details flow.
 	public void coverageDetailsSelect() throws InterruptedException {
-		Thread.sleep(3000);
+		//Thread.sleep(3000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Coverage tab & verify Coverage tab is displayed.");
 		clickButton(driver, coverageTab, "Coverage");
 		Thread.sleep(3000);
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Select Primary risk in DDL if not selected & verify Primary risk is selected and coverages are displayed.");
+		Thread.sleep(2000);
 		Assert.assertEquals(coverageList.get(0).getAttribute("innerHTML"), policyquotepageDTO.riskType,
 				"Coverage for Primary Risk is NOT displayed");
 	}
@@ -272,7 +286,7 @@ public class PolicyQuotePage extends CommonAction {
 
 	// Rate A functionality flow.
 	public PolicyQuotePage rateFunctionality(String policyNo) throws Exception {
-		Thread.sleep(3000);
+		//Thread.sleep(3000);
 		RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
 		rateapolicypage.rateFunctionality(policyNo);
 		return new PolicyQuotePage(driver);
@@ -339,7 +353,10 @@ public class PolicyQuotePage extends CommonAction {
 	// Click preview tab.
 	public PDFReader clickPreviewTab(String policyNumber) throws InterruptedException {
 		invisibilityOfLoader(driver);
-		Thread.sleep(3000);
+		//visibilityOfElement(driver, PreviewTab, "Preview Tab");
+		WebDriverWait wait = new WebDriverWait(driver, High);
+		wait.until(ExpectedConditions.visibilityOf(PreviewTab));
+		//Thread.sleep(6000);
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Click [Preview]& verify Preview window displays with Form Printing on Form's List");
 		// ExtentReporter.logger.log(LogStatus.INFO, "Verify CHG 08 form is displayed
@@ -347,16 +364,19 @@ public class PolicyQuotePage extends CommonAction {
 		clickButton(driver, PreviewTab, "Preview");
 		Thread.sleep(10000);
 		invisibilityOfLoader(driver);
+		verifySaveAsPopUp(policyNumber);
 		verifyPDFgenratedOrNot();
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Click the x to close the Preview screen. Verify Preview screen closes");
-		verifySaveAsPopUp(policyNumber);
 		Thread.sleep(5000);
 		return new PDFReader(driver);
 	}
 
 	public void verifyPDFgenratedOrNot() {
 		try {
+			
+			WebDriverWait wait = new WebDriverWait(driver, Low);
+			wait.until(ExpectedConditions.elementToBeClickable(pdfErrorForm));
 			switchToFrameUsingElement(driver, pdfErrorForm);
 			String errorMsgForPDF = pdfErrorMsg.getAttribute("innerHTML");
 			errorMsgForPDF.contains(PDFErrorMsgContains);
@@ -392,15 +412,14 @@ public class PolicyQuotePage extends CommonAction {
 		if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.policyActionValue, "Policy Action").equals("false")) {
 			RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
 			RateAPolicyPageDTO rateApolicyPageDTO = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
-			rateapolicypage.searchBackUpPolicy();
+			rateapolicypage.searchPolicy(rateApolicyPageDTO.backUpPolicyNum);
 			PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
-			//policybinderpage.copyToQuoteFromActionDropDown(rateApolicyPageDTO.backUpPolicyNum);
 			selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.policyActionValue, "Policy Action");
 		}
 		
 		
 		//selectDropdownByVisibleText(driver, policyAction, policyquotepageDTO.policyActionValue, "Policy Action");
-		Thread.sleep(2000);
+		Thread.sleep(5000);
 		invisibilityOfLoader(driver);
 		switchToFrameUsingId(driver, "popupframe1");
 		getPageTitle(driver, captureTranxDetailsWindowTitle);

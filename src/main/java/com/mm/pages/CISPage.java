@@ -289,7 +289,7 @@ public class CISPage extends CommonAction {
 								executor1.executeScript("arguments[0].click();", selectedMainTab);
 								executor1.executeScript("arguments[0].click();", tabMenuOption1.get(j));
 								invisibilityOfLoader(driver);
-								Thread.sleep(2000);
+								Thread.sleep(8000);
 								// verifying the page title of an open window
 								verifyPageTitleForTheOpenWindow(displayedWindowTitle,
 										oCISPageDTO.windowTitlesForSubMenuTabs.get(k) + " " + oCISPageDTO.clientNameValue,

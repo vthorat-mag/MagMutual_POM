@@ -34,37 +34,40 @@ public class RateAPolicyPageDTO {
 	public RateAPolicyPageDTO(Map<String, List<String>> excelData) {
 
 		for (int i = 0; i <= RateAPolicyPageDTO.class.getFields().length - 1; i++) {
-			if (RateAPolicyPageDTO.class.getFields()[i].getType().toString().toLowerCase().contains("java.util.list")) {
+			if (excelData.containsKey(RateAPolicyPageDTO.class.getFields()[i].getName().toLowerCase())) {
+				if (RateAPolicyPageDTO.class.getFields()[i].getType().toString().toLowerCase()
+						.contains("java.util.list")) {
 
-				// if
-				// (excelData.containsKey(RateAPolicyPageDTO.class.getFields()[i].getName().toLowerCase())){
-				// {
-				try {
-					RateAPolicyPageDTO.class.getFields()[i].set(this,
-							excelData.get(RateAPolicyPageDTO.class.getFields()[i].getName().toLowerCase()));
+					// if
+					// (excelData.containsKey(RateAPolicyPageDTO.class.getFields()[i].getName().toLowerCase())){
+					// {
+					try {
+						RateAPolicyPageDTO.class.getFields()[i].set(this,
+								excelData.get(RateAPolicyPageDTO.class.getFields()[i].getName().toLowerCase()));
 
-				} catch (Exception e) {
-					e.printStackTrace();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+
+				} else if (RateAPolicyPageDTO.class.getFields()[i].getType().toString().toLowerCase().contains("int")) {
+					try {
+						RateAPolicyPageDTO.class.getFields()[i].set(this, Integer.parseInt(
+								excelData.get(RateAPolicyPageDTO.class.getFields()[i].getName().toLowerCase()).get(0)));
+
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				} else {
+					try {
+						RateAPolicyPageDTO.class.getFields()[i].set(this,
+								excelData.get(RateAPolicyPageDTO.class.getFields()[i].getName().toLowerCase()).get(0));
+
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 
-			} else if (RateAPolicyPageDTO.class.getFields()[i].getType().toString().toLowerCase().contains("int")) {
-				try {
-					RateAPolicyPageDTO.class.getFields()[i].set(this, Integer.parseInt(
-							excelData.get(RateAPolicyPageDTO.class.getFields()[i].getName().toLowerCase()).get(0)));
-
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			} else {
-				try {
-					RateAPolicyPageDTO.class.getFields()[i].set(this,
-							excelData.get(RateAPolicyPageDTO.class.getFields()[i].getName().toLowerCase()).get(0));
-
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
 			}
-
 		}
 	}
 }

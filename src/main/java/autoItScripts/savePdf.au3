@@ -3,11 +3,14 @@ Example()
 
 Func Example()
 
-	Sleep(5000)
-	send("{TAB 9}") 
+	;Sleep(18000)	
+	;send("{TAB 9}") 
 	;send("{ENTER}")
-	Sleep(4000)
-	ControlClick("Policy Information - Internet Explorer","AVPageView","AVL_AVView26")
+	Sleep(2000)
+	WinWaitActive("[CLASS:IEFrame]","",10)
+	ControlClick("[CLASS:IEFrame]","","AVL_AVView26")
+	;WinActivate("[CLASS:IEFrame]","",10)
+	Sleep(1000)
 	send("{CTRLDOWN}")
 	send("{SHIFTDOWN}")
 	send("{s down}")
@@ -15,7 +18,7 @@ Func Example()
 	send("{CTRLUP}")
 	send("{SHIFTUP}")
 	send("{s up}")
-	
+	Sleep(1000)
 	ControlFocus("Save As","","Edit1")
 	ControlSend("Save As","","Edit1","C:\savePDF\verifyPDF.pdf");
 	ControlClick("Save As","&Save","Button1")
@@ -25,7 +28,7 @@ Func Example()
 	else 
 		send("{TAB}")
 	EndIf
-	Sleep(2000)
+	Sleep(5000)
 	send("{TAB 8}") 
 	send("{ENTER}")
 	; Wait 10 seconds for the Run dialogue window to appear.

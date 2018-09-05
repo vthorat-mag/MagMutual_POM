@@ -10,37 +10,34 @@ public class pdfReaderDTO {
 	public pdfReaderDTO(Map<String, List<String>> excelData) {
 
 		for (int i = 0; i <= pdfReaderDTO.class.getFields().length - 1; i++) {
-			if (pdfReaderDTO.class.getFields()[i].getType().toString().toLowerCase().contains("java.util.list")) {
+			if (excelData.containsKey(pdfReaderDTO.class.getFields()[i].getName().toLowerCase())) {
+				if (pdfReaderDTO.class.getFields()[i].getType().toString().toLowerCase().contains("java.util.list")) {
+					try {
+						pdfReaderDTO.class.getFields()[i].set(this,
+								excelData.get(pdfReaderDTO.class.getFields()[i].getName().toLowerCase()));
 
-				// if
-				// (excelData.containsKey(pdfReaderDTO.class.getFields()[i].getName().toLowerCase())){
-				// {
-				try {
-					pdfReaderDTO.class.getFields()[i].set(this,
-							excelData.get(pdfReaderDTO.class.getFields()[i].getName().toLowerCase()));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				} else if (pdfReaderDTO.class.getFields()[i].getType().toString().toLowerCase().contains("int")) {
+					try {
+						pdfReaderDTO.class.getFields()[i].set(this, Integer.parseInt(
+								excelData.get(pdfReaderDTO.class.getFields()[i].getName().toLowerCase()).get(0)));
 
-			} else if (pdfReaderDTO.class.getFields()[i].getType().toString().toLowerCase().contains("int")) {
-				try {
-					pdfReaderDTO.class.getFields()[i].set(this, Integer.parseInt(
-							excelData.get(pdfReaderDTO.class.getFields()[i].getName().toLowerCase()).get(0)));
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				} else {
+					try {
+						pdfReaderDTO.class.getFields()[i].set(this,
+								excelData.get(pdfReaderDTO.class.getFields()[i].getName().toLowerCase()).get(0));
 
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			} else {
-				try {
-					pdfReaderDTO.class.getFields()[i].set(this,
-							excelData.get(pdfReaderDTO.class.getFields()[i].getName().toLowerCase()).get(0));
-
-				} catch (Exception e) {
-					e.printStackTrace();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
-
 		}
 	}
 }
