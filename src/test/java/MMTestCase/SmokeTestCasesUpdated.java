@@ -289,8 +289,8 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 		policybinderpage.saveOption(policyNo);
 		exlUtil.writeData("TC42399", "PolicyNum", policyNo, 1, ExcelPath);
 		exlUtil.writeData("TC42240", "PolicyNum", policyNo, 1, ExcelPath);
-		//exlUtil.writeData("TC42400", "PolicyNum", policyNo, 1, ExcelPath);
-		//exlUtil.writeData("TC42666", "PolicyNum", policyNo, 1, ExcelPath); Temprory commented waiting for response from gail that this policy not to use for TC42666
+		exlUtil.writeData("TC42400", "PolicyNum", policyNo, 1, ExcelPath);
+		exlUtil.writeData("TC43666", "PolicyNum", policyNo, 1, ExcelPath);
 	}
 
 	@Test(description = "Hospital Verify Interactive Form", groups = { "Smoke Test" }, priority = 8)
