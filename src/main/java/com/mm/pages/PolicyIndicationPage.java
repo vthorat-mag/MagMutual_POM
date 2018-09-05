@@ -499,14 +499,14 @@ public class PolicyIndicationPage extends CommonAction {
 
 		Thread.sleep(2000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Coverage Tab. Verify Coverage tab displays with the primary defaulting in the dropdown");
-		click(driver, Coverage_tab, "Coverage tab");
+		clickButton(driver, Coverage_tab, "Coverage tab");
 		return new PolicyIndicationPage(driver);
 	}
 	
 	public PolicyIndicationPage selectAddCoverageButton() throws Exception {
 		Thread.sleep(1000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Add. Verify Select Coverage window displays");
-		click(driver, Add_Coverage, "Add button");
+		clickButton(driver, Add_Coverage, "Add button");
 		Thread.sleep(3000);
 		switchToFrameUsingId(driver, "popupframe1");
 		return new PolicyIndicationPage(driver);
@@ -593,9 +593,9 @@ public class PolicyIndicationPage extends CommonAction {
 	public PolicyIndicationPage closeAddCoverageWindow() throws Exception {
 		Thread.sleep(3000);
 		ExtentReporter.logger.log(LogStatus.INFO,"Click Select. Verify Information has been entered and coverage has been added to primary risk");
-		click(driver, Select_coverage, "Select button for coverage");
+		clickButton(driver, Select_coverage, "Select button for coverage");
 		invisibilityOfLoader(driver);
-		Thread.sleep(2000);
+		Thread.sleep(6000);
 		switchToParentWindowfromframe(driver);
 		
 		return new PolicyIndicationPage(driver);

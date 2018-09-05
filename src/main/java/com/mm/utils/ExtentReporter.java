@@ -16,7 +16,8 @@ public class ExtentReporter {
 	public static String screenshotfolderpath;
 	public static String filePath;
 	public static ExtentReports report;
-	public void createReportFolder(String suiteName)
+	public static String excelPath;
+	public String  createReportFolder(String suiteName)
 	{
 		 //Method to generate Report Folder and File to given FilePath using Framework.properties
 		
@@ -35,5 +36,6 @@ public class ExtentReporter {
 		 //new ExtentReports(filePath);
 		 report = new ExtentReports(filePath);
 		 //extent.loadConfig(new File("extent-config.xml"));
+		return reportFolderPath;
 	}
 }

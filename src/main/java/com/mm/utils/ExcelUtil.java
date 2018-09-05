@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -56,7 +57,7 @@ public class ExcelUtil {
 	{
 		Thread.sleep(6000);
 		String[] executionPath = {System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\saveExcel.exe"};
-		Runtime.getRuntime().exec(executionPath);
+		Runtime.getRuntime().exec(executionPath).waitFor(30, TimeUnit.SECONDS);
 		Thread.sleep(12000);
 	}
 	
