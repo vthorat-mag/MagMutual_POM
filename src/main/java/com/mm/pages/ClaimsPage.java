@@ -290,28 +290,38 @@ public class ClaimsPage extends CommonAction {
 		//Logic to add first transaction value.
 		String invoiceNumber = addTransactionDetails(claimsdto.transactionType.get(i), claimsdto.paymentType,claimsdto.vendorIDValue.get(i), claimsdto.taxIDType.get(i), claimsdto.transactionAmount.get(i),i);
 		clickButton(driver, saveTransactionBtn, "Save");
-		// After save button, get alert message in variable and verify alert pop up message
-		if(checkduplicateClaimWindow(duplicateTransactionPageTitle)==true)
-		{
-			clickButton(driver, saveAsClaimBtnOnPsblDuplciateClaimPage, "Save As Claim");
-			invisibilityOfLoader(driver);
-			switchToParentWindowfromframe(driver);
-			switchToFrameUsingId(driver, "popupframe1");
-			Thread.sleep(3000);
-		}else{
-			ExtentReporter.logger.log(LogStatus.INFO, "Duplicat Claims window is not displayed.");
-		}
-		/*switchToParentWindowfromframe(driver);
-		switchToFrameUsingId(driver, "popupframe1");*/
+			// After save button, get alert message in variable and verify alert pop up
+			// message
+			if (checkduplicateClaimWindow(duplicateTransactionPageTitle) == true) {
+				clickButton(driver, saveAsClaimBtnOnPsblDuplciateClaimPage, "Save As Claim");
+				invisibilityOfLoader(driver);
+				isAlertPresent(driver);
+				Thread.sleep(8000);
+				switchToParentWindowfromframe(driver);
+				switchToFrameUsingId(driver, "popupframe1");
+				Thread.sleep(3000);
+			} else {
+				ExtentReporter.logger.log(LogStatus.INFO, "Duplicat Claims window is not displayed.");
+			}
 		ExtentReporter.logger.log(LogStatus.INFO, "Transaction is entered and the Alert message is displayed");
-		Thread.sleep(80000);
+		int counter =0;
+		do{
+			Thread.sleep(60000);
+			if(isAlertPresent(driver) ==true)
+			{
+				break;
+			}
+			counter++;
+		}
+		while(counter<3);
 		/*String alertText= getAlertText(driver);
 		verifySaveAlertMessage(alertText,claimsdto.claimNum,claimsdto.transactionAmount.get(i),claimsdto.transactionType.get(i));*/
 		//close Add transaction window
-		isAlertPresent(driver);
 		closeAddTransactionWindow();
+		switchToParentWindowfromframe(driver);
 		ExtentReporter.logger.log(LogStatus.INFO, "Verify Message window closes and transaction is listed at the top of the Transaction list");
 		Thread.sleep(2000);
+		//switchToParentWindowfromframe(driver);
 		visibilityOfElement(driver, transactionListTitle, "Transaction List");
 		//verify transaction is listed at the top of transaction list
 		ExtentReporter.logger.log(LogStatus.INFO, "Transactions display as entered in the Transaction List.");
@@ -327,6 +337,7 @@ public class ClaimsPage extends CommonAction {
 		selectDropdownByVisibleText(driver, transactionType, txnType, "Trans Type");
 		Thread.sleep(1000);
 		selectDropdownByVisibleText(driver, paymentType, payType, "Pay Type");
+		Thread.sleep(1000);
 		//Click PayeeCISNameSearchIcon
 		clickButton(driver, searchIconPayeeName, "Search Icon for Payee Name");
 		//switch to pop up window and call searchEntity and selectEntity methods from home page
@@ -359,7 +370,6 @@ public class ClaimsPage extends CommonAction {
 	
 	//Verify added transaction is available at the top of Transaction List.
 	public void verifyAddedTransactionIsListedInTransactionList(String InvoiceNum) throws Exception {
-		visibilityOfElement(driver,InvoiceNumberList.get(0),"Invoice Number List");
 		boolean flag = false;
 		try {
 			for (int j = 0; j < InvoiceNumberList.size(); j++) {
@@ -370,21 +380,6 @@ public class ClaimsPage extends CommonAction {
 					flag = true;
 					break;
 				}
-				/*
-				 * //Compare column values Trans type and Trans Amount from transaction list
-				 * with excel sheet values if
-				 * (transTypeFromTransList.get(i).getAttribute("innerHTML").trim().equals(
-				 * claimsdto.transactionType.get(i)) &&
-				 * transAmountFromTransList.get(i).getAttribute("innerHTML").trim().equals("$" +
-				 * claimsdto.transactionAmount.get(i))) { //Compare column values CISpayeeName
-				 * and invoice number from transaction list with excel sheet values if
-				 * (CISpayeeNameFromTransList.get(i).getAttribute("innerHTML").trim().equals(
-				 * claimsdto.payeeName.get(j).trim()) &&
-				 * invoiceNumFromTransactionList.get(i).getAttribute("innerHTML").trim().equals(
-				 * InvoiceNum)) { //if all the transaction values are correct, set flag to true
-				 * ExtentReporter.logger.log(LogStatus.PASS, "Transaction invoice no. " +
-				 * InvoiceNum + " is listed in Transaction list."); flag = true; break; } }
-				 */
 			}
 			if (flag == false)
 				throw new Exception();
@@ -568,8 +563,11 @@ public class ClaimsPage extends CommonAction {
 		waitFor(driver, 5);
 		ExtentReporter.logger.log(LogStatus.INFO,"Check the checkbox next to"+ ClaimsDTO.lastName+","+ClaimsDTO.lastName+".");
 		ExtentReporter.logger.log(LogStatus.INFO,"Click [Select]");
+		Thread.sleep(2000);
 		clickButton(driver, selectEntityChkBox, "Select Entity Check Box");
+		Thread.sleep(2000);
 		clickButton(driver, selectBtnOnEntitySelectListPage, "Entity Select List Page's Select");
+		Thread.sleep(1000);
 		switchToParentWindowfromotherwindow(driver, parentWindowId);
 		Assert.assertEquals(patientSelectedValue.getAttribute("value").trim(),
 				ClaimsDTO.lastName + ", " + ClaimsDTO.firstName + ",", "Patient selected is NOT displayed correctly");
@@ -599,14 +597,18 @@ public class ClaimsPage extends CommonAction {
 		String parentWindowIdSearchEntity = switchToWindow(driver);
 		String searchEntityTitle = getPageTitle(driver, ClaimsDTO.searchEntityPageTitle);
 		ExtentReporter.logger.log(LogStatus.INFO,"In the search screen enter the client id that was noted in step 5 Click [Search]");
+		Thread.sleep(2000);
 		enterTextIn(driver, entityClientId, clientIdValue, "Client Id");
 		clickButton(driver, searchBtnOnEntitySearchPage, "Entity Search Page's Search");
 		waitFor(driver, 10);
 		Assert.assertTrue(resultOnEntityListPage.isDisplayed(),
 				"Insured Name is not populated on 'Entity Select List' page.");
 		ExtentReporter.logger.log(LogStatus.INFO,"Click the checkbox next to the insured's name  Click [Select]");
+		Thread.sleep(2000);
 		clickButton(driver, selectEntityChkBox, "Insured Name");
+		Thread.sleep(1000);
 		clickButton(driver, selectBtnOnEntitySelectListPage, "Select");
+		Thread.sleep(1000);
 		switchToParentWindowfromotherwindow(driver, parentWindowIdSearchEntity);
 		invisibilityOfLoader(driver);
 		Thread.sleep(2000);

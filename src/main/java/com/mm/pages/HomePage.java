@@ -64,7 +64,7 @@ public class HomePage extends CommonAction {
 
 	@FindBy(id = "CI_ENTITY_SELECT_SCH_SCH")
 	WebElement searchEntityBtn;
-
+	
 	@FindBy(xpath = "//input[@name='chkCSELECTIND']")
 	WebElement Select_Entity_Checkbox;
 
@@ -179,8 +179,8 @@ public class HomePage extends CommonAction {
 	// Navigate to policy page from Policy tab.
 	public HomePage navigateToPolicyPage() throws Exception {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click policy in right corner of screen & verify search Policy Screen is opened");
-		waitForElementToLoad(driver, 10, Policy_Tab_Home);
-		Thread.sleep(2000);
+		waitForElementToLoad(driver, High, Policy_Tab_Home);
+		Thread.sleep(6000);
 		clickButton(driver, Policy_Tab_Home, "Policy tab");
 		Thread.sleep(2000);
 		invisibilityOfLoader(driver);

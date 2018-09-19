@@ -44,14 +44,17 @@ public class PDFReader extends CommonAction {
 	String ExcelPath = System.getProperty("user.dir")+"\\src\\main\\resources\\Form_Data.xlsx";
 	
 	//AUTOIT script execution to save PDF.
-	public PDFReader savePDF() throws IOException, InterruptedException {
+	public PDFReader savePDF(String reportFolderPath) throws IOException, InterruptedException {
 		//invisibilityOfLoader(driver);
 		Thread.sleep(6000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click the Save button on the PDF to save the results & verify PDF is saved");
 		String[] savePDFPath = 
 				{System.getProperty("user.dir") + "\\src\\main\\resources\\StoredPDF\\pdfDocument.pdf"};
 		String[] executionPath = {System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\savePdf.exe"};
-		Runtime.getRuntime().exec(executionPath).waitFor(30, TimeUnit.SECONDS);
+		Runtime.getRuntime().exec(executionPath).waitFor(15, TimeUnit.SECONDS);
+		/*String fileSavePath = reportFolderPath.concat("\\").concat(TestCaseDetails.testcaseId).concat(".pdf");
+		ProcessBuilder pb =new ProcessBuilder(System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\savePdf.exe",fileSavePath);*/
+		 
 		if(isAlertPresent(driver)==false)
 		{
 			ExtentReporter.logger.log(LogStatus.INFO,
@@ -59,6 +62,7 @@ public class PDFReader extends CommonAction {
 		}
 		Thread.sleep(6000);
 		//ProcessBuilder pb = new ProcessBuilder(executionPath);
+		switchToParentWindowfromframe(driver);
 		return new PDFReader(driver);
 	}
 	
@@ -71,7 +75,7 @@ public class PDFReader extends CommonAction {
 
 	//Logic to verify PDF content.
 	public PolicyBinderPage verifyPdfContent() throws Exception {
-		/*Thread.sleep(15000);
+		Thread.sleep(15000);
 		//getPageTitle(driver, "Policy Folder "+PolicyNo);
 		boolean flag = false;
 		PDFTextStripper pdfStripper = null;
@@ -104,13 +108,13 @@ public class PDFReader extends CommonAction {
 				{
 				Assert.assertTrue(parsedText.contains(pdfreaderdto.verifyPDFcontent.get(i)), "PDF dose not content '" + pdfreaderdto.verifyPDFcontent.get(i) + "'.");
 				ExtentReporter.logger.log(LogStatus.INFO, "Verify PDF display '" + pdfreaderdto.verifyPDFcontent.get(i) + "'.");
-				break;
+				//break;
 			}
 		}catch (Exception e){
 				ExtentReporter.logger.log(LogStatus.FAIL, pdfreaderdto.verifyPDFcontent.get(i)+" value  is not present in PDF.");
 				Assert.assertTrue(false);
-		}*/
-		switchToParentWindowfromframe(driver);
+		}
+		//switchToParentWindowfromframe(driver);
 		return new PolicyBinderPage(driver);
 	}
 

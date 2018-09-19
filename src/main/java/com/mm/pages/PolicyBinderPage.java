@@ -54,6 +54,9 @@ public class PolicyBinderPage extends CommonAction {
 
 	@FindBy(xpath = "//div[@class='pageHeader'][1]//div[@id='pageTitleForpageHeaderForPolicyFolder'][1] |//*[@id = 'pageTitleForpageHeaderForClaimFolder']")
 	WebElement pageHeaderForPolicyFolder;
+	
+	@FindBy(xpath = "//*[@id = 'pageTitleForpageHeaderForClaimFolder']")
+	WebElement pageHeaderForClaimFolder;
 
 	@FindBy(xpath = "//div[@id='globalDropdownActionItems']//select[@class='globalActionItemList']")
 	WebElement policyAction;
@@ -275,6 +278,14 @@ public class PolicyBinderPage extends CommonAction {
 		String[] portfolioNo = profileNoLable.split(" ", 3);
 		return portfolioNo[2];
 	}
+	
+	// Identify Claim number from Page.
+		public String claimNo() throws InterruptedException {
+			Thread.sleep(2000);
+			String profileNoLable = pageHeaderForClaimFolder.getAttribute("innerHTML");
+			String[] portfolioNo = profileNoLable.split(" ", 3);
+			return portfolioNo[2];
+		}
 
 	// Select Endorsement from "Action DropoDown".
 	public PolicyBinderPage endorsementFromActionDropDown() throws Exception {
