@@ -415,7 +415,9 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 		exlUtil.writeData("TC42246", "PolicyNum", policybinderpage.policyNo(), 1, ExcelPath);
 	}
 
-	@Test(description = "Hospital Verify Image Right", groups = { "BTS Smoke Test" }, priority = 16)
+
+
+	@Test(description = "Hospital Verify Image Right", groups = { "Smoke Test" }, priority = 16)
 	public void TC42243() throws Exception {
 		LoginPageDTO lpDTO;
 		LoginPage loginpage;
@@ -464,47 +466,6 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 		// TODO- upload all excels and pdf to rally.
 	}
 
-	/*
-	 * @Test(description =
-	 * "FM - Hospital Verify On Demand Invoice, Create Batch and Post Batch", groups
-	 * = { "BTS Smoke Test" }, priority = 16) public void TC42250() throws Exception
-	 * { LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
-	 * LoginPage loginpage = new LoginPage(driver); ExcelUtil exlUtil = new
-	 * ExcelUtil(); PolicyBinderPage policyBinderPage = new
-	 * PolicyBinderPage(driver); FinancePage financePage = new FinancePage(driver);
-	 * FinancePageDTO financePageDTO = new
-	 * FinancePageDTO(TestCaseDetails.testDataDictionary);
-	 * loginpage.loginToeOasis(lpDTO.username,
-	 * lpDTO.password).navigateToFinanceHomePage()
-	 * .searchPolicyOnFinanceHomePage().openFirstAccount().onDemandInvoice().
-	 * exportExcelSheet("")
-	 * .getInvoiceAmountFromExcel().cashEntry().batchFunction().validateBatch().
-	 * postBatchFunctionality() .donwloadFinalSheetBySearchingAccountNo();
-	 * //exlUtil.writeData("TC42248", "PolicyNum", financePageDTO.policyNum, 1,
-	 * ExcelPath); }
-	 * 
-	 * @Test(description = "FM - Hospital Verify Credit Applications", groups = {
-	 * "BTS Smoke Test" }, priority = 17) public void TC42248() throws Exception {
-	 * 
-	 * FinancePage financepage = new FinancePage(driver); RateApolicyPage
-	 * rateAPolicyPage = new RateApolicyPage(driver); LoginPageDTO lpDTO = new
-	 * LoginPageDTO(TestCaseDetails.testDataDictionary); LoginPage loginpage = new
-	 * LoginPage(driver); FinancePageDTO financePageDTO = new
-	 * FinancePageDTO(TestCaseDetails.testDataDictionary);
-	 * loginpage.loginToeOasis(lpDTO.username,
-	 * lpDTO.password).navigateToFinancePageFromHeaderLink()
-	 * .receivableDownload(financePageDTO.CreditInstallmentBeforeFileName).
-	 * naviagetToPolicyFromHeaderLink()
-	 * .searchPolicyRateAPolicyPage().coverageDetailsSelect();
-	 * financepage.selectUMBCoverage().selectCancelFromPolicyActionDDL().
-	 * rateFunctionality()
-	 * .openPDF(rateAPolicyPage.policyNo()).savePDF(reportFolderPath);
-	 * financepage.savePolicyAsWIP().navigateToFinancePageFromHeaderLink().
-	 * searchPolicyOnFinanceHomePage()
-	 * .openFirstAccount().downloadExcel(financePageDTO.
-	 * CancelledCoverageTransactionFileName)
-	 * .receivableDownload(financePageDTO.CreditInstallmentAfterFileName); }
-	 */
 
 	@Test(description = "Hospital Renewal", groups = { "Smoke Test" }, priority = 18)
 	public void TC42400() throws Exception {
