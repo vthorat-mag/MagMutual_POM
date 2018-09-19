@@ -48,6 +48,7 @@ public class FinancePageDTO {
 	public String accountHolderName;
 	public String billingFrequency;
 	public String screenShotName;
+	public String backUpPolicyNum;
 
 	public FinancePageDTO(Map<String, List<String>> excelData) {
 

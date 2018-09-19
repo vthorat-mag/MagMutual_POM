@@ -53,7 +53,7 @@ import com.relevantcodes.extentreports.LogStatus;
 
 import BaseClass.BaseTest;
 
-public class SmokeTestCasesUpdated extends ExtentReporter {
+public class BTSSmokeTestCases extends ExtentReporter {
 
 	// Global Assignment/initialization of variables.
 	IntegrateRallyRestAPI iR;
@@ -282,7 +282,7 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 		exlUtil.writeData("TC42248", "PolicyNum", financePageDTO.policyNum, 1, ExcelPath);
 	}
 
-	@Test(description = "FM - Hospital Verify Credit Applications", groups = { "BTS Smoke Test" }, priority = 8)
+	//@Test(description = "FM - Hospital Verify Credit Applications", groups = { "BTS Smoke Test" }, priority = 8)
 	public void TC42248() throws Exception {
 
 		FinancePage financepage = new FinancePage(driver);
@@ -318,7 +318,7 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 		exlUtil.writeData("TC42247", "PolicyNum", policyNumber, 1, ExcelPath);
 	}
 
-	@Test(description = "Hospital Verify Interactive Form", groups = { "BTS Smoke Test" }, priority = 10)
+	//@Test(description = "Hospital Verify Interactive Form", groups = { "BTS Smoke Test" }, priority = 10)
 	public void TC42247() throws Exception {
 		LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
 		LoginPage loginpage = new LoginPage(driver);
@@ -346,7 +346,7 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 		exlUtil.writeData("TC42252", "claimNum", policybinderpage.claimNo(), 1, ExcelPath);
 	}
 
-	@Test(description = "Hospital Claim - Verify Change Claim Status", groups = { "BTS Smoke Test" }, priority = 12)
+	/*@Test(description = "Hospital Claim - Verify Change Claim Status", groups = { "BTS Smoke Test" }, priority = 12)
 	public void TC42405() throws Exception {
 
 		LoginPage loginpage = new LoginPage(driver);
@@ -503,7 +503,7 @@ public class SmokeTestCasesUpdated extends ExtentReporter {
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToFinancePageFromHeaderLink()
 				.searchAccountUsingSearchCriteria().selectLastAccountFromAccountList().maintainAccount()
 				.saveAccountInformation().captureSaveScreenshotofMantainAccountpage();
-	}
+	}*/
 
 	@AfterMethod(alwaysRun = true)
 	public void logoffFromAppclication(ITestResult result) throws IOException, InterruptedException, URISyntaxException,

@@ -545,10 +545,11 @@ public class RateApolicyPage extends CommonAction {
 			selectDropdownByValueFromPolicyActionDDL(driver, policyAction, rateApolicyPageDTO.valueOfPolicyActionAccept,
 					"Policy Action");
 			invisibilityOfLoader(driver);
-			Thread.sleep(4000);
-			Alert alert = driver.switchTo().alert();
-			alert.accept();
-
+			Thread.sleep(2000);
+			/*Alert alert = driver.switchTo().alert();
+			alert.accept();*/
+			isAlertPresent(driver);
+			Thread.sleep(3000);
 			Assert.assertTrue(policyPhaseBinder.isEnabled(), "Policy" + policyNo() + "is NOT Editable.");
 		}
 		return new RateApolicyPage(driver);
@@ -615,14 +616,9 @@ public class RateApolicyPage extends CommonAction {
 
 	// Identify Phase displayed on Page.
 	public RateApolicyPage identifyPhase() throws Exception {
-		waitFor(driver, 2);
 		Thread.sleep(3000);
-		// String getTextPolicyPhase =
-		// policyPhaseBinder.getAttribute("innerText");
-		// String getTextPolicyPhase = getText(driver, policyPhaseBinder);
 		ExtentReporter.logger.log(LogStatus.PASS, "Verify Phase is changed to Binder.");
-		// verifyValueFromField(driver, policyPhaseBinder, policyPhaseValue,
-		// innerText);
+		//verifyValueFromField(driver, policyPhaseBinder, policyPhaseValue,"innerText","phase");
 		return new RateApolicyPage(driver);
 	}
 
@@ -660,9 +656,10 @@ public class RateApolicyPage extends CommonAction {
 		Thread.sleep(2000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Save] Billing account is setup");
 		clickButton(driver, billingSetupSaveBtn, "Save Button");
-		Thread.sleep(10000);
+		Thread.sleep(20000);
 		invisibilityOfLoader(driver);
 		switchToParentWindowfromframe(driver);
+		visibilityOfElement(driver,rateBtn,"Rate Button");
 		return new RateApolicyPage(driver);
 	}
 
@@ -885,32 +882,11 @@ public class RateApolicyPage extends CommonAction {
 			ExtentReporter.logger.log(LogStatus.INFO, "Product Notify Window is NOT dispalyed to user.");
 		}
 		switchToParentWindowfromframe(driver);
+		Thread.sleep(4000);
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]")));
-		// Thread.sleep(3000);
-		// Get the number of last row of Written premium from View premium
-		// window
+		// Get the number of last row of Written premium from View premium window.
 		int lastRowOfWrittenPremium = cwWrittenPremiumOnViewPremium.size() - 1;
-		// Compare Writtem premium from policy page with Written premium from
-		// View premium window
-		/*
-		 * if(writtenPremiumAmount.equals(cwWrittenPremiumOnViewPremium.get(
-		 * lastRowOfWrittenPremium).getAttribute("innerHTML").trim())){
-		 * 
-		 * ExtentReporter.logger.log(LogStatus.PASS,
-		 * "Premium rate on View Premium window matches with Written premium rate on policy Page. i.e. "
-		 * +writtenPremiumAmount); //Close the View Premium window
-		 * ExtentReporter.logger.log(LogStatus.INFO, "Click [Close]");
-		 * clickButton(driver, closeBtnOnViewPremiumPopup, "Close");
-		 * invisibilityOfLoader(driver); switchToParentWindowfromframe(driver);
-		 * switchToFrameUsingElement(driver,
-		 * driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo +
-		 * "')]"))); Thread.sleep(3000); ExtentReporter.logger.log(LogStatus.INFO,
-		 * "Policy is saved in WIP status"); clickButton(driver, okPolicySaveAsWIPPopup,
-		 * "Ok"); }else{ ExtentReporter.logger.log(LogStatus.FAIL,
-		 * "Written Premium Amount in View Premium window did not match, expected is :"
-		 * +writtenPremiumAmount); Assert.assertTrue(false); }
-		 */
 		// Close the View Premium window
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Close]");
 		clickButton(driver, closeBtnOnViewPremiumPopup, "Close");

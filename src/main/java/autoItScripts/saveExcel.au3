@@ -3,8 +3,11 @@ saveExcel()
 
 Func saveExcel()
 
-	Sleep(5000)
+	Sleep(8000)
+	;WinWaitActive("[CLASS:IEFrame]","",10)
+	;ControlClick("[CLASS:IEFrame]","","DirectUIHWND1")
 	send("{F6}") 
+	Sleep(1000)
 	send("{TAB}")
 	send("{DOWN}")
 	send("{DOWN}")

@@ -3,9 +3,14 @@
 <suite name="MagMutualSuite" parallel="methods" thread-count="1">
 	<listeners>
 		<listener class-name="com.mm.listeners.testListners" />
-		<!-- <listener class-name="com.mm.listeners.AnnotationTransform" /> -->
+		<listener class-name="com.mm.listeners.AnnotationTransform" />
 	</listeners>
-	<test name="Test" parallel = "methods" thread-count="2">
+	<test name="Test" parallel="methods" thread-count="1">
+		<groups>
+			<run>
+				<include name="BTS Smoke Test" />
+			</run>
+		</groups>
 		<classes>
 			<class name="MMTestCase.SmokeTestCasesUpdated" />
 		</classes>

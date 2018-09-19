@@ -422,8 +422,8 @@ public class CISPage extends CommonAction {
 		getPageTitle(driver, AddOrganizationPageTitle);
 		ExtentReporter.logger.log(LogStatus.INFO, "Enter/select below information\n Organization: Enter Org Name (Automated Hospital (date))\n"+
 				"DOI: Enter Today's Date\n Classification: Select Med Facility\n Class Eff. From Date: Today's Date\n Class Eff. To Date: 01/01/3000\n Organization information is added");
-		
-		String OrganizationName = oCISPageDTO.OrgName + randomNumGenerator(3,"123456789");
+		CommonUtilities commUtil = new CommonUtilities();
+		String OrganizationName = oCISPageDTO.OrgName +  commUtil.getSystemDateMMddyy_hhmmss();
 		enterTextIn(driver, orgName, OrganizationName, "Org Name");
 		enterTextIn(driver, dateOfBirth, oCISPageDTO.dateOfBirth, "DOI");
 		selectDropdownByVisibleText(driver, classification, oCISPageDTO.Classification, "Classfication");
