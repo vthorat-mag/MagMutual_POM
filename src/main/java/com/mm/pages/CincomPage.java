@@ -97,12 +97,14 @@ public class CincomPage extends CommonAction {
 	@FindBy(name = "additionalText")
 	WebElement addText;
 
+	//code will initialize elements and DTo class.
 	public CincomPage(WebDriver driver) throws IllegalArgumentException, IllegalAccessException, SecurityException {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
 		cincomedto = new CincomPageDTO(TestCaseDetails.testDataDictionary);
 	}
 
+	//Method will cover CINCOM flow.
 	public RateApolicyPage cincomFlow(String PolicyNo) throws Exception {
 		for (int j = 0; j < cincomedto.coverage.size(); j++) {
 			for (int i = 0; i < coverageList.size(); i++) {
@@ -220,6 +222,7 @@ public class CincomPage extends CommonAction {
 		return new RateApolicyPage(driver);
 	}
 
+	//This method will handle spell check pop up on CINCOM page.
 	public boolean verifyCheckSpellingPopup() throws InterruptedException {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, 20);

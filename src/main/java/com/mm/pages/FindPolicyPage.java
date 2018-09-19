@@ -113,6 +113,7 @@ public class FindPolicyPage extends CommonAction {
 		return policyNo;
 	}
 
+	//Code will use to search Policy on Policy Page.
 	public RateApolicyPage searchFromFindPolicyPage() throws Exception {
 		invisibilityOfLoader(driver);
 		ExtentReporter.logger.log(LogStatus.INFO, "click Policy>Find Policy Select Status: Active Click [Search]");

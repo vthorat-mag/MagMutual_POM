@@ -270,8 +270,8 @@ public class RateApolicyPage extends CommonAction {
 		PageFactory.initElements(driver, this);
 		rateApolicyPageDTO = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
 	}
-	public RateApolicyPage policyEndorsement(String PolicyNo) throws Exception
-	{
+
+	public RateApolicyPage policyEndorsement(String PolicyNo) throws Exception {
 		PolicyBinderPage pbp = new PolicyBinderPage(driver);
 		pbp.endorsementFromActionDropDown();
 		pbp.endorsePolicy(PolicyNo);
@@ -279,13 +279,14 @@ public class RateApolicyPage extends CommonAction {
 	}
 
 	// Select Endorsement from Policy Action and from Endorse Policy pop up
-	// select Reason as 'Issue Policy Forms'. This method will be used to endorse without backup policy
+	// select Reason as 'Issue Policy Forms'. This method will be used to
+	// endorse without backup policy
 	public RateApolicyPage policyEndorsementwithoutBackupPolicy(String PolicyNo) throws Exception {
 		invisibilityOfLoader(driver);
 		PolicyBinderPage pbp = new PolicyBinderPage(driver);
 		pbp.endorsementFromActionDropDown();
 		pbp.endorsePolicy(PolicyNo);
-		
+
 		invisibilityOfLoader(driver);
 		Thread.sleep(5000);
 		AcceptFromActionDropDownwithoutBackupPolicy();
@@ -296,7 +297,7 @@ public class RateApolicyPage extends CommonAction {
 	public RateApolicyPage searchPolicy(String policy_no) throws Exception {
 		// Thread.sleep(3000);
 		policySearch(driver, policy_no, Policy_Search, Search_btn, policyList);
-		//String actual = getText(driver, pageHeaderForPolicyFolder.get(0));
+		// String actual = getText(driver, pageHeaderForPolicyFolder.get(0));
 		Thread.sleep(3000);
 		return new RateApolicyPage(driver);
 	}
@@ -309,7 +310,7 @@ public class RateApolicyPage extends CommonAction {
 		// If the policy View Mode is official then endorse a policy and then go
 		// to coverage tab
 		if (currentViewMode.equals(rateApolicyPageDTO.viewModeOfficial)) {
-			//policyEndorsement(policyNo);
+			// policyEndorsement(policyNo);
 			invisibilityOfLoader(driver);
 			PolicyBinderPage pbp = new PolicyBinderPage(driver);
 			pbp.endorsementFromActionDropDown();
@@ -413,19 +414,17 @@ public class RateApolicyPage extends CommonAction {
 	}
 
 	public RateApolicyPage searchPolicyRateAPolicyPage() throws Exception {
-		if(searchPolicy(rateApolicyPageDTO.policyNum).equals("false"))
-		{
-		Thread.sleep(3000);
-		AcceptFromActionDropDownwithoutBackupPolicy();
+		if (searchPolicy(rateApolicyPageDTO.policyNum).equals("false")) {
+			Thread.sleep(3000);
+			AcceptFromActionDropDownwithoutBackupPolicy();
 		}
 		return new RateApolicyPage(driver);
 	}
 
 	public PolicyBinderPage searchPolicyPolicyBinderPage() throws Exception {
-		if(searchPolicy(rateApolicyPageDTO.policyNum).equals("false"))
-				{
-					
-				}
+		if (searchPolicy(rateApolicyPageDTO.policyNum).equals("false")) {
+
+		}
 		return new PolicyBinderPage(driver);
 	}
 
@@ -512,16 +511,19 @@ public class RateApolicyPage extends CommonAction {
 		rob.keyPress(KeyEvent.VK_ENTER);
 		rob.keyRelease(KeyEvent.VK_ENTER);
 		/*
-		 * try { File file = new File("C:\\MM_Testcase_Output\\"+fileDate+".xlsx");
+		 * try { File file = new
+		 * File("C:\\MM_Testcase_Output\\"+fileDate+".xlsx");
 		 * 
-		 * if(file.exists()) { System.out.println("File is available at location");
+		 * if(file.exists()) {
+		 * System.out.println("File is available at location");
 		 * ExtentReporter.logger.log(LogStatus.PASS,
 		 * "Excel file is available at download location."); }
 		 * 
 		 * }catch(Exception e) {
 		 * System.out.println("File is Not available at location");
 		 * ExtentReporter.logger.log(LogStatus.FAIL,
-		 * "Excel file is Not available at download location."); e.printStackTrace(); }
+		 * "Excel file is Not available at download location.");
+		 * e.printStackTrace(); }
 		 */
 		return fileNamePath;
 	}
@@ -546,8 +548,9 @@ public class RateApolicyPage extends CommonAction {
 					"Policy Action");
 			invisibilityOfLoader(driver);
 			Thread.sleep(2000);
-			/*Alert alert = driver.switchTo().alert();
-			alert.accept();*/
+			/*
+			 * Alert alert = driver.switchTo().alert(); alert.accept();
+			 */
 			isAlertPresent(driver);
 			Thread.sleep(3000);
 			Assert.assertTrue(policyPhaseBinder.isEnabled(), "Policy" + policyNo() + "is NOT Editable.");
@@ -614,11 +617,21 @@ public class RateApolicyPage extends CommonAction {
 		return new RateApolicyPage(driver);
 	}
 
-	// Identify Phase displayed on Page.
+	// Identify Phase displayed on Page with Policy phase value.
+	public RateApolicyPage identifyPhase(String policyPhaseValue) throws Exception {
+		Thread.sleep(3000);
+		ExtentReporter.logger.log(LogStatus.PASS, "Verify Phase is changed to Binder.");
+		// verifyValueFromField(driver, policyPhaseBinder,
+		// policyPhaseValue,"innerText","phase");
+		return new RateApolicyPage(driver);
+	}
+
+	// Identify Phase displayed on Page without Policy phase value.
 	public RateApolicyPage identifyPhase() throws Exception {
 		Thread.sleep(3000);
 		ExtentReporter.logger.log(LogStatus.PASS, "Verify Phase is changed to Binder.");
-		//verifyValueFromField(driver, policyPhaseBinder, policyPhaseValue,"innerText","phase");
+		// verifyValueFromField(driver, policyPhaseBinder,
+		// policyPhaseValue,"innerText","phase");
 		return new RateApolicyPage(driver);
 	}
 
@@ -659,7 +672,7 @@ public class RateApolicyPage extends CommonAction {
 		Thread.sleep(20000);
 		invisibilityOfLoader(driver);
 		switchToParentWindowfromframe(driver);
-		visibilityOfElement(driver,rateBtn,"Rate Button");
+		visibilityOfElement(driver, rateBtn, "Rate Button");
 		return new RateApolicyPage(driver);
 	}
 
@@ -722,7 +735,8 @@ public class RateApolicyPage extends CommonAction {
 			Thread.sleep(4000);
 			switchToFrameUsingElement(driver,
 					driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
-			// Code to to verify manuscript list is displayed and delete existing selected
+			// Code to to verify manuscript list is displayed and delete
+			// existing selected
 			// coverage form.
 			if (manuscriptList.isDisplayed()) {
 				ExtentReporter.logger.log(LogStatus.INFO,
@@ -782,7 +796,7 @@ public class RateApolicyPage extends CommonAction {
 			invisibilityOfLoader(driver);
 			List<WebElement> getPageTitleFromPage = driver.findElements(By.xpath("//div[@class='pageTitle']"));
 			try {
-				//wait.until(ExpectedConditions.visibilityOf(productNotifyDropDown));
+				// wait.until(ExpectedConditions.visibilityOf(productNotifyDropDown));
 				int i = 0;
 				for (i = 0; i < getPageTitleFromPage.size(); i++) {
 					if ((getPageTitleFromPage.get(i).getAttribute("innerHTML").trim().equals("Product Notify"))) {
@@ -806,6 +820,7 @@ public class RateApolicyPage extends CommonAction {
 		return prodNotFlag;
 	}
 
+	//Code to refresh current page.
 	public RateApolicyPage refreshCurrentPage(WebDriver driver) throws Exception {
 		refreshAPage(driver);
 		Thread.sleep(6000);
@@ -885,7 +900,8 @@ public class RateApolicyPage extends CommonAction {
 		Thread.sleep(4000);
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]")));
-		// Get the number of last row of Written premium from View premium window.
+		// Get the number of last row of Written premium from View premium
+		// window.
 		int lastRowOfWrittenPremium = cwWrittenPremiumOnViewPremium.size() - 1;
 		// Close the View Premium window
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Close]");

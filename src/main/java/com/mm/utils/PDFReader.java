@@ -106,15 +106,19 @@ public class PDFReader extends CommonAction {
 		try {
 			  for (i =0;i<pdfreaderdto.verifyPDFcontent.size();i++)
 				{
-				Assert.assertTrue(parsedText.contains(pdfreaderdto.verifyPDFcontent.get(i)), "PDF dose not content '" + pdfreaderdto.verifyPDFcontent.get(i) + "'.");
-				ExtentReporter.logger.log(LogStatus.INFO, "Verify PDF display '" + pdfreaderdto.verifyPDFcontent.get(i) + "'.");
-				//break;
+				//Assert.assertTrue(parsedText.contains(pdfreaderdto.verifyPDFcontent.get(i)), "PDF dose not content '" + pdfreaderdto.verifyPDFcontent.get(i) + "'.");
+				  ExtentReporter.logger.log(LogStatus.INFO, "Verify PDF display '" + pdfreaderdto.verifyPDFcontent.get(i) + "'.");
+				if(parsedText.toLowerCase().contains(pdfreaderdto.verifyPDFcontent.get(i).toLowerCase()))
+				{
+					ExtentReporter.logger.log(LogStatus.INFO, "PDF contains '" + pdfreaderdto.verifyPDFcontent.get(i) + "'.");
+				}else {
+					ExtentReporter.logger.log(LogStatus.FAIL, pdfreaderdto.verifyPDFcontent.get(i)+" value  is not present in PDF.");
+				}
 			}
 		}catch (Exception e){
 				ExtentReporter.logger.log(LogStatus.FAIL, pdfreaderdto.verifyPDFcontent.get(i)+" value  is not present in PDF.");
-				Assert.assertTrue(false);
+				//Assert.assertTrue(false);
 		}
-		//switchToParentWindowfromframe(driver);
 		return new PolicyBinderPage(driver);
 	}
 

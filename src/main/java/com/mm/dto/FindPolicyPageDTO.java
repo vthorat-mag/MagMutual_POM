@@ -10,6 +10,7 @@ public class FindPolicyPageDTO {
 	public static String phase;
 	public static String status;
 
+	//This method will access DTO Code.
 	public FindPolicyPageDTO(Map<String, List<String>> excelData) {
 
 		for (int i = 0; i <= FindPolicyPageDTO.class.getFields().length - 1; i++) {

@@ -327,6 +327,7 @@ public class FinancePage extends CommonAction {
 	@FindBy(id = "PM_ENDORSE_OK")
 	WebElement endorsePolicyOK;
 
+	//Constructor to initialize variables on Finance page.
 	public FinancePage(WebDriver driver) throws Exception {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
@@ -517,7 +518,7 @@ public class FinancePage extends CommonAction {
 		// writeData("TC42250","Amount",amountValue,1,System.getProperty("user.dir")+"\\src\\main\\resources\\Form_Data.xlsx");
 
 		String columnCellValue = getDataFromExcel(readerDataSheetName, readerTestDataColumnName, readerDataRowNumber,
-				"C:\\saveExcel\\" + readerExportedExcelSheetName + ".xlsx");
+				ExtentReporter.reportFolderPath+"\\" + readerExportedExcelSheetName + ".xlsx");
 		Thread.sleep(3000);
 
 		// getPageTitle(driver, allTxnInquireyPageTitle); TODO-Need to adjust
@@ -608,6 +609,30 @@ public class FinancePage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [OK].");
 		Thread.sleep(1000);
 		clickButton(driver, endorsePolicyOK, "OK");
+		//If next date is not available or not in range then it will add date in given range.
+		if(verifyAlertDisplay(driver)==true)
+		{
+			String nextDay = null;
+			String alertText = getAlertText(driver);
+			String[] AlldateDisplayedOnAlert = alertText.split("and", 42);
+			String[] startingDate = AlldateDisplayedOnAlert[0].split(" ",31);
+			String dueDate = startingDate[5].trim();
+			 SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+			 Date date = formatter.parse(dueDate);
+			 Thread.sleep(1000);
+			 Calendar c = Calendar.getInstance();
+			 c.setTime(date);
+			 c.add(Calendar.DATE, 1); 
+			 Thread.sleep(1000);
+			 Date d = c.getTime();
+	         nextDay=formatter.format(d);
+			exlUtil.writeData("TC42246", "AlternateNextDate", nextDay, 1, System.getProperty("user.dir") + "\\src\\main\\resources\\Form_Data.xlsx");
+			acceptAlert(driver);
+			clearTextBox(driver, effectiveFromDate, "Effective Date");
+			enterDataIn(driver, effectiveFromDate, nextDay, "Effective Date");
+			clickButton(driver, endorsePolicyOK, "OK");
+			//below code will write New Next date to excel which will be used for add coverage flow.
+		}
 		Thread.sleep(8000);
 		switchToParentWindowfromframe(driver);
 

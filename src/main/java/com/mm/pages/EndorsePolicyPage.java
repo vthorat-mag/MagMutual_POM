@@ -30,18 +30,17 @@ public class EndorsePolicyPage extends CommonAction {
 	@FindBy(id = "PM_SPOL_SEARCH")
 	WebElement Search_Policy;
 
+	//Constructor to initialize variables on Endorse Policy page.
 	public EndorsePolicyPage(WebDriver driver) {
 
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
 	}
 
+	//Method will click on Find Policy tab.
 	public void findPolicy() {
 		Find_Policy.click();
-	}
-
-	public void selectBinder() {
-
+		clickButton(driver, Find_Policy, "Find Policy");
 	}
 
 }

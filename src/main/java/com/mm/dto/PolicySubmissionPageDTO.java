@@ -12,6 +12,7 @@ public class PolicySubmissionPageDTO {
 	public String valueOfPolicyActionCopy;
 	public String indicationPhaseValue;
 
+	//This method will access DTO Code.
 	public PolicySubmissionPageDTO(Map<String, List<String>> excelData) {
 
 		for (int i = 0; i <= PolicySubmissionPageDTO.class.getFields().length - 1; i++) {

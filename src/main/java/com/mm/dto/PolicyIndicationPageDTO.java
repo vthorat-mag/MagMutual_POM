@@ -22,16 +22,21 @@ public class PolicyIndicationPageDTO {
 	public String coverageLimit;
 	public String policyAction;
 	public String producer;
-	public String riskCounty;
-	public String riskSpeciality;
+	public List<String> riskCounty;
+	public List<String> riskSpeciality;
 	public String coverageFromPopup;
 	public String policyForms;
 	public String coverageClass;
 	public String exposureUnit;
-	public String riskTypeValue;
+	public List<String> riskTypeValue;
 	public String riskName;
 	public String coverageNameForRisk;
-
+	public List<String> FTEType;
+	public List<String> riskTypeOrganization;
+	public List<String> riskEntityName;
+	public String stateCodeValue;
+	
+	//This method will access DTO Code.
 	public PolicyIndicationPageDTO(Map<String, List<String>> excelData)
 			throws IllegalArgumentException, IllegalAccessException, SecurityException {
 

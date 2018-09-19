@@ -54,7 +54,7 @@ public class PolicyBinderPage extends CommonAction {
 
 	@FindBy(xpath = "//div[@class='pageHeader'][1]//div[@id='pageTitleForpageHeaderForPolicyFolder'][1] |//*[@id = 'pageTitleForpageHeaderForClaimFolder']")
 	WebElement pageHeaderForPolicyFolder;
-	
+
 	@FindBy(xpath = "//*[@id = 'pageTitleForpageHeaderForClaimFolder']")
 	WebElement pageHeaderForClaimFolder;
 
@@ -278,14 +278,14 @@ public class PolicyBinderPage extends CommonAction {
 		String[] portfolioNo = profileNoLable.split(" ", 3);
 		return portfolioNo[2];
 	}
-	
+
 	// Identify Claim number from Page.
-		public String claimNo() throws InterruptedException {
-			Thread.sleep(2000);
-			String profileNoLable = pageHeaderForClaimFolder.getAttribute("innerHTML");
-			String[] portfolioNo = profileNoLable.split(" ", 3);
-			return portfolioNo[2];
-		}
+	public String claimNo() throws InterruptedException {
+		Thread.sleep(2000);
+		String profileNoLable = pageHeaderForClaimFolder.getAttribute("innerHTML");
+		String[] portfolioNo = profileNoLable.split(" ", 3);
+		return portfolioNo[2];
+	}
 
 	// Select Endorsement from "Action DropoDown".
 	public PolicyBinderPage endorsementFromActionDropDown() throws Exception {
@@ -297,8 +297,11 @@ public class PolicyBinderPage extends CommonAction {
 			RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
 			RateAPolicyPageDTO rateApolicyPageDTO = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
 			rateapolicypage.searchBackUpPolicy();
-			/*PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
-			policybinderpage.copyToQuoteFromActionDropDownwithoutBackUpPolicy(rateApolicyPageDTO.backUpPolicyNum);*/
+			/*
+			 * PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
+			 * policybinderpage.copyToQuoteFromActionDropDownwithoutBackUpPolicy(
+			 * rateApolicyPageDTO.backUpPolicyNum);
+			 */
 			selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
 					policybinderpageDTO.valueOfPolicyActionEndorse, "Policy Action");
 		}
@@ -330,10 +333,12 @@ public class PolicyBinderPage extends CommonAction {
 			RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
 			RateAPolicyPageDTO rateApolicyPageDTO = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
 			rateapolicypage.searchBackUpPolicy();
-			PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
-			policybinderpage.copyToQuoteFromActionDropDown(rateApolicyPageDTO.backUpPolicyNum);
-			selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
-					policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action");
+			// PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
+			// policybinderpage.copyToQuoteFromActionDropDown(rateApolicyPageDTO.backUpPolicyNum);
+			/*
+			 * selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
+			 * policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action");
+			 */
 		}
 
 		// selectDropdownByValue(driver, policyAction,

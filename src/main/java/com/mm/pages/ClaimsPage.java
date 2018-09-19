@@ -270,6 +270,7 @@ public class ClaimsPage extends CommonAction {
 		claimsdto = new ClaimsDTO(TestCaseDetails.testDataDictionary);
 	}
 
+	//This code will open Transaction tab.
 	public ClaimsPage openTransactionTab() throws Exception{
 		ExtentReporter.logger.log(LogStatus.INFO, "Transaction List displays at the bottom of the page");
 		clickButton(driver, transactionTab, "Transaction");
@@ -279,7 +280,7 @@ public class ClaimsPage extends CommonAction {
 	}
 		
 	
-	
+	//Code will add transaction data and save transaction.
 	public void addTransactionDataAndSaveTransaction() throws Exception{
 	//Get the number of transaction types from excel sheet
 		ExtentReporter.logger.log(LogStatus.INFO, "Add Transaction window displays");
@@ -328,9 +329,10 @@ public class ClaimsPage extends CommonAction {
 		verifyAddedTransactionIsListedInTransactionList(invoiceNumber);
 		}
 }
-	
+	//Method wll add details while creating transaction.
 	private String addTransactionDetails(String txnType,  String payType,
 			String  vendorId,  String taxId, String amount, int invoiceNoCount) throws Exception {
+		String Empty = "";
 		switchToFrameUsingId(driver, "popupframe1");
 		Thread.sleep(2000);
 		//Select Trans type and Payee Type from DDL
@@ -346,8 +348,8 @@ public class ClaimsPage extends CommonAction {
 		Thread.sleep(2000);
 		HomePage homePage = new HomePage(driver);
 		//Blank value is passed to match arguments, as method is used by other test case as well.
-		homePage.searchEntity("",vendorId);
-		homePage.selectEntity(parentWindow);
+		homePage.searchEntity(Empty,vendorId);
+		homePage.selectEntity(parentWindow,Empty);
 		switchToFrameUsingId(driver, "popupframe1");
 		Thread.sleep(2000);
 		selectDropdownByVisibleText(driver, taxIDType, taxId, "Tax ID Type");
@@ -643,6 +645,8 @@ public class ClaimsPage extends CommonAction {
 		ExcelUtil exlUtil = new ExcelUtil();
 		exlUtil.writeData("TC42252", "claimNum", claimNumber, 1, ExcelPath);
 	}
+	
+	//Method will check for duplicate claim on claims apge.
 	public boolean checkduplicateClaimWindow(String duplicatePageTitle) throws InterruptedException
 	{
 		Thread.sleep(2000);

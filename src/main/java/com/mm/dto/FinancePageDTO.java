@@ -49,7 +49,9 @@ public class FinancePageDTO {
 	public String billingFrequency;
 	public String screenShotName;
 	public String backUpPolicyNum;
+	public String AlternateNextDate;
 
+	//This method will access DTO Code.
 	public FinancePageDTO(Map<String, List<String>> excelData) {
 
 		for (int i = 0; i <= FinancePageDTO.class.getFields().length - 1; i++) {

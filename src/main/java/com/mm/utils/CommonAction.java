@@ -484,6 +484,16 @@ public class CommonAction implements CommonActionInterface {
 		String saveAlertText= driver.switchTo().alert().getText();
 		return saveAlertText;
 	}
+	
+	public static boolean verifyAlertDisplay(WebDriver driver) throws InterruptedException{
+        try{
+       	 Thread.sleep(2000);
+       	 Alert alert = driver.switchTo().alert();
+            return true;
+            }catch(NoAlertPresentException ex){
+                  return false;
+            }
+        }
 
 	public void invisibilityOfLoader(WebDriver driver) throws InterruptedException {
 		int i=0;
@@ -522,11 +532,11 @@ public class CommonAction implements CommonActionInterface {
 
 	public void copyFile(String saveFilName) {
 		File source = new File("C:\\TempsaveExcel\\OnDemandInvoiceCredit.xlsx");
-		File dest = new File("C:\\SmokeTestFM\\" + saveFilName + ".xlsx");
-		File dest2 = new File("C:\\saveExcel\\" + saveFilName + ".xlsx");
+		//File dest = new File("C:\\SmokeTestFM\\" + saveFilName + ".xlsx");
+		File dest2 = new File(ExtentReporter.reportFolderPath+"\\" + saveFilName + ".xlsx");
 		ExtentReporter.excelPath = ExtentReporter.excelPath.concat("C:\\SmokeTestFM\\" + saveFilName + ".xlsx;");
 		try {
-			FileUtils.copyFile(source, dest);
+			//FileUtils.copyFile(source, dest);
 			FileUtils.copyFile(source, dest2);
 		} catch (IOException e) {
 			e.printStackTrace();
