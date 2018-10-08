@@ -133,7 +133,7 @@ public class BTSSmokeTestCases extends ExtentReporter {
 		}
 	}
 
-	/*@Test(description = "Rate a policy that existed before the change or deployment to confirm it still displays as expected", groups = {
+	@Test(description = "Rate a policy that existed before the change or deployment to confirm it still displays as expected", groups = {
 			"BTS Smoke Test" }, priority = 0)
 	public void TC42239() throws Exception {
 		LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
@@ -165,7 +165,7 @@ public class BTSSmokeTestCases extends ExtentReporter {
 		String OrganizationName = cisPage.addOrganizationInformation();
 		cisPage.addOrgAddress().selectZipCode().addPhoneNumber().searchRecentlyAddedOrganisation(OrganizationName);
 		exlUtil.writeData("TC42249", "lastOrgName", OrganizationName, 1, ExcelPath);
-	}*/
+	}
 
 	@Test(description = "Hospital Indication", groups = { "BTS Smoke Test" }, priority = 3)
 	public void TC42249() throws Exception {
