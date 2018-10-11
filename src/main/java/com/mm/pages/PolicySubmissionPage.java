@@ -46,8 +46,7 @@ public class PolicySubmissionPage extends CommonAction {
 	@FindBy(name = "termDesc")
 	WebElement Quote_Description;
 
-	@FindBy(id = "PM_COMMON_TABS_SAVEWIP")
-	WebElement Save_WIP;
+	
 
 	// Constructor to initialize driver, page elements and DTO PageObject for
 	// PolicySubmissionPage
@@ -76,7 +75,7 @@ public class PolicySubmissionPage extends CommonAction {
 	// Change policy phase to indication.
 	public PolicySubmissionPage changePhaseToIndicationAndAddQuoteDescription()
 			throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
-		Thread.sleep(6000);
+		Thread.sleep(9000);
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Change Policy Phase to Indication. Verify Policy is changed from Submission to Indication");
 		selectDropdownByValue(driver, policyPhase, policysubmissionpageDTO.indicationPhaseValue, "Phase");
@@ -98,8 +97,7 @@ public class PolicySubmissionPage extends CommonAction {
 	// Update policy details for a policy and change policy phase from
 	// Submission to Indication.
 	public PolicyIndicationPage updatePolicyDetails() throws Exception {
-		Thread.sleep(6000);
-		Thread.sleep(6000);
+		Thread.sleep(10000);
 		invisibilityOfLoader(driver);
 		// getPageTitle(driver, expectedPageTitle)
 		// Change policy type to Indication and add organization type as
@@ -115,7 +113,7 @@ public class PolicySubmissionPage extends CommonAction {
 		enterTextIn(driver, Hosp_Disc_Period_Rating, policysubmissionpageDTO.discoveryPeriodRating,
 				"Discovery_Period Rating");
 		enterTextIn(driver, Quote_Description, policysubmissionpageDTO.quoteDescription, "Quote Description");
-		click(driver, Save_WIP, "Save WIP button");
+		click(driver, saveWIP, "Save WIP button");
 		return new PolicyIndicationPage(driver);
 	}
 }

@@ -67,7 +67,7 @@ public class QuickAddOrganisation extends CommonAction {
 		PageFactory.initElements(driver, this);
 
 	}
-
+	
 	//Code to navigate to add organisation page.
 	public QuickAddOrganisation navigate_To_Add_Org_Window() throws InterruptedException {
 		Thread.sleep(3000);
@@ -79,7 +79,6 @@ public class QuickAddOrganisation extends CommonAction {
 		return new QuickAddOrganisation(driver);
 	}
 
-	//Enter Details on Add Organisation page.
 	public QuickAddOrganisation add_Org_Information() throws InterruptedException {
 
 		enterTextIn(driver, Org_Name, "Vivek_Test_Organisation2", "Org Name");
@@ -91,11 +90,10 @@ public class QuickAddOrganisation extends CommonAction {
 		selectDropdownByValue(driver, classification, "HOSPITAL", "Classfication");
 
 		enterTextIn(driver, Effe_To_Date, "12052050", "Effec_To_Date");
-
+		
 		return new QuickAddOrganisation(driver);
 	}
 
-	//Code to add organisations address details.
 	public QuickAddOrganisation add_Org_Address() {
 
 		selectDropdownByValue(driver, Address_Type1, "POLICY", "Add_Type1");
@@ -105,12 +103,11 @@ public class QuickAddOrganisation extends CommonAction {
 		enterTextIn(driver, City, "Atlanta", "city");
 
 		selectDropdownByValue(driver, Zip_code, "GA", "state code");
-
+		
 		return new QuickAddOrganisation(driver);
 
 	}
 
-	//Code to select Zip code
 	public QuickAddOrganisation selectZipCode() throws InterruptedException {
 		Thread.sleep(3000);
 		String parentwindow = switchToWindow(driver);
@@ -123,7 +120,6 @@ public class QuickAddOrganisation extends CommonAction {
 		return new QuickAddOrganisation(driver);
 	}
 
-	//Code to add phone number to new organisation.
 	public void add_Phone_Number() {
 
 		enterTextIn(driver, Phn_Num_Type, "OFFICE", "Phone_No_Type");

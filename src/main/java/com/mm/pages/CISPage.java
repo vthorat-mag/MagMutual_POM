@@ -191,10 +191,10 @@ public class CISPage extends CommonAction {
 	@FindBy(id = "CI_ENSRC_SEARCH")
 	WebElement searchEntity;
 
-	@FindBy(xpath = "//span[@id='CCLIENT_NAME']")
+	@FindBy(xpath = "//a[@id='entityListGrid_CCLIENT_NAME_0_HREF']| //span[@id='CCLIENT_NAME']")
 	List<WebElement> orgNameList;
 
-	@FindBy(xpath = "//div[@id='CDATE_OF_BIRTH']")
+	@FindBy(xpath = "//div[@id='CDATE_OF_BIRTH']|//div[@id='row0entityListGrid']/div[8]/div")
 	List<WebElement> DOBList;
 
 	// Constructor to initialize driver, page elements and DTO PageObject for
@@ -488,7 +488,7 @@ public class CISPage extends CommonAction {
 		// Add recently added org name and search
 		enterTextIn(driver, lastNameORorgName, OrganizationName, "Last/Org name");
 		clickButton(driver, searchEntity, "Search");
-		Thread.sleep(15000);
+		Thread.sleep(20000);
 
 		boolean flag = false;
 		try {
@@ -497,7 +497,7 @@ public class CISPage extends CommonAction {
 				// compare if organization name and DOB are as expected from
 				// excel sheet
 				if (orgNameList.get(i).getAttribute("innerHTML").trim().equals(OrganizationName)
-						&& DOBList.get(i).getAttribute("innerHTML").trim().equals(oCISPageDTO.dateOfBirth)) {
+						&& DOBList.get(i).getAttribute("innerHTML").trim().equals(oCISPageDTO.dateOfBirth)){
 					ExtentReporter.logger.log(LogStatus.PASS, "New Organization is available in search List");
 					flag = true;
 					break;
@@ -507,7 +507,7 @@ public class CISPage extends CommonAction {
 				throw new Exception("Org name not listed in search results");
 			}
 		} catch (Exception e) {
-			ExtentReporter.logger.log(LogStatus.FAIL, "New organization name is not listed in search results");
+			ExtentReporter.logger.log(LogStatus.FAIL, "Recently added New organization name is not listed in search results");
 		}
 	}
 }

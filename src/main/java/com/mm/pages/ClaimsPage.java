@@ -281,54 +281,55 @@ public class ClaimsPage extends CommonAction {
 		
 	
 	//Code will add transaction data and save transaction.
-	public void addTransactionDataAndSaveTransaction() throws Exception{
-	//Get the number of transaction types from excel sheet
-		ExtentReporter.logger.log(LogStatus.INFO, "Add Transaction window displays");
-		for (int i=0;i<claimsdto.transactionType.size();i++) {
-		clickButton(driver, addTransactionBtn, "Add Transaction");
-		invisibilityOfLoader(driver);
-		Thread.sleep(1000);
-		//Logic to add first transaction value.
-		String invoiceNumber = addTransactionDetails(claimsdto.transactionType.get(i), claimsdto.paymentType,claimsdto.vendorIDValue.get(i), claimsdto.taxIDType.get(i), claimsdto.transactionAmount.get(i),i);
-		clickButton(driver, saveTransactionBtn, "Save");
-			// After save button, get alert message in variable and verify alert pop up
-			// message
-			if (checkduplicateClaimWindow(duplicateTransactionPageTitle) == true) {
-				clickButton(driver, saveAsClaimBtnOnPsblDuplciateClaimPage, "Save As Claim");
-				invisibilityOfLoader(driver);
-				isAlertPresent(driver);
-				Thread.sleep(8000);
-				switchToParentWindowfromframe(driver);
-				switchToFrameUsingId(driver, "popupframe1");
-				Thread.sleep(3000);
-			} else {
-				ExtentReporter.logger.log(LogStatus.INFO, "Duplicat Claims window is not displayed.");
+		public void addTransactionDataAndSaveTransaction() throws Exception{
+		//Get the number of transaction types from excel sheet
+			ExtentReporter.logger.log(LogStatus.INFO, "Add Transaction window displays");
+			for (int i=0;i<claimsdto.transactionType.size();i++) {
+			clickButton(driver, addTransactionBtn, "Add Transaction");
+			invisibilityOfLoader(driver);
+			Thread.sleep(1000);
+			//Logic to add first transaction value.
+			String invoiceNumber = addTransactionDetails(claimsdto.transactionType.get(i), claimsdto.paymentType,claimsdto.vendorIDValue.get(i), claimsdto.taxIDType.get(i), claimsdto.transactionAmount.get(i),i);
+			clickButton(driver, saveTransactionBtn, "Save");
+				// After save button, get alert message in variable and verify alert pop up
+				// message
+				if (checkduplicateClaimWindow(duplicateTransactionPageTitle) == true) {
+					clickButton(driver, saveAsClaimBtnOnPsblDuplciateClaimPage, "Save As Claim");
+					invisibilityOfLoader(driver);
+					isAlertPresent(driver);
+					Thread.sleep(8000);
+					switchToParentWindowfromframe(driver);
+					switchToFrameUsingId(driver, "popupframe1");
+					Thread.sleep(3000);
+				} else {
+					ExtentReporter.logger.log(LogStatus.INFO, "Duplicat Claims window is not displayed.");
+				}
+			ExtentReporter.logger.log(LogStatus.INFO, "Transaction is entered and the Alert message is displayed");
+			int counter =0;
+			do{
+				Thread.sleep(60000);
+				if(isAlertPresent(driver) ==true)
+				{
+					break;
+				}
+				counter++;
 			}
-		ExtentReporter.logger.log(LogStatus.INFO, "Transaction is entered and the Alert message is displayed");
-		int counter =0;
-		do{
-			Thread.sleep(60000);
-			if(isAlertPresent(driver) ==true)
-			{
-				break;
+			while(counter<3);
+			/*String alertText= getAlertText(driver);
+			verifySaveAlertMessage(alertText,claimsdto.claimNum,claimsdto.transactionAmount.get(i),claimsdto.transactionType.get(i));*/
+			//close Add transaction window
+			closeAddTransactionWindow();
+			switchToParentWindowfromframe(driver);
+			ExtentReporter.logger.log(LogStatus.INFO, "Verify Message window closes and transaction is listed at the top of the Transaction list");
+			Thread.sleep(2000);
+			//switchToParentWindowfromframe(driver);
+			visibilityOfElement(driver, transactionListTitle, "Transaction List");
+			//verify transaction is listed at the top of transaction list
+			ExtentReporter.logger.log(LogStatus.INFO, "Transactions display as entered in the Transaction List.");
+			verifyAddedTransactionIsListedInTransactionList(invoiceNumber);
 			}
-			counter++;
-		}
-		while(counter<3);
-		/*String alertText= getAlertText(driver);
-		verifySaveAlertMessage(alertText,claimsdto.claimNum,claimsdto.transactionAmount.get(i),claimsdto.transactionType.get(i));*/
-		//close Add transaction window
-		closeAddTransactionWindow();
-		switchToParentWindowfromframe(driver);
-		ExtentReporter.logger.log(LogStatus.INFO, "Verify Message window closes and transaction is listed at the top of the Transaction list");
-		Thread.sleep(2000);
-		//switchToParentWindowfromframe(driver);
-		visibilityOfElement(driver, transactionListTitle, "Transaction List");
-		//verify transaction is listed at the top of transaction list
-		ExtentReporter.logger.log(LogStatus.INFO, "Transactions display as entered in the Transaction List.");
-		verifyAddedTransactionIsListedInTransactionList(invoiceNumber);
-		}
-}
+	}
+	
 	//Method wll add details while creating transaction.
 	private String addTransactionDetails(String txnType,  String payType,
 			String  vendorId,  String taxId, String amount, int invoiceNoCount) throws Exception {
@@ -365,12 +366,48 @@ public class ClaimsPage extends CommonAction {
 
 	//Navigate to open window and close Add Transaction window.
 	public void closeAddTransactionWindow() throws InterruptedException{
+	switchToParentWindowfromframe(driver);
+	switchToFrameUsingId(driver, "popupframe1");
 	Thread.sleep(1000);
 	clickButton(driver, closeTransactionBtn, "Close");
 	Thread.sleep(4000);
 }
 	
-	//Verify added transaction is available at the top of Transaction List.
+/*	//Verify added transaction is available at the top of Transaction List.
+	public void verifyAddedTransactionIsListedInTransactionList(String InvoiceNum) throws Exception {
+
+		boolean flag = false;
+		try {
+			//i represents transaction list index, so value of i remains zero as we need to verify top most transaction from the list always.
+			int i =0;
+			//Get the size of transaction types from excel sheet
+			for (int j = 0; j < claimsdto.transactionType.size(); j++) {
+			//Compare column values Trans type and Trans Amount from transaction list with excel sheet values
+				
+				if (transTypeFromTransList.get(i).getAttribute("innerHTML").trim().equals(claimsdto.transactionType.get(j))
+						&& transAmountFromTransList.get(i).getAttribute("innerHTML").trim().equals("$" + claimsdto.transactionAmount.get(j))) 
+				{
+					//Compare column values CISpayeeName and invoice number from transaction list with excel sheet values
+					if (CISpayeeNameFromTransList.get(i).getAttribute("innerHTML").trim().contains(claimsdto.payeeName.get(j).trim())
+							&& invoiceNumFromTransactionList.get(i).getAttribute("innerHTML").trim().equals(InvoiceNum)) 
+					{
+						//if all the transaction values are correct, set flag to true
+						ExtentReporter.logger.log(LogStatus.PASS, "Transaction invoice no. " + InvoiceNum + " is listed in Transaction list.");
+						flag = true;
+						break;
+					}
+				}
+			}
+				if(flag==false)
+				throw new Exception();
+			} catch (Exception e) {
+				//Log status as failed in report and stop execution
+				ExtentReporter.logger.log(LogStatus.FAIL, "Transaction invoice no. "+InvoiceNum+" is Not available at top of Transaction list OR  it is incorrect.");
+				Assert.assertTrue(false,"\nTransaction invoice no. "+InvoiceNum+" is Not available at top of Transaction list OR  it is incorrect.");
+			}
+		}*/
+		
+			//Verify added transaction is available at the top of Transaction List.
 	public void verifyAddedTransactionIsListedInTransactionList(String InvoiceNum) throws Exception {
 		boolean flag = false;
 		try {
@@ -393,6 +430,7 @@ public class ClaimsPage extends CommonAction {
 					+ " is Not available in Transaction list.");
 		}
 		}
+
 			
 	
 	//Get the alert window text message and compare with expected alert message
@@ -560,6 +598,7 @@ public class ClaimsPage extends CommonAction {
 		enterTextIn(driver, firstNameEntitySearchPage, ClaimsDTO.firstName, "First Name");
 		ExtentReporter.logger.log(LogStatus.INFO,"Press Enter or Search");
 		clickButton(driver, searchBtnOnEntitySearchPage, "Entity Search Page's Search");
+		Thread.sleep(2000);
 		Assert.assertEquals(resultOnEntityListPage.getAttribute("innerHTML").trim(),
 				ClaimsDTO.lastName + ", " + ClaimsDTO.firstName + ",", "Data displayed after search is not correct");
 		waitFor(driver, 5);
@@ -586,8 +625,10 @@ public class ClaimsPage extends CommonAction {
 		selectDropdownByValue(driver, lobDropDown, ClaimsDTO.lobDropDownValue, "LOB");
 		ExtentReporter.logger.log(LogStatus.INFO,"Enter 'Test' in the description field ");
 		enterTextIn(driver, descriptionTextBox, ClaimsDTO.description, "Description");
+		if(triageMeetingDateField.isDisplayed()==true) {
 		ExtentReporter.logger.log(LogStatus.INFO,"Enter today's date in 'Traige Meeting Date' field");
 		enterTextIn(driver, triageMeetingDateField, comUtil.getSystemDatemm_dd_yyyy(), "Triage Meeting Date");
+		}
 		ExtentReporter.logger.log(LogStatus.INFO,"Click File Handler dropdown and select Act Super, EJ");
 		selectDropdownByValue(driver, fileHandlerDorpDown, ClaimsDTO.fileHandlerDropDownValue, "File Handler");
 		ExtentReporter.logger.log(LogStatus.INFO,"Click State of Loss dropdown and select GA");
@@ -602,6 +643,7 @@ public class ClaimsPage extends CommonAction {
 		Thread.sleep(2000);
 		enterTextIn(driver, entityClientId, clientIdValue, "Client Id");
 		clickButton(driver, searchBtnOnEntitySearchPage, "Entity Search Page's Search");
+		Thread.sleep(4000);
 		waitFor(driver, 10);
 		Assert.assertTrue(resultOnEntityListPage.isDisplayed(),
 				"Insured Name is not populated on 'Entity Select List' page.");
@@ -630,6 +672,7 @@ public class ClaimsPage extends CommonAction {
 		}
 		ExtentReporter.logger.log(LogStatus.INFO,"Click Save as Claim ");
 		clickButton(driver, saveAsClaimBtn, "Save As Claim");
+			
 		if(checkduplicateClaimWindow(duplicateClaimPageTitle)==true)
 		{
 			//switchToFrameUsingElement(driver, changeFileStatusFrameEle);

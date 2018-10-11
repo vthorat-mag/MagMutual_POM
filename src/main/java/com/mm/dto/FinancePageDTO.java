@@ -3,7 +3,7 @@ package com.mm.dto;
 import java.util.List;
 import java.util.Map;
 
-import MMTestCase.SmokeTestCasesUpdated;
+import MMTestCase.QA;
 
 public class FinancePageDTO {
 
@@ -50,8 +50,12 @@ public class FinancePageDTO {
 	public String screenShotName;
 	public String backUpPolicyNum;
 	public String AlternateNextDate;
+	public String OwnerDDLValue_Y;
+	public String OwnerDDLValue_N;
+	public String coverageNameumbplins;
+	public String coveragenameumbcglins;
+	public String issueCompanyValue;
 
-	//This method will access DTO Code.
 	public FinancePageDTO(Map<String, List<String>> excelData) {
 
 		for (int i = 0; i <= FinancePageDTO.class.getFields().length - 1; i++) {

@@ -57,8 +57,8 @@ public class PolicyIndicationPage extends CommonAction {
 
 	@FindBy(id = "PM_UNDWRI_BACK")
 	WebElement Close_Underwritter;
-
-	@FindBy(id = "PM_CPT_TRAN_OK")
+	
+	@FindBy(id="PM_CPT_TRAN_OK")
 	WebElement OK_Capt_Trans_Details;
 
 	@FindBy(id = "PM_QT_LIMIT_SHARING")
@@ -117,8 +117,8 @@ public class PolicyIndicationPage extends CommonAction {
 
 	@FindBy(name = "retroDate")
 	WebElement Retro_Date;
-
-	@FindBy(name = "productDefaultLimitCode")
+	
+	@FindBy(name="productDefaultLimitCode")
 	WebElement coverageLimitCode;
 
 	@FindBy(id = "PM_SEL_COVG_DONE")
@@ -252,11 +252,11 @@ public class PolicyIndicationPage extends CommonAction {
 
 	@FindBy(id = "PM_QT_RISK_ADD")
 	WebElement addRiskbtn;
-
-	@FindBy(id = "CRISKTYPEDESC")
-	List<WebElement> riskTypeList;
-
-	@FindBy(id = "PM_SELRISKTYPES")
+	
+	@FindBy(id="CRISKTYPEDESC")
+	List <WebElement> riskTypeList; 
+	
+	@FindBy(id="PM_SELRISKTYPES")
 	WebElement selectRiskTypeButton;
 
 	@FindBy(id = "CCOVERAGEEFFECTIVEFROMDATE")
@@ -306,47 +306,54 @@ public class PolicyIndicationPage extends CommonAction {
 	}
 
 	// Select Underwriter button from Policy tab and move to pop up window frame
-	public List<WebElement> open_Underwriter() throws InterruptedException {
+	public String open_Underwriter() throws InterruptedException {
 
+		String policyNo=policyNo();
 		ExtentReporter.logger.log(LogStatus.INFO, "Select Underwriter Button. Verify Underwriter window is displayed");
-		// waitForElementToLoad(driver, 30, Underwriter);
+		//waitForElementToLoad(driver, 30, Underwriter);
 		Thread.sleep(3000);
 		invisibilityOfLoader(driver);
 		clickButton(driver, Underwriter, "Underwriter button");
 		Thread.sleep(4000);
 
-		List<WebElement> firstFrame = driver.findElements(By.id("popupframe1"));
-		driver.switchTo().frame(firstFrame.get(0));
-		return firstFrame;
+		/*List<WebElement> firstFrame = driver.findElements(By.id("popupframe1"));
+		driver.switchTo().frame(firstFrame.get(0));*/
+		return policyNo;
 	}
 
 	// Select under writer button from policy page, Add Underwriters info to
 	// create underwriters and Save underwriter
-	public PolicyIndicationPage add_Underwriter(List<WebElement> firstFrame) throws Exception {
+	public PolicyIndicationPage add_Underwriter(String policyNo) throws Exception {
 
+		WebElement iframeEle = driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]"));
+		switchToFrameUsingElement(driver, iframeEle);
+		String Blank="";
+		Thread.sleep(2000);
+		invisibilityOfLoader(driver);
 		getPageTitle(driver, maintainUnderwritingTeamPageTitle);
 
 		// Get count of underwriterNames from excel file
-		for (int underwritercount = 0; underwritercount < hospitalIndicationDTO.underwriterName.size()
-				/ 2; underwritercount++) {
-
+		for (int underwritercount = 0; underwritercount < hospitalIndicationDTO.underwriterName.size(); underwritercount++) {
+			
+			if(hospitalIndicationDTO.underwriterName.get(underwritercount).equals(Blank)){
+				break;
+			}
+			
 			ExtentReporter.logger.log(LogStatus.INFO, "Click Add Underwriter. Verify Add Underwriter window displayed");
-			// waitForElementToLoad(driver, 30, Add_Underwriter);
-			Thread.sleep(2000);
-			invisibilityOfLoader(driver);
-
+			//waitForElementToLoad(driver, 30, Add_Underwriter);
 			// Open Add underwriter tab from the first pop up frame and move to
 			// second pop up frame using list
 			clickButton(driver, Add_Underwriter, "Add Underwriter");
 			Thread.sleep(3000);
-			List<WebElement> secondFrame = driver.findElements(By.id("popupframe1"));
-			driver.switchTo().frame(secondFrame.get(0));
+			/*List<WebElement> secondFrame = driver.findElements(By.id("popupframe1"));
+			driver.switchTo().frame(secondFrame.get(0));*/
+			WebElement iframeEle1 = driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]"));
+			switchToFrameUsingElement(driver, iframeEle1);
 			Thread.sleep(1000);
 			getPageTitle(driver, addUnderwriterPageTitle);
 
 			// Select underwriter name from DDL
-			ExtentReporter.logger.log(LogStatus.INFO,
-					"Use drop down menu to select Arwood, Ruth,Click [Ok].Underwriter is added to list");
+			ExtentReporter.logger.log(LogStatus.INFO, "Use drop down menu to select Arwood, Ruth,Click [Ok].Underwriter is added to list");
 			selectDropdownByVisibleText(driver, underWritingTeamMemberName,
 					hospitalIndicationDTO.underwriterName.get(underwritercount), "Underwriter name");
 			Thread.sleep(1000);
@@ -355,41 +362,106 @@ public class PolicyIndicationPage extends CommonAction {
 			click(driver, Add_Underwriter_Ok, "OK button");
 			driver.switchTo().defaultContent();
 			Thread.sleep(2000);
-			driver.switchTo().frame(firstFrame.get(0));
+			//driver.switchTo().frame(firstFrame.get(0));
+			switchToFrameUsingElement(driver, iframeEle);
 			// select underwriter info for the selected underwriter using DDL
 			// and save
 			ExtentReporter.logger.log(LogStatus.INFO,
 					"Update Underwriting Team Member Information-Type:Verify Underwriting Team Member List displays the updated type for Entity");
 			selectDropdownByVisibleText(driver, UnderwriterType, hospitalIndicationDTO.teamName.get(underwritercount),
 					"Type");
-			ExtentReporter.logger.log(LogStatus.INFO,
-					"Use drop down menu to select Name. Verify Underwriter name is displayed");
+			ExtentReporter.logger.log(LogStatus.INFO, "Use drop down menu to select Name. Verify Underwriter name is displayed");
 			selectDropdownByVisibleText(driver, Underwriter_name,
 					hospitalIndicationDTO.teamMembername.get(underwritercount), "Underwriter team member name");
 			// Verify the Under writer name value is selected and it is correct
-
+			
 			Thread.sleep(1000);
 			clickButton(driver, Save_Underwritter, "Save button");
-
-			// TODO-handle this method for QA
-			// captureTransactionDetailsForQA();
-		}
+			
+			//TODO-handle this method for QA
+			//captureTransactionDetailsForQA();
+		}	
 		return new PolicyIndicationPage(driver);
 	}
 
-	// Capture transaction details occurs for QA environment only
-	public void captureTransactionDetailsForQA() throws InterruptedException {
+	public PolicyIndicationPage add_UnderwriterForQA(String policyNo) throws Exception {
 
-		List<WebElement> secondFrame2 = driver.findElements(By.id("popupframe1"));
-		driver.switchTo().frame(secondFrame2.get(0));
+		WebElement iframeEle1 = driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]"));
+		switchToFrameUsingElement(driver, iframeEle1);
+		String Blank="";
 		Thread.sleep(2000);
-		clickButton(driver, OK_Capt_Trans_Details, "Ok");
-		driver.switchTo().defaultContent();
-		Thread.sleep(2000);
-		List<WebElement> firstFrame = driver.findElements(By.id("popupframe1"));
-		driver.switchTo().frame(firstFrame.get(0));
+		invisibilityOfLoader(driver);
+		getPageTitle(driver, maintainUnderwritingTeamPageTitle);
+
+		// Get count of underwriterNames from excel file
+		for (int underwritercount = 0; underwritercount < hospitalIndicationDTO.underwriterName.size(); underwritercount++) {
+			
+			if(hospitalIndicationDTO.underwriterName.get(underwritercount).equals(Blank)){
+				break;
+			}
+			
+			ExtentReporter.logger.log(LogStatus.INFO, "Click Add Underwriter. Verify Add Underwriter window displayed");
+			//waitForElementToLoad(driver, 30, Add_Underwriter);
+			// Open Add underwriter tab from the first pop up frame and move to
+			// second pop up frame using list
+			clickButton(driver, Add_Underwriter, "Add Underwriter");
+			Thread.sleep(3000);
+			/*List<WebElement> secondFrame = driver.findElements(By.id("popupframe1"));
+			driver.switchTo().frame(secondFrame.get(0));*/
+			WebElement iframeEle2 = driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]"));
+			switchToFrameUsingElement(driver, iframeEle2);
+			Thread.sleep(1000);
+			getPageTitle(driver, addUnderwriterPageTitle);
+
+			// Select underwriter name from DDL
+			ExtentReporter.logger.log(LogStatus.INFO, "Use drop down menu to select Arwood, Ruth,Click [Ok].Underwriter is added to list");
+			selectDropdownByVisibleText(driver, underWritingTeamMemberName,
+					hospitalIndicationDTO.underwriterName.get(underwritercount), "Underwriter name");
+			Thread.sleep(1000);
+
+			// Switch back to first frame from second frame
+			click(driver, Add_Underwriter_Ok, "OK button");
+			driver.switchTo().defaultContent();
+			Thread.sleep(2000);
+			switchToFrameUsingElement(driver, iframeEle1);
+			// select underwriter info for the selected underwriter using DDL
+			// and save
+			ExtentReporter.logger.log(LogStatus.INFO,
+					"Update Underwriting Team Member Information-Type:Verify Underwriting Team Member List displays the updated type for Entity");
+			selectDropdownByVisibleText(driver, UnderwriterType, hospitalIndicationDTO.teamName.get(underwritercount),
+					"Type");
+			ExtentReporter.logger.log(LogStatus.INFO, "Use drop down menu to select Name. Verify Underwriter name is displayed");
+			selectDropdownByVisibleText(driver, Underwriter_name,
+					hospitalIndicationDTO.teamMembername.get(underwritercount), "Underwriter team member name");
+			// Verify the Under writer name value is selected and it is correct
+			
+			Thread.sleep(1000);
+			clickButton(driver, Save_Underwritter, "Save button");
+			
+			//TODO-handle this method for QA
+			captureTransactionDetailsForQA(policyNo);
+		}	
+		return new PolicyIndicationPage(driver);
 	}
 
+	
+	
+	//Capture transaction details occurs for QA environment only
+	public void captureTransactionDetailsForQA(String policyNo) throws Exception{
+		
+		
+		WebElement iframeEle2 = driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]"));
+		switchToFrameUsingElement(driver, iframeEle2);
+		Thread.sleep(2000);
+		clickButton(driver, OK_Capt_Trans_Details, "Ok"); 
+		driver.switchTo().defaultContent();
+		Thread.sleep(2000);
+		
+		WebElement iframeEle1 = driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]"));
+		switchToFrameUsingElement(driver, iframeEle1);
+	}
+	
+	
 	// Close 'Maintain Underwriting team' pop up, move control to parent window
 	// and Save WIP
 	public PolicyIndicationPage closeUnderwriter() throws Exception {
@@ -412,8 +484,7 @@ public class PolicyIndicationPage extends CommonAction {
 
 		Thread.sleep(3000);
 		// Select Agent from Policy Action drop down list
-		ExtentReporter.logger.log(LogStatus.INFO,
-				"Click Policy Actions dropdown and select Agent. Verify Agent window is open");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions dropdown and select Agent. Verify Agent window is open");
 		selectDropdownByVisibleText(driver, Policy_Action, hospitalIndicationDTO.policyAction, "Policy Action");
 		Thread.sleep(3000);
 		switchToFrameUsingId(driver, "popupframe1");
@@ -422,248 +493,179 @@ public class PolicyIndicationPage extends CommonAction {
 
 		// Add Agent information and save agent
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Add. Verify Producer Agent Entry window opens");
-		click(driver, addAgent, "Add button");
+		clickButton(driver, addAgent, "Add button");
 		Thread.sleep(3000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Select Agent from dropdown list: Verify Agent is selected");
-		// Select producer value using DDL // Add in excel sheet
-		selectDropdownByVisibleText(driver, Producer, hospitalIndicationDTO.producer, "Producer");
-		// Verify producer value is selected and it is correct
-		// verifyValueFromField(driver,Producer,
-		// hospitalIndicationDTO.producer,"value");
-		click(driver, Save_Agent, "Save button");
-		Thread.sleep(2000);
+		//Select producer value using DDL // Add in excel sheet
+		selectDropdownByVisibleText(driver,Producer,hospitalIndicationDTO.producer, "Producer");
+		//Verify producer value is selected and it is correct
+	//	verifyValueFromField(driver,Producer, hospitalIndicationDTO.producer,"value");
+		clickButton(driver,Save_Agent, "Save button");
+		Thread.sleep(4000);
 
 		// Close agent and switch to parent window
-		ExtentReporter.logger.log(LogStatus.INFO,
-				"Click Save and Close.Verify Agent is saved to policy and window is closed");
-		click(driver, closeAgent, "Close button");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Save and Close.Verify Agent is saved to policy and window is closed");
+		clickButton(driver, closeAgent, "Close button");
 		switchToParentWindowfromframe(driver);
 		return new PolicyIndicationPage(driver);
 
 	}
 
 	// Select Risk tab, select Risk type and fill the Risk Information
-	public PolicyIndicationPage addRiskInformation(String riskCountyValue, String riskSpecialityValue,
-			String riskTypeValueFromDataSheet, String fteTypeValue) throws Exception {
+		public PolicyIndicationPage addRiskInformation(String riskCountyValue, String riskSpecialityValue,
+				String riskTypeValueFromDataSheet, String fteTypeValue) throws Exception {
 
-		Thread.sleep(5000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Select Risk. Verify Hospital Risk is highlighted");
-		List<WebElement> availableRiskTypeList = driver
-				.findElements(By.xpath("//td//div[@id='CRISKTYPECODELOVLABEL']"));
+			Thread.sleep(5000);
+			ExtentReporter.logger.log(LogStatus.INFO, "Select Risk. Verify Hospital Risk is highlighted");
+			List<WebElement> availableRiskTypeList = driver
+					.findElements(By.xpath("//td//div[@id='CRISKTYPECODELOVLABEL']"));
 
-		boolean flag = false;
-		try {
-			// Get the size of risk types available on page list
-			for (int i = 0; i < availableRiskTypeList.size(); i++) {
-				// Store selected risk type in a string to compare if it
-				// contains FTE, because there are 2 FTE risk types
-				// And it selects first FTE from list always, so to avoid that
-				// we have to choose last (latest) risk type.
-				String recentlyAddedRiskType = availableRiskTypeList.get(i).getAttribute("innerHTML").trim();
+			boolean flag = false;
+			try {
+				// Get the size of risk types available on page list
+				for (int i = 0; i < availableRiskTypeList.size(); i++) {
+					// Store selected risk type in a string to compare if it
+					// contains FTE, because there are 2 FTE risk types
+					// And it selects first FTE from list always, so to avoid that
+					// we have to choose last (latest) risk type.
+					String recentlyAddedRiskType = availableRiskTypeList.get(i).getAttribute("innerHTML").trim();
 
-				if (recentlyAddedRiskType.contains("FTE")) {
+					if (recentlyAddedRiskType.contains("FTE")) {
 
-					// Get the size of last risk type in list
-					int lastValueIndexFromList = availableRiskTypeList.size() - 1;
+						// Get the size of last risk type in list
+						int lastValueIndexFromList = availableRiskTypeList.size() - 1;
 
-					selectValue(driver, availableRiskTypeList.get(lastValueIndexFromList),
-							"Risk Type from Risk List on Risk Page");
-					flag = true;
-					break;
-				} else
-				// If risk type from data sheet does not contain FTE then select
-				// risk type directly
-				if (recentlyAddedRiskType.equals(riskTypeValueFromDataSheet)) {
-					selectValue(driver, availableRiskTypeList.get(i), "Risk Type from Risk List on Risk Page");
-					flag = true;
-					break;
+						selectValue(driver, availableRiskTypeList.get(lastValueIndexFromList),
+								"Risk Type from Risk List on Risk Page");
+						flag = true;
+						break;
+					} else
+					// If risk type from data sheet does not contain FTE then select
+					// risk type directly
+					if (recentlyAddedRiskType.equals(riskTypeValueFromDataSheet)) {
+						selectValue(driver, availableRiskTypeList.get(i), "Risk Type from Risk List on Risk Page");
+						flag = true;
+						break;
+					}
 				}
+				if (flag == false) {
+					throw new Exception();
+				}
+			} catch (Exception e) {
+				ExtentReporter.logger.log(LogStatus.FAIL,
+						riskTypeValueFromDataSheet + " is not available in Risk List section of Risk Page.");
 			}
-			if (flag == false) {
-				throw new Exception();
+
+			ExtentReporter.logger.log(LogStatus.INFO,
+					"For Risk information populate the following: Primary = Yes (defaults)" + "County = " + riskCountyValue
+							+ ", Specialty = " + riskSpecialityValue
+							+ ". Verify Risk information is displayed and selected");
+			// Select Risk County and Risk specialty using DDL
+			Thread.sleep(3000);
+			selectDropdownByValue(driver, stateCode, hospitalIndicationDTO.stateCodeValue, "State");
+			Thread.sleep(2000);
+			selectDropdownByValue(driver, riskCounty, riskCountyValue, "Risk County");
+			Thread.sleep(1000);
+			selectDropdownByValue(driver, riskSpeciality, riskSpecialityValue, "Risk speciality");
+
+			// This is for TC42244
+			// If the risk type is FTE add FTE type and FTE number
+			if (riskTypeValueFromDataSheet.equals("FTE")) {
+				Thread.sleep(2000);
+				selectDropdownByValue(driver, FTEtype, fteTypeValue, "FTE Type");
+				String FTEnum = randomNumGenerator(1, "1234567");
+				clearTextBox(driver, FTEnumber, "# FTE");
+				enterDataIn(driver, FTEnumber, FTEnum, "# FTE");
+			} else if (riskTypeValueFromDataSheet.equals("Emp Shared")) {
+				Thread.sleep(2000);
+				String FTEnum = randomNumGenerator(1, "1234567");
+				clearTextBox(driver, FTEnumber, "# FTE");
+				enterDataIn(driver, FTEnumber, FTEnum, "# FTE");
+
 			}
-		} catch (Exception e) {
-			ExtentReporter.logger.log(LogStatus.FAIL,
-					riskTypeValueFromDataSheet + " is not available in Risk List section of Risk Page.");
+
+			clickButton(driver, saveWIP, "Save WIP"); // not given in rally test
+														// steps
+			return new PolicyIndicationPage(driver);
 		}
 
-		ExtentReporter.logger.log(LogStatus.INFO,
-				"For Risk information populate the following: Primary = Yes (defaults)" + "County = " + riskCountyValue
-						+ ", Specialty = " + riskSpecialityValue
-						+ ". Verify Risk information is displayed and selected");
-		// Select Risk County and Risk specialty using DDL
-		Thread.sleep(3000);
-		selectDropdownByValue(driver, stateCode, hospitalIndicationDTO.stateCodeValue, "State");
-		Thread.sleep(2000);
-		selectDropdownByValue(driver, riskCounty, riskCountyValue, "Risk County");
-		Thread.sleep(1000);
-		selectDropdownByValue(driver, riskSpeciality, riskSpecialityValue, "Risk speciality");
-
-		// This is for TC42244
-		// If the risk type is FTE add FTE type and FTE number
-		if (riskTypeValueFromDataSheet.equals("FTE")) {
-			Thread.sleep(2000);
-			selectDropdownByValue(driver, FTEtype, fteTypeValue, "FTE Type");
-			String FTEnum = randomNumGenerator(1, "1234567");
-			clearTextBox(driver, FTEnumber, "# FTE");
-			enterDataIn(driver, FTEnumber, FTEnum, "# FTE");
-		} else if (riskTypeValueFromDataSheet.equals("Emp Shared")) {
-			Thread.sleep(2000);
-			String FTEnum = randomNumGenerator(1, "1234567");
-			clearTextBox(driver, FTEnumber, "# FTE");
-			enterDataIn(driver, FTEnumber, FTEnum, "# FTE");
-
-		}
-
-		clickButton(driver, saveWIP, "Save WIP"); // not given in rally test
-													// steps
-		return new PolicyIndicationPage(driver);
-	}
-
-	public PolicyIndicationPage selectRiskTab() throws Exception {
-
+	public PolicyIndicationPage selectRiskTab() throws Exception{
+		
 		Thread.sleep(4000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Go to Risk Tab. Verify Risk tab displays");
 		click(driver, riskTab, "Risk tab");
 		return new PolicyIndicationPage(driver);
 	}
-
+	
 	// Add Risk type from Risk tab, Search risk and select risk
-	public PolicyIndicationPage selectRiskTypeFromPopupWindow(String policyNo) throws Exception {
+		public PolicyIndicationPage selectRiskTypeFromPopupWindow(String policyNo) throws Exception {
 
-		clickButton(driver, addRiskbtn, "Add");
-		Thread.sleep(2000);
-		invisibilityOfLoader(driver);
-		WebElement iframeEle = driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]"));
-		switchToFrameUsingElement(driver, iframeEle);
-		getPageTitle(driver, selectRiskTypeWindowTitle);
-		boolean flag = false;
-		try {
-			for (int i = 0; i < riskTypeList.size(); i++) {
+			clickButton(driver, addRiskbtn, "Add");
+			Thread.sleep(2000);
+			invisibilityOfLoader(driver);
+			WebElement iframeEle = driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]"));
+			switchToFrameUsingElement(driver, iframeEle);
+			getPageTitle(driver, selectRiskTypeWindowTitle);
+			boolean flag = false;
+			try {
+				for (int i = 0; i < riskTypeList.size(); i++) {
 
-				if (riskTypeList.get(i).getAttribute("innerHTML").equals(hospitalIndicationDTO.riskTypeValue.get(0))) {
+					if (riskTypeList.get(i).getAttribute("innerHTML").equals(hospitalIndicationDTO.riskTypeValue.get(0))) {
 
-					selectValue(driver, riskTypeList.get(i), hospitalIndicationDTO.riskTypeValue.get(0));
-					ExtentReporter.logger.log(LogStatus.PASS,
-							hospitalIndicationDTO.riskTypeValue + " is selected from Risk Type List");
-					flag = true;
-					break;
-				}
-			}
-			if (flag == false) {
-				throw new Exception();
-			}
-		} catch (Exception e) {
-			ExtentReporter.logger.log(LogStatus.FAIL, hospitalIndicationDTO.riskTypeValue
-					+ " is not available in Risk Type List of window" + selectRiskTypeWindowTitle);
-		}
-
-		clickButton(driver, selectRiskTypeButton, "Select");
-		switchToParentWindowfromframe(driver);
-		return new PolicyIndicationPage(driver);
-
-	}
-	/*
-	 * public PolicyIndicationPage searchAndSelectRisk() throws Exception{
-	 * String Blank=""; HomePage homePage= new HomePage(driver); String
-	 * parentWindow = switchToWindow(driver);
-	 * homePage.searchEntity(Blank,Blank); homePage.selectEntity(parentWindow);
-	 * return new PolicyIndicationPage(driver); }
-	 */
-
-	// Add Risk type from Risk tab, Search And Select Entity according to Risk
-	// type
-	public PolicyIndicationPage selectRiskTypeFromPopupWindowAndSelectEntity(String policyNo,
-			String riskTypeFromDataFile, String clientNameFromDataSheet) throws Exception {
-
-		ExtentReporter.logger.log(LogStatus.INFO, "Click Add under Risk List. Select Risk Type window pops up");
-		clickButton(driver, addRiskbtn, "Add");
-		Thread.sleep(4000);
-		invisibilityOfLoader(driver);
-		WebElement iframeEle = driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]"));
-		switchToFrameUsingElement(driver, iframeEle);
-		getPageTitle(driver, selectRiskTypeWindowTitle);
-
-		boolean flag = false;
-		try {
-
-			if (riskTypeFromDataFile.contains("IBNR")) {
-				clickButton(driver, nextPageForRiskTypeList, "Next Page Arrow");
-				Thread.sleep(3000);
-			}
-
-			for (int j = 0; j < riskTypeList.size(); j++) {
-
-				String riskTypeFromApplication = riskTypeList.get(j).getAttribute("innerHTML").trim();
-
-				if (riskTypeFromDataFile.equals(riskTypeFromApplication)) {
-
-					if (riskTypeFromApplication.contains("FTE") || riskTypeFromApplication.equals("Emp Shared"))
-
-					{
-						ExtentReporter.logger.log(LogStatus.INFO, "Select " + riskTypeFromDataFile
-								+ ". Click Select Entity Select Search window pops up");
-						selectValue(driver, riskTypeList.get(j), riskTypeFromDataFile);
+						selectValue(driver, riskTypeList.get(i), hospitalIndicationDTO.riskTypeValue.get(0));
 						ExtentReporter.logger.log(LogStatus.PASS,
-								riskTypeFromDataFile + " is selected from Risk Type List");
-						clickButton(driver, selectRiskTypeButton, "Select");
-						searchAndSelectRiskTypeOrganization(clientNameFromDataSheet);
-						flag = true;
-						break;
-					} else {
-
-						selectValue(driver, riskTypeList.get(j), riskTypeFromDataFile);
-						ExtentReporter.logger.log(LogStatus.PASS,
-								riskTypeFromDataFile + " is selected from Risk Type List");
-						clickButton(driver, selectRiskTypeButton, "Select");
-						searchAndSelectRiskTypePerson(clientNameFromDataSheet);
+								hospitalIndicationDTO.riskTypeValue + " is selected from Risk Type List");
 						flag = true;
 						break;
 					}
 				}
+				if (flag == false) {
+					throw new Exception();
+				}
+			} catch (Exception e) {
+				ExtentReporter.logger.log(LogStatus.FAIL, hospitalIndicationDTO.riskTypeValue
+						+ " is not available in Risk Type List of window" + selectRiskTypeWindowTitle);
 			}
-			if (flag == false) {
-				throw new Exception("Risk Type is not available in Add risk window");
-			}
-		} catch (Exception e) {
-			ExtentReporter.logger.log(LogStatus.FAIL,
-					riskTypeFromDataFile + " is not available to select in Risk Type List of Add Risk window");
-			Assert.assertTrue(false);
+
+			clickButton(driver, selectRiskTypeButton, "Select");
+			switchToParentWindowfromframe(driver);
+			return new PolicyIndicationPage(driver);
+
 		}
-		return new PolicyIndicationPage(driver);
-	}
+		
+		
+		// search and select Risk name for the type Person
+		public PolicyIndicationPage searchAndSelectRiskTypePerson(String clientNameFromDataSheet) throws Exception {
+			String Blank = "";
+			HomePage homePage = new HomePage(driver);
+			String parentWindow = switchToWindow(driver);
+			homePage.searchEntity(Blank, Blank);
+			homePage.selectEntity(parentWindow, clientNameFromDataSheet);
+			return new PolicyIndicationPage(driver);
+		}
 
-	// search and select Risk name for the type Person
-	public PolicyIndicationPage searchAndSelectRiskTypePerson(String clientNameFromDataSheet) throws Exception {
-		String Blank = "";
-		HomePage homePage = new HomePage(driver);
-		String parentWindow = switchToWindow(driver);
-		homePage.searchEntity(Blank, Blank);
-		homePage.selectEntity(parentWindow, clientNameFromDataSheet);
-		return new PolicyIndicationPage(driver);
-	}
+		// search and select Risk name for the type Organization
+		public PolicyIndicationPage searchAndSelectRiskTypeOrganization(String clientNameFromDataSheet) throws Exception {
+			String Blank = "";
+			HomePage homePage = new HomePage(driver);
+			String parentWindow = switchToWindow(driver);
+			homePage.searchEntity(Blank, Blank);
+			homePage.changeEntityTypeToOrganization();
+			homePage.selectEntity(parentWindow, clientNameFromDataSheet);
+			return new PolicyIndicationPage(driver);
+		}
 
-	// search and select Risk name for the type Organization
-	public PolicyIndicationPage searchAndSelectRiskTypeOrganization(String clientNameFromDataSheet) throws Exception {
-		String Blank = "";
-		HomePage homePage = new HomePage(driver);
-		String parentWindow = switchToWindow(driver);
-		homePage.searchEntity(Blank, Blank);
-		homePage.changeEntityTypeToOrganization();
-		homePage.selectEntity(parentWindow, clientNameFromDataSheet);
-		return new PolicyIndicationPage(driver);
-	}
-
+	
+	
 	// Select Coverage tab, click on Add button and switch to pop up window
 	public PolicyIndicationPage selectCoverageTab() throws Exception {
 
 		Thread.sleep(2000);
-		ExtentReporter.logger.log(LogStatus.INFO,
-				"Click Coverage Tab. Verify Coverage tab displays with the primary defaulting in the dropdown");
+		ExtentReporter.logger.log(LogStatus.INFO, "Click Coverage Tab. Verify Coverage tab displays with the primary defaulting in the dropdown");
 		clickButton(driver, Coverage_tab, "Coverage tab");
 		return new PolicyIndicationPage(driver);
 	}
-
+	
 	public PolicyIndicationPage selectAddCoverageButton() throws Exception {
 		Thread.sleep(1000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Add. Verify Select Coverage window displays");
@@ -675,19 +677,17 @@ public class PolicyIndicationPage extends CommonAction {
 
 	// Select Coverage from the pop up List appearing after 'Add' button on
 	// coverage tab
-	public PolicyIndicationPage selectCoverageFromPopupListAddDatePremium(String retroDate) throws Exception {
+	public PolicyIndicationPage selectCoverageFromPopupListAddDatePremium(String retroDate)	throws Exception {
 
 		// Get the count of coverage check boxes
 		Thread.sleep(2000);
 		for (int i = 0; i < selectCoverageChkBox.size(); i++) {
 			// Select coverage check box if Coverage and Policy Form combination
 			// is as expected
-			if (selectCoveragevalues.get(i).getAttribute("innerHTML").trim()
-					.equalsIgnoreCase(hospitalIndicationDTO.coverageFromPopup.trim())
-					&& selectPolicyForm.get(i).getAttribute("innerHTML").trim()
-							.equalsIgnoreCase(hospitalIndicationDTO.policyForms.trim())) {
-				ExtentReporter.logger.log(LogStatus.INFO, "Select " + hospitalIndicationDTO.coverageFromPopup + " for "
-						+ hospitalIndicationDTO.policyForms + ", Verify Coverage is selected from popup list");
+			if (selectCoveragevalues.get(i).getAttribute("innerHTML").trim().equalsIgnoreCase(hospitalIndicationDTO.coverageFromPopup.trim())
+					&& selectPolicyForm.get(i).getAttribute("innerHTML").trim().equalsIgnoreCase(hospitalIndicationDTO.policyForms.trim())) {
+				ExtentReporter.logger.log(LogStatus.INFO,
+						 "Select "+hospitalIndicationDTO.coverageFromPopup +" for "+hospitalIndicationDTO.policyForms+", Verify Coverage is selected from popup list");
 				clickButton(driver, selectCoverageChkBox.get(i), "Coverage check box");
 				Assert.assertTrue(selectCoverageChkBox.get(i).isSelected(),
 						selectCoverageChkBox.get(i) + "is NOt selected");
@@ -699,18 +699,15 @@ public class PolicyIndicationPage extends CommonAction {
 						// Add Retro date and premium amount for the selected
 						// coverage
 						if (Retro_Date.isDisplayed()) {
-							selectDropdownByVisibleText(driver, coverageLimitCode, hospitalIndicationDTO.coverageLimit,
-									"Coverage Limit Code");
+							selectDropdownByVisibleText(driver, coverageLimitCode, hospitalIndicationDTO.coverageLimit, "Coverage Limit Code");
 							clearTextBox(driver, Premium, "Premium Amount");
 							enterDataIn(driver, Premium, hospitalIndicationDTO.premiumAmount.get(retroDateCount),
 									"Premium text box");
 							// Verify that premium amount is entered and it is
-							// correct
-							// verifyValueFromField(driver,
-							// Premium,hospitalIndicationDTO.premiumAmount.get(retroDateCount),
-							// "value", "Premium Amount");
+							// correct 
+						//	verifyValueFromField(driver, Premium,hospitalIndicationDTO.premiumAmount.get(retroDateCount), "value", "Premium Amount");
 							Thread.sleep(1000);
-							enterDataIn(driver, Retro_Date, retroDate, "Retro Date");
+							enterDataIn(driver, Retro_Date, retroDate,"Retro Date");
 							break;
 						}
 					} catch (Exception e) {
@@ -722,8 +719,8 @@ public class PolicyIndicationPage extends CommonAction {
 				// Select coverage check box if Coverage is as expected
 			} else if (selectCoveragevalues.get(i).getAttribute("innerHTML")
 					.equals(hospitalIndicationDTO.coverageFromPopup)) {
-				ExtentReporter.logger.log(LogStatus.INFO, "Select " + hospitalIndicationDTO.coverageFromPopup + " for "
-						+ hospitalIndicationDTO.policyForms + ", Verify Coverage is selected from popup list");
+				ExtentReporter.logger.log(LogStatus.INFO,
+						 "Select "+hospitalIndicationDTO.coverageFromPopup +" for "+hospitalIndicationDTO.policyForms+", Verify Coverage is selected from popup list");
 				clickButton(driver, selectCoverageChkBox.get(i), "Coverage check box");
 				// Assert.assertTrue(selectCoverageChkBox.get(i).isSelected(),selectCoverageChkBox.get(i)+"is
 				// NOt selected");
@@ -758,13 +755,12 @@ public class PolicyIndicationPage extends CommonAction {
 	// Close Select Coverage pop up
 	public PolicyIndicationPage closeAddCoverageWindow() throws Exception {
 		Thread.sleep(3000);
-		ExtentReporter.logger.log(LogStatus.INFO,
-				"Click Select. Verify Information has been entered and coverage has been added to primary risk");
+		ExtentReporter.logger.log(LogStatus.INFO,"Click Select. Verify Information has been entered and coverage has been added to primary risk");
 		clickButton(driver, Select_coverage, "Select button for coverage");
 		invisibilityOfLoader(driver);
 		Thread.sleep(6000);
 		switchToParentWindowfromframe(driver);
-
+		
 		return new PolicyIndicationPage(driver);
 	}
 
@@ -791,9 +787,8 @@ public class PolicyIndicationPage extends CommonAction {
 				// coverage from grid on coverage page
 				if (coverageList.get(i).getAttribute("innerHTML").trim()
 						.equalsIgnoreCase(hospitalIndicationDTO.coverage.get(coverageCount))) {
-					ExtentReporter.logger.log(LogStatus.INFO,
-							"Select " + hospitalIndicationDTO.coverage.get(coverageCount)
-									+ "Verify Coverage is highlighted from Grid");
+					ExtentReporter.logger.log(LogStatus.INFO,"Select "+
+							hospitalIndicationDTO.coverage.get(coverageCount) + "Verify Coverage is highlighted from Grid");
 					// select the coverage from grid if it matches
 					selectValue(driver, coverageList.get(i), hospitalIndicationDTO.coverage.get(coverageCount));
 					// Assert.assertTrue(coverageList.get(i).isSelected(),coverageList.get(i)+"is
@@ -802,27 +797,21 @@ public class PolicyIndicationPage extends CommonAction {
 					// If retro date field is displayed,add Retro Date and
 					// Premium Amount for selected coverage
 					if (Retro_Date.isDisplayed()) {
-
-						ExtentReporter.logger.log(LogStatus.INFO,
-								"Enter Retroactive Date: " + hospitalIndicationDTO.retroDate.get(coverageCount)
-										+ ", Enter 12 month Premium: "
-										+ hospitalIndicationDTO.premiumAmount.get(coverageCount));
+						
+						ExtentReporter.logger.log(LogStatus.INFO, "Enter Retroactive Date: "+hospitalIndicationDTO.retroDate.get(coverageCount)
+						+", Enter 12 month Premium: "+hospitalIndicationDTO.premiumAmount.get(coverageCount));
 						clearTextBox(driver, Premium, "Premium Amount");
 						enterDataIn(driver, Premium, hospitalIndicationDTO.premiumAmount.get(coverageCount),
 								"Premium text box");
 						Thread.sleep(1000);
 						enterDataIn(driver, Retro_Date, hospitalIndicationDTO.retroDate.get(coverageCount),
 								"Retro Date");
-						clickButton(driver, saveWIP, "Save WIP"); // Not in
-																	// rally
-																	// test
-																	// steps
+						clickButton(driver, saveWIP, "Save WIP"); //Not in rally test steps
 						invisibilityOfLoader(driver);
 
 					} // else add only premium for selected coverage
 					else if (Premium.isDisplayed()) {
-						ExtentReporter.logger.log(LogStatus.INFO,
-								"Enter 12 month Premium: " + hospitalIndicationDTO.premiumAmount.get(coverageCount));
+						ExtentReporter.logger.log(LogStatus.INFO, "Enter 12 month Premium: "+hospitalIndicationDTO.premiumAmount.get(coverageCount));
 						clearTextBox(driver, Premium, "Premium Amount");
 						enterDataIn(driver, Premium, hospitalIndicationDTO.premiumAmount.get(coverageCount),
 								"Premium text box");
@@ -833,12 +822,12 @@ public class PolicyIndicationPage extends CommonAction {
 		}
 
 		// Select coverage from Grid List and add only Retro Date
-		// Get coverage count from excel sheet
+		// Get coverage count from excel sheet 
 		for (int coverageTitleCount = 0; coverageTitleCount < hospitalIndicationDTO.coverageTitle
 				.size(); coverageTitleCount++) {
-			String ProfLiabCoverage = "Prof Liab-Out";
+			String ProfLiabCoverage="Prof Liab-Out";
 			Thread.sleep(5000);
-
+			
 			// Get coverage count from the grid on coverage page
 			for (int i = 0; i < coverageList.size(); i++) {
 				// Compare if the coverage from excel sheet column is same as
@@ -863,16 +852,11 @@ public class PolicyIndicationPage extends CommonAction {
 							Thread.sleep(1000);
 							if (Retro_Date.isDisplayed()) {
 								Thread.sleep(2000);
-								ExtentReporter.logger.log(LogStatus.INFO,
-										"Enter Retro Date "
-												+ hospitalIndicationDTO.retroDateValue.get(coverageTitleCount)
-												+ " for coverage "
-												+ hospitalIndicationDTO.coverageTitle.get(coverageTitleCount));
+								ExtentReporter.logger.log(LogStatus.INFO, "Enter Retro Date "+hospitalIndicationDTO.retroDateValue.get(coverageTitleCount)
+								+" for coverage "+hospitalIndicationDTO.coverageTitle.get(coverageTitleCount));
 								enterDataIn(driver, Retro_Date,
 										hospitalIndicationDTO.retroDateValue.get(coverageTitleCount), "Retro Date");
-								verifyValueFromField(driver, Retro_Date,
-										hospitalIndicationDTO.retroDateValue.get(coverageTitleCount), "value",
-										"Retro Date");
+								verifyValueFromField(driver, Retro_Date,hospitalIndicationDTO.retroDateValue.get(coverageTitleCount), "value", "Retro Date");
 								clickButton(driver, saveWIP, "Save WIP");
 								invisibilityOfLoader(driver);
 								Thread.sleep(1000);
@@ -890,10 +874,9 @@ public class PolicyIndicationPage extends CommonAction {
 
 	// Select Coverage Class tab, Add Coverage Class,save and move to coverage
 	// tab
-	public void addCoverageClass() throws InterruptedException {
+	public void addCoverageClass() throws Exception {
 
-		ExtentReporter.logger.log(LogStatus.INFO,
-				"Highlight Prof-Liab-Out,Select Coverage Class Tab. Verify Coverage Class Tab Displays");
+		ExtentReporter.logger.log(LogStatus.INFO, "Highlight Prof-Liab-Out,Select Coverage Class Tab. Verify Coverage Class Tab Displays");
 		invisibilityOfLoader(driver);
 		Thread.sleep(2000);
 		clickButton(driver, Coverage_Class_tab, "Coverage class tab");
@@ -909,10 +892,8 @@ public class PolicyIndicationPage extends CommonAction {
 		// check box
 		for (int i = 0; i < selectCoverageClassChkBox.size(); i++) {
 			if (selectCoverageClass.get(i).getAttribute("innerHTML").equals(hospitalIndicationDTO.coverageClass)) {
-				ExtentReporter.logger.log(LogStatus.INFO,
-						"Select the checkbox next to " + hospitalIndicationDTO.coverageClass
-								+ " Enter Exposure unit amounts:" + hospitalIndicationDTO.exposureUnit
-								+ ", Enter Select. Verify Coverage class is saved.");
+				ExtentReporter.logger.log(LogStatus.INFO, "Select the checkbox next to "+hospitalIndicationDTO.coverageClass
+						+ " Enter Exposure unit amounts:"+ hospitalIndicationDTO.exposureUnit+", Enter Select. Verify Coverage class is saved.");
 				clickButton(driver, selectCoverageClassChkBox.get(i), "Coverage Class selection");
 				break;
 			}
@@ -925,76 +906,81 @@ public class PolicyIndicationPage extends CommonAction {
 		Thread.sleep(3000);
 		invisibilityOfLoader(driver);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click on the Coverage tab. Verify Prof-Liab-Out is highlighted");
-		click(driver, Coverage_tab, "Coverage tab");
+		//click(driver, Coverage_tab, "Coverage tab");
+		selectCoverageTab();
 	}
 
 	// Select 'Coverage' tab and add Manuscript from optional forms and Save
-	public PolicyIndicationPage coverageUpdates(String PolicyNo) throws Exception {
-		Thread.sleep(4000);
-		// Get the coverage count from excel sheet column
-		for (int coverageNameCount = 0; coverageNameCount < hospitalIndicationDTO.coverageName.size()
-				/ 2; coverageNameCount++) // divide by 2 for indication
-		{
-			// Get Coverage count from list on coverage page
-			try {
-				WebElement coverageType = driver.findElement(
-						By.xpath("//div[text()='" + hospitalIndicationDTO.coverage.get(coverageNameCount) + "']"));
-				clickButton(driver, coverageType, "Coverage Type");
-			} catch (Exception e) {
-				ExtentReporter.logger.log(LogStatus.INFO, hospitalIndicationDTO.coverage.get(coverageNameCount)
-						+ " Coverage is NOT found under coverage section.");
-				Assert.assertTrue(false, hospitalIndicationDTO.coverage.get(coverageNameCount)
-						+ " Coverage is NOT found under coverage section.");
+		public PolicyIndicationPage coverageUpdates(String PolicyNo) throws Exception {
+			
+			String Blank="";
+			Thread.sleep(4000);
+			// Get the coverage count from excel sheet column
+			for (int coverageNameCount = 0; coverageNameCount <hospitalIndicationDTO.coverageName.size(); coverageNameCount++) // divide by 2 for indication
+			{
+				if(hospitalIndicationDTO.coverageName.get(coverageNameCount).equals(Blank)) {
+					break;
+				}
+				// Get Coverage count from list on coverage page
+				try {
+					WebElement coverageType = driver
+							.findElement(By.xpath("//div[text()='" + hospitalIndicationDTO.coverage.get(coverageNameCount) + "']"));
+					//Select the coverage type from coverage list
+					clickButton(driver, coverageType, "Coverage Type");
+				} catch (Exception e) {
+					ExtentReporter.logger.log(LogStatus.INFO,
+							hospitalIndicationDTO.coverage.get(coverageNameCount) + " Coverage is NOT found under coverage section.");
+					Assert.assertTrue(false,
+							hospitalIndicationDTO.coverage.get(coverageNameCount) + " Coverage is NOT found under coverage section.");
+				}
+				// Click on 'Optional forms', navigate to pop up window and click 'Add' button
+				Thread.sleep(2000);
+				ExtentReporter.logger.log(LogStatus.INFO, "Click on the Optional Forms button. Verify Manuscript Information Window displays");
+				clickButton(driver, optionalFormBtn, "Optional Form");
+				Thread.sleep(2000);
+				switchToFrameUsingElement(driver,
+						driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
+				ExtentReporter.logger.log(LogStatus.INFO, "Click [Add]. Verify Add Manuscript window displays");
+				clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
+				Thread.sleep(1000);
+				switchToFrameUsingElement(driver,
+						driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
+
+				// Search manuscript Form from pop up window and select check box
+				Thread.sleep(3000);
+				try {
+					WebElement coverageFormType = driver
+							.findElement(By.xpath("//div[text()='" + hospitalIndicationDTO.form.get(coverageNameCount)
+									+ "']/parent::td/preceding-sibling::td/input[@name='chkCSELECT_IND']"));
+					clickButton(driver, coverageFormType, "Coverage Form Type");
+				} catch (Exception e) {
+					ExtentReporter.logger.log(LogStatus.INFO,
+							hospitalIndicationDTO.form.get(coverageNameCount) + " Coverage is NOT found on Select Coverage Type window.");
+					Assert.assertTrue(false,
+							hospitalIndicationDTO.form.get(coverageNameCount) + " Coverage is NOT found on Select Coverage Type window.");
+				}
+	 		
+				clickButton(driver, manuscriptAddListDoneBtn, "Done");
+				switchToParentWindowfromframe(driver);
+				Thread.sleep(2000);
+				switchToFrameUsingElement(driver,
+						driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
+				Thread.sleep(1000);
+
+				// Save manuscript and close the window
+				clickButton(driver, manuscriptPageSaveBtn, "Manu Script page Save");
+				Thread.sleep(2000);
+				ExtentReporter.logger.log(LogStatus.INFO, "Form is saved to coverage and window closes");
+				clickButton(driver, manuscriptPageCloseBtn, "Manu Script page Close");
+				switchToParentWindowfromframe(driver);
+				Thread.sleep(2000);
+				invisibilityOfLoader(driver);
+				click(driver, saveWIP, "Save WIP");
+				Thread.sleep(2000);
 			}
-			// Click on 'Optional forms', navigate to pop up window and click
-			// 'Add' button
-			Thread.sleep(2000);
-			ExtentReporter.logger.log(LogStatus.INFO,
-					"Click on the Optional Forms button. Verify Manuscript Information Window displays");
-			clickButton(driver, optionalFormBtn, "Optional Form");
-			Thread.sleep(2000);
-			switchToFrameUsingElement(driver,
-					driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
-			ExtentReporter.logger.log(LogStatus.INFO, "Click [Add]. Verify Add Manuscript window displays");
-			clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
-			Thread.sleep(1000);
-			switchToFrameUsingElement(driver,
-					driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
-
-			// Search manuscript Form from pop up window and select check box
-			Thread.sleep(3000);
-			try {
-				WebElement coverageFormType = driver
-						.findElement(By.xpath("//div[text()='" + hospitalIndicationDTO.form.get(coverageNameCount)
-								+ "']/parent::td/preceding-sibling::td/input[@name='chkCSELECT_IND']"));
-				clickButton(driver, coverageFormType, "Coverage Form Type");
-			} catch (Exception e) {
-				ExtentReporter.logger.log(LogStatus.INFO, hospitalIndicationDTO.form.get(coverageNameCount)
-						+ " Coverage is NOT found on Select Coverage Type window.");
-				Assert.assertTrue(false, hospitalIndicationDTO.form.get(coverageNameCount)
-						+ " Coverage is NOT found on Select Coverage Type window.");
-			}
-
-			clickButton(driver, manuscriptAddListDoneBtn, "Done");
-			switchToParentWindowfromframe(driver);
-			Thread.sleep(2000);
-			switchToFrameUsingElement(driver,
-					driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
-			Thread.sleep(1000);
-
-			// Save manuscript and close the window
-			clickButton(driver, manuscriptPageSaveBtn, "Manu Script page Save");
-			Thread.sleep(2000);
-			ExtentReporter.logger.log(LogStatus.INFO, "Form is saved to coverage and window closes");
-			clickButton(driver, manuscriptPageCloseBtn, "Manu Script page Close");
-			Thread.sleep(2000);
-			invisibilityOfLoader(driver);
-			switchToParentWindowfromframe(driver);
-			click(driver, saveWIP, "Save WIP");
-			Thread.sleep(2000);
+			return new PolicyIndicationPage(driver);
 		}
-		return new PolicyIndicationPage(driver);
-	}
+
 
 	// Open Limit Sharing pop up from coverage tab and switch to pop up window
 	public PolicyIndicationPage openLimitSharingTab(String PolicyNo) throws Exception {
@@ -1016,17 +1002,14 @@ public class PolicyIndicationPage extends CommonAction {
 
 		for (int sharedGroupCoverageCount = 0; sharedGroupCoverageCount < hospitalIndicationDTO.sharedGroupCoverage
 				.size() / 3; sharedGroupCoverageCount++) {
-
+			//TODO- remove /3 and replace with if condn
 			// Click on 'Add' button from pop up to add shared group
 			Thread.sleep(5000);
 			ExtentReporter.logger.log(LogStatus.INFO, "Click [Add]. Verify Line is added to Shared Group");
 			click(driver, Add_Shared_Group, "Add button for Shared group");
 			Thread.sleep(2000);
-			ExtentReporter.logger.log(LogStatus.INFO,
-					"Insert- Shared Group Description: "
-							+ hospitalIndicationDTO.sharedGroupDescription.get(sharedGroupCoverageCount)
-							+ ". Click [Add] under Shared Group Details "
-							+ "Verify Select Shared Group Detail window displays");
+			ExtentReporter.logger.log(LogStatus.INFO, "Insert- Shared Group Description: "+hospitalIndicationDTO.sharedGroupDescription.get(sharedGroupCoverageCount)+". Click [Add] under Shared Group Details "
+					+"Verify Select Shared Group Detail window displays");
 			selectDropdownByVisibleText(driver, Desc_Shared_Group,
 					hospitalIndicationDTO.sharedGroupDescription.get(sharedGroupCoverageCount),
 					"Shared group description");
@@ -1034,7 +1017,7 @@ public class PolicyIndicationPage extends CommonAction {
 			// hospitalIndicationDTO.sharedGroupDescription.get(sharedGroupCoverageCount),"value");
 
 			// Click on 'Add' button from pop up to add shared group details
-
+			
 			click(driver, Add_Shared_Group_Details, "Add button for Shared Group details");
 			Thread.sleep(3000);
 			invisibilityOfLoader(driver);
@@ -1047,13 +1030,11 @@ public class PolicyIndicationPage extends CommonAction {
 
 				// Compare the coverage class and select Coverage class and
 				// owner check box from the coverage list on pop up.
-				ExtentReporter.logger.log(LogStatus.INFO,
-						" Select:" + hospitalIndicationDTO.sharedGroupCoverage.get(sharedGroupCoverageCount)
-								+ " Mark as Owner "
-								+ "Click [Done]. Verify Selected Risks are added to Shared Group Details");
-
 				if (selectCoverage.get(i).getAttribute("innerHTML")
 						.equals(hospitalIndicationDTO.sharedGroupCoverage.get(sharedGroupCoverageCount))) {
+					
+					ExtentReporter.logger.log(LogStatus.INFO, " Select:"+ hospitalIndicationDTO.sharedGroupCoverage.get(sharedGroupCoverageCount)+" Mark as Owner "
+							+"Click [Done]. Verify Selected Risks are added to Shared Group Details");
 					clickButton(driver, selectSharedGroupDetailChkBox.get(i), "Coverage Class selection");
 					clickButton(driver, selectSharedGroupOwnerChkBox.get(i), "Owner checkbox");
 					break;
@@ -1061,16 +1042,14 @@ public class PolicyIndicationPage extends CommonAction {
 			}
 			// Select Done button and switch back to first window for its
 			// closure
-
+			
 			click(driver, Done_Shared_Details, "Done button for Select Shared Group details");
 			switchToParentWindowfromframe(driver);
 			Thread.sleep(1000);
 			switchToFrameUsingId(driver, "popupframe1");
-			/*
-			 * Assert.assertEquals(sharedGroupDetailsCoverage.getAttribute(
-			 * "innerHTML"), hospitalIndicationDTO.sharedGroupCoverage.get(
-			 * sharedGroupCoverageCount), "Shared group coverage is not added");
-			 */
+			/*Assert.assertEquals(sharedGroupDetailsCoverage.getAttribute("innerHTML"),
+					hospitalIndicationDTO.sharedGroupCoverage.get(sharedGroupCoverageCount),
+					"Shared group coverage is not added");*/
 			// ToDo-Use Verify value from field instead of assert
 		}
 		return new PolicyIndicationPage(driver);
@@ -1084,124 +1063,126 @@ public class PolicyIndicationPage extends CommonAction {
 		click(driver, Save_Limit_Sharing, "Save button");
 		click(driver, Close_Limit_Sharing, "Close button");
 		Thread.sleep(2000);
-
+		
 		switchToParentWindowfromframe(driver);
 		return new RateApolicyPage(driver);
 	}
+	
+	
+	
+	public PolicyIndicationPage selectCoverageFromCoverageList() throws Exception{
 
-	public PolicyIndicationPage selectCoverageFromCoverageList() throws Exception {
-
-		// Get coverage count from the excel sheet column
-		for (int coverageCount = 0; coverageCount < hospitalIndicationDTO.coverage.size(); coverageCount++) {
-			invisibilityOfLoader(driver);
-			Thread.sleep(1000);
-			boolean flag = false;
-			try {
+			// Get coverage count from the excel sheet column
+			for (int coverageCount = 0; coverageCount < hospitalIndicationDTO.coverage.size(); coverageCount++) {
+				invisibilityOfLoader(driver);
+				Thread.sleep(1000);
+				boolean flag=false;
+				try{
 				// Get coverage count from the grid list on coverage page
 				for (int i = 0; i < coverageList.size(); i++) {
-					// compare if the coverage selected from excel sheet is same
-					// as
+					// compare if the coverage selected from excel sheet is same as
 					// coverage from grid on coverage page
 					if (coverageList.get(i).getAttribute("innerHTML").trim()
 							.equalsIgnoreCase(hospitalIndicationDTO.coverageNameForRisk)) {
-						ExtentReporter.logger.log(LogStatus.INFO, "Select " + hospitalIndicationDTO.coverageNameForRisk
-								+ "Verify Coverage is highlighted from Grid");
+						ExtentReporter.logger.log(LogStatus.INFO,"Select "+
+								hospitalIndicationDTO.coverageNameForRisk + "Verify Coverage is highlighted from Grid");
 						// select the coverage from grid if it matches
 						selectValue(driver, coverageList.get(i), hospitalIndicationDTO.coverageNameForRisk);
-						flag = true;
+						flag=true;
 						break;
 					}
 				}
-				if (flag == false) {
+				if(flag==false){
 					throw new Exception();
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				ExtentReporter.logger.log(LogStatus.FAIL,
-						hospitalIndicationDTO.coverageNameForRisk + " is not available in coverage List");
 			}
+				catch(Exception e){
+					e.printStackTrace();
+					ExtentReporter.logger.log(LogStatus.FAIL,hospitalIndicationDTO.coverageNameForRisk+" is not available in coverage List");
+				}
+			}	
+			return new PolicyIndicationPage(driver);
 		}
-		return new PolicyIndicationPage(driver);
-	}
+	
 
 	// Get the date from EffDate column to add in retro date, as the retro date
-	// should be <= EffDate
-	public String getTheCoverageEffectiveDate() {
+		// should be <= EffDate
+		public String getTheCoverageEffectiveDate() {
 
-		String coverageEffectiveDate = coverageEffectiveFromDate.getAttribute("innerHTML").trim();
-		return coverageEffectiveDate;
-	}
-
-	// Add retro date from Eff Date column
-	public PolicyIndicationPage addRetroactiveDate() throws Exception {
-
-		enterDataIn(driver, Retro_Date, getTheCoverageEffectiveDate(), "Retro Date");
-		clickButton(driver, saveWIP, "Save WIP");
-		return new PolicyIndicationPage(driver);
-	}
-
-	// Get the date from EffDate column to add in retro date, as the retro date
-	// should be <= EffDate
-	public String getCoverageEffectiveDate() {
-
-		String coverageEffectiveDate = coverageEffectiveFromDate.getAttribute("innerHTML").trim();
-		return coverageEffectiveDate;
-	}
-
-	// Get the next day of the due date column from exported excel sheet
-	public String nextYearOfCurrentDate() throws Exception {
-
-		CommonUtilities comUtil = new CommonUtilities();
-		String currentSystemDate = comUtil.getSystemDatemm_dd_yyyy();
-
-		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-		Date date = formatter.parse(currentSystemDate);
-		Thread.sleep(1000);
-		Calendar c = Calendar.getInstance();
-		c.setTime(date);
-		c.add(Calendar.YEAR, 1);
-		Thread.sleep(1000);
-		Date d = c.getTime();
-		System.out.println("dueDate= " + currentSystemDate);
-		String nextYear = formatter.format(d);
-		System.out.println("nextDay= " + nextYear);
-		return nextYear;
-	}
-
-	// Add retro date from Eff Date column
-	public PolicyIndicationPage addRetroactiveDate(String riskTypeValue) throws Exception {
-		Thread.sleep(3000);
-		// Get the system current date
-		CommonUtilities comUtil = new CommonUtilities();
-		String currentDate = comUtil.getSystemDatemm_dd_yyyy();
-
-		String coverageEffectiveDate = getCoverageEffectiveDate();
-
-		if (riskTypeValue.contains("IBNR")) {
-
-			ExtentReporter.logger.log(LogStatus.INFO,
-					"Populate Retrodate ( Retroactive date should be <= Policy effective date), Original coverage effective date, Original coverage expiration date and Form effective date.");
-
-			// Retro date should be < or = policy effective date
-			enterDataIn(driver, Retro_Date, currentDate, "Retro Date");
-			Thread.sleep(1000);
-			// Original Coverage effective date should be = retro date
-			enterDataIn(driver, originalCoverageEffeDate, currentDate, "Original Coverage Effective Date");
-			Thread.sleep(1000);
-			// Original coverage expiry date should be > retro date & < policy
-			// effective date.
-			enterDataIn(driver, originalCoverageExpDate, nextYearOfCurrentDate(), "Original Coverage Expiration Date");
-			Thread.sleep(1000);
-			// Form effect = policy effective date
-			enterDataIn(driver, formEffectiveDate, coverageEffectiveDate, "Form Effective Date");
-
-		} else {
-			enterDataIn(driver, Retro_Date, currentDate, "Retro Date");
+			String coverageEffectiveDate = coverageEffectiveFromDate.getAttribute("innerHTML").trim();
+			return coverageEffectiveDate;
 		}
-		clickButton(driver, saveWIP, "Save WIP");
-		invisibilityOfLoader(driver);
-		Thread.sleep(4000);
-		return new PolicyIndicationPage(driver);
-	}
 
-}
+		// Add retro date from Eff Date column
+		public PolicyIndicationPage addRetroactiveDate() throws Exception {
+
+			enterDataIn(driver, Retro_Date, getTheCoverageEffectiveDate(), "Retro Date");
+			clickButton(driver, saveWIP, "Save WIP");
+			return new PolicyIndicationPage(driver);
+		}
+
+		// Get the date from EffDate column to add in retro date, as the retro date
+		// should be <= EffDate
+		public String getCoverageEffectiveDate() {
+
+			String coverageEffectiveDate = coverageEffectiveFromDate.getAttribute("innerHTML").trim();
+			return coverageEffectiveDate;
+		}
+
+		// Get the next day of the due date column from exported excel sheet
+		public String nextYearOfCurrentDate() throws Exception {
+
+			CommonUtilities comUtil = new CommonUtilities();
+			String currentSystemDate = comUtil.getSystemDatemm_dd_yyyy();
+
+			SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+			Date date = formatter.parse(currentSystemDate);
+			Thread.sleep(1000);
+			Calendar c = Calendar.getInstance();
+			c.setTime(date);
+			c.add(Calendar.YEAR, 1);
+			Thread.sleep(1000);
+			Date d = c.getTime();
+			System.out.println("dueDate= " + currentSystemDate);
+			String nextYear = formatter.format(d);
+			System.out.println("nextDay= " + nextYear);
+			return nextYear;
+		}
+
+		// Add retro date from Eff Date column
+		public PolicyIndicationPage addRetroactiveDate(String riskTypeValue) throws Exception {
+			Thread.sleep(3000);
+			// Get the system current date
+			CommonUtilities comUtil = new CommonUtilities();
+			String currentDate = comUtil.getSystemDatemm_dd_yyyy();
+
+			String coverageEffectiveDate = getCoverageEffectiveDate();
+
+			if (riskTypeValue.contains("IBNR")) {
+
+				ExtentReporter.logger.log(LogStatus.INFO,
+						"Populate Retrodate ( Retroactive date should be <= Policy effective date), Original coverage effective date, Original coverage expiration date and Form effective date.");
+
+				// Retro date should be < or = policy effective date
+				enterDataIn(driver, Retro_Date, currentDate, "Retro Date");
+				Thread.sleep(1000);
+				// Original Coverage effective date should be = retro date
+				enterDataIn(driver, originalCoverageEffeDate, currentDate, "Original Coverage Effective Date");
+				Thread.sleep(1000);
+				// Original coverage expiry date should be > retro date & < policy
+				// effective date.
+				enterDataIn(driver, originalCoverageExpDate, nextYearOfCurrentDate(), "Original Coverage Expiration Date");
+				Thread.sleep(1000);
+				// Form effect = policy effective date
+				enterDataIn(driver, formEffectiveDate, coverageEffectiveDate, "Form Effective Date");
+
+			} else {
+				enterDataIn(driver, Retro_Date, currentDate, "Retro Date");
+			}
+			clickButton(driver, saveWIP, "Save WIP");
+			invisibilityOfLoader(driver);
+			Thread.sleep(4000);
+			return new PolicyIndicationPage(driver);
+		}
+
+	}

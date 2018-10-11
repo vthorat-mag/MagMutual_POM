@@ -12,6 +12,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
+import com.google.common.base.Verify;
 import com.mm.dto.PolicyBinderPageDTO;
 import com.mm.dto.RateAPolicyPageDTO;
 import com.mm.utils.CommonAction;
@@ -41,9 +42,10 @@ public class PolicyBinderPage extends CommonAction {
 	String fileHandlerDropDownValue = "416012116";
 	String stateOfLossDropDownValue = "GA";
 	String searchEntityPageTitle = "Entity Select Search";
-	String policyPhaseVlaue = "Policy";
+	String policyPhaseValue = "Policy";
 	String innerText = "innerText";
 	String policyValue = "Policy";
+	String endorsementWindowTitle="Endorse Policy";
 
 	// Element repository for the page Policy Binder page.
 	@FindBy(name = "globalSearch")
@@ -54,7 +56,7 @@ public class PolicyBinderPage extends CommonAction {
 
 	@FindBy(xpath = "//div[@class='pageHeader'][1]//div[@id='pageTitleForpageHeaderForPolicyFolder'][1] |//*[@id = 'pageTitleForpageHeaderForClaimFolder']")
 	WebElement pageHeaderForPolicyFolder;
-
+	
 	@FindBy(xpath = "//*[@id = 'pageTitleForpageHeaderForClaimFolder']")
 	WebElement pageHeaderForClaimFolder;
 
@@ -67,7 +69,8 @@ public class PolicyBinderPage extends CommonAction {
 	@FindBy(id = "PM_ENDORSE_OK")
 	WebElement okBtnEndorsmentPopup;
 
-	@FindBy(xpath = "//table[@id='formFieldsTableForHeaderFieldsSecond']//span[@id='polPhaseCodeROSPAN']")
+	//@FindBy(xpath = "//span[@id='polPhaseCodeLOVLABELSPAN'] |//table[@id='formFieldsTableForHeaderFieldsSecond']//span[@id='polPhaseCodeROSPAN']")
+	@FindBy(xpath = "//span[@id='polPhaseCodeLOVLABELSPAN']| //table[@id='formFieldsTableForHeaderFieldsSecond']//span[@id='polPhaseCodeROSPAN'")
 	WebElement policyPhasePolicy;
 
 	@FindBy(id = "PM_COMMON_TABS_RATE")
@@ -172,7 +175,10 @@ public class PolicyBinderPage extends CommonAction {
 
 	@FindBy(xpath = "//input[@name = 'entity_clientID']")
 	WebElement entityClientId;
-
+	
+	@FindBy(xpath ="//input[@id='PM_CPT_TRAN_OK']| //input[@id='PM_ENDORSE_OK']")
+	WebElement captTranxOk;
+	
 	// Constructor to initialize variables on policy binder page.
 	public PolicyBinderPage(WebDriver driver)
 			throws IllegalArgumentException, IllegalAccessException, SecurityException {
@@ -199,7 +205,7 @@ public class PolicyBinderPage extends CommonAction {
 
 	// Select Patient.
 	public void getPatientDetails(String clientIdValue) throws Exception {
-		Thread.sleep(2000);
+		Thread.sleep(5000);
 		Actions builder = new Actions(driver);
 		builder.moveToElement(filesMenuTab).build().perform();
 		clickButton(driver, fileAddMenuOption, "Add File Menu");
@@ -278,7 +284,7 @@ public class PolicyBinderPage extends CommonAction {
 		String[] portfolioNo = profileNoLable.split(" ", 3);
 		return portfolioNo[2];
 	}
-
+	
 	// Identify Claim number from Page.
 	public String claimNo() throws InterruptedException {
 		Thread.sleep(2000);
@@ -290,20 +296,33 @@ public class PolicyBinderPage extends CommonAction {
 	// Select Endorsement from "Action DropoDown".
 	public PolicyBinderPage endorsementFromActionDropDown() throws Exception {
 		Thread.sleep(3000);
-		ExtentReporter.logger.log(LogStatus.PASS,
+		ExtentReporter.logger.log(LogStatus.INFO,
 				"Select Policy Actions-> Endorsement. Verify Endorse policy window displays.");
 		if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
 				policybinderpageDTO.valueOfPolicyActionEndorse, "Policy Action").equals("false")) {
-			RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
-			RateAPolicyPageDTO rateApolicyPageDTO = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
-			rateapolicypage.searchBackUpPolicy();
-			/*
-			 * PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
-			 * policybinderpage.copyToQuoteFromActionDropDownwithoutBackUpPolicy(
-			 * rateApolicyPageDTO.backUpPolicyNum);
-			 */
-			selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
-					policybinderpageDTO.valueOfPolicyActionEndorse, "Policy Action");
+			//rateapolicypage.searchBackUpPolicy();*/
+			Thread.sleep(2000);
+			
+			//This method will select the policy using required criteria
+			PolicyQuotePage quotepage = new PolicyQuotePage(driver);
+			quotepage.searchBackUpPolicyUsingSearchCriteria();
+			Thread.sleep(4000);
+		/*	if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
+					policybinderpageDTO.valueOfPolicyActionEndorse, "Policy Action").equals("false")) {
+				//Deleting the Work in progress will enable required action from policy Action DDL
+				quotepage.deleteWIPForReUse();
+				Thread.sleep(5000);
+				selectDropdownByValueFromPolicyActionDDL(driver, ppolicyAction,policybinderageDTO.valueOfPolicyActionEndorse, "Policy Action");
+				*/
+			
+			if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction,policybinderpageDTO.valueOfPolicyActionEndorse,
+					"Policy Action").equals("false")) {
+				
+				//navigate through policy list till policy with expected criteria is found
+				RateApolicyPage rateapolicypage= new RateApolicyPage(driver);
+				rateapolicypage.searchThroughPolicyList(policybinderpageDTO.valueOfPolicyActionEndorse);
+			}
+			
 		}
 		return new PolicyBinderPage(driver);
 	}
@@ -314,10 +333,6 @@ public class PolicyBinderPage extends CommonAction {
 		Thread.sleep(3000);
 		ExtentReporter.logger.log(LogStatus.PASS,
 				"Select Policy Actions-> Endorsement. Verify Endorse policy window displays.");
-		selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policybinderpageDTO.valueOfPolicyActionEndorse,
-				"Policy Action");
-		// selectDropdownByValue(driver, policyAction,
-		// policybinderpageDTO.valueOfPolicyActionEndorse, "Policy Action");
 		selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policybinderpageDTO.valueOfPolicyActionEndorse,
 				"Policy Action");
 		return new PolicyBinderPage(driver);
@@ -346,12 +361,12 @@ public class PolicyBinderPage extends CommonAction {
 		invisibilityOfLoader(driver);
 		Thread.sleep(10000);
 		String getUpdatedPolicyNo = policyNo();
-		// below commented code is for QA env
-		/*
-		 * if(verifyCpatureTxnDetailsPageDisplayedOrNot(getUpdatedPolicyNo)==false) {
-		 * ExtentReporter.logger.log(LogStatus.INFO,
-		 * "Capture transaction details is NOT displayed."); }
-		 */
+		// below code is for QA env
+		
+		  if(verifyCpatureTxnDetailsPageDisplayedOrNot(getUpdatedPolicyNo)==false) {
+		  ExtentReporter.logger.log(LogStatus.INFO,
+		  "Capture transaction details is NOT displayed."); }
+		 
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo() + "')]")));
 		ExtentReporter.logger.log(LogStatus.INFO,
@@ -362,30 +377,75 @@ public class PolicyBinderPage extends CommonAction {
 		return new PolicySubmissionPage(driver);
 	}
 
+	// Select Copy To Quote from "Action DropoDown" for QA with capture Transaction window.
+		public PolicyBinderPage copyToQuoteFromActionDropDownForQA() throws Exception {
+				Thread.sleep(2000);
+				String getPolicyNo = policyNo();
+				ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy to Quote. Verify Policy folder shows a new number, Phase show Submission.");
+				selectDropdownByValue(driver, policyAction, policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action");
+				Thread.sleep(8000);
+				invisibilityOfLoader(driver);
+				captureTransactionDetailsWithExitOkButton(getPolicyNo);;
+				return new PolicyBinderPage(driver);
+			}
+			
+		//Handles capture transaction details window which does not have Exit-OK button.
+		public void captureTransactionDetails(String getPolicyNo) throws Exception {
+			
+			Thread.sleep(3000);
+			switchToFrameUsingElement(driver,
+					driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + getPolicyNo + "')]")));
+			
+			//Click on Ok button from Capture Transaction Details window.
+			if(captTranxOk.isDisplayed()){
+				clickButton(driver, captTranxOk, "Ok button for Capture Transaction Details");
+				isAlertPresent(driver);
+			}else{
+				ExtentReporter.logger.log(LogStatus.FAIL, "Capture Transaction Details window is not displayed");
+				Assert.assertTrue(false);
+			}
+			switchToParentWindowfromframe(driver);
+		}
+		
+		//Handles capture transaction details window which has Exit-OK button.
+		public void captureTransactionDetailsWithExitOkButton(String getPolicyNo) throws Exception {
+				
+				captureTransactionDetails(getPolicyNo);
+				Thread.sleep(10000);
+				switchToFrameUsingElement(driver,
+						driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + getPolicyNo + "')]")));
+				invisibilityOfLoader(driver);
+				ExtentReporter.logger.log(LogStatus.INFO, "Click [OK]. Verify Policy folder shows a new number, Phase show Submission.");
+				click(driver, Exit_Ok, "OK button");
+				Thread.sleep(2000);
+				switchToParentWindowfromframe(driver);
+		}
+		
+	
 	// Select Copy To Quote from "Action DropoDown".
-	public PolicySubmissionPage copyToQuoteFromActionDropDownwithoutBackUpPolicy(String policyNum) throws Exception {
-		Thread.sleep(2000);
-		ExtentReporter.logger.log(LogStatus.INFO,
-				"Click Policy Actions>Copy to Quote. Verify Policy folder shows a new number, Phase show Submission.");
-		selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
-				policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action");
-		invisibilityOfLoader(driver);
-		Thread.sleep(10000);
-		// below commented code is for QA env
-		/*
-		 * if(verifyCpatureTxnDetailsPageDisplayedOrNot(getUpdatedPolicyNo)==false) {
-		 * ExtentReporter.logger.log(LogStatus.INFO,
-		 * "Captursaction details is NOT displayed."); }
-		 */
-		switchToFrameUsingElement(driver,
-				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo() + "')]")));
-		ExtentReporter.logger.log(LogStatus.INFO,
-				"Click [OK]. Verify Policy folder shows a new number, Phase show Submission.");
-		clickButton(driver, Exit_Ok, "OK button");
-		Thread.sleep(2000);
-		switchToParentWindowfromframe(driver);
-		return new PolicySubmissionPage(driver);
-	}
+		public PolicySubmissionPage copyToQuoteFromActionDropDownwithoutBackUpPolicy(String policyNum) throws Exception {
+			Thread.sleep(2000);
+			ExtentReporter.logger.log(LogStatus.INFO,
+					"Click Policy Actions>Copy to Quote. Verify Policy folder shows a new number, Phase show Submission.");
+				selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
+						policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action");
+			invisibilityOfLoader(driver);
+			Thread.sleep(7000);
+			String getUpdatedPolicyNo = policyNo();
+			// below commented code is for QA env
+			
+			 if(verifyCpatureTxnDetailsPageDisplayedOrNot(getUpdatedPolicyNo)==false) {
+			 ExtentReporter.logger.log(LogStatus.INFO, "Capture transaction details is NOT displayed."); }
+			 
+			switchToFrameUsingElement(driver,
+					driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo() + "')]")));
+			ExtentReporter.logger.log(LogStatus.INFO,
+					"Click [OK]. Verify Policy folder shows a new number, Phase show Submission.");
+			click(driver, Exit_Ok, "OK button");
+			Thread.sleep(2000);
+			switchToParentWindowfromframe(driver);
+			return new PolicySubmissionPage(driver);
+		}
 
 	// Select Copy To Quote from "Action DropoDown" for copy to quote TC.
 	// We don't have to select copy to quote option from action ddl in COpy to
@@ -408,19 +468,20 @@ public class PolicyBinderPage extends CommonAction {
 		invisibilityOfLoader(driver);
 		String getUpdatedPolicyNo = policyNo();
 		// below commented code is for QA env
-		/*
-		 * if(verifyCpatureTxnDetailsPageDisplayedOrNot(getUpdatedPolicyNo)==false) {
-		 * ExtentReporter.logger.log(LogStatus.INFO,
-		 * "Capture transaction details is NOT displayed."); }
-		 */
-		Thread.sleep(14000);
+		
+		 if(verifyCpatureTxnDetailsPageDisplayedOrNot(getUpdatedPolicyNo)==false) {
+		 ExtentReporter.logger.log(LogStatus.INFO,"Capture transaction details is NOT displayed.");
+		 }
+		 
+		Thread.sleep(15000);
 		invisibilityOfLoader(driver);
+		//Need latest policy number as it changes for TC43769, so policyNo method is called
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo() + "')]")));
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Click [OK]. Verify Policy folder shows a new number, Phase show Submission.");
 		if (Exit_Ok.isDisplayed()) {
-			click(driver, Exit_Ok, "OK button");
+			clickButton(driver, Exit_Ok, "OK button");
 		}
 		Thread.sleep(2000);
 		switchToParentWindowfromframe(driver);
@@ -451,11 +512,11 @@ public class PolicyBinderPage extends CommonAction {
 
 	// Endorse Policy Flow.
 	public PolicyBinderPage endorsePolicy(String policyNum) throws Exception {
-		Thread.sleep(3000);
+		Thread.sleep(5000);
 		/*
 		 * switchToFrameUsingElement(driver,
-		 * driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNum +
-		 * "')]")));
+		 * driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" +
+		 * policyNum + "')]")));
 		 */
 		switchToFrameUsingId(driver, "popupframe1");
 		WebDriverWait wait = new WebDriverWait(driver, High);

@@ -3,7 +3,7 @@ package com.mm.dto;
 import java.util.List;
 import java.util.Map;
 
-import MMTestCase.SmokeTestCasesUpdated;
+import MMTestCase.QA;
 
 public class CincomPageDTO {
 
