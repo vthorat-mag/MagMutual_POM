@@ -38,7 +38,8 @@ public class FindPolicyPage extends CommonAction {
 	@FindBy(xpath = "//a[@id='AFD_policyStatus']//img[@id='btnFind']")
 	WebElement policyStatusSearch;
 
-	//@FindBy(xpath = "//table[@class='popupcontent']//input[@name='chkMultiSelectpolicyStatus']")
+	// @FindBy(xpath =
+	// "//table[@class='popupcontent']//input[@name='chkMultiSelectpolicyStatus']")
 	@FindBy(xpath = "//input[@name='chkMultiSelectpolicyStatus']")
 	List<WebElement> policyStatusValues;
 
@@ -53,12 +54,12 @@ public class FindPolicyPage extends CommonAction {
 
 	@FindBy(xpath = "//div[@class='horizontalButtonCollection']//input[@value='Search']")
 	WebElement searchBtn;
-								
-	//@FindBy(xpath = "//a[@id='findPolicyListGrid_CPOLICYNO_0_HREF']| //table[@class='clsGrid']//tbody//span[@id='CPOLICYNO']")
-	//List<WebElement> policyList;
-	
-	@FindBy(xpath = "//a[contains(@id,'findPolicyListGrid_CPOLICYNO')]")
-	List<WebElement> policyList;
+
+	@FindBy(xpath = "//a[@id='findPolicyListGrid_CPOLICYNO_0_HREF']| //table[@class='clsGrid']//tbody//span[@id='CPOLICYNO']")
+	 List<WebElement> policyList;
+
+	/*@FindBy(xpath = "//a[contains(@id,'findPolicyListGrid_CPOLICYNO')]")
+	List<WebElement> policyList;*/
 
 	@FindBy(xpath = "//table[@class='clsGrid']//tbody//input[@name='chkCSELECT_IND']")
 	List<WebElement> policyListChkBox;
@@ -68,39 +69,41 @@ public class FindPolicyPage extends CommonAction {
 
 	@FindBy(id = "termStatusLOVLABELSPAN")
 	WebElement selectedStatusValueEle;
-	
-	@FindBy(name="termStatusCode")
+
+	@FindBy(name = "termStatusCode")
 	WebElement termStatus;
-	
-	@FindBy(name="chkMultiSelectpolicyTypeCode")
-	List <WebElement> policyTypeList;
-	
-	@FindBy(xpath="//a[@id='AFD_policyTypeCode']//img")
+
+	@FindBy(name = "chkMultiSelectpolicyTypeCode")
+	List<WebElement> policyTypeList;
+
+	@FindBy(xpath = "//a[@id='AFD_policyTypeCode']//img")
 	WebElement searchPolicyType;
-	
+
 	@FindBy(xpath = "//li[@id='PM_POLICY_MENU']//a[@class='fNiv isParent']")
 	WebElement policyTab;
-	
+
 	@FindBy(xpath = "//li[@id='PM_FIND_POLICY']//a/span")
 	WebElement findPolicy;
-	
-	@FindBy(name="issueCompanyEntityId")
+
+	@FindBy(name = "issueCompanyEntityId")
 	WebElement issueCompany;
-	
-	@FindBy(xpath="//div[@title='next']")
+
+	@FindBy(xpath = "//div[@title='next']")
 	WebElement nextPageArrow;
-	
-	//@FindBy(xpath="//div[@class='jqx-listitem-element']//span")
-	@FindBy(xpath="//div[@id='listBoxContentinnerListBoxgridpagerlistfindPolicyListGrid']/div/div/span")
-	List <WebElement> pageSize; 
-	
-	@FindBy(xpath="//div[@id='dropdownlistArrowgridpagerlistfindPolicyListGrid']//div")
+
+	// @FindBy(xpath="//div[@class='jqx-listitem-element']//span")
+	@FindBy(xpath = "//div[@id='listBoxContentinnerListBoxgridpagerlistfindPolicyListGrid']/div/div/span")
+	List<WebElement> pageSize;
+
+	@FindBy(xpath = "//div[@id='dropdownlistArrowgridpagerlistfindPolicyListGrid']//div")
 	WebElement pageSizeDDLArrow;
-	
-	@FindBy(xpath="//a[@class='pageNextLink']")
+
+	@FindBy(xpath = "//a[@class='pageNextLink']")
 	WebElement nextPolicyArrow;
-	
-	
+
+	@FindBy(xpath = "//div[@id='CTRANSACTIONCODESHORTDESC']")
+	List<WebElement> PolicyList;
+
 	// Constructor to initialize elements on Find a policy page.
 	public FindPolicyPage(WebDriver driver) throws Exception {
 		this.driver = driver;
@@ -154,10 +157,9 @@ public class FindPolicyPage extends CommonAction {
 		return policyNo;
 	}
 
-	//Code will use to search Policy on Policy Page.
-	
+	// Code will use to search Policy on Policy Page.
 	public FindPolicyPage navigateToPolicySearchPage() throws Exception {
-		
+
 		Actions action = new Actions(driver);
 		action.moveToElement(policyTab).click().build().perform();
 		Thread.sleep(2000);
@@ -165,8 +167,7 @@ public class FindPolicyPage extends CommonAction {
 		js.executeScript("arguments[0].click();", findPolicy);
 		return new FindPolicyPage(driver);
 	}
-	
-	
+
 	public FindPolicyPage openSearchPolicyPane() throws Exception {
 		invisibilityOfLoader(driver);
 		ExtentReporter.logger.log(LogStatus.INFO, "click Policy>Find Policy Select Status: Active Click [Search]");
@@ -180,7 +181,73 @@ public class FindPolicyPage extends CommonAction {
 		return new FindPolicyPage(driver);
 	}
 	
-		public RateApolicyPage searchFromFindPolicyPage() throws Exception {
+	public RateApolicyPage searchFromFindPolicyPage() throws Exception {
+		invisibilityOfLoader(driver);
+		ExtentReporter.logger.log(LogStatus.INFO, "click Policy>Find Policy Select Status: Active Click [Search]");
+		// Below code will verify if search pane is expanded or not.
+		try {
+			Assert.assertTrue(paneDown.isEnabled());
+			click(driver, paneDown, "Search Criteria");
+		} catch (Exception e) {
+			ExtentReporter.logger.log(LogStatus.PASS, "Search Criteria Section is already expanded.");
+		}
+
+		// below code will select phase from Policy Phase drop down.
+		click(driver, policyPhaseSearch, "Policy Phase Search Icon");
+		waitFor(driver, 3);
+		for (int i = 0; i < policyPhaseCheckBox.size(); i++) {
+			if (policyPhaseCheckBox.get(i).getAttribute("value").equals("POLICY")) {
+				clickButton(driver, policyPhaseCheckBox.get(i), FindPolicyPageDTO.phase + " Check Box");
+			}
+		}
+		for (int i = 0; i < policyPhaseCheckBox.size(); i++) {
+			if (policyPhaseValues.get(i).getAttribute("innerHTML").equals(FindPolicyPageDTO.phase )) {
+				clickButton(driver, policyPhaseCheckBox.get(i), FindPolicyPageDTO.phase  + " Check Box");
+				ExtentReporter.logger.log(LogStatus.PASS, FindPolicyPageDTO.phase  + " is  selected from Policy phase drop down");
+				break;
+			}
+		}
+
+		// below code will select Status from Status drop down.
+		Thread.sleep(2000);
+		clickButton(driver, policyStatusSearch, "Policy Status Search");
+		for (int i = 0; i < policyStatusValues.size(); i++) {
+			if (policyStatusValues.get(i).getAttribute("value").equals(FindPolicyPageDTO.status)) {
+				click(driver, policyStatusValues.get(i),
+						policyStatusValues.get(i).getAttribute("value") + " Check Box");
+				ExtentReporter.logger.log(LogStatus.PASS, FindPolicyPageDTO.status + " is  selected from Status drop down");
+			}
+		}
+		click(driver, searchBtn, "SearchButton");
+		invisibilityOfLoader(driver);
+
+		// Below code will check if policies are displayed after filter.search
+		// and will open/select policy.
+		try {
+			if (policyList.size() > 0) {
+				for (int i = 0; i < policyList.size(); i++) {
+					ExtentReporter.logger.log(LogStatus.INFO, "Select Policy with Policy No." +policyList.get(i).getAttribute("innerHTML"));
+					clickButton(driver, policyList.get(i), "Policy Name");
+					break;
+				}
+			}
+		} catch (Exception e) {
+			ExtentReporter.logger.log(LogStatus.FAIL, "No Policy available for this Criteria.");
+		}
+
+		invisibilityOfLoader(driver);
+
+		// Below line of code will verify Selected phase value is correct or
+		// not.
+		verifyValueFromField(driver, selectedPhaseValueEle, selectedPhaseValue, "innerHTML","Phase Value");
+
+		// Below line of code will verify Selected status value is correct or
+		// not.
+		verifyValueFromField(driver, selectedStatusValueEle, selectedStatusValue, "innerHTML","Status Value");
+		return new RateApolicyPage(driver);
+	}
+
+	/*public RateApolicyPage searchFromFindPolicyPage() throws Exception {
 		// below code will select phase from Policy Phase drop down.
 		click(driver, policyPhaseSearch, "Policy Phase Search Icon");
 		waitFor(driver, 3);
@@ -208,31 +275,37 @@ public class FindPolicyPage extends CommonAction {
 				break;
 			}
 		}
-		click(driver, searchBtn, "SearchButton");
+		clickButton(driver, searchBtn, "SearchButton");
 		invisibilityOfLoader(driver);
 		Thread.sleep(2000);
 
+		// Below code will check if policies are displayed after filter.search
+		// and will open/select policy.
+		try {
+			if (policyList.size() > 0) {
+				for (int i = 0; i < policyList.size(); i++) {
+					ExtentReporter.logger.log(LogStatus.INFO,
+							"Select Policy with Policy No." + policyList.get(i).getAttribute("innerHTML"));
+					System.out.println("Select Policy with Policy No." + policyList.get(i).getAttribute("innerHTML"));
+					clickButton(driver, policyList.get(i), "Policy Name");
+					break;
+				}
+			}
+		} catch (Exception e) {
+			ExtentReporter.logger.log(LogStatus.FAIL, "No Policy available for this Criteria.");
+		}
 		
 		// Below code will check if the policies displayed in search criteria result match the last Transaction.
 		// and will open/select matching policy.
 		boolean flag=false;
 		try {
 			List<String> policyList= new ArrayList<String>();
-			
 			for(int page=0;page<10;page++) {
 			//each page shows only four rows in DOM, so we need to change page to search policy after 4 rows
-				for (int row = 0; row <4; row++) {
+				for (int row = 0; row <PolicyList.size(); row++) {
 			
-				WebElement lastTranctionColumn=	driver.findElement(By.xpath("//div[@id=\"row"+row+"findPolicyListGrid\"]/div[14]/div"));
+				WebElement lastTranctionColumn=	driver.findElement(By.xpath("//div[@id=\"row"+row+"findPolicyListGrid\"]/div[11]/div"));
 				WebElement policyNum=driver.findElement(By.xpath("//div[@id=\"row"+row+"findPolicyListGrid\"]/div[3]/div/a"));
-				
-				//System.out.println(policyNum.getAttribute("innerHTML"));
-				String policyNumValue=policyNum.getAttribute("innerHTML").trim();
-				//adding policyNUmber to array list
-				
-			//	policyList.add(policyNumValue);
-			
-				
 				//compare the value of last Transaction to expected value from data sheet, so select the required policy
 				if(lastTranctionColumn.getAttribute("innerHTML").trim().equalsIgnoreCase(FindPolicyPageDTO.lastTransaction)) {
 					ExtentReporter.logger.log(LogStatus.INFO, "Select Policy with Policy No." +policyNum.getAttribute("innerHTML"));
@@ -252,64 +325,56 @@ public class FindPolicyPage extends CommonAction {
 				}else {
 					break;
 				}
-		  }	
+		  }
 		} catch (Exception e) {
 			ExtentReporter.logger.log(LogStatus.FAIL, "No Policy available for given Criteria.");
 			throw new Exception("No Policy available for given Criteria");
 		}
-			/*WebElement ele = driver.findElement(By.xpath("//div[@id=\"row6findPolicyListGrid\"]//div[@title='Active']"));
-			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", ele);
-			Actions actions = new Actions(driver);
-			actions.moveToElement(ele).perform();*/
 		Thread.sleep(2000);
 		invisibilityOfLoader(driver);
-
-		// Below line of code will verify Selected phase value is correct or
-		// not.
-		//verifyValueFromField(driver, selectedPhaseValueEle, selectedPhaseValue, "innerHTML","Phase Value");
-
 		// Below line of code will verify Selected status value is correct or
 		// not.
 		verifyValueFromField(driver, selectedStatusValueEle, selectedStatusValue, "innerHTML","Status Value");
 		return new RateApolicyPage(driver);
-	}
+	}*/
 	
 		
 	public RateApolicyPage selectNextPolicyFromListUsingForwardArrow() throws Exception {
-		
+
 		Thread.sleep(3000);
 		try {
-		if(nextPolicyArrow.isDisplayed()==true) {
-		
-			clickButton(driver, nextPolicyArrow, "Arrow for next Policy");
-			Thread.sleep(3000);
-		}
-		}catch(Exception e){
-			ExtentReporter.logger.log(LogStatus.INFO, "Next Policy Arrow is not available on policy details page, so policies from list are exhausted.");
+			if (nextPolicyArrow.isDisplayed() == true) {
+
+				clickButton(driver, nextPolicyArrow, "Arrow for next Policy");
+				Thread.sleep(3000);
+			}
+		} catch (Exception e) {
+			ExtentReporter.logger.log(LogStatus.INFO,
+					"Next Policy Arrow is not available on policy details page, so policies from list are exhausted.");
 			e.printStackTrace();
-			assertTrue(false,"There is no substitte policy available in policy list to progress this test.");
+			assertTrue(false, "There is no substitte policy available in policy list to progress this test.");
 		}
 		return new RateApolicyPage(driver);
-		
+
 	}
-	
-		
+
+
 	public FindPolicyPage selectTermStatusAndIssueCompany() throws Exception {
-		ExtentReporter.logger.log(LogStatus.INFO, "Select Policy Status "+FindPolicyPageDTO.termStatusCode);
+		ExtentReporter.logger.log(LogStatus.INFO, "Select Policy Status " + FindPolicyPageDTO.termStatusCode);
 		selectDropdownByValue(driver, termStatus, FindPolicyPageDTO.termStatusCode, "Term Status");
 		Thread.sleep(1000);
 		selectDropdownByValue(driver, issueCompany, FindPolicyPageDTO.issueCompanyValue, "Issue Company");
 		return new FindPolicyPage(driver);
 	}
-	
+
 	public FindPolicyPage selectPolicyType() throws Exception {
-		
+
 		clickButton(driver, searchPolicyType, "Policy Search");
 		Thread.sleep(2000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Select Policy Type "+FindPolicyPageDTO.policyTypeValue);
-		for(int i=0;i<policyTypeList.size();i++) {
-			
-			if(policyTypeList.get(i).getAttribute("value").trim().equals(FindPolicyPageDTO.policyTypeValue)) {
+		ExtentReporter.logger.log(LogStatus.INFO, "Select Policy Type " + FindPolicyPageDTO.policyTypeValue);
+		for (int i = 0; i < policyTypeList.size(); i++) {
+
+			if (policyTypeList.get(i).getAttribute("value").trim().equals(FindPolicyPageDTO.policyTypeValue)) {
 				selectValue(driver, policyTypeList.get(i), "Policy Type Institutai");
 				break;
 			}

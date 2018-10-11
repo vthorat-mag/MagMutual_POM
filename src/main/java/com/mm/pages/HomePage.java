@@ -75,7 +75,9 @@ public class HomePage extends CommonAction {
 	@FindBy(id = "CI_ENT_SEL_LST_FORM_SEL")
 	WebElement Select_Entity;
 
-	@FindBy(id = "wfsortCENTITY_TYPE_DESC")
+	//@FindBy(id ="wfsortCENTITY_TYPE_DESC")
+	@FindBy(xpath = "//th[@id='HCENTITY_TYPE_DESC']/a[@class='gridheader']")
+	//@FindBy(xpath ="//a[@class='gridheader']/img[@id='wfsortCENTITY_TYPE_DESC']")
 	WebElement entityType;
 
 	@FindBy(id = "CPOLICYNO")
@@ -395,9 +397,11 @@ public class HomePage extends CommonAction {
 
 	// Change Entity Type to Organization.
 	public HomePage changeEntityTypeToOrganization() throws Exception {
-		Thread.sleep(6000);
+		Thread.sleep(30000);
 		invisibilityOfLoader(driver);
 		ExtentReporter.logger.log(LogStatus.INFO, "Change Risk Type from Person to Organization");
+		Actions action=new Actions(driver);
+		action.click(entityType);
 		clickButton(driver, entityType, "Type column");
 		ExtentReporter.logger.log(LogStatus.PASS, "Risk Type is changed from Person to Organization");
 		Thread.sleep(2000);

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import MMTestCase.QA;
+import MMTestCase.BTS;
 
 public class PolicyIndicationPageDTO {
 
@@ -22,6 +23,8 @@ public class PolicyIndicationPageDTO {
 	public List<String> riskCounty;
 	public List<String> riskSpeciality;
 	public List<String> riskTypeValue;
+	public List<String> riskEntityName;
+	public List<String> FTEType;
 	public String coverageLimit;
 	public String policyAction;
 	public String producer;

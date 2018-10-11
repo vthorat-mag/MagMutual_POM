@@ -157,11 +157,11 @@ public class PolicyQuotePage extends CommonAction {
 	
 	@FindBy(id="PM_COMMON_TABS_DELETEWIP")
 	WebElement deleteWIPBtn;
-	
-  // This is a constructor for PolicyQuotePage class to initialize page elments and DTO object
-	public PolicyQuotePage(WebDriver driver)throws Exception
-	{
-		this.driver=driver;
+
+	// This is a constructor for PolicyQuotePage class to initialize page
+	// elments and DTO object
+	public PolicyQuotePage(WebDriver driver) throws Exception {
+		this.driver = driver;
 		PageFactory.initElements(driver, this);
 		policyquotepageDTO = new PolicyQuotePageDTO(TestCaseDetails.testDataDictionary);
 	}
@@ -181,13 +181,18 @@ public class PolicyQuotePage extends CommonAction {
 		invisibilityOfLoader(driver);
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Click Policy Actions>Copy>Ok and verify Policy displays in Indication phase.");
-		if(selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.valueOfPolicyActionCopy, "Policy Action").equals("false"))
-		{
-			PolicyQuotePage policyquotepage = new PolicyQuotePage(driver);
-			policyquotepage.searchBackUpPolicyUsingSearchCriteria();
-			//Select copy to quote from policy action to get copy option in policy Action
-			policyquotepage.copyToQuoteFromActionDropDownForQA();
-			selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.valueOfPolicyActionCopy, "Policy Action");
+		if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.valueOfPolicyActionCopy,
+				"Policy Action").equals("false")) {
+			RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
+			PolicyBinderPage pbp = new PolicyBinderPage(driver);
+			RateAPolicyPageDTO rateApolicyPageDTO = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
+			//rateapolicypage.searchBackUpPolicy();
+			//Below code will search the policy from application.
+			searchBackUpPolicyUsingSearchCriteria();
+			pbp.copyToQuoteFromActionDropDownwithoutBackUpPolicy(pbp.policyNo());
+			PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
+			selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.valueOfPolicyActionCopy,
+					"Policy Action");
 		}
 		return new PolicyQuotePage(driver);
 	}
@@ -349,13 +354,6 @@ public class PolicyQuotePage extends CommonAction {
 
 	}
 
-	public PolicyQuotePage deleteWIPForReUse()throws Exception {
-		Thread.sleep(3000);
-		clickButton(driver, deleteWIPBtn, "DeleteWIP");
-		isAlertPresent(driver);
-		return new PolicyQuotePage(driver);
-	}
-	
 	public PolicyQuotePage product_Notify() throws Exception {
 
 		switchToFrameUsingId(driver, "popupframe1");
@@ -384,16 +382,20 @@ public class PolicyQuotePage extends CommonAction {
 		Thread.sleep(2000);
 		invisibilityOfLoader(driver);
 		clickButton(driver, applyButton, "Apply");
-		
 		isAlertPresent(driver);
 		return new PolicyQuotePage(driver);
 	}
 	
-	
-	//Change phase to Quote.
-	public PolicyQuotePage changePolicyPhase(String newPhaseValue) throws Exception
-	{
-		Thread.sleep(7000);
+	public PolicyQuotePage deleteWIPForReUse()throws Exception {
+		Thread.sleep(3000);
+		clickButton(driver, deleteWIPBtn, "DeleteWIP");
+		isAlertPresent(driver);
+		return new PolicyQuotePage(driver);
+	}
+
+	// Change phase to Quote.
+	public PolicyQuotePage changePolicyPhase(String newPhaseValue) throws Exception {
+		Thread.sleep(8000);
 		invisibilityOfLoader(driver);
 		ExtentReporter.logger.log(LogStatus.INFO, "Change Phase to "+newPhaseValue+" & verify Phase is changed to "+newPhaseValue);
 		selectDropdownByValue(driver, policyPhase, newPhaseValue, "Phase");
@@ -452,27 +454,40 @@ public class PolicyQuotePage extends CommonAction {
 			ExtentReporter.logger.log(LogStatus.INFO, "Save as Pop up window is not displayed.");
 		}
 	}
-
+	
 	// Select the policy Action from DDL
+		public PolicyQuotePage selectPolicyActionAndAddDescription() throws Exception {
+			Thread.sleep(4000);
+			ExtentReporter.logger.log(LogStatus.INFO,
+					"Click Policy Actions>Renewal. Verify Capture Transaction Details window opens");
+			if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.policyActionValue,
+					"Policy Action").equals("false")) {
+				RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
+				RateAPolicyPageDTO rateApolicyPageDTO = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
+				rateapolicypage.searchPolicy(rateApolicyPageDTO.backUpPolicyNum);
+				PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
+				selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.policyActionValue,
+						"Policy Action");
+			}
+			return new PolicyQuotePage(driver);
+		}
+
+	/*// Select the policy Action from DDL
 	public PolicyQuotePage selectPolicyAction() throws Exception {
 		Thread.sleep(4000);
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Click Policy Actions>Renewal. Verify Capture Transaction Details window opens");
-		
-		if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.policyActionValue, "Policy Action").equals("false")) {
-	
-			//Deleting the Work in progress will enable required action from policy Action DDL
-			deleteWIPForReUse();
-			Thread.sleep(5000);
-			
-			if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.policyActionValue, "Policy Action").equals("false")) {
-				//Below method will search policy number using search criteria if renewal option is not available
-				searchBackUpPolicyUsingSearchCriteria();
-				selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.policyActionValue, "Policy Action");
-			}
+		if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.policyActionValue,
+				"Policy Action").equals("false")) {
+			RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
+			RateAPolicyPageDTO rateApolicyPageDTO = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
+			rateapolicypage.searchPolicy(rateApolicyPageDTO.backUpPolicyNum);
+			PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
+			selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.policyActionValue,
+					"Policy Action");
 		}
 		return new PolicyQuotePage(driver);
-	}
+	}*/
 	
 	public PolicyQuotePage addQuoteDescription() throws Exception {
 	
@@ -485,8 +500,28 @@ public class PolicyQuotePage extends CommonAction {
 		enterTextIn(driver, quoteDescription, policyquotepageDTO.quoteDescriptionText, "Enter Quote Description");
 		Thread.sleep(2000);
 		return new PolicyQuotePage(driver);
-
 	}
+	
+	// Select the policy Action from DDL
+		public PolicyQuotePage selectPolicyAction() throws Exception {
+			Thread.sleep(4000);
+			ExtentReporter.logger.log(LogStatus.INFO,
+					"Click Policy Actions>Renewal. Verify Capture Transaction Details window opens");
+			
+			if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.policyActionValue, "Policy Action").equals("false")) {
+		
+				//Deleting the Work in progress will enable required action from policy Action DDL
+				deleteWIPForReUse();
+				Thread.sleep(5000);
+				
+				if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.policyActionValue, "Policy Action").equals("false")) {
+					//Below method will search policy number using search criteria
+					searchBackUpPolicyUsingSearchCriteria();
+					selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.policyActionValue, "Policy Action");
+				}
+			}
+			return new PolicyQuotePage(driver);
+		}
 
 	//This method will select a policy using the required search criteria
 	public void searchBackUpPolicyUsingSearchCriteria() throws Exception {
@@ -535,8 +570,9 @@ public class PolicyQuotePage extends CommonAction {
 		return new PolicyQuotePage(driver);
 	}
 	
-	public void saveOptionAndHandleCaptureTransactionDetails(WebDriver driver, WebElement saveOptionBtn, WebElement saveAsDropDown,
-			WebElement saveOKBtn, WebElement exitOK, String saveAsValue,String policyNo)
+
+	public void saveOptionAndHandleCaptureTransactionDetails(WebDriver driver, WebElement saveOptionBtn,
+			WebElement saveAsDropDown, WebElement saveOKBtn, WebElement exitOK, String saveAsValue, String policyNo)
 			throws Exception {
 		Thread.sleep(5000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options & verify Save as window displays.");
