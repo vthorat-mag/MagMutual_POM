@@ -59,15 +59,15 @@ public class PolicySubmissionPage extends CommonAction {
 
 	// Select Copy from Action value from Action drop down.
 	public PolicySubmissionPage copyFromPolicyActionDropDown(String policyNum) throws Exception {
-		Thread.sleep(2000);
+		Thread.sleep(8000);
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy. Verify Phase is editable.");
 		selectDropdownByValue(driver, policyAction, policysubmissionpageDTO.valueOfPolicyActionCopy, "Policy Action");
 		Thread.sleep(3000);
 		// Below code is for QA env.
-		/*
-		 * PolicyBinderPage pbp = new PolicyBinderPage(driver);
-		 * pbp.verifyCpatureTxnDetailsPageDisplayedOrNot(pbp.policyNo());
-		 */
+		
+		 PolicyBinderPage pbp = new PolicyBinderPage(driver);
+		 pbp.verifyCpatureTxnDetailsPageDisplayedOrNot(pbp.policyNo());
+		 
 		return new PolicySubmissionPage(driver);
 
 	}

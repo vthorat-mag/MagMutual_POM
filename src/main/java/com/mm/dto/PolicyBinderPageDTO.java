@@ -2,7 +2,7 @@ package com.mm.dto;
 
 import java.util.List;
 import java.util.Map;
-
+import MMTestCase.BTS;
 import MMTestCase.QA;
 
 public class PolicyBinderPageDTO {
@@ -25,6 +25,8 @@ public class PolicyBinderPageDTO {
 	public String lastName;
 	public String firstName;
 	public String description;
+	public String policyPhaseValueBinder;
+	public String policyPhaseValue;
 
 	public PolicyBinderPageDTO(Map<String, List<String>> excelData) {
 

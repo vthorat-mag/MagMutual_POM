@@ -16,7 +16,7 @@ import com.mm.utils.ExtentReporter;
 import com.relevantcodes.extentreports.ExtentReports;
 
 import BaseClass.BaseTest;
-import MMTestCase.SmokeTestCasesUpdated;
+import MMTestCase.QA;
 
 public class testListners implements ITestListener {
 
@@ -33,7 +33,7 @@ public class testListners implements ITestListener {
 
 	public void onTestFailure(ITestResult result) {
 		//ExtentReporter.logger=null;
-		TakesScreenshot ts=(TakesScreenshot)SmokeTestCasesUpdated.driver;
+		TakesScreenshot ts=(TakesScreenshot)QA.driver;
 		File source =ts.getScreenshotAs(OutputType.FILE);
 		String screenshotLocation =ExtentReporter.screenshotfolderpath+result.getName()+".png";
 		File destination=new File(screenshotLocation);

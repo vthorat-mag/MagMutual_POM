@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import MMTestCase.QA;
+import MMTestCase.BTS;
 
 public class CincomPageDTO {
 

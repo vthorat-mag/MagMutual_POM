@@ -1218,5 +1218,4 @@ public class FinancePage extends CommonAction {
 		captureScreenshot(driver, financePageDTO.screenShotName);
 		ExtentReporter.logger.log(LogStatus.INFO, "Upload screenshot to Rally");
 	}
-	
 }

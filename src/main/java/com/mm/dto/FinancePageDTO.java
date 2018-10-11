@@ -2,7 +2,7 @@ package com.mm.dto;
 
 import java.util.List;
 import java.util.Map;
-
+import MMTestCase.BTS;
 import MMTestCase.QA;
 
 public class FinancePageDTO {
@@ -50,10 +50,10 @@ public class FinancePageDTO {
 	public String screenShotName;
 	public String backUpPolicyNum;
 	public String AlternateNextDate;
-	public String OwnerDDLValue_Y;
-	public String OwnerDDLValue_N;
-	public String coverageNameumbplins;
 	public String coveragenameumbcglins;
+	public String OwnerDDLValue_Y;
+	public String coverageNameumbplins;
+	public String OwnerDDLValue_N;
 	public String issueCompanyValue;
 
 	public FinancePageDTO(Map<String, List<String>> excelData) {
