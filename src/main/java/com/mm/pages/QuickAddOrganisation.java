@@ -67,7 +67,8 @@ public class QuickAddOrganisation extends CommonAction {
 		PageFactory.initElements(driver, this);
 
 	}
-
+	
+	//Code to navigate to add organisation page.
 	public QuickAddOrganisation navigate_To_Add_Org_Window() throws InterruptedException {
 		Thread.sleep(3000);
 		Actions action = new Actions(driver);
