@@ -7,6 +7,7 @@ public class pdfReaderDTO {
 
 	public List<String> verifyPDFcontent;
 
+	//This method will access DTO Code.
 	public pdfReaderDTO(Map<String, List<String>> excelData) {
 
 		for (int i = 0; i <= pdfReaderDTO.class.getFields().length - 1; i++) {

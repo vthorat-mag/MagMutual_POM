@@ -4,9 +4,9 @@ import org.openqa.selenium.WebDriver;
 
 public class BrowserTypes {
 
+	
+	//Code to initialize driver.
 	public static WebDriver getDriver() {
-		// TODO Auto-generated method stub
-		
 		//String browserType = System.getProperty("browser.type");
 		String browserType = "IE";
 		if(browserType != null)

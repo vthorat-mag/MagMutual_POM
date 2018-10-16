@@ -32,6 +32,7 @@ public class ClaimsDTO {
 	public String policyNum;
 	public String CoverageDescription;
 
+	//This method will access DTO Code.
 	public ClaimsDTO(Map<String, List<String>> excelData) {
 
 		for (int i = 0; i <= ClaimsDTO.class.getFields().length - 1; i++) {

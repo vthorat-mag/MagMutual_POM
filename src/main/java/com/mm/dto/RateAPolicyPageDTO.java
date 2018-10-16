@@ -32,6 +32,7 @@ public class RateAPolicyPageDTO {
 	public String backUpPolicyNum;
 	public String policyPhaseValue;
 
+	//This method will access DTO Code.
 	public RateAPolicyPageDTO(Map<String, List<String>> excelData) {
 
 		for (int i = 0; i <= RateAPolicyPageDTO.class.getFields().length - 1; i++) {

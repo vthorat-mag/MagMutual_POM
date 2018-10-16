@@ -31,6 +31,7 @@ public class testListners implements ITestListener {
 		
 	}
 
+	//This code will take screenshot on test failure.
 	public void onTestFailure(ITestResult result) {
 		//ExtentReporter.logger=null;
 		TakesScreenshot ts=(TakesScreenshot)QA.driver;

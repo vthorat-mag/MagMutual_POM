@@ -28,6 +28,7 @@ public class PolicyBinderPageDTO {
 	public String policyPhaseValueBinder;
 	public String policyPhaseValue;
 
+	//This method will access DTO Code.
 	public PolicyBinderPageDTO(Map<String, List<String>> excelData) {
 
 		for (int i = 0; i <= PolicyBinderPageDTO.class.getFields().length - 1; i++) {

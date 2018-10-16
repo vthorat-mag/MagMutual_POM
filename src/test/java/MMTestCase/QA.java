@@ -600,7 +600,7 @@ public class QA extends ExtentReporter {
 	}
 
 
-	@Test(description = "Hospital - Add multiple risks", groups = { "BTS Smoke Test" }, priority = 21)
+	@Test(description = "Hospital - Add multiple risks", groups = { "BTS Smoke Test" }, priority = 20)
 	public void TC42244() throws Exception {
 		String Blank = "";
 		LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);

@@ -503,7 +503,6 @@ public class PolicyQuotePage extends CommonAction {
 			if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.policyActionValue, "Policy Action").equals("false")) {
 		
 				//Deleting the Work in progress will enable required action from policy Action DDL
-				//deleteWIPForReUse();
 				searchBackUpPolicyUsingSearchCriteria();
 				Thread.sleep(5000);
 				

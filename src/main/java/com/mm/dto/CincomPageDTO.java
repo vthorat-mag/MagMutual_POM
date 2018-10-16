@@ -12,6 +12,7 @@ public class CincomPageDTO {
 	public List<String> coverageList;
 	public List<String> phase;
 
+	//This method will access DTO Code.
 	public CincomPageDTO(Map<String, List<String>> excelData) {
 
 		for (int i = 0; i <= CincomPageDTO.class.getFields().length - 1; i++) {
