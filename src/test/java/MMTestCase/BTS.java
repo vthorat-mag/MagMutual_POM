@@ -514,49 +514,50 @@ public class BTS extends ExtentReporter {
 	}*/
 	
 	//@Test(description = "Hospital - Add multiple risks", groups = { "BTS Smoke Test" }, priority = 20)
-		public void TC42244() throws Exception {
-				String Blank="";
-				LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
-				LoginPage loginpage = new LoginPage(driver);
-				RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
-				PolicyBinderPage policyBinderPage = new PolicyBinderPage(driver);
-				PolicyQuotePage policyQuotePage = new PolicyQuotePage(driver);
-				PolicyIndicationPage policyIndicationPage= new PolicyIndicationPage(driver);
-				PolicySubmissionPage policySubmissionPage = new PolicySubmissionPage(driver); 
-				PolicyBinderPageDTO policyBinderPageDTO = new PolicyBinderPageDTO(TestCaseDetails.testDataDictionary);
-				PolicyQuotePageDTO policyQuotePageDTO = new PolicyQuotePageDTO(TestCaseDetails.testDataDictionary);
-				PolicyIndicationPageDTO indicationPageDTO = new PolicyIndicationPageDTO(TestCaseDetails.testDataDictionary);
-				loginpage.loginToeOasis(lpDTO.username, lpDTO.password)
-				.navigateToPolicyPageUsingHeaderPolicyLink()
-				.searchPolicyPolicyBinderPage()
-				.copyToQuoteFromActionDropDown(policyBinderPage.policyNo());
-				policySubmissionPage.copyFromPolicyActionDropDown(policyBinderPage.policyNo());
-				policyQuotePage.changePolicyPhase(policyQuotePageDTO.policyPhaseValue);
-				String policyNo= policyBinderPage.policyNo();
-				
-				for (int i=0;i<indicationPageDTO.riskTypeValue.size();i++){
-				
-					if(indicationPageDTO.riskTypeValue.get(i).equals(Blank)){
-						break;
-					}else if(indicationPageDTO.riskTypeValue.get(i).equals("Dentist")){
-						policyIndicationPage.openLimitSharingTab(policyNo)
-						.addSharedGroup(policyNo).closeLimitSharingtab();
-					}
-					
-				policyIndicationPage.selectRiskTab()
-				.selectRiskTypeFromPopupWindowAndSelectEntity(policyNo, indicationPageDTO.riskTypeValue.get(i),indicationPageDTO.riskEntityName.get(i))
-				.addRiskInformation(indicationPageDTO.riskCounty.get(i),indicationPageDTO.riskSpeciality.get(i),indicationPageDTO.riskTypeValue.get(i),indicationPageDTO.FTEType.get(i))
-				.selectCoverageTab()/*.selectRiskfromGoToDropdown(indicationPageDTO.GoToRiskDropDownValue.get(i))*/
-				.selectCoverageFromCoverageList()
-				.addRetroactiveDate(indicationPageDTO.riskTypeValue.get(i));
-				}
-				rateapolicypage.rateFunctionality(policyNo).saveOptionOfficial(policyNo);
-				rateapolicypage.AcceptFromActionDropDown().isAlertPresent().identifyPhase().billingSetup().refreshCurrentPage(driver);
-				String policyNum= policyBinderPage.policyNo();
-				rateapolicypage.rateFunctionality(policyNum).saveOptionOfficial(policyNum);
-				rateapolicypage.policyEndorsementwithoutBackupPolicy(policyNum).identifyPhase().rateFunctionality(policyNum).clickPreviewTab(policyNum).savePDF(reportFolderPath);
-				policyQuotePage.saveOptionOfficial(policyNum);
+	@Test(description = "Hospital - Add multiple risks", groups = { "BTS Smoke Test" }, priority = 20)
+	public void TC42244() throws Exception {
+		String Blank = "";
+		LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
+		LoginPage loginpage = new LoginPage(driver);
+		RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
+		PolicyBinderPage policyBinderPage = new PolicyBinderPage(driver);
+		PolicyQuotePage policyQuotePage = new PolicyQuotePage(driver);
+		PolicyIndicationPage policyIndicationPage = new PolicyIndicationPage(driver);
+		PolicySubmissionPage policySubmissionPage = new PolicySubmissionPage(driver);
+		PolicyBinderPageDTO policyBinderPageDTO = new PolicyBinderPageDTO(TestCaseDetails.testDataDictionary);
+		PolicyQuotePageDTO policyQuotePageDTO = new PolicyQuotePageDTO(TestCaseDetails.testDataDictionary);
+		PolicyIndicationPageDTO indicationPageDTO = new PolicyIndicationPageDTO(TestCaseDetails.testDataDictionary);
+		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageUsingHeaderPolicyLink()
+				.searchPolicyPolicyBinderPage().copyToQuoteFromActionDropDown(policyBinderPage.policyNo());
+		policySubmissionPage.copyFromPolicyActionDropDown(policyBinderPage.policyNo());
+		policyQuotePage.changePolicyPhase(policyQuotePageDTO.policyPhaseValue);
+		String policyNo = policyBinderPage.policyNo();
+
+		for (int i = 0; i < indicationPageDTO.riskTypeValue.size(); i++) {
+
+			if (indicationPageDTO.riskTypeValue.get(i).equals(Blank)) {
+				break;
+			} else if (indicationPageDTO.riskTypeValue.get(i).equals("Dentist")) {
+				policyIndicationPage.openLimitSharingTab(policyNo).addSharedGroup(policyNo).closeLimitSharingtab();
+			}
+
+			policyIndicationPage.selectRiskTab()
+					.selectRiskTypeFromPopupWindowAndSelectEntity(policyNo, indicationPageDTO.riskTypeValue.get(i),
+							indicationPageDTO.riskEntityName.get(i))
+					.addRiskInformation(indicationPageDTO.riskCounty.get(i), indicationPageDTO.riskSpeciality.get(i),
+							indicationPageDTO.riskTypeValue.get(i), indicationPageDTO.FTEType.get(i))
+					.selectCoverageTab().selectCoverageFromCoverageList()
+					.addRetroactiveDate(indicationPageDTO.riskTypeValue.get(i));
 		}
+		rateapolicypage.rateFunctionality(policyNo).saveOptionOfficial(policyNo);
+		rateapolicypage.AcceptFromActionDropDown().isAlertPresent().identifyPhase(indicationPageDTO.policyPhaseValue).billingSetup()
+				.refreshCurrentPage(driver);
+		String policyNum = policyBinderPage.policyNo();
+		rateapolicypage.rateFunctionality(policyNum).saveOptionOfficial(policyNum);
+		rateapolicypage.policyEndorsementwithoutBackupPolicy(policyNum).identifyPhase(indicationPageDTO.policyPhaseValue2).rateFunctionality(policyNum)
+				.clickPreviewTab(policyNum).savePDF(reportFolderPath);
+		policyQuotePage.saveOptionOfficial(policyNum);
+	}
 
 	@AfterMethod(alwaysRun = true)
 	public void logoffFromAppclication(ITestResult result) throws IOException, InterruptedException, URISyntaxException,
