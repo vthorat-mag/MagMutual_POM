@@ -35,6 +35,8 @@ public class PolicyIndicationPageDTO {
 	public String riskName;
 	public String coverageNameForRisk;
 	public String stateCodeValue;
+	public String policyPhaseValue;
+	public String policyPhaseValue2;
 	
 	public PolicyIndicationPageDTO(Map<String, List<String>> excelData)
 			throws IllegalArgumentException, IllegalAccessException, SecurityException {

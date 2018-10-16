@@ -29,7 +29,7 @@ Func Example()
 		send("{TAB}")
 	EndIf
 	Sleep(5000)
-	send("{TAB 8}") 
+	send("{TAB 15}") 
 	send("{ENTER}")
 	; Wait 10 seconds for the Run dialogue window to appear.
 EndFunc   ;==>Example

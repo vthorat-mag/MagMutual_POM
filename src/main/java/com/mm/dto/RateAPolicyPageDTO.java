@@ -30,6 +30,7 @@ public class RateAPolicyPageDTO {
 	public String policyNo;
 	public String endorsementComment;
 	public String backUpPolicyNum;
+	public String policyPhaseValue;
 
 	public RateAPolicyPageDTO(Map<String, List<String>> excelData) {
 

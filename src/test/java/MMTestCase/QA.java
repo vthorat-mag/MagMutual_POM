@@ -12,7 +12,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
-
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
@@ -23,7 +22,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.util.RetryAnalyzerCount;
-
 import com.mm.browsers.BrowserTypes;
 import com.mm.dto.FinancePageDTO;
 import com.mm.dto.HomePageDTO;
@@ -31,6 +29,7 @@ import com.mm.dto.LoginPageDTO;
 import com.mm.dto.PolicyBinderPageDTO;
 import com.mm.dto.PolicyIndicationPageDTO;
 import com.mm.dto.PolicyQuotePageDTO;
+import com.mm.dto.RateAPolicyPageDTO;
 import com.mm.listeners.RetryListner;
 import com.mm.pages.CISPage;
 import com.mm.pages.FinancePage;
@@ -405,9 +404,10 @@ public class QA extends ExtentReporter {
 		ExcelUtil exlUtil = new ExcelUtil();
 		RateApolicyPage rateapolicyPage = new RateApolicyPage(driver);
 		lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
+		PolicyIndicationPageDTO indicationPageDTO = new PolicyIndicationPageDTO(TestCaseDetails.testDataDictionary);
 		loginpage = new LoginPage(driver);
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageUsingHeaderPolicyLink()
-				.searchPolicyRateAPolicyPage().AcceptFromActionDropDown().identifyPhase().billingSetup()
+				.searchPolicyRateAPolicyPage().AcceptFromActionDropDown().identifyPhase(indicationPageDTO.policyPhaseValue).billingSetup()
 				.refreshCurrentPage(driver).coverageDetailsSelect();
 		String policyNumber = rateapolicyPage.policyNo();
 		rateapolicyPage.coverageUpdates(policyNumber).rateFunctionalityWithoutPremiumAmountVerification(policyNumber)
@@ -420,6 +420,7 @@ public class QA extends ExtentReporter {
 	@Test(description = "QA Hospital Issue Policy Forms", groups = { "QA Smoke Test" }, priority = 6)
 	public void TC43771() throws Exception {
 		LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
+		PolicyQuotePageDTO policyquotepagedto = new PolicyQuotePageDTO(TestCaseDetails.testDataDictionary);
 		LoginPage loginpage = new LoginPage(driver);
 		ExcelUtil exlUtil = new ExcelUtil();
 		PolicyQuotePage policyQuotePage = new PolicyQuotePage(driver);
@@ -427,7 +428,7 @@ public class QA extends ExtentReporter {
 				.searchPolicyPolicyBinderPage();
 		PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
 		String policyNumber = policybinderpage.policyNo();
-		policybinderpage.endorsementFromActionDropDown().endorsePolicy(policyNumber).identifyPhase()
+		policybinderpage.endorsementFromActionDropDown().endorsePolicy(policyNumber).identifyPhase(policyquotepagedto.policyPhaseValue)
 				.rateFunctionality(policybinderpage.policyNo());
 		String policyNo = policybinderpage.policyNo();
 		policyQuotePage.clickPreviewTab(policyNo).savePDF(reportFolderPath).verifyPdfContent();
@@ -504,13 +505,14 @@ public class QA extends ExtentReporter {
 	@Test(description = "QA Hospital Create Claim", groups = { "QA Smoke Test" }, priority = 11)
 	public void TC43776() throws Exception {
 		LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
+		RateAPolicyPageDTO rpdto = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
 		LoginPage loginpage = new LoginPage(driver);
 		PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
 		ExcelUtil exlUtil = new ExcelUtil();
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageUsingHeaderPolicyLink()
 				.searchPolicyRateAPolicyPage();
 		String clientID = policybinderpage.getClientId();
-		policybinderpage.verifyPhase().navigatetoClaimsPage().getPatientDetails().enterDataOnClaimsPage(clientID);
+		policybinderpage.verifyPhase(rpdto.policyPhaseValue).navigatetoClaimsPage().getPatientDetails().enterDataOnClaimsPage(clientID);
 		String claimNumber = policybinderpage.claimNo();
 		exlUtil.writeData("TC43784", "claimNum", claimNumber, 1, ExcelPath);
 		exlUtil.writeData("TC43782", "claimNum", claimNumber, 1, ExcelPath);
@@ -566,7 +568,7 @@ public class QA extends ExtentReporter {
 		policyQuotePage.clickPreviewTab(policyNumb).savePDF(reportFolderPath).verifyPdfContent();
 		policyQuotePage.saveOptionOfficial(policyNumb);
 		exlUtil.writeData("TC44218", "PolicyNum", policyNumb, 1, ExcelPath);
-		exlUtil.writeData("TC43780", "PolicyNum", policyNumb, 1, ExcelPath); // 42243,42246
+		exlUtil.writeData("TC43780", "PolicyNum", policyNumb, 1, ExcelPath); 
 	}
 
 	@Test(description = "QA Hospital Verify Image Right", groups = { "QA Smoke Test" }, priority = 16)
@@ -579,6 +581,7 @@ public class QA extends ExtentReporter {
 		TC42246();
 	}
 
+	// latest back up policy search done
 	@Test(description = "QA Hospital Renewal", groups = { "QA Smoke Test" }, priority = 18)
 	public void TC43777() throws Exception {
 		TC42400();
@@ -596,9 +599,8 @@ public class QA extends ExtentReporter {
 		TC42403();
 	}
 
-	// TODO-Verify & Add this tests in QA suite- 42218 & 42219
 
-	@Test(description = "Hospital - Add multiple risks", groups = { "BTS Smoke Test" }, priority = 20)
+	@Test(description = "Hospital - Add multiple risks", groups = { "BTS Smoke Test" }, priority = 21)
 	public void TC42244() throws Exception {
 		String Blank = "";
 		LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
@@ -634,11 +636,11 @@ public class QA extends ExtentReporter {
 					.addRetroactiveDate(indicationPageDTO.riskTypeValue.get(i));
 		}
 		rateapolicypage.rateFunctionality(policyNo).saveOptionOfficial(policyNo);
-		rateapolicypage.AcceptFromActionDropDown().isAlertPresent().identifyPhase().billingSetup()
+		rateapolicypage.AcceptFromActionDropDown().isAlertPresent().identifyPhase(indicationPageDTO.policyPhaseValue).billingSetup()
 				.refreshCurrentPage(driver);
 		String policyNum = policyBinderPage.policyNo();
 		rateapolicypage.rateFunctionality(policyNum).saveOptionOfficial(policyNum);
-		rateapolicypage.policyEndorsementwithoutBackupPolicy(policyNum).identifyPhase().rateFunctionality(policyNum)
+		rateapolicypage.policyEndorsementwithoutBackupPolicy(policyNum).identifyPhase(indicationPageDTO.policyPhaseValue2).rateFunctionality(policyNum)
 				.clickPreviewTab(policyNum).savePDF(reportFolderPath);
 		policyQuotePage.saveOptionOfficial(policyNum);
 	}
@@ -688,6 +690,8 @@ public class QA extends ExtentReporter {
 		 */
 		ExtentReporter.report.flush();
 		ExtentReporter.report.close();
+		if(driver!=null) {
 		driver.quit();
+		}
 	}
 }

@@ -8,11 +8,11 @@
 	<test name="Test" parallel="methods" thread-count="1">
 		<groups>
 			<run>
-				<include name="BTS Smoke Test" />
+				<include name="QA Smoke Test" />
 			</run>
 		</groups>
 		<classes>
-			<class name="MMTestCase.SmokeTestCasesUpdated" />
+			<class name="MMTestCase.QA" />
 		</classes>
 	</test> <!-- Test -->
 </suite> <!-- Suite -->

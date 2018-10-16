@@ -588,6 +588,7 @@ public class RateApolicyPage extends CommonAction {
 		FindPolicyPage findpolicypage = new FindPolicyPage(driver);
 		do {
 			findpolicypage.selectNextPolicyFromListUsingForwardArrow();
+			Thread.sleep(2000);
 		} while (selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyActionValue, "Policy Action")
 				.equals("false"));
 	}
@@ -656,13 +657,13 @@ public class RateApolicyPage extends CommonAction {
 	}
 
 	// Identify Phase displayed on Page.
-	public RateApolicyPage identifyPhase() throws Exception {
-		Thread.sleep(3000);
-		ExtentReporter.logger.log(LogStatus.PASS, "Verify Phase is changed to Binder.");
-		//verifyValueFromField(driver, policyPhaseBinder, policyPhaseValue,innerText);
-		PolicyBinderPage pbp = new PolicyBinderPage(driver);
-		pbp.verifyPhase();
-		return new RateApolicyPage(driver);
+	public RateApolicyPage identifyPhase(String PhaseValue) throws Exception {
+	Thread.sleep(3000);
+	ExtentReporter.logger.log(LogStatus.PASS, "Verify Phase is changed to Binder.");
+	//verifyValueFromField(driver, policyPhaseBinder, policyPhaseValue,innerText);
+	PolicyBinderPage pbp = new PolicyBinderPage(driver);
+	pbp.verifyPhase(PhaseValue);
+	return new RateApolicyPage(driver);
 	}
 
 	// Identify Policy number from Page.
@@ -768,11 +769,12 @@ public class RateApolicyPage extends CommonAction {
 			// Code to to verify manuscript list is displayed and delete
 			// existing selected
 			// coverage form.
+			Thread.sleep(4000);
 			if (manuscriptList.isDisplayed()) {
 				ExtentReporter.logger.log(LogStatus.INFO,
 						"Delete current Indication form, Are you sure you want to delete this? Click Ok & verify Form is deleted.");
 				clickButton(driver, manuscriptPageDeleteBtn, "Manu script Delete");
-				driver.switchTo().alert().accept();
+				isAlertPresent(driver);
 				Thread.sleep(2000);
 				ExtentReporter.logger.log(LogStatus.INFO, "Click [Add] & verify Add Manuscript window dispalys.");
 				clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
@@ -819,11 +821,11 @@ public class RateApolicyPage extends CommonAction {
 
 	public String verifyProductNotifyWindowDisplayed(String PolicyNo) {
 		try {
-			Thread.sleep(10000);
+			Thread.sleep(15000);
 			WebDriverWait wait = new WebDriverWait(driver, High);
 			switchToFrameUsingElement(driver,
 					driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
-			// Thread.sleep(3000);
+			Thread.sleep(2000);
 			invisibilityOfLoader(driver);
 			List<WebElement> getPageTitleFromPage = driver.findElements(By.xpath("//div[@class='pageTitle']"));
 			try {
@@ -915,19 +917,7 @@ public class RateApolicyPage extends CommonAction {
 
 		handleProducNotifyWindow(policyNo);
 		switchToParentWindowfromframe(driver);
-		/*
-		 * try { Thread.sleep(2000); WebElement iframeEle1 =
-		 * driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" +
-		 * policyNo + "')]")); switchToFrameUsingElement(driver, iframeEle1);
-		 * ExtentReporter.logger.log(LogStatus.INFO,
-		 * "Save as Official window displays"); clickButton(driver, exitOK,
-		 * "Workflow exit OK"); switchToParentWindowfromframe(driver);
-		 * Thread.sleep(2000); }catch(Exception e) {
-		 * ExtentReporter.logger.log(LogStatus.INFO,
-		 * "Work flow Exit Ok button is not displayed."); }
-		 */
-
-		// switchToParentWindowfromframe(driver);
+		
 		switchToFrameUsingElement(driver,
 				driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]")));
 		Thread.sleep(3000);

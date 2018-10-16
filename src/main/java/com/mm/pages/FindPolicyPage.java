@@ -226,12 +226,7 @@ public class FindPolicyPage extends CommonAction {
 				WebElement lastTranctionColumn=	driver.findElement(By.xpath("//div[@id=\"row"+row+"findPolicyListGrid\"]/div[14]/div"));
 				WebElement policyNum=driver.findElement(By.xpath("//div[@id=\"row"+row+"findPolicyListGrid\"]/div[3]/div/a"));
 				
-				//System.out.println(policyNum.getAttribute("innerHTML"));
 				String policyNumValue=policyNum.getAttribute("innerHTML").trim();
-				//adding policyNUmber to array list
-				
-			//	policyList.add(policyNumValue);
-			
 				
 				//compare the value of last Transaction to expected value from data sheet, so select the required policy
 				if(lastTranctionColumn.getAttribute("innerHTML").trim().equalsIgnoreCase(FindPolicyPageDTO.lastTransaction)) {
@@ -257,10 +252,6 @@ public class FindPolicyPage extends CommonAction {
 			ExtentReporter.logger.log(LogStatus.FAIL, "No Policy available for given Criteria.");
 			throw new Exception("No Policy available for given Criteria");
 		}
-			/*WebElement ele = driver.findElement(By.xpath("//div[@id=\"row6findPolicyListGrid\"]//div[@title='Active']"));
-			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", ele);
-			Actions actions = new Actions(driver);
-			actions.moveToElement(ele).perform();*/
 		Thread.sleep(2000);
 		invisibilityOfLoader(driver);
 

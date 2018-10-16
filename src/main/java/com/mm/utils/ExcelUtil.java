@@ -91,7 +91,7 @@ public class ExcelUtil {
 			workbook.close();
 			outputStream.flush();
 			outputStream.close();
-
+			ExtentReporter.logger.log(LogStatus.PASS, "Policy number "+cellValue+" is written successfully in test case data sheet - "+testCaseId);
 		} catch (NoSuchElementException e) {
 
 			e.printStackTrace();
@@ -99,9 +99,3 @@ public class ExcelUtil {
 
 	}
 }
-
-/*for (int i = 1; i < rows; i++) {
-for (int j = 0; j < columns; j++) {
-	excelData[i - 1][j] = eat.getCellData(sheetName, j, i);
-}
-}*/

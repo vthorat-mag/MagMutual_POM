@@ -381,7 +381,8 @@ public class PolicyQuotePage extends CommonAction {
 	public PolicyQuotePage deleteWIPForReUse()throws Exception {
 		Thread.sleep(3000);
 		clickButton(driver, deleteWIPBtn, "DeleteWIP");
-		isAlertPresent(driver);
+		//isAlertPresent(driver);
+		dismissAlert(driver);
 		return new PolicyQuotePage(driver);
 	}
 
@@ -482,7 +483,7 @@ public class PolicyQuotePage extends CommonAction {
 	
 	public PolicyQuotePage addQuoteDescription() throws Exception {
 	
-		Thread.sleep(7000);
+		Thread.sleep(6000);
 		invisibilityOfLoader(driver);
 		switchToFrameUsingId(driver, "popupframe1");
 		getPageTitle(driver, captureTranxDetailsWindowTitle);
@@ -502,13 +503,14 @@ public class PolicyQuotePage extends CommonAction {
 			if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.policyActionValue, "Policy Action").equals("false")) {
 		
 				//Deleting the Work in progress will enable required action from policy Action DDL
-				deleteWIPForReUse();
+				//deleteWIPForReUse();
+				searchBackUpPolicyUsingSearchCriteria();
 				Thread.sleep(5000);
 				
 				if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.policyActionValue, "Policy Action").equals("false")) {
 					//Below method will search policy number using search criteria
-					searchBackUpPolicyUsingSearchCriteria();
-					selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.policyActionValue, "Policy Action");
+					RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
+					rateapolicypage.searchThroughPolicyList(policyquotepageDTO.policyActionValue);
 				}
 			}
 			return new PolicyQuotePage(driver);
@@ -569,7 +571,7 @@ public class PolicyQuotePage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options & verify Save as window displays.");
 		waitForElementToLoad(driver, 20, saveOptionBtn);
 		clickButton(driver, saveOptionBtn, "Save Option");
-		Thread.sleep(3000);
+		Thread.sleep(5000);
 		invisibilityOfLoader(driver);
 		Thread.sleep(2000);
 		WebElement iframeElement = driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]"));
@@ -580,7 +582,7 @@ public class PolicyQuotePage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Select " + saveAsValue + " Click [OK] & verify Message is closed and WIP is saved as"+ saveAsValue);
 		clickButton(driver, saveOKBtn, "OK");
 		switchToParentWindowfromframe(driver);
-		Thread.sleep(3000);
+		Thread.sleep(5000);
 		invisibilityOfLoader(driver);		
 		List <WebElement> iframeEle1 = driver.findElements(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]"));
 		switchToFrameUsingElement(driver, iframeEle1.get(1));

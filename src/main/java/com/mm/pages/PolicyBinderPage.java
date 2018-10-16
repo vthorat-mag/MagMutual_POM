@@ -196,11 +196,11 @@ public class PolicyBinderPage extends CommonAction {
 	}
 
 	// Verify phase method
-	public PolicyBinderPage verifyPhase() throws IllegalArgumentException, IllegalAccessException, SecurityException {
-		ExtentReporter.logger.log(LogStatus.INFO, "Phase changed to Policy.");
-		// Assert.assertEquals(phaseField.getAttribute("innerHTML").trim(),
-		// policyValue,"Expected Frame is not displayed");
-		return new PolicyBinderPage(driver);
+	public PolicyBinderPage verifyPhase(String policyPhaseValue) throws IllegalArgumentException, IllegalAccessException, SecurityException {
+	ExtentReporter.logger.log(LogStatus.INFO, "Phase changed to Policy.");
+	Assert.assertEquals(phaseField.getAttribute("innerHTML").trim(), policyPhaseValue,
+	"Expected Frame is not displayed");
+	return new PolicyBinderPage(driver);
 	}
 
 	// Select Patient.
@@ -520,16 +520,14 @@ public class PolicyBinderPage extends CommonAction {
 		return new PolicyBinderPage(driver);
 	}
 
-	// Identify Phase from page.
-	public PolicyBinderPage identifyPhase()
-			throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
-		waitFor(driver, 5);
-		Thread.sleep(5000);
-		//String getTextPolicyPhase = policyPhasePolicy.getAttribute("innerText");
-		//ExtentReporter.logger.log(LogStatus.INFO, "Verify phase is " + getTextPolicyPhase);
-		// verifyValueFromField(driver, policyPhasePolicy, policyPhaseVlaue,
-		// "innerText");
-		return new PolicyBinderPage(driver);
+	// Identify Phase displayed on Page.
+	public RateApolicyPage identifyPhase(String PhaseValue) throws Exception {
+	Thread.sleep(3000);
+	ExtentReporter.logger.log(LogStatus.PASS, "Verify Phase is changed to Binder.");
+	//verifyValueFromField(driver, policyPhaseBinder, policyPhaseValue,innerText);
+	PolicyBinderPage pbp = new PolicyBinderPage(driver);
+	pbp.verifyPhase(PhaseValue);
+	return new RateApolicyPage(driver);
 	}
 
 	// Rate a Functionality flow.

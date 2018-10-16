@@ -520,12 +520,13 @@ public class FinancePage extends CommonAction {
 		accountNumber = accountNo.getAttribute("innerHTML");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Process].");
 		clickButton(driver, processButton, "Process");
-		Thread.sleep(50000);
+		Thread.sleep(70000);
 		invisibilityOfLoader(driver);
-		//switchToFrameUsingId(driver, "popupframe1");
-		
-		 switchToFrameUsingElement(driver,
+
+		switchToFrameUsingElement(driver,
 		 driver.findElement(By.xpath("//iframe[contains(@src,'&accountNo="+accountNumber+"')]")));
+		 
+		 //TODO-visibilityOfElement(driver, jumpButton, "jump button");
 		 
 		invoiceAmount = invoiceAmt.getAttribute("innerHTML");
 		ExtentReporter.logger.log(LogStatus.INFO, "Click [Jump].");
@@ -1218,4 +1219,5 @@ public class FinancePage extends CommonAction {
 		captureScreenshot(driver, financePageDTO.screenShotName);
 		ExtentReporter.logger.log(LogStatus.INFO, "Upload screenshot to Rally");
 	}
+	
 }

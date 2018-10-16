@@ -494,7 +494,7 @@ public class CommonAction implements CommonActionInterface {
        	 Thread.sleep(2000);
        	 Alert alert = driver.switchTo().alert();
        	 alert.dismiss();
-            Thread.sleep(1000);
+            Thread.sleep(3000);
             return true;
             }catch(NoAlertPresentException ex){
                   return false;
@@ -542,18 +542,6 @@ public class CommonAction implements CommonActionInterface {
 		}
 	}
 
-	/*public void copyFile(String saveFilName) {
-		File source = new File("C:\\TempsaveExcel\\OnDemandInvoiceCredit.xlsx");
-		File dest = new File("C:\\SmokeTestFM\\" + saveFilName + ".xlsx");
-		File dest2 = new File("C:\\saveExcel\\" + saveFilName + ".xlsx");
-		try {
-			FileUtils.copyFile(source, dest);
-			FileUtils.copyFile(source, dest2);
-		} catch (IOException e) {
-			e.printStackTrace();
-			Assert.assertTrue(false,"Error while copying file from location C:\\TempsaveExcel\\ TO C:\\SmokeTestFM or C:\\saveExcel");
-		}
-	}*/
 	
 	public void copyFile(String saveFilName) throws Exception {
 		File source = new File("C:\\TempsaveExcel\\OnDemandInvoiceCredit.xlsx");
@@ -700,8 +688,8 @@ public class CommonAction implements CommonActionInterface {
 		ExtentReporter.logger.log(LogStatus.INFO, "Save as Official window displays");
 		Thread.sleep(2000);
 		clickButton(driver, exitOK, "Workflow exit OK");
-		Thread.sleep(8000);
 		switchToParentWindowfromframe(driver);
+		Thread.sleep(8000);
 		}catch(Exception e)
 		{
 		  ExtentReporter.logger.log(LogStatus.INFO, "Work flow Exit Ok button is not displayed.");
@@ -753,7 +741,7 @@ public class CommonAction implements CommonActionInterface {
 			rpp.searchBackUpPolicy();*/
 			PolicyQuotePage pqp = new PolicyQuotePage(driver);
 			pqp.searchBackUpPolicyUsingSearchCriteria();
-			//TODO - Vivek to verify if this sech code is working for all test cases.
+			//TODO -verify code is working for all test cases.
 			flag = "false";
 		}
 		else{
