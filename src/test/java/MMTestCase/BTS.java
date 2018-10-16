@@ -513,7 +513,6 @@ public class BTS extends ExtentReporter {
 				.saveAccountInformation().captureSaveScreenshotofMantainAccountpage();
 	}*/
 	
-	//@Test(description = "Hospital - Add multiple risks", groups = { "BTS Smoke Test" }, priority = 20)
 	@Test(description = "Hospital - Add multiple risks", groups = { "BTS Smoke Test" }, priority = 20)
 	public void TC42244() throws Exception {
 		String Blank = "";

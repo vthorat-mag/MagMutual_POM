@@ -36,6 +36,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
+import com.mm.dto.PolicyBinderPageDTO;
 import com.mm.dto.RateAPolicyPageDTO;
 import com.mm.utils.CommonAction;
 import com.mm.utils.CommonUtilities;
@@ -658,12 +659,12 @@ public class RateApolicyPage extends CommonAction {
 
 	// Identify Phase displayed on Page.
 	public RateApolicyPage identifyPhase(String PhaseValue) throws Exception {
-	Thread.sleep(3000);
-	ExtentReporter.logger.log(LogStatus.PASS, "Verify Phase is changed to Binder.");
-	//verifyValueFromField(driver, policyPhaseBinder, policyPhaseValue,innerText);
-	PolicyBinderPage pbp = new PolicyBinderPage(driver);
-	pbp.verifyPhase(PhaseValue);
-	return new RateApolicyPage(driver);
+		Thread.sleep(3000);
+		ExtentReporter.logger.log(LogStatus.PASS, "Verify Phase is changed to Binder.");
+		//verifyValueFromField(driver, policyPhaseBinder, policyPhaseValue,innerText);
+		PolicyBinderPage pbp = new PolicyBinderPage(driver);
+		pbp.verifyPhase(PhaseValue);
+		return new RateApolicyPage(driver);
 	}
 
 	// Identify Policy number from Page.
