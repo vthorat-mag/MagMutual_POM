@@ -55,6 +55,7 @@ public class FinancePageDTO {
 	public String coverageNameumbplins;
 	public String OwnerDDLValue_N;
 	public String issueCompanyValue;
+	public String savePDFAs;
 
 	public FinancePageDTO(Map<String, List<String>> excelData) {
 

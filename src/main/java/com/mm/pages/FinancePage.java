@@ -583,7 +583,7 @@ public class FinancePage extends CommonAction {
 	
 	public FinancePage writeDataInExcelSheet(String cellValue,String writerTCSheetNumber,
 			String writerTestDataColumnHeader, int writerRowNumber) throws Exception {
-	
+		Thread.sleep(2000);
 		writeData(writerTCSheetNumber, writerTestDataColumnHeader, cellValue, writerRowNumber,
 				System.getProperty("user.dir") + "\\src\\main\\resources\\Form_Data.xlsx");
 
@@ -644,6 +644,7 @@ public class FinancePage extends CommonAction {
 	//Endorse policy scenario with input having date
 	public PolicyIndicationPage policyEndorsementWithDate(String PolicyNo, String nextDayOfDueDate) throws Exception {
 		invisibilityOfLoader(driver);
+		switchToParentWindowfromframe(driver);
 		Thread.sleep(4000);
 		// Select Endorsement from Policy Action
 		ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Endorsement.");
@@ -664,7 +665,8 @@ public class FinancePage extends CommonAction {
 			CommonUtilities comUtil = new CommonUtilities();
 			String currentDate = comUtil.getSystemDatemmddyyyy();
 			enterDataIn(driver, effectiveFromDate, currentDate, "Effective Date");
-			exlUtil.writeData(financePageDTO.TCSheetNumber, "retorDate", currentDate, 1, System.getProperty("user.dir") + "\\src\\main\\resources\\Form_Data.xlsx");
+			Thread.sleep(2000);
+			exlUtil.writeData(financePageDTO.TCSheetNumber, "retroDate", "'"+currentDate, 1, System.getProperty("user.dir") + "\\src\\main\\resources\\Form_Data.xlsx");
 		}else {
 			enterDataIn(driver, effectiveFromDate, nextDayOfDueDate, "Effective Date");
 		}
@@ -749,7 +751,7 @@ public class FinancePage extends CommonAction {
 			isAlertPresent(driver);
 			checkNoOnCashEntryPage.click();		// Alert.
 			//clickButton(driver, checkNoOnCashEntryPage, "Cash Entry Page");
-			Thread.sleep(8000);
+			Thread.sleep(6000);
 			isAlertPresent(driver);
 			ExtentReporter.logger.log(LogStatus.INFO, "Amount:" + financePageDTO.Amount + "");
 			//enterTextIn(driver, amountOnCashEntryPage, financePageDTO.Amount, "Cash Entry Page's Amount");

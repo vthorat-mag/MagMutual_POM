@@ -352,7 +352,7 @@ public class CISPage extends CommonAction {
 	// Verify the page title for the open window, this method is called after
 	// each tab that is selected
 	public void verifyPageTitleForTheOpenWindow(WebElement tabTitleElement, String tabTitle, String tabName) throws InterruptedException {
-		Thread.sleep(2000);
+		Thread.sleep(5000);
 		waitForElementToLoad(driver, 10, tabTitleElement);
 
 		// verify if actual tab title matches with tab title from excel sheet and log message

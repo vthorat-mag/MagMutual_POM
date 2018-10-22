@@ -17,25 +17,32 @@ public class ExtentReporter {
 	public static String filePath;
 	public static ExtentReports report;
 	public static String excelPath;
-	public String  createReportFolder(String suiteName)
-	{
-		 //Method to generate Report Folder and File to given FilePath using Framework.properties
-		
-		 String startDateTime = new SimpleDateFormat("ddMMYYHHmmss").format(new Date());
-		 reportFolderPath = "C:\\SmokeTestFM\\".concat(suiteName+"_").concat("_BTS_").concat(startDateTime);
-		 //configProperties.getProperty("ReportFolder")
-		 //Create report folder for every run session
-		 File reportFolder = new File(reportFolderPath.concat("\\Screenshots"));
-		 screenshotfolderpath = reportFolderPath.concat("\\Screenshots\\");
-		 if(!reportFolder.exists())
-		 {
-		 reportFolder.mkdirs();
 
-		 }
-		 filePath = reportFolderPath + "\\SmokeTestReport.html";
-		 //new ExtentReports(filePath);
-		 report = new ExtentReports(filePath);
-		 //extent.loadConfig(new File("extent-config.xml"));
+	public String createReportFolder(String suiteName) {
+		// Method to generate Report Folder and File to given FilePath using
+		// Framework.properties
+
+		String startDateTime = new SimpleDateFormat("ddMMYYHHmmss").format(new Date());
+		reportFolderPath = "C:\\SmokeTestFM\\".concat(suiteName + "_").concat(startDateTime);
+		// configProperties.getProperty("ReportFolder")
+		// Create report folder for every run session
+		File reportFolder = new File(reportFolderPath.concat("\\Screenshots"));
+		screenshotfolderpath = reportFolderPath.concat("\\Screenshots\\");
+		if (!reportFolder.exists()) {
+			reportFolder.mkdirs();
+
+		}
+		filePath = reportFolderPath + "\\SmokeTestReport.html";
+		// new ExtentReports(filePath);
+		report = new ExtentReports(filePath);
+		// extent.loadConfig(new File("extent-config.xml"));
 		return reportFolderPath;
+	}
+
+	public void verifyFolderExistOrNot(String fileName) {
+		File reportFolder = new File("C:\\".concat(fileName));
+		if (!reportFolder.exists()) {
+			reportFolder.mkdirs();
+		}
 	}
 }

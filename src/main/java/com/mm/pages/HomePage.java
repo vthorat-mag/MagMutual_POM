@@ -166,7 +166,7 @@ public class HomePage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Click policy in right corner of screen. Search Policy Screen is opened");
 		clickButton(driver, headerPolicyTab, "Policy (from header");
-		Thread.sleep(2000);
+		Thread.sleep(3000);
 		getPageTitle(driver, findPolicyPageTitleActualText);
 
 		return new RateApolicyPage(driver);

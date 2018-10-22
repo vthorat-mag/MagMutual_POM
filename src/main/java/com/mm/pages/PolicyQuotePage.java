@@ -347,7 +347,14 @@ public class PolicyQuotePage extends CommonAction {
 	}
 
 	public PolicyQuotePage saveOptionOfficial(String PolicyNo) throws Exception {
-
+		RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
+		
+		/*Note- PDF process kill and refresh page code is added 
+		 *because IE faces issue intermittently after PDF generation.
+		 */
+		rateapolicypage.refreshCurrentPage(driver);
+		Process processkillpdf = Runtime.getRuntime()
+				.exec("TASKKILL /F /FI \"USERNAME eq " + System.getProperty("user.name") + "\" /IM savePdf.exe");
 		saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn, exitOK,
 				policyquotepageDTO.saveAsPolicyValueOfficial, PolicyNo);
 		return new PolicyQuotePage(driver);
@@ -579,6 +586,7 @@ public class PolicyQuotePage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO, "Select "+saveAsValue+" from drop down list");
 		selectDropdownByValue(driver, saveAsDropDown, saveAsValue, "Selected "+saveAsValue);
 		ExtentReporter.logger.log(LogStatus.INFO, "Select " + saveAsValue + " Click [OK] & verify Message is closed and WIP is saved as"+ saveAsValue);
+		Thread.sleep(2000);
 		clickButton(driver, saveOKBtn, "OK");
 		switchToParentWindowfromframe(driver);
 		Thread.sleep(5000);

@@ -27,6 +27,8 @@ import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
+import org.testng.ITestResult;
+import org.testng.Reporter;
 
 import com.mm.dto.pdfReaderDTO;
 import com.mm.pages.PolicyBinderPage;
@@ -40,41 +42,39 @@ public class PDFReader extends CommonAction {
 	CommonUtilities comUtil = new CommonUtilities();
 	WebDriver driver;
 	pdfReaderDTO pdfreaderdto;
-	int i =0;
-	String ExcelPath = System.getProperty("user.dir")+"\\src\\main\\resources\\Form_Data.xlsx";
-	
-	//AUTOIT script execution to save PDF.
-	public PDFReader savePDF(String reportFolderPath) throws IOException, InterruptedException {
-		//invisibilityOfLoader(driver);
+	int i = 0;
+	String Blank="";
+	String ExcelPath = System.getProperty("user.dir") + "\\src\\main\\resources\\Form_Data.xlsx";
+
+	// AUTOIT script execution to save PDF.
+	public PDFReader savePDF(String FileName) throws Exception {
+		// invisibilityOfLoader(driver);
 		Thread.sleep(6000);
-		ExtentReporter.logger.log(LogStatus.INFO, "Click the Save button on the PDF to save the results & verify PDF is saved");
-		String[] savePDFPath = 	
-				{System.getProperty("user.dir") + "\\src\\main\\resources\\StoredPDF\\pdfDocument.pdf"};
-		String[] executionPath =
-			{System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\savePdf.exe"};
-		Runtime.getRuntime().exec(executionPath).waitFor(15, TimeUnit.SECONDS);
-		if(isAlertPresent(driver)==false)
-		{
-			ExtentReporter.logger.log(LogStatus.INFO,
-					"Alert[Optional] is NOT present.");
+		ExtentReporter.logger.log(LogStatus.INFO,
+				"Click the Save button on the PDF to save the results & verify PDF is saved");
+		String[] savePDFPath = {
+				System.getProperty("user.dir") + "\\src\\main\\resources\\StoredPDF\\pdfDocument.pdf" };
+		String[] executionPath = { System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\savePdf.exe" };
+		Runtime.getRuntime().exec(executionPath).waitFor(20, TimeUnit.SECONDS);
+		copyPDFFile(FileName);
+		if (isAlertPresent(driver) == false) {
+			ExtentReporter.logger.log(LogStatus.INFO, "Alert[Optional] is NOT present.");
 		}
 		Thread.sleep(5000);
 		switchToParentWindowfromframe(driver);
 		return new PDFReader(driver);
 	}
-	
-	
-	public PDFReader(WebDriver driver)
-	{
+
+	public PDFReader(WebDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
 		pdfreaderdto = new pdfReaderDTO(TestCaseDetails.testDataDictionary);
 	}
 
-	//Logic to verify PDF content.
+	// Logic to verify PDF content.
 	public PolicyBinderPage verifyPdfContent() throws Exception {
-		/*Thread.sleep(15000);
-		//getPageTitle(driver, "Policy Folder "+PolicyNo);
+		Thread.sleep(15000);
+		// getPageTitle(driver, "Policy Folder "+PolicyNo);
 		boolean flag = false;
 		PDFTextStripper pdfStripper = null;
 		PDDocument pdDoc = null;
@@ -101,17 +101,24 @@ public class PDFReader extends CommonAction {
 				e.printStackTrace();
 			}
 		}
-		try {
-			  for (i =0;i<pdfreaderdto.verifyPDFcontent.size();i++)
-				{
-				Assert.assertTrue(parsedText.contains(pdfreaderdto.verifyPDFcontent.get(i)), "PDF dose not content '" + pdfreaderdto.verifyPDFcontent.get(i) + "'.");
-				ExtentReporter.logger.log(LogStatus.INFO, "Verify PDF display '" + pdfreaderdto.verifyPDFcontent.get(i) + "'.");
-				break;
+		for (i = 0; i < pdfreaderdto.verifyPDFcontent.size(); i++) {
+			try {
+				if (pdfreaderdto.verifyPDFcontent.get(i).equals(Blank)) {
+					break;
+				} else if (parsedText.toLowerCase().contains(pdfreaderdto.verifyPDFcontent.get(i).toLowerCase())) {
+					ExtentReporter.logger.log(LogStatus.PASS,
+							"PDF displays value- '" + pdfreaderdto.verifyPDFcontent.get(i) + "'.");
+				} else {
+					ExtentReporter.logger.log(LogStatus.FAIL,
+							pdfreaderdto.verifyPDFcontent.get(i) + " - value  is not present in PDF.");
+					Reporter.getCurrentTestResult().setStatus(ITestResult.FAILURE);
+				}
+			} catch (Exception e) {
+				ExtentReporter.logger.log(LogStatus.FAIL,
+						pdfreaderdto.verifyPDFcontent.get(i) + " - value  is not present in PDF.");
 			}
-		}catch (Exception e){
-				ExtentReporter.logger.log(LogStatus.FAIL, pdfreaderdto.verifyPDFcontent.get(i)+" value  is not present in PDF.");
-				Assert.assertTrue(false);
-		}*/
+		}
+		pdDoc.close();
 		switchToParentWindowfromframe(driver);
 		return new PolicyBinderPage(driver);
 	}

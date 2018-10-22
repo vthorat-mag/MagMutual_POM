@@ -1,5 +1,7 @@
 package com.mm.pages;
 
+import static org.testng.Assert.assertTrue;
+
 import java.util.List;
 
 import org.openqa.selenium.Alert;
@@ -36,7 +38,11 @@ public class ClaimsPage extends CommonAction {
 	String duplicateClaimPageTitle = "Possible Duplicate Claim";
 	String duplicateTransactionPageTitle = "Possible Duplicate Transaction";
 	String ExcelPath = System.getProperty("user.dir")+"\\src\\main\\resources\\Form_Data.xlsx";
-
+	String addFilePageTitle="";
+	
+	@FindBy(xpath="//div[@class='pageTitle']")
+	WebElement pageTitle;
+	
 	@FindBy(name = "globalSearch")
 	WebElement claim_Search;
 
@@ -490,6 +496,7 @@ public class ClaimsPage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Enter Claim # from Hospital Create Claim Test Case(Example 66429) & Click Search.");
 		claimsSearch(driver, claimsdto.claimNum, claim_Search, Search_btn,policyList);
+		Thread.sleep(2000);
 		getPageTitle(driver, "Claim Folder " + claimsdto.claimNum);
 
 		return new ClaimsPage(driver);
@@ -572,7 +579,7 @@ public class ClaimsPage extends CommonAction {
 	enterTextIn(driver, firstNameEntitySearchPage, ClaimsDTO.firstName, "First Name");
 	ExtentReporter.logger.log(LogStatus.INFO,"Press Enter or Search");
 	clickButton(driver, searchBtnOnEntitySearchPage, "Entity Search Page's Search");
-	Thread.sleep(4000);
+	Thread.sleep(8000);
 	Assert.assertEquals(resultOnEntityListPage.getAttribute("innerHTML").trim(),
 	ClaimsDTO.lastName + ", " + ClaimsDTO.firstName + ",", "Data displayed after search is not correct");
 	waitFor(driver, 5);
@@ -582,9 +589,18 @@ public class ClaimsPage extends CommonAction {
 	clickButton(driver, selectEntityChkBox, "Select Entity Check Box");
 	Thread.sleep(2000);
 	clickButton(driver, selectBtnOnEntitySelectListPage, "Entity Select List Page's Select");
-	//Thread.sleep(5000);
-	switchToParentWindowfromotherwindow(driver, parentWindowId);
-	Thread.sleep(4000);
+	Thread.sleep(1000);
+	if (switchToParentWindowfromotherwindow(driver, parentWindowId).equals("false"))
+	//if (switchToParentWindowfromotherwindow(driver, "1234").equals("false"))
+	{
+		assertTrue(false);
+	}
+	Thread.sleep(3000);
+	getPageTitle(driver, "Add File");
+	/*If(Assert.assertEquals(pageTitle.getAttribute("innerHTML").trim(), addFilePageTitle)==false){
+		
+	}
+	;*/
 	//Assert.assertEquals(patientSelectedValue.getAttribute("value").trim(),
 	//ClaimsDTO.lastName + ", " + ClaimsDTO.firstName + ",", "Patient selected is NOT displayed correctly");
 	return new ClaimsPage(driver);
@@ -596,7 +612,6 @@ public class ClaimsPage extends CommonAction {
 	public void enterDataOnClaimsPage(String clientIdValue) throws Exception
 	{
 		Thread.sleep(3000);
-		
 		ExtentReporter.logger.log(LogStatus.INFO,"Click the dropdown by file type and select claim ");
 		selectDropdownByValue(driver, FileTypeDropDown, ClaimsDTO.fileTypeDropDownValue, "File Type");
 		ExtentReporter.logger.log(LogStatus.INFO,"Click the LOB dropdown and select HLP");
@@ -630,9 +645,10 @@ public class ClaimsPage extends CommonAction {
 		clickButton(driver, selectEntityChkBox, "Insured Name");
 		Thread.sleep(1000);
 		clickButton(driver, selectBtnOnEntitySelectListPage, "Select");
-		//Thread.sleep(3000);
-		switchToParentWindowfromotherwindow(driver, parentWindowIdSearchEntity);
 		Thread.sleep(4000);
+		switchToParentWindowfromotherwindow(driver, parentWindowIdSearchEntity);
+		invisibilityOfLoader(driver);
+		Thread.sleep(6000);
 		ExtentReporter.logger.log(LogStatus.INFO,"In the filter criteria section, click the Policy No dropdown and Select [Policy number entered in step 3]");
 		selectDropdownByValue(driver, policyNoDDL, claimsdto.policyNum, "Policy Number");
 		ExtentReporter.logger.log(LogStatus.INFO,"Click the checkbox next the Prof Liab coverage Click Save as Claim");
@@ -652,7 +668,6 @@ public class ClaimsPage extends CommonAction {
 			
 		if(checkduplicateClaimWindow(duplicateClaimPageTitle)==true)
 		{
-			//switchToFrameUsingElement(driver, changeFileStatusFrameEle);
 			clickButton(driver, saveAsClaimBtnOnPsblDuplciateClaimPage, "Save As Claim");
 			invisibilityOfLoader(driver);
 			Thread.sleep(3000);

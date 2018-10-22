@@ -68,7 +68,7 @@ public class ExcelUtil {
 		ExtentReporter.logger.log(LogStatus.INFO, "Note the policy number to use in the next test case - "+testCaseId +" is "+cellValue);
 		inputStream = new FileInputStream(new File(excelFilePath));
 		try {
-
+			Thread.sleep(2000);
 			XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
 			XSSFSheet dataSheet = (XSSFSheet) workbook.getSheet(testCaseId);
 
@@ -80,11 +80,13 @@ public class ExcelUtil {
 				if (headerCell.getStringCellValue().toLowerCase().trim().equals(columnName.toLowerCase())) {
 					Row dataRow = dataSheet.getRow(rowNum);
 					Cell dataCell = dataRow.getCell(cellNumber);
+					Thread.sleep(2000);
 					dataCell.setCellValue(cellValue);
 					break;
 				}
 
 			} // for loop - cellNumber
+			Thread.sleep(1000);
 			inputStream.close();
 			FileOutputStream outputStream = new FileOutputStream(excelFilePath);
 			workbook.write(outputStream);

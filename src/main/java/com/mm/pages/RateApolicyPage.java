@@ -36,7 +36,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
-import com.mm.dto.PolicyBinderPageDTO;
 import com.mm.dto.RateAPolicyPageDTO;
 import com.mm.utils.CommonAction;
 import com.mm.utils.CommonUtilities;
@@ -556,8 +555,7 @@ public class RateApolicyPage extends CommonAction {
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Select Accept from the dropdown screen.Same type of policy exists for the period. Continue? message displays. Click Ok & verify Policy is editable.");
 		Thread.sleep(3000);
-		PolicyBinderPage pbp = new PolicyBinderPage(driver);
-		String policyNumber = pbp.policyNo();
+		
 		if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction, rateApolicyPageDTO.valueOfPolicyActionAccept,
 				"Policy Action").equals("false")) {
 			Thread.sleep(4000);
@@ -578,7 +576,10 @@ public class RateApolicyPage extends CommonAction {
 				searchThroughPolicyList(rateApolicyPageDTO.valueOfPolicyActionAccept);
 			}
 		}
+		Thread.sleep(2000);
 		isAlertPresent(driver);
+		PolicyBinderPage pbp = new PolicyBinderPage(driver);
+		String policyNumber = pbp.policyNo();
 		pbp.verifyCpatureTxnDetailsPageDisplayedOrNot(policyNumber);
 		return new RateApolicyPage(driver);
 	}
@@ -659,12 +660,12 @@ public class RateApolicyPage extends CommonAction {
 
 	// Identify Phase displayed on Page.
 	public RateApolicyPage identifyPhase(String PhaseValue) throws Exception {
-		Thread.sleep(3000);
-		ExtentReporter.logger.log(LogStatus.PASS, "Verify Phase is changed to Binder.");
-		//verifyValueFromField(driver, policyPhaseBinder, policyPhaseValue,innerText);
-		PolicyBinderPage pbp = new PolicyBinderPage(driver);
-		pbp.verifyPhase(PhaseValue);
-		return new RateApolicyPage(driver);
+	Thread.sleep(3000);
+	ExtentReporter.logger.log(LogStatus.PASS, "Verify Phase is changed to Binder.");
+	//verifyValueFromField(driver, policyPhaseBinder, policyPhaseValue,innerText);
+	PolicyBinderPage pbp = new PolicyBinderPage(driver);
+	pbp.verifyPhase(PhaseValue);
+	return new RateApolicyPage(driver);
 	}
 
 	// Identify Policy number from Page.
@@ -938,32 +939,15 @@ public class RateApolicyPage extends CommonAction {
 
 	// Rate a functionality with premium Amount verification flow.
 	public PolicyQuotePage rateFunctionality(String policyNo) throws Exception {
-		Thread.sleep(3000);
+		Thread.sleep(4000);
 		invisibilityOfLoader(driver);
 		ExtentReporter.logger.log(LogStatus.INFO,
 				"Click rate button in center of screen. Rate window validates and save, View Premium pop up window displays with correct rates");
 		clickButton(driver, rateBtn, "Rate Tab");
-		Thread.sleep(5000);
+		Thread.sleep(6000);
 		invisibilityOfLoader(driver);
 		// If Product Notify Window appears then it will switch to window and
 		// select 'Yes' from that window and close window
-		/*
-		 * if (verifyProductNotifyWindowDisplayed(policyNo).equals("true")) {
-		 * try { selectDropdownByValue(driver, productNotifyDropDown.get(0),
-		 * rateApolicyPageDTO.productNotifyValue, "product notify");
-		 * if(productNotifyDropDown.get(1).isDisplayed()) {
-		 * selectDropdownByValue(driver, productNotifyDropDown.get(1),
-		 * rateApolicyPageDTO.productNotifyValue, "product notify 2"); }
-		 * Thread.sleep(1000); clickButton(driver, prodNotifyClose,
-		 * "Product Notify Close"); ExtentReporter.logger.log(LogStatus.PASS,
-		 * "Product Notify Window is dispalyed to user and Yes selected from Product Notify dorp down."
-		 * ); Thread.sleep(6000); invisibilityOfLoader(driver); } catch
-		 * (Exception e) { ExtentReporter.logger.log(LogStatus.WARNING,
-		 * "Product Notify Window is NOT dispalyed to user."); } // If Product
-		 * Notify Window does not appear it will log info in // report and move
-		 * ahead. } else { ExtentReporter.logger.log(LogStatus.INFO,
-		 * "Product Notify Window is NOT dispalyed to user."); }
-		 */
 		handleProducNotifyWindow(policyNo);
 		Thread.sleep(3000);
 		invisibilityOfLoader(driver);

@@ -24,7 +24,7 @@ public interface CommonActionInterface {
     void visibilityOfElement(WebDriver driver, WebElement pageElement, String text);
     String switchToWindow(WebDriver driver) throws InterruptedException;
     void selectDropdownByValue(WebDriver driver, WebElement Value,String DropDownOption, String name);
-    void switchToParentWindowfromotherwindow(WebDriver driver, String parentwindow);
+    String switchToParentWindowfromotherwindow(WebDriver driver, String parentwindow);
     String policySearch(WebDriver driver, String policyNo, WebElement policySearchTxtBox, WebElement earchBtn,WebElement policyList) throws Exception;
     void invisibilityOfLoader(WebDriver driver) throws InterruptedException;
 }
