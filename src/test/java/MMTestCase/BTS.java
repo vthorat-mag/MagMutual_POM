@@ -31,6 +31,7 @@ import com.mm.dto.LoginPageDTO;
 import com.mm.dto.PolicyBinderPageDTO;
 import com.mm.dto.PolicyIndicationPageDTO;
 import com.mm.dto.PolicyQuotePageDTO;
+import com.mm.dto.RateAPolicyPageDTO;
 import com.mm.listeners.RetryListner;
 import com.mm.pages.CISPage;
 import com.mm.pages.FinancePage;
@@ -135,7 +136,7 @@ public class BTS extends ExtentReporter {
 		}
 	}
 
-	/*@Test(description = "Rate a policy that existed before the change or deployment to confirm it still displays as expected", groups = {
+	@Test(description = "Rate a policy that existed before the change or deployment to confirm it still displays as expected", groups = {
 			"BTS Smoke Test" }, priority = 0)
 	public void TC42239() throws Exception {
 		LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
@@ -186,7 +187,7 @@ public class BTS extends ExtentReporter {
 		homepage.searchEntity(homePageDTO.lastOrgName, Empty).selectEntity(ParentWindow, Empty).selectPolicyTypeForBTS()
 				.updatePolicyDetails();
 
-		List<WebElement> firstFrame = policyindicationpage.open_Underwriter();
+		String firstFrame = policyindicationpage.open_Underwriter();
 
 		policyindicationpage.add_Underwriter(firstFrame).closeUnderwriter().addAgent().selectRiskTab()
 				.addRiskInformation(indicationPageDTO.riskCounty.get(0), indicationPageDTO.riskSpeciality.get(0),
@@ -234,10 +235,12 @@ public class BTS extends ExtentReporter {
 		ExcelUtil exlUtil = new ExcelUtil();
 		RateApolicyPage rateapolicyPage = new RateApolicyPage(driver);
 		lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
+		PolicyIndicationPageDTO indicationPageDTO = new PolicyIndicationPageDTO(TestCaseDetails.testDataDictionary);
 		loginpage = new LoginPage(driver);
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageFromrateApolicyPage()
-				.searchPolicyRateAPolicyPage().AcceptFromActionDropDown().identifyPhase().billingSetup()
-				.refreshCurrentPage(driver).coverageDetailsSelect();
+				.searchPolicyRateAPolicyPage().AcceptFromActionDropDown()
+				.identifyPhase(indicationPageDTO.policyPhaseValue).billingSetup().refreshCurrentPage(driver)
+				.coverageDetailsSelect();
 		String policyNumber = rateapolicyPage.policyNo();
 		rateapolicyPage.coverageUpdates(policyNumber).rateFunctionality(policyNumber).clickPreviewTab(policyNumber)
 				.savePDF(reportFolderPath).verifyPdfContent().saveOption(policyNumber);
@@ -249,6 +252,7 @@ public class BTS extends ExtentReporter {
 		LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
 		LoginPage loginpage = new LoginPage(driver);
 		ExcelUtil exlUtil = new ExcelUtil();
+		PolicyIndicationPageDTO indicationPageDTO = new PolicyIndicationPageDTO(TestCaseDetails.testDataDictionary);
 		PolicyQuotePage policyQuotePage = new PolicyQuotePage(driver);
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageFromPolicyBinderPage()
 				.searchPolicyPolicyBinderPage();
@@ -256,8 +260,8 @@ public class BTS extends ExtentReporter {
 		PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
 		String policyNumber = policybinderpage.policyNo();
 
-		policybinderpage.endorsementFromActionDropDown().endorsePolicy(policyNumber).identifyPhase()
-				.rateFunctionality(policybinderpage.policyNo());
+		policybinderpage.endorsementFromActionDropDown().endorsePolicy(policyNumber)
+				.identifyPhase(indicationPageDTO.policyPhaseValue).rateFunctionality(policybinderpage.policyNo());
 		String policyNo = policybinderpage.policyNo();
 		policyQuotePage.clickPreviewTab(policyNo).savePDF(reportFolderPath).verifyPdfContent();
 		policybinderpage.saveOption(policyNo);
@@ -298,7 +302,7 @@ public class BTS extends ExtentReporter {
 				.searchPolicyRateAPolicyPage().coverageDetailsSelect();
 		financepage.selectUMBCoverage().selectCancelFromPolicyActionDDL().rateFunctionality()
 				.openPDF(rateAPolicyPage.policyNo()).savePDF(reportFolderPath);
-		financepage.savePolicyAsWIP().navigateToFinancePageFromHeaderLink().searchPolicyOnFinanceHomePage()
+		financepage.savePolicyAsofficial().navigateToFinancePageFromHeaderLink().searchPolicyOnFinanceHomePage()
 				.openFirstAccount().downloadExcel(financePageDTO.CancelledCoverageTransactionFileName)
 				.receivableDownload(financePageDTO.CreditInstallmentAfterFileName);
 	}
@@ -331,7 +335,7 @@ public class BTS extends ExtentReporter {
 				.searchPolicyRateAPolicyPage();
 		String policyNo = rateapolicypage.policyNo();
 		rateapolicypage.coverageDetailSelectForCinCom().cincomFlow(policyNo).rateFunctionality(policyNo)
-				.clickPreviewTab(policyNo).savePDF(reportFolderPath).verifyPdfContent();
+				.clickPreviewTab(policyNo).savePDF(reportFolderPath).verifyPdfContent().saveOption(policyNo);
 	}
 
 	@Test(description = "Hospital Create Claim", groups = { "BTS Smoke Test" }, priority = 11)
@@ -339,12 +343,14 @@ public class BTS extends ExtentReporter {
 
 		LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
 		LoginPage loginpage = new LoginPage(driver);
+		RateAPolicyPageDTO rpdto = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
 		PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
 		ExcelUtil exlUtil = new ExcelUtil();
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageUsingHeaderPolicyLink()
 				.searchPolicyRateAPolicyPage();
 		String clientID = policybinderpage.getClientId();
-		policybinderpage.verifyPhase().navigatetoClaimsPage().getPatientDetails().enterDataOnClaimsPage(clientID);
+		policybinderpage.verifyPhase(rpdto.policyPhaseValue).navigatetoClaimsPage().getPatientDetails()
+				.enterDataOnClaimsPage(clientID);
 		exlUtil.writeData("TC42405", "claimNum", policybinderpage.claimNo(), 1, ExcelPath);
 		exlUtil.writeData("TC42252", "claimNum", policybinderpage.claimNo(), 1, ExcelPath);
 	}
@@ -382,8 +388,8 @@ public class BTS extends ExtentReporter {
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageUsingHeaderPolicyLink()
 				.searchPolicyRateAPolicyPage();
 		String policyNumber = rateapolicypage.policyNo();
-		rateapolicypage.policyEndorsement(policyNumber).rateFunctionality(policyNumber)
-				.clickPreviewTab(policyNumber).savePDF(reportFolderPath).verifyPdfContent();
+		rateapolicypage.policyEndorsement(policyNumber).rateFunctionality(policyNumber).clickPreviewTab(policyNumber)
+				.savePDF(reportFolderPath).verifyPdfContent();
 		policyQuotePage.saveOptionOfficial(policyNumber);
 	}
 
@@ -421,8 +427,6 @@ public class BTS extends ExtentReporter {
 		exlUtil.writeData("TC42246", "PolicyNum", policybinderpage.policyNo(), 1, ExcelPath);
 	}
 
-
-
 	@Test(description = "Hospital Verify Image Right", groups = { "BTS Smoke Test" }, priority = 15)
 	public void TC42243() throws Exception {
 		LoginPageDTO lpDTO;
@@ -456,15 +460,21 @@ public class BTS extends ExtentReporter {
 		String cellValue = financePage.readDataFromExcelSheet(financePageDTO.dataSheetName,
 				financePageDTO.testDataColumnName, financePageDTO.dataRowNumber, financePageDTO.exportedExcelSheetName);
 		financePage.writeDataInExcelSheet(cellValue, financePageDTO.TCSheetNumber, financePageDTO.testDataColumnheader,
-			financePageDTO.rowNumber);
+				financePageDTO.rowNumber);
 		String policyNum = rateApolicyPage.policyNo();
 		String nextDay = financePage.nextDayOfDueDate();
 		exlUtil.writeData("TC42246", "AlternateNextDate", nextDay, 1, ExcelPath);
-		financePage.policyEndorsementWithDate(policyNum, nextDay) // Delete WIP if Endorsement is not shown in policy
+		financePage.policyEndorsementWithDate(policyNum, nextDay) // Delete WIP
+																	// if
+																	// Endorsement
+																	// is not
+																	// shown in
+																	// policy
 																	// Action
 				.selectCoverageTab();
 		financePage.selectCoverageFromGridList().selectAddCoverageButton();
-		policyIndicationPage.selectCoverageFromPopupListAddDatePremium(financePageDTO.AlternateNextDate).closeAddCoverageWindow();
+		policyIndicationPage.selectCoverageFromPopupListAddDatePremium(financePageDTO.AlternateNextDate)
+				.closeAddCoverageWindow();
 		rateApolicyPage.rateFunctionality(policyNum).clickPreviewTab(policyNum).savePDF(reportFolderPath);
 		policyQuotePage.saveOptionOfficial(policyNum);
 		homePage.navigateToFinancePageFromHeaderLink().searchPolicyOnFinanceHomePage().openFirstAccount()
@@ -472,8 +482,7 @@ public class BTS extends ExtentReporter {
 				.selectReceivableTabAndExportExcel(financePageDTO.excelNameOnDemandInvoiceInstallmentAfter);
 
 		// TODO- upload all excels and pdf to rally.
-	}*/
-
+	}
 
 	@Test(description = "Hospital Renewal", groups = { "BTS Smoke Test" }, priority = 17)
 	public void TC42400() throws Exception {
@@ -491,7 +500,7 @@ public class BTS extends ExtentReporter {
 				.changePolicyPhase(policyquotepageDTO.policyPhaseValue).saveOptionOfficial(PolicyNo);
 	}
 
-	/*@Test(description = "FM - Verify that user can create an account in FM", groups = {
+	@Test(description = "FM - Verify that user can create an account in FM", groups = {
 			"BTS Smoke Test" }, priority = 18)
 	public void TC42251() throws Exception {
 
@@ -503,7 +512,7 @@ public class BTS extends ExtentReporter {
 				.entitySelectSearch().selectAddress().saveAccountDetails().captureSaveScreenshotofMantainAccountpage();
 	}
 
-	/*@Test(description = "Claims - Verify that user is allowed to change Billing Parameter for an Existing Account", groups = {
+	@Test(description = "Claims - Verify that user is allowed to change Billing Parameter for an Existing Account", groups = {
 			"BTS Smoke Test" }, priority = 19)
 	public void TC42403() throws Exception {
 		LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
@@ -511,8 +520,8 @@ public class BTS extends ExtentReporter {
 		loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToFinancePageFromHeaderLink()
 				.searchAccountUsingSearchCriteria().selectLastAccountFromAccountList().maintainAccount()
 				.saveAccountInformation().captureSaveScreenshotofMantainAccountpage();
-	}*/
-	
+	}
+
 	@Test(description = "Hospital - Add multiple risks", groups = { "BTS Smoke Test" }, priority = 20)
 	public void TC42244() throws Exception {
 		String Blank = "";
@@ -549,11 +558,12 @@ public class BTS extends ExtentReporter {
 					.addRetroactiveDate(indicationPageDTO.riskTypeValue.get(i));
 		}
 		rateapolicypage.rateFunctionality(policyNo).saveOptionOfficial(policyNo);
-		rateapolicypage.AcceptFromActionDropDown().isAlertPresent().identifyPhase(indicationPageDTO.policyPhaseValue).billingSetup()
-				.refreshCurrentPage(driver);
+		rateapolicypage.AcceptFromActionDropDown().isAlertPresent().identifyPhase(indicationPageDTO.policyPhaseValue)
+				.billingSetup().refreshCurrentPage(driver);
 		String policyNum = policyBinderPage.policyNo();
 		rateapolicypage.rateFunctionality(policyNum).saveOptionOfficial(policyNum);
-		rateapolicypage.policyEndorsementwithoutBackupPolicy(policyNum).identifyPhase(indicationPageDTO.policyPhaseValue2).rateFunctionality(policyNum)
+		rateapolicypage.policyEndorsementwithoutBackupPolicy(policyNum)
+				.identifyPhase(indicationPageDTO.policyPhaseValue2).rateFunctionality(policyNum)
 				.clickPreviewTab(policyNum).savePDF(reportFolderPath);
 		policyQuotePage.saveOptionOfficial(policyNum);
 	}
@@ -581,7 +591,6 @@ public class BTS extends ExtentReporter {
 		} else if (ITestResult.SKIP == result.getStatus()) {
 			verdict = "Hold";
 		}
-		// ExtentReporter.report.flush();
 		// "Blocked", "Deferred", "Enhancement", "Error", "Fail", "Hold", "In
 		// Progress", "Inconclusive", "Invalid", "Out of Scope", "Pass",
 		// "Waiting for Policy"
@@ -598,7 +607,8 @@ public class BTS extends ExtentReporter {
 	@AfterClass(alwaysRun = true)
 	public void closeBrowser() {
 		/*
-		 * FailedTCRerun failedtcrun = new FailedTCRerun(); failedtcrun.reRunFailedTC();
+		 * FailedTCRerun failedtcrun = new FailedTCRerun();
+		 * failedtcrun.reRunFailedTC();
 		 */
 		ExtentReporter.report.flush();
 		ExtentReporter.report.close();

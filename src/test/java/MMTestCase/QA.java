@@ -135,6 +135,7 @@ public class QA extends ExtentReporter {
 		File genericVerifyPDFFile = new File("C:\\savePDF\\verifyPDF.pdf");
 		genericVerifyPDFFile.delete();
 		driver = BrowserTypes.getDriver();
+		
 		ExtentReporter.logger = ExtentReporter.report.startTest(method.getName(),
 				method.getAnnotation(Test.class).description());
 		ExtentReporter.excelPath="";
@@ -490,7 +491,7 @@ public class QA extends ExtentReporter {
 
 	// TODO-latest search
 	@Test(description = "QA FM - Hospital Verify On Demand Invoice, Create Batch and Post Batch", groups = {
-			"QA Smoke Test" }, priority = 7)
+			"QA Smoke Test123" }, priority = 7)
 	public void TC43783() throws Exception {
 		String Empty="";
 		LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
