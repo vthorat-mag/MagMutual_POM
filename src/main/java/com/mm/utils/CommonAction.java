@@ -565,8 +565,9 @@ public class CommonAction implements CommonActionInterface {
             FileUtils.copyFile(source, dest2);
         } catch (IOException e) {
             e.printStackTrace();
-            Assert.assertTrue(false,
-                    "Error while copying file from location C:\\TempsaveExcel\\ TO C:\\SmokeTestFM or C:\\saveExcel");
+            Assert.assertTrue(false, "Error while copying file from location " + source + " TO " + dest2);
+            // "Error while copying file from location C:\\TempsaveExcel\\ TO
+            // C:\\SmokeTestFM or C:\\saveExcel");
         }
     }
 
@@ -579,8 +580,7 @@ public class CommonAction implements CommonActionInterface {
             FileUtils.copyFile(source, dest2);
         } catch (IOException e) {
             e.printStackTrace();
-            Assert.assertTrue(false,
-                    "Error while copying file from location C:\\TempsaveExcel\\ TO C:\\SmokeTestFM or C:\\saveExcel");
+            Assert.assertTrue(false, "Error while copying file from location " + source + " TO " + dest2);
         }
     }
 
@@ -766,8 +766,7 @@ public class CommonAction implements CommonActionInterface {
                     "Policy is not available, please enter another/correct policy Number.");
             ExtentReporter.logger.log(LogStatus.INFO, "Searching for backUp policy.");
             /*
-             * RateApolicyPage rpp = new RateApolicyPage(driver);
-             * rpp.searchBackUpPolicy();
+             * RateApolicyPage rpp = new RateApolicyPage(driver); rpp.searchBackUpPolicy();
              */
             PolicyQuotePage pqp = new PolicyQuotePage(driver);
             pqp.searchBackUpPolicyUsingSearchCriteria();

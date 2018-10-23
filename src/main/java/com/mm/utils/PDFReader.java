@@ -39,11 +39,11 @@ public class PDFReader extends CommonAction {
         if (isAlertPresent(driver) == false) {
             ExtentReporter.logger.log(LogStatus.INFO, "Alert[Optional] is NOT present.");
         }
-        Thread.sleep(5000);
+        Thread.sleep(2000);
         switchToParentWindowfromframe(driver);
         return new PDFReader(driver);
     }
-
+    
     public PDFReader(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);

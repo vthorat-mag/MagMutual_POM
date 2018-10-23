@@ -86,7 +86,6 @@ public class RateApolicyPage extends CommonAction {
     @FindBy(xpath = "//div[contains(@id ,'pageTitleForpageHeader')] | //div[contains(@id ,'pageTitleForpageHeaderFor')]")
     WebElement pageHeaderForPageTitle;
 
-    // @FindBy(id="polPhaseCodeROSPAN")
     @FindBy(xpath = "//table[@id='formFieldsTableForHeaderFieldsSecond']//span[@id='polPhaseCodeROSPAN']")
     WebElement policyPhaseBinder;
 
@@ -267,7 +266,6 @@ public class RateApolicyPage extends CommonAction {
 
         invisibilityOfLoader(driver);
         Thread.sleep(5000);
-        // AcceptFromActionDropDownwithoutBackupPolicy();
         return new RateApolicyPage(driver);
     }
 
@@ -509,19 +507,16 @@ public class RateApolicyPage extends CommonAction {
         rob.keyPress(KeyEvent.VK_ENTER);
         rob.keyRelease(KeyEvent.VK_ENTER);
         /*
-         * try { File file = new
-         * File("C:\\MM_Testcase_Output\\"+fileDate+".xlsx");
+         * try { File file = new File("C:\\MM_Testcase_Output\\"+fileDate+".xlsx");
          * 
-         * if(file.exists()) {
-         * System.out.println("File is available at location");
+         * if(file.exists()) { System.out.println("File is available at location");
          * ExtentReporter.logger.log(LogStatus.PASS,
          * "Excel file is available at download location."); }
          * 
          * }catch(Exception e) {
          * System.out.println("File is Not available at location");
          * ExtentReporter.logger.log(LogStatus.FAIL,
-         * "Excel file is Not available at download location.");
-         * e.printStackTrace(); }
+         * "Excel file is Not available at download location."); e.printStackTrace(); }
          */
         return fileNamePath;
     }
@@ -644,8 +639,7 @@ public class RateApolicyPage extends CommonAction {
     public RateApolicyPage identifyPhase(String PhaseValue) throws Exception {
         Thread.sleep(3000);
         ExtentReporter.logger.log(LogStatus.PASS, "Verify Phase is changed to Binder.");
-        // verifyValueFromField(driver, policyPhaseBinder,
-        // policyPhaseValue,innerText);
+        // verifyValueFromField(driver, policyPhaseBinder, policyPhaseValue,innerText);
         PolicyBinderPage pbp = new PolicyBinderPage(driver);
         pbp.verifyPhase(PhaseValue);
         return new RateApolicyPage(driver);

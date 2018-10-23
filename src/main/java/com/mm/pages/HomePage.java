@@ -71,8 +71,7 @@ public class HomePage extends CommonAction {
 
     // @FindBy(id ="wfsortCENTITY_TYPE_DESC")
     @FindBy(xpath = "//th[@id='HCENTITY_TYPE_DESC']/a[@class='gridheader']")
-    // @FindBy(xpath
-    // ="//a[@class='gridheader']/img[@id='wfsortCENTITY_TYPE_DESC']")
+    // @FindBy(xpath ="//a[@class='gridheader']/img[@id='wfsortCENTITY_TYPE_DESC']")
     WebElement entityType;
 
     @FindBy(id = "CPOLICYNO")
@@ -120,8 +119,7 @@ public class HomePage extends CommonAction {
     @FindBy(id = "CPOLICYNO")
     List<WebElement> policyName;
 
-    @FindBy(id = "pageTitleForpageHeaderForPolicyFolder") // seperate for BTS
-                                                          // and QA
+    @FindBy(id = "pageTitleForpageHeaderForPolicyFolder") // seperate for BTS and QA
     WebElement pageHeaderForPolicyFolder;
 
     @FindBy(id = "PM_COMMON_TABS_RATE")
@@ -319,8 +317,8 @@ public class HomePage extends CommonAction {
     }
 
     /*
-     * Entity Select Search window appears and then we enter Organization name
-     * and search Then select the Organization name from populated list.
+     * Entity Select Search window appears and then we enter Organization name and
+     * search Then select the Organization name from populated list.
      */
     public HomePage searchEntity(String lastOrgNameValue, String vendorIDValue) throws Exception {
 
@@ -339,8 +337,7 @@ public class HomePage extends CommonAction {
     public HomePage selectEntity(String parentWindow, String clientNameFromDataSheet) throws Exception {
         Thread.sleep(27000);
         // waitForElementToLoad(driver, 30, Select_Entity_Checkbox.get(0));
-        // visibilityOfElement(driver, Select_Entity_Checkbox.get(0), "First
-        // Entity
+        // visibilityOfElement(driver, Select_Entity_Checkbox.get(0), "First Entity
         // Checkbox");
         invisibilityOfLoader(driver);
 
@@ -348,14 +345,12 @@ public class HomePage extends CommonAction {
         ExtentReporter.logger.log(LogStatus.INFO,
                 "Click the checkbox next to the name to select the risk. Verify Risk is selected");
 
-        // If the Entity name is not provided then select first client name
-        // check box.
+        // If the Entity name is not provided then select first client name check box.
         if (clientNameFromDataSheet.equals(Empty)) {
 
             clickButton(driver, Select_Entity_Checkbox.get(0), "Select Entity Checkbox");
         } else {
-            // If the Entity name is provided then search and select Entity name
-            // check box.
+            // If the Entity name is provided then search and select Entity name check box.
 
             boolean flag = false;
             try {
@@ -366,8 +361,7 @@ public class HomePage extends CommonAction {
                     // Get the current client name from application to compare
                     String clientNameValue = clientNameList.get(i).getAttribute("innerHTML").trim();
 
-                    // Compare client name from application with client name
-                    // from data sheet
+                    // Compare client name from application with client name from data sheet
                     if (clientNameValue.equals(clientNameFromDataSheet)) {
 
                         ExtentReporter.logger.log(LogStatus.INFO, "Select risk " + clientNameFromDataSheet
@@ -382,8 +376,7 @@ public class HomePage extends CommonAction {
                     throw new Exception("Value from Data Sheet is not available in Entity list.");
                 }
             } catch (Exception e) {
-                // if the Entity name from Data sheet is not available use
-                // random entity name
+                // if the Entity name from Data sheet is not available use random entity name
                 // from list excluding top 4
                 int num = Integer.valueOf(randomNumGenerator(1, "456789"));
                 String substituteRiskName = Select_Entity_Checkbox.get(num).getAttribute("innerHTML");
@@ -456,17 +449,13 @@ public class HomePage extends CommonAction {
                 "Enter/Select the below information Effective Date: Enter Today's Date"
                         + "Issue Company: Select 'Professional Security Insurance' "
                         + "Issue State:Select GA. Click Search. Verify Policy Type window will display below");
-        // getPageTitle(driver, selectPolicyTypePageTitle); //TODO- clarify,
-        // Page title is different in QA
+        // getPageTitle(driver, selectPolicyTypePageTitle); //TODO- clarify, Page title
+        // is different in QA
         // Verify Select Policy Type window appeared, enter Effective date,Issue
         // company,state and click Search
         CommonUtilities comUtil = new CommonUtilities();
         String todaysDate = comUtil.getSystemDatemmddyyyy();
-        enterTextIn(driver, Effe_Date, todaysDate, "Effective Date"); // Updated
-                                                                      // date,
-                                                                      // taken
-                                                                      // current
-                                                                      // date
+        enterTextIn(driver, Effe_Date, todaysDate, "Effective Date"); // Updated date, taken current date
         selectDropdownByValue(driver, Issue_Comp, homepageDTO.issueCompany, "Issue Company");
         selectDropdownByValue(driver, Issue_State_Code, homepageDTO.issueState, "Issue State");
         click(driver, Policy_Search, "Search button for policy type");

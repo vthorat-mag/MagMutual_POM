@@ -123,7 +123,6 @@ public class QA extends ExtentReporter {
         File genericVerifyPDFFile = new File("C:\\savePDF\\verifyPDF.pdf");
         genericVerifyPDFFile.delete();
         driver = BrowserTypes.getDriver();
-
         ExtentReporter.logger = ExtentReporter.report.startTest(method.getName(),
                 method.getAnnotation(Test.class).description());
         ExtentReporter.excelPath = "";
@@ -312,8 +311,8 @@ public class QA extends ExtentReporter {
                 .saveAccountInformation().captureSaveScreenshotofMantainAccountpage();
     }
 
-    // @Test(description = "Hospital - Add multiple risks", groups = { "BTS
-    // Smoke Test" }, priority = 21)
+    // @Test(description = "Hospital - Add multiple risks", groups = { "BTS Smoke
+    // Test" }, priority = 21)
     public void TC42244() throws Exception {
         String Blank = "";
         LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
@@ -358,8 +357,7 @@ public class QA extends ExtentReporter {
         policyQuotePage.saveOptionOfficial(policyNum);
     }
 
-    // *******************************QA Test
-    // Cases******************************
+    // *******************************QA Test Cases******************************
 
     @Test(description = "QA Hospital Rate", groups = { "QA Smoke Test" }, priority = 0)
     public void TC43778() throws Exception {
@@ -482,7 +480,7 @@ public class QA extends ExtentReporter {
 
     // TODO-latest search
     @Test(description = "QA FM - Hospital Verify On Demand Invoice, Create Batch and Post Batch", groups = {
-            "QA Smoke Test123" }, priority = 7)
+            "QA Smoke Test" }, priority = 7)
     public void TC43783() throws Exception {
         String Empty = "";
         LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
@@ -689,8 +687,7 @@ public class QA extends ExtentReporter {
         /*
          * Another solution to run failed test cases
          * 
-         * FailedTCRerun failedtcrun = new FailedTCRerun();
-         * failedtcrun.reRunFailedTC();
+         * FailedTCRerun failedtcrun = new FailedTCRerun(); failedtcrun.reRunFailedTC();
          */
         ExtentReporter.report.flush();
         ExtentReporter.report.close();

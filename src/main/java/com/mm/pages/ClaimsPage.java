@@ -591,19 +591,14 @@ public class ClaimsPage extends CommonAction {
         clickButton(driver, selectBtnOnEntitySelectListPage, "Entity Select List Page's Select");
         Thread.sleep(1000);
         if (switchToParentWindowfromotherwindow(driver, parentWindowId).equals("false"))
-        // if (switchToParentWindowfromotherwindow(driver,
-        // "1234").equals("false"))
         {
+            //This assert to added to fail the test if switch did not work
+            //because test is halted and never failed or progressed.
             assertTrue(false);
         }
         Thread.sleep(3000);
         getPageTitle(driver, "Add File");
-        /*
-         * If(Assert.assertEquals(pageTitle.getAttribute("innerHTML").trim(),
-         * addFilePageTitle)==false){
-         * 
-         * } ;
-         */
+       
         // Assert.assertEquals(patientSelectedValue.getAttribute("value").trim(),
         // ClaimsDTO.lastName + ", " + ClaimsDTO.firstName + ",", "Patient
         // selected is NOT displayed correctly");

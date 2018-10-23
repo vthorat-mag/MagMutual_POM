@@ -22,6 +22,7 @@ import com.relevantcodes.extentreports.LogStatus;
 public class PolicyIndicationPage extends CommonAction {
 
     WebDriver driver;
+
     PolicyIndicationPageDTO hospitalIndicationDTO;
     String producerAgentEntryPageTitle = "Producer Agent Entry";
     String maintainUnderwritingTeamPageTitle = "Maintain Underwriting Team";
@@ -316,8 +317,7 @@ public class PolicyIndicationPage extends CommonAction {
         Thread.sleep(4000);
 
         /*
-         * List<WebElement> firstFrame =
-         * driver.findElements(By.id("popupframe1"));
+         * List<WebElement> firstFrame = driver.findElements(By.id("popupframe1"));
          * driver.switchTo().frame(firstFrame.get(0));
          */
         return policyNo;
@@ -349,8 +349,7 @@ public class PolicyIndicationPage extends CommonAction {
             clickButton(driver, Add_Underwriter, "Add Underwriter");
             Thread.sleep(3000);
             /*
-             * List<WebElement> secondFrame =
-             * driver.findElements(By.id("popupframe1"));
+             * List<WebElement> secondFrame = driver.findElements(By.id("popupframe1"));
              * driver.switchTo().frame(secondFrame.get(0));
              */
             WebElement iframeEle1 = driver
@@ -417,8 +416,7 @@ public class PolicyIndicationPage extends CommonAction {
             clickButton(driver, Add_Underwriter, "Add Underwriter");
             Thread.sleep(3000);
             /*
-             * List<WebElement> secondFrame =
-             * driver.findElements(By.id("popupframe1"));
+             * List<WebElement> secondFrame = driver.findElements(By.id("popupframe1"));
              * driver.switchTo().frame(secondFrame.get(0));
              */
             WebElement iframeEle2 = driver
@@ -784,8 +782,8 @@ public class PolicyIndicationPage extends CommonAction {
                             // Verify that premium amount is entered and it is
                             // correct
                             // verifyValueFromField(driver,
-                            // Premium,hospitalIndicationDTO.premiumAmount.get(retroDateCount),
-                            // "value", "Premium Amount");
+                            // Premium,hospitalIndicationDTO.premiumAmount.get(retroDateCount), "value",
+                            // "Premium Amount");
                             Thread.sleep(1000);
                             enterDataIn(driver, Retro_Date, retroDate, "Retro Date");
                             break;
@@ -890,9 +888,7 @@ public class PolicyIndicationPage extends CommonAction {
                         Thread.sleep(1000);
                         enterDataIn(driver, Retro_Date, hospitalIndicationDTO.retroDate.get(coverageCount),
                                 "Retro Date");
-                        clickButton(driver, saveWIP, "Save WIP"); // Not in
-                                                                  // rally test
-                                                                  // steps
+                        clickButton(driver, saveWIP, "Save WIP"); // Not in rally test steps
                         invisibilityOfLoader(driver);
 
                     } // else add only premium for selected coverage
@@ -1029,8 +1025,7 @@ public class PolicyIndicationPage extends CommonAction {
                 Assert.assertTrue(false, hospitalIndicationDTO.coverage.get(coverageNameCount)
                         + " Coverage is NOT found under coverage section.");
             }
-            // Click on 'Optional forms', navigate to pop up window and click
-            // 'Add' button
+            // Click on 'Optional forms', navigate to pop up window and click 'Add' button
             Thread.sleep(2000);
             ExtentReporter.logger.log(LogStatus.INFO,
                     "Click on the Optional Forms button. Verify Manuscript Information Window displays");
@@ -1152,9 +1147,9 @@ public class PolicyIndicationPage extends CommonAction {
             Thread.sleep(1000);
             switchToFrameUsingId(driver, "popupframe1");
             /*
-             * Assert.assertEquals(sharedGroupDetailsCoverage.getAttribute(
-             * "innerHTML"), hospitalIndicationDTO.sharedGroupCoverage.get(
-             * sharedGroupCoverageCount), "Shared group coverage is not added");
+             * Assert.assertEquals(sharedGroupDetailsCoverage.getAttribute("innerHTML"),
+             * hospitalIndicationDTO.sharedGroupCoverage.get(sharedGroupCoverageCount),
+             * "Shared group coverage is not added");
              */
             // ToDo-Use Verify value from field instead of assert
         }

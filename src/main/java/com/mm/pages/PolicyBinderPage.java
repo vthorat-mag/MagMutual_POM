@@ -23,6 +23,7 @@ public class PolicyBinderPage extends CommonAction {
     // Global Variable assignment.
     WebDriver driver;
     PolicyBinderPageDTO policybinderpageDTO;
+
     CommonUtilities comUtil = new CommonUtilities();
     String valueOfPolicyActionEndorse = "javascript:endorseTransaction('oosendorse');";
     String saveAsPolicyValue = "OFFICIAL";
@@ -253,12 +254,11 @@ public class PolicyBinderPage extends CommonAction {
         // TODO - Need To add below steps once got confirmaiton on query - Cant
         // see policy No from Policy No drop down field.
         /*
-         * In the filter criteria section, click the Policy No dropdown and
-         * Select [Policy number entered in step 3] Click the checkbox next the
-         * Prof Liab coverage Click Save as Claim Possible duplicate claim
-         * screen displays Click Save as Claim Claim No displays in the upper
-         * left corner. Note (and save for later input) the claim number:
-         * ****add ########### Click [Close]
+         * In the filter criteria section, click the Policy No dropdown and Select
+         * [Policy number entered in step 3] Click the checkbox next the Prof Liab
+         * coverage Click Save as Claim Possible duplicate claim screen displays Click
+         * Save as Claim Claim No displays in the upper left corner. Note (and save for
+         * later input) the claim number: ****add ########### Click [Close]
          */
     }
 
@@ -307,12 +307,11 @@ public class PolicyBinderPage extends CommonAction {
             quotepage.searchBackUpPolicyUsingSearchCriteria();
             Thread.sleep(4000);
             /*
-             * if (selectDropdownByValueFromPolicyActionDDL(driver,
-             * policyAction, policybinderpageDTO.valueOfPolicyActionEndorse,
-             * "Policy Action").equals("false")) { //Deleting the Work in
-             * progress will enable required action from policy Action DDL
-             * quotepage.deleteWIPForReUse(); Thread.sleep(5000);
-             * selectDropdownByValueFromPolicyActionDDL(driver,
+             * if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
+             * policybinderpageDTO.valueOfPolicyActionEndorse,
+             * "Policy Action").equals("false")) { //Deleting the Work in progress will
+             * enable required action from policy Action DDL quotepage.deleteWIPForReUse();
+             * Thread.sleep(5000); selectDropdownByValueFromPolicyActionDDL(driver,
              * ppolicyAction,policybinderageDTO.valueOfPolicyActionEndorse,
              * "Policy Action");
              */
@@ -320,8 +319,7 @@ public class PolicyBinderPage extends CommonAction {
             if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
                     policybinderpageDTO.valueOfPolicyActionEndorse, "Policy Action").equals("false")) {
 
-                // navigate through policy list till policy with expected
-                // criteria is found
+                // navigate through policy list till policy with expected criteria is found
                 RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
                 rateapolicypage.searchThroughPolicyList(policybinderpageDTO.valueOfPolicyActionEndorse);
             }
@@ -373,8 +371,8 @@ public class PolicyBinderPage extends CommonAction {
         return new PolicySubmissionPage(driver);
     }
 
-    // Select Copy To Quote from "Action DropoDown" for QA with capture
-    // Transaction window.
+    // Select Copy To Quote from "Action DropoDown" for QA with capture Transaction
+    // window.
     public PolicyBinderPage copyToQuoteFromActionDropDownForQA() throws Exception {
         Thread.sleep(2000);
         String getPolicyNo = policyNo();
@@ -476,8 +474,8 @@ public class PolicyBinderPage extends CommonAction {
 
         Thread.sleep(15000);
         invisibilityOfLoader(driver);
-        // Need latest policy number as it changes for TC43769, so policyNo
-        // method is called
+        // Need latest policy number as it changes for TC43769, so policyNo method is
+        // called
         switchToFrameUsingElement(driver,
                 driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo() + "')]")));
         ExtentReporter.logger.log(LogStatus.INFO,
@@ -517,8 +515,8 @@ public class PolicyBinderPage extends CommonAction {
         Thread.sleep(5000);
         /*
          * switchToFrameUsingElement(driver,
-         * driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" +
-         * policyNum + "')]")));
+         * driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNum +
+         * "')]")));
          */
         switchToFrameUsingId(driver, "popupframe1");
         WebDriverWait wait = new WebDriverWait(driver, High);
@@ -535,8 +533,7 @@ public class PolicyBinderPage extends CommonAction {
     public RateApolicyPage identifyPhase(String PhaseValue) throws Exception {
         Thread.sleep(3000);
         ExtentReporter.logger.log(LogStatus.PASS, "Verify Phase is changed to Binder.");
-        // verifyValueFromField(driver, policyPhaseBinder,
-        // policyPhaseValue,innerText);
+        // verifyValueFromField(driver, policyPhaseBinder, policyPhaseValue,innerText);
         PolicyBinderPage pbp = new PolicyBinderPage(driver);
         pbp.verifyPhase(PhaseValue);
         return new RateApolicyPage(driver);
