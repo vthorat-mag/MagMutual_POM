@@ -274,7 +274,8 @@ public class PolicyQuotePage extends CommonAction {
                     "Delete current Indication form, Are you sure you want to delete this? Click Ok");
             clickButton(driver, manuscriptPageDeleteBtn, "Manu script Delete");
             driver.switchTo().alert().accept();
-            // Verify first item displayed in manu script list is not displayed in list.
+            // Verify first item displayed in manu script list is not displayed
+            // in list.
             Assert.assertEquals(manuscriptPageFirstItem.getAttribute("innerHTML"), firstManuScriptInfoName,
                     "Manuscript lsit first item " + firstManuScriptInfoName + " is not deleted.");
             Thread.sleep(2000);
@@ -340,8 +341,8 @@ public class PolicyQuotePage extends CommonAction {
         RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
 
         /*
-         * Note- PDF process kill and refresh page code is added because IE faces issue
-         * intermittently after PDF generation.
+         * Note- PDF process kill and refresh page code is added because IE
+         * faces issue intermittently after PDF generation.
          */
         rateapolicypage.refreshCurrentPage(driver);
         Process processkillpdf = Runtime.getRuntime()
@@ -398,11 +399,9 @@ public class PolicyQuotePage extends CommonAction {
         invisibilityOfLoader(driver);
         WebDriverWait wait = new WebDriverWait(driver, High);
         wait.until(ExpectedConditions.visibilityOf(PreviewTab));
-        // Thread.sleep(6000);
+        Thread.sleep(2000);
         ExtentReporter.logger.log(LogStatus.INFO,
                 "Click [Preview]& verify Preview window displays with Form Printing on Form's List");
-        // ExtentReporter.logger.log(LogStatus.INFO, "Verify CHG 08 form is displayed
-        // and information that was entered is on form");
         clickButton(driver, PreviewTab, "Preview");
         Thread.sleep(10000);
         invisibilityOfLoader(driver);
@@ -501,7 +500,8 @@ public class PolicyQuotePage extends CommonAction {
         if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.policyActionValue,
                 "Policy Action").equals("false")) {
 
-            // Deleting the Work in progress will enable required action from policy Action
+            // Deleting the Work in progress will enable required action from
+            // policy Action
             // DDL
             searchBackUpPolicyUsingSearchCriteria();
             Thread.sleep(5000);
@@ -522,6 +522,14 @@ public class PolicyQuotePage extends CommonAction {
         FindPolicyPage findPolicyPage = new FindPolicyPage(driver);
         findPolicyPage.navigateToPolicySearchPage().openSearchPolicyPane().selectTermStatusAndIssueCompany()
                 .selectPolicyType().searchFromFindPolicyPage();
+    }
+
+    // This method will select a policy using the required search criteria on
+    // New BTS env
+    public void searchBackUpPolicyUsingSearchCriteriaBTS_QA() throws Exception {
+        FindPolicyPage findPolicyPage = new FindPolicyPage(driver);
+        findPolicyPage.navigateToPolicySearchPage().openSearchPolicyPane().selectTermStatusAndIssueCompany()
+                .selectPolicyType().policySearchFromFindPolicyPage_BTS_QA();
     }
 
     // Switch to second frame from first frame

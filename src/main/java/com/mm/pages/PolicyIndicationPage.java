@@ -343,6 +343,7 @@ public class PolicyIndicationPage extends CommonAction {
             }
 
             ExtentReporter.logger.log(LogStatus.INFO, "Click Add Underwriter. Verify Add Underwriter window displayed");
+            Thread.sleep(3000);
             // waitForElementToLoad(driver, 30, Add_Underwriter);
             // Open Add underwriter tab from the first pop up frame and move to
             // second pop up frame using list
@@ -413,8 +414,9 @@ public class PolicyIndicationPage extends CommonAction {
             // waitForElementToLoad(driver, 30, Add_Underwriter);
             // Open Add underwriter tab from the first pop up frame and move to
             // second pop up frame using list
-            clickButton(driver, Add_Underwriter, "Add Underwriter");
             Thread.sleep(3000);
+            clickButton(driver, Add_Underwriter, "Add Underwriter");
+
             /*
              * List<WebElement> secondFrame = driver.findElements(By.id("popupframe1"));
              * driver.switchTo().frame(secondFrame.get(0));
@@ -460,16 +462,17 @@ public class PolicyIndicationPage extends CommonAction {
 
     // Capture transaction details occurs for QA environment only
     public void captureTransactionDetailsForQA(String policyNo) throws Exception {
-
-        WebElement iframeEle2 = driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]"));
-        switchToFrameUsingElement(driver, iframeEle2);
-        Thread.sleep(2000);
-        clickButton(driver, OK_Capt_Trans_Details, "Ok");
-        driver.switchTo().defaultContent();
-        Thread.sleep(2000);
-
-        WebElement iframeEle1 = driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]"));
-        switchToFrameUsingElement(driver, iframeEle1);
+        /*
+         * WebElement iframeEle2 =
+         * driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" +
+         * policyNo + "')]")); switchToFrameUsingElement(driver, iframeEle2);
+         * Thread.sleep(2000); clickButton(driver, OK_Capt_Trans_Details, "Ok");
+         * driver.switchTo().defaultContent(); Thread.sleep(2000);
+         * 
+         * WebElement iframeEle1 =
+         * driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" +
+         * policyNo + "')]")); switchToFrameUsingElement(driver, iframeEle1);
+         */
     }
 
     // Close 'Maintain Underwriting team' pop up, move control to parent window
@@ -1045,6 +1048,7 @@ public class PolicyIndicationPage extends CommonAction {
                 WebElement coverageFormType = driver
                         .findElement(By.xpath("//div[text()='" + hospitalIndicationDTO.form.get(coverageNameCount)
                                 + "']/parent::td/preceding-sibling::td/input[@name='chkCSELECT_IND']"));
+                Thread.sleep(2000);
                 clickButton(driver, coverageFormType, "Coverage Form Type");
             } catch (Exception e) {
                 ExtentReporter.logger.log(LogStatus.INFO, hospitalIndicationDTO.form.get(coverageNameCount)
@@ -1146,6 +1150,8 @@ public class PolicyIndicationPage extends CommonAction {
             switchToParentWindowfromframe(driver);
             Thread.sleep(1000);
             switchToFrameUsingId(driver, "popupframe1");
+            Thread.sleep(1000);
+            click(driver, Save_Limit_Sharing, "Save button");
             /*
              * Assert.assertEquals(sharedGroupDetailsCoverage.getAttribute("innerHTML"),
              * hospitalIndicationDTO.sharedGroupCoverage.get(sharedGroupCoverageCount),

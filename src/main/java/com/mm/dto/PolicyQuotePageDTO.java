@@ -21,6 +21,7 @@ public class PolicyQuotePageDTO {
     public String quoteDescriptionText;
     public List<String> coverages;
     public List<String> phases;
+    public String columnNumber;
 
     // This method will access DTO Code.
     public PolicyQuotePageDTO(Map<String, List<String>> excelData) {

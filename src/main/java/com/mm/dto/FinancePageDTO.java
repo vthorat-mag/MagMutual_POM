@@ -52,9 +52,10 @@ public class FinancePageDTO {
     public String OwnerDDLValue_Y;
     public String coverageNameumbplins;
     public String OwnerDDLValue_N;
-    public String issueCompanyValue;
     public String savePDFAs;
+    public String issueCompanyValue;
 
+    // This method will access DTO Code.
     public FinancePageDTO(Map<String, List<String>> excelData) {
 
         for (int i = 0; i <= FinancePageDTO.class.getFields().length - 1; i++) {

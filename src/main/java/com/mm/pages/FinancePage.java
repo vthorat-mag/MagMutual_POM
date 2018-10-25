@@ -1054,6 +1054,7 @@ public class FinancePage extends CommonAction {
             clickButton(driver, LimitSharingSaveBtn, "Limit Sharing windows Save");
             isAlertPresent(driver);
             invisibilityOfLoader(driver);
+            Thread.sleep(2000);
             clickButton(driver, LimitSharingCloseBtn, "Limit Sharing windows Close");
             invisibilityOfLoader(driver);
             Thread.sleep(3000);

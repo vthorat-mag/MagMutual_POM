@@ -7,11 +7,11 @@ public class FindPolicyPageDTO {
 
     public static String lastTransaction;
     public static String phaseValue;
-    public static String phase;
     public static String status;
     public static String termStatusCode;
     public static String policyTypeValue;
     public static String issueCompanyValue;
+    public static String columnNo;
 
     // This method will access DTO Code.
     public FindPolicyPageDTO(Map<String, List<String>> excelData) {

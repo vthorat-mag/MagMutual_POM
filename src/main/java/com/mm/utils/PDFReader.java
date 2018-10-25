@@ -15,6 +15,7 @@ import org.testng.Reporter;
 
 import com.mm.dto.pdfReaderDTO;
 import com.mm.pages.PolicyBinderPage;
+import com.mm.pages.PolicyQuotePage;
 import com.relevantcodes.extentreports.LogStatus;
 
 public class PDFReader extends CommonAction {
@@ -35,15 +36,25 @@ public class PDFReader extends CommonAction {
                 System.getProperty("user.dir") + "\\src\\main\\resources\\StoredPDF\\pdfDocument.pdf" };
         String[] executionPath = { System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\savePdf.exe" };
         Runtime.getRuntime().exec(executionPath).waitFor(20, TimeUnit.SECONDS);
-        copyPDFFile(FileName);
-        if (isAlertPresent(driver) == false) {
-            ExtentReporter.logger.log(LogStatus.INFO, "Alert[Optional] is NOT present.");
+        if (copyPDFFile(FileName).equals("false")) {
+            switchToParentWindowfromframe(driver);
+            Process processkillpdf = Runtime.getRuntime()
+                    .exec("TASKKILL /F /FI \"USERNAME eq " + System.getProperty("user.name") + "\" /IM savePdf.exe");
+            PolicyQuotePage pqp = new PolicyQuotePage(driver);
+            PolicyBinderPage policyBinderPage = new PolicyBinderPage(driver);
+            pqp.clickPreviewTab(policyBinderPage.policyNo());
+            Runtime.getRuntime().exec(executionPath).waitFor(20, TimeUnit.SECONDS);
+            copyPDFFile(FileName);
+        } else {
+            if (isAlertPresent(driver) == false) {
+                ExtentReporter.logger.log(LogStatus.INFO, "Alert[Optional] is NOT present.");
+            }
+            Thread.sleep(5000);
+            switchToParentWindowfromframe(driver);
         }
-        Thread.sleep(2000);
-        switchToParentWindowfromframe(driver);
         return new PDFReader(driver);
     }
-    
+
     public PDFReader(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);

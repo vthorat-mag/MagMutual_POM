@@ -102,6 +102,15 @@ public class FindPolicyPage extends CommonAction {
     @FindBy(xpath = "//a[@class='pageNextLink']")
     WebElement nextPolicyArrow;
 
+    @FindBy(id = "jqxScrollBtnDownhorizontalScrollBarfindPolicyListGrid")
+    WebElement lefthorizontalScrollBtn;
+
+    @FindBy(id = "jqxScrollBtnUphorizontalScrollBarfindPolicyListGrid")
+    WebElement righthorizontalScrollBtn;
+
+    @FindBy(id = "jqxScrollThumbhorizontalScrollBarfindPolicyListGrid")
+    WebElement policyListScrollBar;
+
     // Constructor to initialize elements on Find a policy page.
     public FindPolicyPage(WebDriver driver) throws Exception {
         this.driver = driver;
@@ -180,8 +189,116 @@ public class FindPolicyPage extends CommonAction {
         return new FindPolicyPage(driver);
     }
 
+    public RateApolicyPage policySearchFromFindPolicyPage_BTS_QA() throws Exception {
+        // below code will select phase from Policy Phase drop down.
+        // click(driver, policyPhaseSearch, "Policy Phase Search Icon");
+        Thread.sleep(2000);
+        click(driver, policyPhaseSearch, "Policy Phase Search Icon");
+        waitFor(driver, 3);
+        for (int i = 0; i < policyPhaseCheckBox.size(); i++) {
+            if (policyPhaseCheckBox.get(i).getAttribute("value").equals("POLICY")) {
+                clickButton(driver, policyPhaseCheckBox.get(i), FindPolicyPageDTO.phaseValue + " Check Box");
+            }
+        }
+        for (int i = 0; i < policyPhaseCheckBox.size(); i++) {
+            if (policyPhaseCheckBox.get(i).getAttribute("value").equalsIgnoreCase(FindPolicyPageDTO.phaseValue)) {
+                clickButton(driver, policyPhaseCheckBox.get(i), FindPolicyPageDTO.phaseValue + " Check Box");
+                ExtentReporter.logger.log(LogStatus.PASS,
+                        FindPolicyPageDTO.phaseValue + " is  selected from Policy phase drop down");
+                break;
+            }
+        }
+
+        // below code will select Status from Status drop down.
+        Thread.sleep(3000);
+        clickButton(driver, policyStatusSearch, "Policy Status Search");
+        for (int i = 0; i < policyStatusValues.size(); i++) {
+            if (policyStatusValues.get(i).getAttribute("value").equals(FindPolicyPageDTO.status)) {
+                click(driver, policyStatusValues.get(i),
+                        policyStatusValues.get(i).getAttribute("value") + " Check Box");
+                ExtentReporter.logger.log(LogStatus.PASS,
+                        FindPolicyPageDTO.status + " is  selected from Status drop down");
+                break;
+            }
+        }
+        click(driver, searchBtn, "SearchButton");
+        invisibilityOfLoader(driver);
+        Thread.sleep(2000);
+
+        // Below code will check if the policies displayed in search criteria
+        // result match the last Transaction.
+        // and will open/select matching policy.
+        boolean flag = false;
+        try {
+            List<String> policyList = new ArrayList<String>();
+            Actions action = new Actions(driver);
+            action.dragAndDrop(policyListScrollBar, lefthorizontalScrollBtn).build().perform();
+            for (int page = 0; page < 10; page++) {
+                // each page shows only four rows in DOM, so we need to change
+                // page to search policy after 4 rows
+                for (int row = 0; row < 4; row++) {
+                    // ColumnNo is parameterized because Last transaction column
+                    // value is changing depending on type of policy is
+                    // searched.
+                    WebElement lastTranctionColumn = driver.findElement(By.xpath("//div[@id=\"row" + row
+                            + "findPolicyListGrid\"]//div[" + FindPolicyPageDTO.columnNo + "]/div"));
+                    // compare the value of last Transaction to expected value
+                    // from data sheet, so select the required policy
+                    if (lastTranctionColumn.getAttribute("innerHTML").trim()
+                            .equalsIgnoreCase(FindPolicyPageDTO.lastTransaction)) {
+                        /*
+                         * for (int i = 0; i < 100; i++) { click(driver,
+                         * righthorizontalScrollBtn,
+                         * "Horizontal Scroll button"); }
+                         */
+                        action.dragAndDrop(policyListScrollBar, righthorizontalScrollBtn).build().perform();
+                        Thread.sleep(1000);
+                        WebElement policyNum = driver
+                                .findElement(By.xpath("//div[@id=\"row" + row + "findPolicyListGrid\"]//div/a"));
+                        Thread.sleep(1000);
+                        ExtentReporter.logger.log(LogStatus.INFO,
+                                "Select Policy with Policy No." + policyNum.getAttribute("innerHTML"));
+                        // select the policy from First column if the last
+                        // transaction is as expected.
+                        click(driver, policyNum, "Policy Name");
+                        flag = true;
+                        break;
+                    }
+                }
+                // if the policy is not found on first page then change page
+                // size to 5 and move to next page
+                if (flag == false) {
+                    click(driver, pageSizeDDLArrow, "Page Size Down Arrow");
+                    Thread.sleep(1000);
+                    click(driver, pageSize.get(0), "Page Size 5");
+                    Thread.sleep(2000);
+                    clickButton(driver, nextPageArrow, "Next Page");
+                } else {
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            ExtentReporter.logger.log(LogStatus.FAIL, "No Policy available for given Criteria.");
+            throw new Exception("No Policy available for given Criteria");
+        }
+        Thread.sleep(2000);
+        invisibilityOfLoader(driver);
+
+        // Below line of code will verify Selected phase value is correct or
+        // not.
+        // verifyValueFromField(driver, selectedPhaseValueEle,
+        // selectedPhaseValue, "innerHTML","Phase Value");
+
+        // Below line of code will verify Selected status value is correct or
+        // not.
+        verifyValueFromField(driver, selectedStatusValueEle, selectedStatusValue, "innerHTML", "Status Value");
+        return new RateApolicyPage(driver);
+    }
+
     public RateApolicyPage searchFromFindPolicyPage() throws Exception {
         // below code will select phase from Policy Phase drop down.
+        click(driver, policyPhaseSearch, "Policy Phase Search Icon");
+        Thread.sleep(2000);
         click(driver, policyPhaseSearch, "Policy Phase Search Icon");
         waitFor(driver, 3);
         for (int i = 0; i < policyPhaseCheckBox.size(); i++) {

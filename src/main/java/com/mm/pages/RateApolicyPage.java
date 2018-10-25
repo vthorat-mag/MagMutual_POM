@@ -296,6 +296,14 @@ public class RateApolicyPage extends CommonAction {
         return new RateApolicyPage(driver);
     }
 
+    // Search Policy from Search Policy text field on New BTS env.
+    public RateApolicyPage searchPolicyBTS_QA(String policy_no) throws Exception {
+        Thread.sleep(3000);
+        policySearchBTS_QA(driver, policy_no, Policy_Search, Search_btn, policyList);
+        Thread.sleep(3000);
+        return new RateApolicyPage(driver);
+    }
+
     public String checkPolicyViewModeAndUpdateCoverage(String policyNo) throws Exception {
 
         Thread.sleep(3000);
@@ -425,6 +433,18 @@ public class RateApolicyPage extends CommonAction {
 
     public PolicyQuotePage searchPolicyPolicyQuotePage() throws Exception {
         searchPolicy(rateApolicyPageDTO.policyNum);
+        return new PolicyQuotePage(driver);
+    }
+
+    public PolicyQuotePage searchPolicyPolicyQuotePageBTS_QA() throws Exception {
+        searchPolicyBTS_QA(rateApolicyPageDTO.policyNum);
+        return new PolicyQuotePage(driver);
+    }
+
+    public PolicyQuotePage searchPolicyPolicyQuotePageWithCopyTOQuteBTS_QA() throws Exception {
+        searchPolicyBTS_QA(rateApolicyPageDTO.policyNum);
+        PolicyBinderPage pbp = new PolicyBinderPage(driver);
+        pbp.copyToQuoteFromActionDropDownwithoutBackUpPolicy(pbp.policyNo());
         return new PolicyQuotePage(driver);
     }
 
@@ -726,6 +746,12 @@ public class RateApolicyPage extends CommonAction {
         wait.until(ExpectedConditions.visibilityOf(optionalFormBtn));
         // Thread.sleep(3000);
         for (int j = 0; j < rateApolicyPageDTO.coverage.size(); j++) {
+
+            // Below code will verify if value in excel sheet is blank if it is
+            // blank it will break the loop.
+            if (rateApolicyPageDTO.coverage.get(j).equals("")) {
+                break;
+            }
             // Code to select Coverage.
             try {
                 WebElement coverageType = driver

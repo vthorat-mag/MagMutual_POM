@@ -108,7 +108,7 @@ public class CommonAction implements CommonActionInterface {
         Boolean flag = null;
         try {
             WebDriverWait wait = new WebDriverWait(driver, High);
-            wait.until(ExpectedConditions.visibilityOf(element));
+            // wait.until(ExpectedConditions.visibilityOf(element));
             driver.switchTo().frame(element);
             ExtentReporter.logger.log(LogStatus.INFO, "Control switched to frame.");
             flag = true;
@@ -571,17 +571,25 @@ public class CommonAction implements CommonActionInterface {
         }
     }
 
-    public void copyPDFFile(String saveFilName) throws Exception {
+    public String copyPDFFile(String saveFilName) throws Exception {
+        String flag = null;
         File source = new File("C:\\savePDF\\verifyPDF.pdf");
         File dest2 = new File(ExtentReporter.reportFolderPath + "\\" + saveFilName + ".pdf");
         ExtentReporter.excelPath = ExtentReporter.excelPath
                 .concat(ExtentReporter.reportFolderPath + "\\" + saveFilName + ".pdf;");
-        try {
-            FileUtils.copyFile(source, dest2);
-        } catch (IOException e) {
-            e.printStackTrace();
-            Assert.assertTrue(false, "Error while copying file from location " + source + " TO " + dest2);
+        if (dest2.exists() == false) {
+            flag = "false";
+        } else {
+            try {
+                FileUtils.copyFile(source, dest2);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Assert.assertTrue(false,
+                        "Error while copying file from location C:\\TempsaveExcel\\ TO C:\\SmokeTestFM or C:\\saveExcel");
+            }
+            flag = "true";
         }
+        return flag;
     }
 
     public String getDataFromExcel(String sheetName, String columnName, int rowNum, String filePath)
@@ -766,10 +774,53 @@ public class CommonAction implements CommonActionInterface {
                     "Policy is not available, please enter another/correct policy Number.");
             ExtentReporter.logger.log(LogStatus.INFO, "Searching for backUp policy.");
             /*
-             * RateApolicyPage rpp = new RateApolicyPage(driver); rpp.searchBackUpPolicy();
+             * RateApolicyPage rpp = new RateApolicyPage(driver);
+             * rpp.searchBackUpPolicy();
              */
             PolicyQuotePage pqp = new PolicyQuotePage(driver);
             pqp.searchBackUpPolicyUsingSearchCriteria();
+            // TODO -verify code is working for all test cases.
+            flag = "false";
+        } else {
+            getPageTitle(driver, "Policy Folder " + policybinderpage.policyNo());
+            ExtentReporter.logger.log(LogStatus.INFO, "Policy list is displayed after policy Search");
+            flag = "true";
+        }
+        return flag;
+    }
+
+    public String policySearchBTS_QA(WebDriver driver, String policyNo, WebElement policySearchTxtBox,
+            WebElement searchBtn, WebElement policyList) throws Exception {
+        String flag = null;
+        WebDriverWait wait = new WebDriverWait(driver, High);
+        wait.until(ExpectedConditions.visibilityOf(policySearchTxtBox));
+        PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
+        ExtentReporter.logger.log(LogStatus.INFO,
+                "Enter in active Hospital/Facility policy number in Enter Policy # entry box, Click Search. Policy Will display");
+        clearTextBox(driver, policySearchTxtBox, "Enter Policy # text field");
+        enterTextIn(driver, policySearchTxtBox, policyNo, "Enter Policy # text field");
+        ExtentReporter.logger.log(LogStatus.INFO, "Click search button and Verify full policy page is displayed");
+        Thread.sleep(1000);
+        click(driver, searchBtn, "Search button");
+        Thread.sleep(3000);
+        invisibilityOfLoader(driver);
+        if (verifyPolicyListDispOnQAEnv(driver, policyList) == true) {
+            // clickButton(driver, policyList, "First policy from Searched
+            // Policies");
+            Actions action = new Actions(driver);
+            action.click(policyList).build().perform();
+            flag = "true";
+        } else if (verifypolicyNotDisplayErrorMsg(driver).equals("true")) {
+            WebElement policyNotFoudErrorMsg = driver.findElement(By.xpath("//td[@class='errormessage'][1]"));
+            ExtentReporter.logger.log(LogStatus.WARNING,
+                    "Policy is not available, please enter another/correct policy Number.");
+            ExtentReporter.logger.log(LogStatus.INFO, "Searching for backUp policy.");
+            /*
+             * RateApolicyPage rpp = new RateApolicyPage(driver);
+             * rpp.searchBackUpPolicy();
+             */
+            PolicyQuotePage pqp = new PolicyQuotePage(driver);
+            pqp.searchBackUpPolicyUsingSearchCriteriaBTS_QA();
             // TODO -verify code is working for all test cases.
             flag = "false";
         } else {
