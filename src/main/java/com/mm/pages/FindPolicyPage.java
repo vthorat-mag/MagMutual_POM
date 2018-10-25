@@ -38,8 +38,6 @@ public class FindPolicyPage extends CommonAction {
     @FindBy(xpath = "//a[@id='AFD_policyStatus']//img[@id='btnFind']")
     WebElement policyStatusSearch;
 
-    // @FindBy(xpath =
-    // "//table[@class='popupcontent']//input[@name='chkMultiSelectpolicyStatus']")
     @FindBy(xpath = "//input[@name='chkMultiSelectpolicyStatus']")
     List<WebElement> policyStatusValues;
 
@@ -54,10 +52,6 @@ public class FindPolicyPage extends CommonAction {
 
     @FindBy(xpath = "//div[@class='horizontalButtonCollection']//input[@value='Search']")
     WebElement searchBtn;
-
-    // @FindBy(xpath = "//a[@id='findPolicyListGrid_CPOLICYNO_0_HREF']|
-    // //table[@class='clsGrid']//tbody//span[@id='CPOLICYNO']")
-    // List<WebElement> policyList;
 
     @FindBy(xpath = "//a[contains(@id,'findPolicyListGrid_CPOLICYNO')]")
     List<WebElement> policyList;
@@ -92,7 +86,6 @@ public class FindPolicyPage extends CommonAction {
     @FindBy(xpath = "//div[@title='next']")
     WebElement nextPageArrow;
 
-    // @FindBy(xpath="//div[@class='jqx-listitem-element']//span")
     @FindBy(xpath = "//div[@id='listBoxContentinnerListBoxgridpagerlistfindPolicyListGrid']/div/div/span")
     List<WebElement> pageSize;
 
@@ -112,14 +105,14 @@ public class FindPolicyPage extends CommonAction {
     WebElement policyListScrollBar;
 
     // Constructor to initialize elements on Find a policy page.
-    public FindPolicyPage(WebDriver driver) throws Exception {
+    public FindPolicyPage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
         FindPolicyPageDTO findpolicypagedto = new FindPolicyPageDTO(TestCaseDetails.testDataDictionary);
     }
 
     // Search Policy from filter.
-    public String findQuotewithActiveState(String phase, String status) throws InterruptedException {
+    public String findQuotewithActiveState(String phase, String status) {
         invisibilityOfLoader(driver);
         try {
             Assert.assertTrue(paneDown.isEnabled());
@@ -166,17 +159,17 @@ public class FindPolicyPage extends CommonAction {
 
     // Code will use to search Policy on Policy Page.
 
-    public FindPolicyPage navigateToPolicySearchPage() throws Exception {
+    public FindPolicyPage navigateToPolicySearchPage() {
 
         Actions action = new Actions(driver);
         action.moveToElement(policyTab).click().build().perform();
-        Thread.sleep(2000);
+        sleep(2000);
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].click();", findPolicy);
         return new FindPolicyPage(driver);
     }
 
-    public FindPolicyPage openSearchPolicyPane() throws Exception {
+    public FindPolicyPage openSearchPolicyPane() {
         invisibilityOfLoader(driver);
         ExtentReporter.logger.log(LogStatus.INFO, "click Policy>Find Policy Select Status: Active Click [Search]");
         // Below code will verify if search pane is expanded or not.
@@ -189,10 +182,10 @@ public class FindPolicyPage extends CommonAction {
         return new FindPolicyPage(driver);
     }
 
-    public RateApolicyPage policySearchFromFindPolicyPage_BTS_QA() throws Exception {
+    public RateApolicyPage policySearchFromFindPolicyPage_BTS_QA() {
         // below code will select phase from Policy Phase drop down.
         // click(driver, policyPhaseSearch, "Policy Phase Search Icon");
-        Thread.sleep(2000);
+        sleep(2000);
         click(driver, policyPhaseSearch, "Policy Phase Search Icon");
         waitFor(driver, 3);
         for (int i = 0; i < policyPhaseCheckBox.size(); i++) {
@@ -210,7 +203,7 @@ public class FindPolicyPage extends CommonAction {
         }
 
         // below code will select Status from Status drop down.
-        Thread.sleep(3000);
+        sleep(3000);
         clickButton(driver, policyStatusSearch, "Policy Status Search");
         for (int i = 0; i < policyStatusValues.size(); i++) {
             if (policyStatusValues.get(i).getAttribute("value").equals(FindPolicyPageDTO.status)) {
@@ -223,7 +216,7 @@ public class FindPolicyPage extends CommonAction {
         }
         click(driver, searchBtn, "SearchButton");
         invisibilityOfLoader(driver);
-        Thread.sleep(2000);
+        sleep(2000);
 
         // Below code will check if the policies displayed in search criteria
         // result match the last Transaction.
@@ -247,15 +240,14 @@ public class FindPolicyPage extends CommonAction {
                     if (lastTranctionColumn.getAttribute("innerHTML").trim()
                             .equalsIgnoreCase(FindPolicyPageDTO.lastTransaction)) {
                         /*
-                         * for (int i = 0; i < 100; i++) { click(driver,
-                         * righthorizontalScrollBtn,
+                         * for (int i = 0; i < 100; i++) { click(driver, righthorizontalScrollBtn,
                          * "Horizontal Scroll button"); }
                          */
                         action.dragAndDrop(policyListScrollBar, righthorizontalScrollBtn).build().perform();
-                        Thread.sleep(1000);
+                        sleep(1000);
                         WebElement policyNum = driver
                                 .findElement(By.xpath("//div[@id=\"row" + row + "findPolicyListGrid\"]//div/a"));
-                        Thread.sleep(1000);
+                        sleep(1000);
                         ExtentReporter.logger.log(LogStatus.INFO,
                                 "Select Policy with Policy No." + policyNum.getAttribute("innerHTML"));
                         // select the policy from First column if the last
@@ -269,9 +261,9 @@ public class FindPolicyPage extends CommonAction {
                 // size to 5 and move to next page
                 if (flag == false) {
                     click(driver, pageSizeDDLArrow, "Page Size Down Arrow");
-                    Thread.sleep(1000);
+                    sleep(1000);
                     click(driver, pageSize.get(0), "Page Size 5");
-                    Thread.sleep(2000);
+                    sleep(2000);
                     clickButton(driver, nextPageArrow, "Next Page");
                 } else {
                     break;
@@ -279,9 +271,9 @@ public class FindPolicyPage extends CommonAction {
             }
         } catch (Exception e) {
             ExtentReporter.logger.log(LogStatus.FAIL, "No Policy available for given Criteria.");
-            throw new Exception("No Policy available for given Criteria");
+            assertTrue(false, e.getMessage());
         }
-        Thread.sleep(2000);
+        sleep(2000);
         invisibilityOfLoader(driver);
 
         // Below line of code will verify Selected phase value is correct or
@@ -295,10 +287,10 @@ public class FindPolicyPage extends CommonAction {
         return new RateApolicyPage(driver);
     }
 
-    public RateApolicyPage searchFromFindPolicyPage() throws Exception {
+    public RateApolicyPage searchFromFindPolicyPage() {
         // below code will select phase from Policy Phase drop down.
         click(driver, policyPhaseSearch, "Policy Phase Search Icon");
-        Thread.sleep(2000);
+        sleep(2000);
         click(driver, policyPhaseSearch, "Policy Phase Search Icon");
         waitFor(driver, 3);
         for (int i = 0; i < policyPhaseCheckBox.size(); i++) {
@@ -316,7 +308,7 @@ public class FindPolicyPage extends CommonAction {
         }
 
         // below code will select Status from Status drop down.
-        Thread.sleep(3000);
+        sleep(3000);
         clickButton(driver, policyStatusSearch, "Policy Status Search");
         for (int i = 0; i < policyStatusValues.size(); i++) {
             if (policyStatusValues.get(i).getAttribute("value").equals(FindPolicyPageDTO.status)) {
@@ -329,7 +321,7 @@ public class FindPolicyPage extends CommonAction {
         }
         click(driver, searchBtn, "SearchButton");
         invisibilityOfLoader(driver);
-        Thread.sleep(2000);
+        sleep(2000);
 
         // Below code will check if the policies displayed in search criteria result
         // match the last Transaction.
@@ -366,9 +358,9 @@ public class FindPolicyPage extends CommonAction {
                 // to next page
                 if (flag == false) {
                     click(driver, pageSizeDDLArrow, "Page Size Down Arrow");
-                    Thread.sleep(1000);
+                    sleep(1000);
                     click(driver, pageSize.get(0), "Page Size 5");
-                    Thread.sleep(2000);
+                    sleep(2000);
                     clickButton(driver, nextPageArrow, "Next Page");
                 } else {
                     break;
@@ -376,15 +368,10 @@ public class FindPolicyPage extends CommonAction {
             }
         } catch (Exception e) {
             ExtentReporter.logger.log(LogStatus.FAIL, "No Policy available for given Criteria.");
-            throw new Exception("No Policy available for given Criteria");
+            assertTrue(false, "No Policy available for given Criteria");
         }
-        Thread.sleep(2000);
+        sleep(2000);
         invisibilityOfLoader(driver);
-
-        // Below line of code will verify Selected phase value is correct or
-        // not.
-        // verifyValueFromField(driver, selectedPhaseValueEle, selectedPhaseValue,
-        // "innerHTML","Phase Value");
 
         // Below line of code will verify Selected status value is correct or
         // not.
@@ -392,14 +379,13 @@ public class FindPolicyPage extends CommonAction {
         return new RateApolicyPage(driver);
     }
 
-    public RateApolicyPage selectNextPolicyFromListUsingForwardArrow() throws Exception {
+    public RateApolicyPage selectNextPolicyFromListUsingForwardArrow() {
 
-        Thread.sleep(3000);
+        sleep(3000);
         try {
             if (nextPolicyArrow.isDisplayed() == true) {
-
                 clickButton(driver, nextPolicyArrow, "Arrow for next Policy");
-                Thread.sleep(3000);
+                sleep(3000);
             }
         } catch (Exception e) {
             ExtentReporter.logger.log(LogStatus.INFO,
@@ -408,21 +394,20 @@ public class FindPolicyPage extends CommonAction {
             assertTrue(false, "There is no substitte policy available in policy list to progress this test.");
         }
         return new RateApolicyPage(driver);
-
     }
 
-    public FindPolicyPage selectTermStatusAndIssueCompany() throws Exception {
+    public FindPolicyPage selectTermStatusAndIssueCompany() {
         ExtentReporter.logger.log(LogStatus.INFO, "Select Policy Status " + FindPolicyPageDTO.termStatusCode);
         selectDropdownByValue(driver, transactionStatus, FindPolicyPageDTO.termStatusCode, "Term Status");
-        Thread.sleep(1000);
+        sleep(1000);
         selectDropdownByValue(driver, issueCompany, FindPolicyPageDTO.issueCompanyValue, "Issue Company");
         return new FindPolicyPage(driver);
     }
 
-    public FindPolicyPage selectPolicyType() throws Exception {
+    public FindPolicyPage selectPolicyType() {
 
         clickButton(driver, searchPolicyType, "Policy Search");
-        Thread.sleep(2000);
+        sleep(2000);
         ExtentReporter.logger.log(LogStatus.INFO, "Select Policy Type " + FindPolicyPageDTO.policyTypeValue);
         for (int i = 0; i < policyTypeList.size(); i++) {
 

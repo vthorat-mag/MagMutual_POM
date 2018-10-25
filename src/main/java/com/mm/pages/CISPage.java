@@ -1,5 +1,7 @@
 package com.mm.pages;
 
+import static org.testng.Assert.assertTrue;
+
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -37,20 +39,8 @@ public class CISPage extends CommonAction {
     @FindBy(id = "CI_ENSRC_SEARCH")
     WebElement searchButton;
 
-    /*
-     * @FindBy(xpath="//a[@id='entityListGrid_CCLIENT_NAME_0_HREF']")
-     * List<WebElement> clientNameEntityListQA;
-     * 
-     * @FindBy(xpath = "//span[@id='CCLIENT_NAME']") List<WebElement>
-     * clientNameEntityListBTS;
-     */
-
     @FindBy(xpath = ("//span[@id='CCLIENT_NAME'] | //a[@id='entityListGrid_CCLIENT_NAME_0_HREF']"))
     List<WebElement> clientNameEntityList;
-
-    // @FindBy(xpath = "//div[@id='CCLIENT_ID']") id= 0003683482 - BTS
-    // @FindBy(xpath = "//div[@id='row0entityListGrid']//div[3]") // id =
-    // 0003529128- QA
 
     @FindBy(xpath = "//div[@id='CCLIENT_ID'] | //div[@id='row0entityListGrid']//div[3]")
     List<WebElement> clientIDEntityList;
@@ -194,26 +184,27 @@ public class CISPage extends CommonAction {
 
     // Constructor to initialize driver, page elements and DTO PageObject for
     // CISPage
-    public CISPage(WebDriver driver) throws Exception {
+    public CISPage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
         oCISPageDTO = new CISPageDTO(TestCaseDetails.testDataDictionary);
     }
 
     // Search and Select the client name from the Entity List
-    public CISPage searchAndSelectAClientName() throws Exception {
+    public CISPage searchAndSelectAClientName() {
 
         waitForElementToLoad(driver, 10, clientLastName);
-        ExtentReporter.logger.log(LogStatus.INFO, "Enter " + oCISPageDTO.clientLastName
-                + " in the Last Name field. Enter " + oCISPageDTO.clientFirstName + " in the First Name field"
+        ExtentReporter.logger.log(LogStatus.INFO,
+                "Enter " + oCISPageDTO.clientLastName + " in the Last Name field. Enter " + oCISPageDTO.clientFirstName
+                        + " in the First Name field"
 
-                + "Click search. Verify Search results returned");
+                        + "Click search. Verify Search results returned");
         enterTextIn(driver, clientLastName, oCISPageDTO.clientLastName, "Last/Org Name");
         enterTextIn(driver, clientFirstName, oCISPageDTO.clientFirstName, "First Name");
-        Thread.sleep(2000);
+        sleep(2000);
         click(driver, searchButton, "Search");
         invisibilityOfLoader(driver);
-        Thread.sleep(3000);
+        sleep(3000);
         getPageTitle(driver, EntityListPageTitle);
         // Get list of client IDs based on environment 'BTS OR QA' and store in
         // List WebElement
@@ -254,8 +245,8 @@ public class CISPage extends CommonAction {
 
     // Verify that all main tabs having menu options are opened and page title
     // is verified
-    public CISPage verifyPagesHavingMenuOnPersonPageAreDisplayed() throws Exception {
-        Thread.sleep(3000);
+    public CISPage verifyPagesHavingMenuOnPersonPageAreDisplayed() {
+        sleep(3000);
         JavascriptExecutor executor = (JavascriptExecutor) driver;
 
         // Get list of main tabs from Excel sheet column
@@ -291,7 +282,7 @@ public class CISPage extends CommonAction {
                             executor1.executeScript("arguments[0].click();", selectedMainTab);
                             executor1.executeScript("arguments[0].click();", tabMenuOption1.get(j));
                             invisibilityOfLoader(driver);
-                            Thread.sleep(8000);
+                            sleep(8000);
                             // verifying the page title of an open window
                             verifyPageTitleForTheOpenWindow(displayedWindowTitle,
                                     oCISPageDTO.windowTitlesForSubMenuTabs.get(k) + " " + oCISPageDTO.clientNameValue,
@@ -307,7 +298,7 @@ public class CISPage extends CommonAction {
                                             + oCISPageDTO.allMenuOptions.get(k) + " window opens");
                             executor.executeScript("arguments[0].click();", tabMenuOption.get(j));
                             invisibilityOfLoader(driver);
-                            Thread.sleep(2000);
+                            sleep(2000);
                             // verifying the page title of an open window
                             verifyPageTitleForTheOpenWindow(displayedWindowTitle,
                                     oCISPageDTO.windowTitlesForSubMenuTabs.get(k) + " " + oCISPageDTO.clientNameValue,
@@ -322,14 +313,14 @@ public class CISPage extends CommonAction {
 
     // Verify that main tab not having menu options is opened and page title is
     // verified
-    public CISPage verifyPagesWithoutSubMenu() throws Exception {
+    public CISPage verifyPagesWithoutSubMenu() {
 
-        Thread.sleep(2000);
+        sleep(2000);
         // Get the list and count of all menus from excel sheet list
         for (int i = 0; i < oCISPageDTO.allMenuOptions.size(); i++) {
 
             // compare tab name with names from excel column
-            Thread.sleep(1000);
+            sleep(1000);
             if (agencyMainTab.getAttribute("innerHTML").equalsIgnoreCase(oCISPageDTO.allMenuOptions.get(i))) {
                 try {
                     // click on tab name when it matches with name from excel
@@ -339,7 +330,7 @@ public class CISPage extends CommonAction {
 
                     JavascriptExecutor executor1 = (JavascriptExecutor) driver;
                     executor1.executeScript("arguments[0].click();", agencyMainTab);
-                    Thread.sleep(2000);
+                    sleep(2000);
                     // verify the page title when the tab window opens
                     verifyPageTitleForTheOpenWindow(displayedWindowTitle,
                             oCISPageDTO.windowTitlesForSubMenuTabs.get(i) + " " + oCISPageDTO.clientNameValue,
@@ -347,6 +338,7 @@ public class CISPage extends CommonAction {
                     break;
                 } catch (Exception e) {
                     e.printStackTrace();
+                    assertTrue(false, e.getMessage());
                 }
             }
         }
@@ -355,11 +347,11 @@ public class CISPage extends CommonAction {
 
     // Verify the page title for the open window, this method is called after
     // each tab that is selected
-    public void verifyPageTitleForTheOpenWindow(WebElement tabTitleElement, String tabTitle, String tabName)
-            throws InterruptedException {
-        Thread.sleep(5000);
+    public void verifyPageTitleForTheOpenWindow(WebElement tabTitleElement, String tabTitle, String tabName) {
+        sleep(5000);
+        System.out.println("element not yet visible");
         waitForElementToLoad(driver, 10, tabTitleElement);
-
+        System.out.println("element visible");
         // verify if actual tab title matches with tab title from excel sheet
         // and log message
         if (tabTitleElement.getAttribute("innerHTML").trim().equals(tabTitle)) {
@@ -397,35 +389,35 @@ public class CISPage extends CommonAction {
         }
     }
 
-    // Quick Add organization new code
+    // Note- Quick Add organization new code
 
     // Move to Quick Add button and select Add Organization menu
-    public CISPage navigateToAddOrgPage() throws Exception {
-        Thread.sleep(2000);
+    public CISPage navigateToAddOrgPage() {
+        sleep(2000);
         ExtentReporter.logger.log(LogStatus.INFO,
                 "Click Quick Add Dropdown and  then select Add Organization. Add Organization Quick Entry window displays");
         Actions action = new Actions(driver);
         action.moveToElement(quickAdd).build().perform();
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].click();", addOrg);
-        Thread.sleep(2000);
+        sleep(2000);
         return new CISPage(driver);
     }
 
     // Move to Quick Add button and select Add Person menu
-    public CISPage navigateToAddPersonPage() throws Exception {
-        Thread.sleep(2000);
+    public CISPage navigateToAddPersonPage() {
+        sleep(2000);
         ExtentReporter.logger.log(LogStatus.INFO, "Add Organization Quick Entry window displays");
         Actions action = new Actions(driver);
         action.moveToElement(quickAdd).build().perform();
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].click();", addPerson);
-        Thread.sleep(2000);
+        sleep(2000);
         return new CISPage(driver);
     }
 
     // Add info like Org. Name, DOI, Classfication, EffectTODate in
-    public String addOrganizationInformation() throws Exception {
+    public String addOrganizationInformation() {
 
         getPageTitle(driver, AddOrganizationPageTitle);
         ExtentReporter.logger.log(LogStatus.INFO,
@@ -436,14 +428,14 @@ public class CISPage extends CommonAction {
         enterTextIn(driver, orgName, OrganizationName, "Org Name");
         enterTextIn(driver, dateOfBirth, oCISPageDTO.dateOfBirth, "DOI");
         selectDropdownByVisibleText(driver, classification, oCISPageDTO.Classification, "Classfication");
-        Thread.sleep(1000);
+        sleep(1000);
         enterTextIn(driver, effectiveToDate, oCISPageDTO.classEffctToDate, "Effective To Date");
 
         return OrganizationName;
     }
 
     // Add org address in Address section
-    public CISPage addOrgAddress() throws Exception {
+    public CISPage addOrgAddress() {
         ExtentReporter.logger.log(LogStatus.INFO, "Enter below information under Address criteria Select\n"
                 + "Country: USA Address\n Address Type: Policy Address\n Address) Line 1: Generate random number and street name City: Atlanta (zip code pop-up screen displays)"
                 + "State: GA\n County: Select any county from DDL\n Zip: Select any Zip Code from pop-up screen\n Addr. Eff From Date: Select Today's date (defaults)\n Address is entered");
@@ -457,15 +449,15 @@ public class CISPage extends CommonAction {
     }
 
     // Select zip code from pop up window and validate on parent window
-    public CISPage selectZipCode() throws Exception {
-        Thread.sleep(4000);
+    public CISPage selectZipCode() {
+        sleep(4000);
         // switch to new window using get window handle
         String parentwindow = switchToWindow(driver);
         WebElement zipCode = driver.findElement(By.xpath("//input[@value='" + oCISPageDTO.zipCode + "']"));
         // select zip code from pop up window
         clickButton(driver, zipCode, "ZipCode");
         clickButton(driver, OkButton, "OK button");
-        Thread.sleep(1000);
+        sleep(1000);
         // navigate back to parent window
         switchToParentWindowfromotherwindow(driver, parentwindow);
         // verify value in zip code field is as expected
@@ -475,7 +467,7 @@ public class CISPage extends CommonAction {
     }
 
     // Add phone number in phone section
-    public CISPage addPhoneNumber() throws Exception {
+    public CISPage addPhoneNumber() {
         ExtentReporter.logger.log(LogStatus.INFO, "Enter below information under\n"
                 + " Phone Address1-\n Phone No.Type: Enter Office Telephone\n Area Code: 770\n Phone Number: ###-#### format\n Phone number is added");
 
@@ -488,8 +480,8 @@ public class CISPage extends CommonAction {
     }
 
     // Validate that added organization is listed in searched list
-    public void searchRecentlyAddedOrganisation(String OrganizationName) throws InterruptedException {
-        Thread.sleep(2000);
+    public void searchRecentlyAddedOrganisation(String OrganizationName) {
+        sleep(2000);
         // Click Search from home tab header
         clickButton(driver, HomeSearchTab, "Search");
         invisibilityOfLoader(driver);
@@ -497,7 +489,7 @@ public class CISPage extends CommonAction {
         // Add recently added org name and search
         enterTextIn(driver, lastNameORorgName, OrganizationName, "Last/Org name");
         clickButton(driver, searchEntity, "Search");
-        Thread.sleep(20000);
+        sleep(20000);
 
         boolean flag = false;
         try {

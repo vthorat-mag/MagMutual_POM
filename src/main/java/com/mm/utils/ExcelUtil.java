@@ -50,11 +50,16 @@ public class ExcelUtil {
         return excelData;
     }
 
-    public void downloadExcel() throws Exception {
-        Thread.sleep(6000);
-        String[] executionPath = { System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\saveExcel.exe" };
-        Runtime.getRuntime().exec(executionPath).waitFor(30, TimeUnit.SECONDS);
-        Thread.sleep(12000);
+    public void downloadExcel() {
+        try {
+            Thread.sleep(6000);
+            String[] executionPath = {
+                    System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\saveExcel.exe" };
+            Runtime.getRuntime().exec(executionPath).waitFor(30, TimeUnit.SECONDS);
+            Thread.sleep(12000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void writeData(String testCaseId, String columnName, String cellValue, int rowNum, String saveDataFilePath)

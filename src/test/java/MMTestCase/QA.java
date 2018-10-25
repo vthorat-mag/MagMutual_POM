@@ -175,7 +175,7 @@ public class QA extends ExtentReporter {
         String policyNo = rateapolicypage.policyNo();
         rateapolicypage.coverageDetailSelectForCinCom().cincomFlow(policyNo)
                 .rateFunctionalityWithoutPremiumAmountVerification(policyNo).clickPreviewTab(policyNo)
-                .savePDF(testcaseFormattedID).verifyPdfContent();
+                .savePDF(testcaseFormattedID).verifyPdfContent().saveOption(policyNo);
     }
 
     // @Test(description = "Hospital Claim - Verify Change Claim Status", groups
@@ -215,7 +215,6 @@ public class QA extends ExtentReporter {
         rateapolicypage.rateFunctionality(policyNumber).clickPreviewTab(policyNumber).savePDF(testcaseFormattedID)
                 .verifyPdfContent();
         policyquotepage.saveOptionOfficial(policyNumber);
-
     }
 
     // @Test(description = "Hospital Verify Image Right", groups = { "Smoke
@@ -655,7 +654,7 @@ public class QA extends ExtentReporter {
                 String screenshotLocation = screenshotfolderpath + result.getName() + ".png";
                 ExtentReporter.logger.log(LogStatus.FAIL, ExtentReporter.logger.addScreenCapture(screenshotLocation));
                 ExtentReporter.logger.log(LogStatus.FAIL, result.getThrowable());
-                homepage.logoutFromeOasis();
+                // homepage.logoutFromeOasis();
             } catch (Exception e) {
                 System.out.println("Error in repot");
                 e.printStackTrace();
@@ -667,6 +666,7 @@ public class QA extends ExtentReporter {
         } else if (ITestResult.SKIP == result.getStatus()) {
             verdict = "Hold";
         }
+        // ExtentReporter.report.endTest(ExtentReporter.logger);
         // ExtentReporter.report.flush();
         // "Blocked", "Deferred", "Enhancement", "Error", "Fail", "Hold", "In
         // Progress", "Inconclusive", "Invalid", "Out of Scope", "Pass",
@@ -681,7 +681,6 @@ public class QA extends ExtentReporter {
         driver.quit();
     }
 
-    //
     @AfterClass(alwaysRun = true)
     public void closeBrowser() {
         /*

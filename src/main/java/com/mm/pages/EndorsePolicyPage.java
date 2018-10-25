@@ -15,10 +15,9 @@ public class EndorsePolicyPage extends CommonAction {
     WebElement Policy_tab;
 
     @FindBy(linkText = "Find Policy")
-    // link//a[@onclick='doMenuItem('PM_FIND_POLICY','~/policymgr/findPolicy.do?')']
     WebElement Find_Policy;
 
-    @FindBy(name = "policyPhaseCodeMultiSelectText") // not needed
+    @FindBy(name = "policyPhaseCodeMultiSelectText")
     WebElement Policy_Phase;
 
     @FindBy(name = "AFD_policyPhaseCode")

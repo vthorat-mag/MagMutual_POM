@@ -44,32 +44,27 @@ public class PolicySubmissionPage extends CommonAction {
 
     // Constructor to initialize driver, page elements and DTO PageObject for
     // PolicySubmissionPage
-    public PolicySubmissionPage(WebDriver driver)
-            throws IllegalArgumentException, IllegalAccessException, SecurityException {
+    public PolicySubmissionPage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
         policysubmissionpageDTO = new PolicySubmissionPageDTO(TestCaseDetails.testDataDictionary);
     }
 
     // Select Copy from Action value from Action drop down.
-    public PolicySubmissionPage copyFromPolicyActionDropDown(String policyNum) throws Exception {
-        Thread.sleep(8000);
+    public PolicySubmissionPage copyFromPolicyActionDropDown(String policyNum) {
+        sleep(8000);
         ExtentReporter.logger.log(LogStatus.INFO, "Click Policy Actions>Copy. Verify Phase is editable.");
         selectDropdownByValue(driver, policyAction, policysubmissionpageDTO.valueOfPolicyActionCopy, "Policy Action");
-        Thread.sleep(3000);
+        sleep(3000);
         // Below code is for QA env.
-
         PolicyBinderPage pbp = new PolicyBinderPage(driver);
         pbp.verifyCpatureTxnDetailsPageDisplayedOrNot(pbp.policyNo());
-
         return new PolicySubmissionPage(driver);
-
     }
 
     // Change policy phase to indication.
-    public PolicySubmissionPage changePhaseToIndicationAndAddQuoteDescription()
-            throws InterruptedException, IllegalArgumentException, IllegalAccessException, SecurityException {
-        Thread.sleep(9000);
+    public PolicySubmissionPage changePhaseToIndicationAndAddQuoteDescription() {
+        sleep(9000);
         ExtentReporter.logger.log(LogStatus.INFO,
                 "Change Policy Phase to Indication. Verify Policy is changed from Submission to Indication");
         selectDropdownByValue(driver, policyPhase, policysubmissionpageDTO.indicationPhaseValue, "Phase");
@@ -77,23 +72,23 @@ public class PolicySubmissionPage extends CommonAction {
                 "Enter " + policysubmissionpageDTO.quoteDescription + " in the Quote Description. Verify "
                         + policysubmissionpageDTO.quoteDescription + " is entered in Quote Description.");
         enterTextIn(driver, Quote_Description, policysubmissionpageDTO.quoteDescription, "Quote Description");
-        Thread.sleep(1000);
+        sleep(1000);
         return new PolicySubmissionPage(driver);
     }
 
     // Save policy / Quote as Work in progress.
-    public PolicyQuotePage saveWip() throws Exception {
+    public PolicyQuotePage saveWip() {
         clickButton(driver, saveWIP, "Save WIP");
-        Thread.sleep(2000);
+        sleep(2000);
         return new PolicyQuotePage(driver);
     }
 
     // Update policy details for a policy and change policy phase from
     // Submission to Indication.
-    public PolicyIndicationPage updatePolicyDetails() throws Exception {
-        Thread.sleep(10000);
+    public PolicyIndicationPage updatePolicyDetails() {
+        sleep(10000);
         invisibilityOfLoader(driver);
-        // getPageTitle(driver, expectedPageTitle)
+        // TODO-getPageTitle(driver, expectedPageTitle)
         // Change policy type to Indication and add organization type as
         // Hospital from DDL
         ExtentReporter.logger.log(LogStatus.INFO,
@@ -102,7 +97,7 @@ public class PolicySubmissionPage extends CommonAction {
                         + "Quote Description: Automated Test. Click Save WIP Button. Verify Indication saved as WIP");
         selectDropdownByValue(driver, Phase, policysubmissionpageDTO.policyPhase, "Phase");
         selectDropdownByValue(driver, Org_Type, policysubmissionpageDTO.organisationType, "Organisation Type");
-        Thread.sleep(2000);
+        sleep(2000);
         // Add Discovery period rating, Quote Description and save as WIP
         enterTextIn(driver, Hosp_Disc_Period_Rating, policysubmissionpageDTO.discoveryPeriodRating,
                 "Discovery_Period Rating");

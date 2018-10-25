@@ -100,7 +100,7 @@ public class CincomPage extends CommonAction {
     @FindBy(xpath = "//div[@id='CFORMCODELOVLABEL']")
     List<WebElement> manuScriptForm;
 
-    public CincomPage(WebDriver driver) throws IllegalArgumentException, IllegalAccessException, SecurityException {
+    public CincomPage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
         cincomedto = new CincomPageDTO(TestCaseDetails.testDataDictionary);
@@ -118,15 +118,15 @@ public class CincomPage extends CommonAction {
         }
         ExtentReporter.logger.log(LogStatus.INFO,
                 "Click [Optional Forms] & verify Manuscript Information window displays");
-        Thread.sleep(4000);
+        sleep(4000);
         clickButton(driver, optionalFormBtn, "Optional Form");
-        Thread.sleep(3000);
+        sleep(3000);
         invisibilityOfLoader(driver);
         switchToFrameUsingElement(driver,
                 driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
         ExtentReporter.logger.log(LogStatus.INFO, "Click [Add] & verify Add Manuscript window opens.");
         clickButton(driver, manuscriptPageAddBtn, "Manu script Add");
-        Thread.sleep(4000);
+        sleep(4000);
         invisibilityOfLoader(driver);
         switchToFrameUsingElement(driver,
                 driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
@@ -140,7 +140,7 @@ public class CincomPage extends CommonAction {
                 }
             }
             clickButton(driver, manuscriptAddListDoneBtn, "Done");
-            Thread.sleep(4000);
+            sleep(4000);
             switchToParentWindowfromframe(driver);
             switchToFrameUsingElement(driver,
                     driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
@@ -148,7 +148,7 @@ public class CincomPage extends CommonAction {
             enterTextIn(driver, addText, cincomedto.phase.get(k) + " form added.", "Aditional Text");
             ExtentReporter.logger.log(LogStatus.INFO, "Select [Save]");
             clickButton(driver, manuscriptPageSaveBtn, "Manu Script page Save");
-            Thread.sleep(4000);
+            sleep(4000);
             ExtentReporter.logger.log(LogStatus.INFO, "Select Form " + cincomedto.phase.get(k));
 
             for (int formCount = 0; formCount < manuScriptForm.size(); formCount++) {
@@ -162,14 +162,14 @@ public class CincomPage extends CommonAction {
             ExtentReporter.logger.log(LogStatus.INFO,
                     "Click the Data Entry button & verify Manuscript Information window displays");
             clickButton(driver, dataEntryBtn, "Data Entry");
-            Thread.sleep(8000);
+            sleep(8000);
             // Below AutoIT code will accept the security warning window for
             // cincom page
             String[] executionPath = {
                     System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\SecurityWindowHandle.exe" };
             Runtime.getRuntime().exec(executionPath).waitFor(30, TimeUnit.SECONDS);
             String parentWindowId = switchToWindow(driver);
-            Thread.sleep(2000);
+            sleep(2000);
             // Below code will verify if there is an error on cincom page then
             // it will close the current window and fail the test cases else it
             // will execute CINCOM page flow.
@@ -179,7 +179,7 @@ public class CincomPage extends CommonAction {
                     throw new Exception();
                 } else {
                     try {
-                        Thread.sleep(2000);
+                        sleep(2000);
                         ExtentReporter.logger.log(LogStatus.INFO, "Enter in Title_HFLHPLCHGGE: 'Automated Test CHGGE'");
                         titleHFLHPLCHGGE.clear();
                         enterTextIn(driver, titleHFLHPLCHGGE, "Automated Test CHGGE", " Cincom Title");
@@ -189,7 +189,7 @@ public class CincomPage extends CommonAction {
                                         + "\r\n" + "Adds the form \r\n" + "Enter data entry \r\n"
                                         + "Verify Bulletpoints display as entered. '");
                         clickButton(driver, freeFormCHGGEBeginChkBox, "freeFormCHGGEBeginChkBox");
-                        Thread.sleep(2000);
+                        sleep(2000);
                         CommonUtilities comUtil = new CommonUtilities();
                         ExtentReporter.logger.log(LogStatus.INFO, "Select Font Family: Arial Select Font Size: 10pt");
                         JavascriptExecutor executor = (JavascriptExecutor) driver;
@@ -208,11 +208,11 @@ public class CincomPage extends CommonAction {
                         if (chkspellpopupvalue == true) {
                             do {
                                 clickButton(driver, ignoreAllBtn, "Ignore All");
-                                Thread.sleep(2000);
+                                sleep(2000);
                                 clickButton(driver, DelOptions, "Delivery Options");
                             } while (verifyCheckSpellingPopup() == true);
                         }
-                        Thread.sleep(2000);
+                        sleep(2000);
                         ExtentReporter.logger.log(LogStatus.INFO,
                                 "Click [Deliver] Exit out of window  & Return code: 0 message appears, Exit out of window.");
                         clickButton(driver, deliverBtn, "deliver button");
@@ -224,12 +224,11 @@ public class CincomPage extends CommonAction {
                         switchToParentWindowfromotherwindow(driver, parentWindowId);
                         switchToFrameUsingElement(driver,
                                 driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
-                        Thread.sleep(2000);
+                        sleep(2000);
                         clickButton(driver, manuscriptPageCloseBtn, "Manu Script page Close");
-                        Thread.sleep(5000);
+                        sleep(5000);
                         switchToParentWindowfromframe(driver);
                         Assert.assertTrue(false, "Error while performing action on Cincom Page.");
-                        // driver.close();
                     }
                 }
             } catch (Exception e) {
@@ -238,12 +237,11 @@ public class CincomPage extends CommonAction {
                 switchToParentWindowfromotherwindow(driver, parentWindowId);
                 switchToFrameUsingElement(driver,
                         driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
-                Thread.sleep(2000);
+                sleep(2000);
                 clickButton(driver, manuscriptPageCloseBtn, "Manu Script page Close");
-                Thread.sleep(5000);
+                sleep(5000);
                 switchToParentWindowfromframe(driver);
                 Assert.assertTrue(false, "Error while opening Cincom Page.");
-                // driver.close();
             }
 
             switchToParentWindowfromotherwindow(driver, parentWindowId);
@@ -251,7 +249,7 @@ public class CincomPage extends CommonAction {
                     driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
 
             clickButton(driver, manuscriptPageSaveBtn, "Manu Script page Save");
-            Thread.sleep(2000);
+            sleep(2000);
             clickButton(driver, manuscriptPageCloseBtn, "Manu Script page Close");
             switchToParentWindowfromframe(driver);
             break;

@@ -27,31 +27,39 @@ public class PDFReader extends CommonAction {
     String ExcelPath = System.getProperty("user.dir") + "\\src\\main\\resources\\Form_Data.xlsx";
 
     // AUTOIT script execution to save PDF.
-    public PDFReader savePDF(String FileName) throws Exception {
+    public PDFReader savePDF(String FileName) {
         // invisibilityOfLoader(driver);
-        Thread.sleep(6000);
+        sleep(6000);
         ExtentReporter.logger.log(LogStatus.INFO,
                 "Click the Save button on the PDF to save the results & verify PDF is saved");
         String[] savePDFPath = {
                 System.getProperty("user.dir") + "\\src\\main\\resources\\StoredPDF\\pdfDocument.pdf" };
         String[] executionPath = { System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\savePdf.exe" };
-        Runtime.getRuntime().exec(executionPath).waitFor(20, TimeUnit.SECONDS);
-        if (copyPDFFile(FileName).equals("false")) {
-            switchToParentWindowfromframe(driver);
-            Process processkillpdf = Runtime.getRuntime()
-                    .exec("TASKKILL /F /FI \"USERNAME eq " + System.getProperty("user.name") + "\" /IM savePdf.exe");
-            PolicyQuotePage pqp = new PolicyQuotePage(driver);
-            PolicyBinderPage policyBinderPage = new PolicyBinderPage(driver);
-            pqp.clickPreviewTab(policyBinderPage.policyNo());
+        try {
             Runtime.getRuntime().exec(executionPath).waitFor(20, TimeUnit.SECONDS);
-            copyPDFFile(FileName);
-        } else {
-            if (isAlertPresent(driver) == false) {
-                ExtentReporter.logger.log(LogStatus.INFO, "Alert[Optional] is NOT present.");
+            if (copyPDFFile(FileName).equals("false")) {
+                switchToParentWindowfromframe(driver);
+                Process processkillpdf = Runtime.getRuntime().exec(
+                        "TASKKILL /F /FI \"USERNAME eq " + System.getProperty("user.name") + "\" /IM savePdf.exe");
+                PolicyQuotePage pqp = new PolicyQuotePage(driver);
+                PolicyBinderPage policyBinderPage = new PolicyBinderPage(driver);
+                pqp.clickPreviewTab(policyBinderPage.policyNo());
+                Runtime.getRuntime().exec(executionPath).waitFor(20, TimeUnit.SECONDS);
+                isAlertPresent(driver);
+                copyPDFFile(FileName);
+            } else {
+                if (isAlertPresent(driver) == false) {
+                    ExtentReporter.logger.log(LogStatus.INFO, "Alert[Optional] is NOT present.");
+                }
+                sleep(5000);
+                // switchToParentWindowfromframe(driver);
             }
-            Thread.sleep(5000);
-            switchToParentWindowfromframe(driver);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExtentReporter.logger.log(LogStatus.FAIL, e.getMessage());
         }
+        sleep(2000);
+        switchToParentWindowfromframe(driver);
         return new PDFReader(driver);
     }
 
@@ -63,7 +71,7 @@ public class PDFReader extends CommonAction {
 
     // Logic to verify PDF content.
     public PolicyBinderPage verifyPdfContent() throws Exception {
-        Thread.sleep(15000);
+        sleep(15000);
         // getPageTitle(driver, "Policy Folder "+PolicyNo);
         boolean flag = false;
         PDFTextStripper pdfStripper = null;

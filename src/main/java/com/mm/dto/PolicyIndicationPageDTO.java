@@ -38,7 +38,7 @@ public class PolicyIndicationPageDTO {
 
     // This method will access DTO Code.
     public PolicyIndicationPageDTO(Map<String, List<String>> excelData)
-            throws IllegalArgumentException, IllegalAccessException, SecurityException {
+    /* throws IllegalArgumentException, IllegalAccessException, SecurityException */ {
 
         for (int i = 0; i <= PolicyIndicationPageDTO.class.getFields().length - 1; i++) {
             if (excelData.containsKey(PolicyIndicationPageDTO.class.getFields()[i].getName().toLowerCase())) {

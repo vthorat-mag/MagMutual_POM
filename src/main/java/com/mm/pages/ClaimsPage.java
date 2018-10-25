@@ -46,7 +46,7 @@ public class ClaimsPage extends CommonAction {
     WebElement Search_btn;
 
     @FindBy(xpath = "//span[@id='CCLAIMNO']") // QA
-                                              // "//span[@id='findPolicyListGrid_CPOLICYNO_0_HREF'
+    // "//span[@id='findPolicyListGrid_CPOLICYNO_0_HREF'
     WebElement policyList;
 
     @FindBy(name = "claim_claimStatusDate")
@@ -265,7 +265,7 @@ public class ClaimsPage extends CommonAction {
 
     // Constructor to initialize driver, page elements and DTO PageObject for
     // Claims Page.
-    public ClaimsPage(WebDriver driver) throws Exception {
+    public ClaimsPage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
         claimsdto = new ClaimsDTO(TestCaseDetails.testDataDictionary);
@@ -315,18 +315,12 @@ public class ClaimsPage extends CommonAction {
                 }
                 counter++;
             } while (counter < 3);
-            /*
-             * String alertText= getAlertText(driver);
-             * verifySaveAlertMessage(alertText,claimsdto.claimNum,claimsdto.
-             * transactionAmount.get(i),claimsdto.transactionType.get(i));
-             */
             // close Add transaction window
             closeAddTransactionWindow();
             switchToParentWindowfromframe(driver);
             ExtentReporter.logger.log(LogStatus.INFO,
                     "Verify Message window closes and transaction is listed at the top of the Transaction list");
             Thread.sleep(2000);
-            // switchToParentWindowfromframe(driver);
             visibilityOfElement(driver, transactionListTitle, "Transaction List");
             // verify transaction is listed at the top of transaction list
             ExtentReporter.logger.log(LogStatus.INFO, "Transactions display as entered in the Transaction List.");
@@ -334,7 +328,7 @@ public class ClaimsPage extends CommonAction {
         }
     }
 
-    // Method wll add details while creating transaction.
+    // Method will add details while creating transaction.
     private String addTransactionDetails(String txnType, String payType, String vendorId, String taxId, String amount,
             int invoiceNoCount) throws Exception {
         String Empty = "";
@@ -378,41 +372,6 @@ public class ClaimsPage extends CommonAction {
         clickButton(driver, closeTransactionBtn, "Close");
         Thread.sleep(4000);
     }
-
-    /*
-     * //Verify added transaction is available at the top of Transaction List.
-     * public void verifyAddedTransactionIsListedInTransactionList(String
-     * InvoiceNum) throws Exception {
-     * 
-     * boolean flag = false; try { //i represents transaction list index, so
-     * value of i remains zero as we need to verify top most transaction from
-     * the list always. int i =0; //Get the size of transaction types from excel
-     * sheet for (int j = 0; j < claimsdto.transactionType.size(); j++) {
-     * //Compare column values Trans type and Trans Amount from transaction list
-     * with excel sheet values
-     * 
-     * if
-     * (transTypeFromTransList.get(i).getAttribute("innerHTML").trim().equals(
-     * claimsdto.transactionType.get(j)) &&
-     * transAmountFromTransList.get(i).getAttribute("innerHTML").trim().equals(
-     * "$" + claimsdto.transactionAmount.get(j))) { //Compare column values
-     * CISpayeeName and invoice number from transaction list with excel sheet
-     * values if
-     * (CISpayeeNameFromTransList.get(i).getAttribute("innerHTML").trim().
-     * contains(claimsdto.payeeName.get(j).trim()) &&
-     * invoiceNumFromTransactionList.get(i).getAttribute("innerHTML").trim().
-     * equals(InvoiceNum)) { //if all the transaction values are correct, set
-     * flag to true ExtentReporter.logger.log(LogStatus.PASS,
-     * "Transaction invoice no. " + InvoiceNum +
-     * " is listed in Transaction list."); flag = true; break; } } }
-     * if(flag==false) throw new Exception(); } catch (Exception e) { //Log
-     * status as failed in report and stop execution
-     * ExtentReporter.logger.log(LogStatus.FAIL, "Transaction invoice no. "
-     * +InvoiceNum+" is Not available at top of Transaction list OR  it is incorrect."
-     * ); Assert.assertTrue(false,"\nTransaction invoice no. "
-     * +InvoiceNum+" is Not available at top of Transaction list OR  it is incorrect."
-     * ); } }
-     */
 
     // Verify added transaction is available at the top of Transaction List.
     public void verifyAddedTransactionIsListedInTransactionList(String InvoiceNum) throws Exception {
@@ -543,9 +502,9 @@ public class ClaimsPage extends CommonAction {
         // required in case when application is down.
         // ****************
         /*
-         * switchToParentWindowfromframe(driver);
-         * switchToFrameUsingElement(driver, changeFileStatusFrameEle);
-         * click(driver, closeSymbolOnChagneStatusPopup, "Close");
+         * switchToParentWindowfromframe(driver); switchToFrameUsingElement(driver,
+         * changeFileStatusFrameEle); click(driver, closeSymbolOnChagneStatusPopup,
+         * "Close");
          */
         // *****************************
 
@@ -589,16 +548,15 @@ public class ClaimsPage extends CommonAction {
         clickButton(driver, selectEntityChkBox, "Select Entity Check Box");
         Thread.sleep(2000);
         clickButton(driver, selectBtnOnEntitySelectListPage, "Entity Select List Page's Select");
-        Thread.sleep(1000);
-        if (switchToParentWindowfromotherwindow(driver, parentWindowId).equals("false"))
-        {
-            //This assert to added to fail the test if switch did not work
-            //because test is halted and never failed or progressed.
+        Thread.sleep(2000);
+        if (switchToParentWindowfromotherwindow(driver, parentWindowId).equals("false")) {
+            // This assert to added to fail the test if switch does not work
+            // because test is halted and never failed or progressed.
             assertTrue(false);
         }
         Thread.sleep(3000);
         getPageTitle(driver, "Add File");
-       
+
         // Assert.assertEquals(patientSelectedValue.getAttribute("value").trim(),
         // ClaimsDTO.lastName + ", " + ClaimsDTO.firstName + ",", "Patient
         // selected is NOT displayed correctly");
@@ -628,7 +586,7 @@ public class ClaimsPage extends CommonAction {
         ExtentReporter.logger.log(LogStatus.INFO, "Click the magnifying glass next to insured");
         clickButton(driver, insuredSearchIcon, "Insured Search Icon");
         String parentWindowIdSearchEntity = switchToWindow(driver);
-        String searchEntityTitle = getPageTitle(driver, ClaimsDTO.searchEntityPageTitle);
+        getPageTitle(driver, ClaimsDTO.searchEntityPageTitle);
         ExtentReporter.logger.log(LogStatus.INFO,
                 "In the search screen enter the client id that was noted in step 5 Click [Search]");
         Thread.sleep(2000);
@@ -646,7 +604,7 @@ public class ClaimsPage extends CommonAction {
         Thread.sleep(4000);
         switchToParentWindowfromotherwindow(driver, parentWindowIdSearchEntity);
         invisibilityOfLoader(driver);
-        Thread.sleep(6000);
+        Thread.sleep(5000);
         ExtentReporter.logger.log(LogStatus.INFO,
                 "In the filter criteria section, click the Policy No dropdown and Select [Policy number entered in step 3]");
         selectDropdownByValue(driver, policyNoDDL, claimsdto.policyNum, "Policy Number");
