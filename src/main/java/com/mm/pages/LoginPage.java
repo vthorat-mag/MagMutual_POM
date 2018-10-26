@@ -27,19 +27,19 @@ public class LoginPage extends CommonAction {
     WebElement loginBtn;
 
     // Constructor to initialize elements on Login page.
-    public LoginPage(WebDriver driver) throws IllegalArgumentException, IllegalAccessException, SecurityException {
+    public LoginPage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
 
     }
 
     // Code to login to eOasis application.
-    public HomePage loginToeOasis(String UserName, String PassWord) throws Exception {
+    public HomePage loginToeOasis(String UserName, String PassWord) {
         ExcelUtil exlutil = new ExcelUtil();
         // driver.get("http://oasiscloud2017t:8081/oas17bts/CS/login.jsp");
         driver.get("http://172.18.1.107:9080/magsoasisqa/CS/login.jsp");
         ExtentReporter.logger.log(LogStatus.INFO,
-                "Accessing the URL - http://oasiscloud2017t:8081/oas17bts/CS/login.jsp");
+                "Accessing the URL - http://172.18.1.107:9080/magsoasisqa/CS/login.jsp");
         driver.manage().deleteAllCookies();
         driver.manage().window().maximize();
         ExtentReporter.logger.log(LogStatus.PASS,
@@ -53,7 +53,7 @@ public class LoginPage extends CommonAction {
 
         // Entering Password.
         try {
-            Thread.sleep(1000);
+            sleep(1000);
             enterTextIn(driver, password, PassWord, "Password");
         } catch (Exception e) {
             ExtentReporter.logger.log(LogStatus.FAIL, " Error while entering data into password field.");

@@ -372,7 +372,7 @@ public class PolicyIndicationPage extends CommonAction {
         return new PolicyIndicationPage(driver);
     }
 
-    public PolicyIndicationPage add_UnderwriterForQA(String policyNo) throws Exception {
+    public PolicyIndicationPage add_UnderwriterForQA(String policyNo) {
 
         WebElement iframeEle1 = driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]"));
         switchToFrameUsingElement(driver, iframeEle1);
@@ -1178,27 +1178,32 @@ public class PolicyIndicationPage extends CommonAction {
     }
 
     // Get the next day of the due date column from exported excel sheet
-    public String nextYearOfCurrentDate() throws Exception {
+    public String nextYearOfCurrentDate() {
 
         CommonUtilities comUtil = new CommonUtilities();
         String currentSystemDate = comUtil.getSystemDatemm_dd_yyyy();
-
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-        Date date = formatter.parse(currentSystemDate);
-        sleep(1000);
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        c.add(Calendar.YEAR, 1);
-        sleep(1000);
-        Date d = c.getTime();
-        System.out.println("dueDate= " + currentSystemDate);
-        String nextYear = formatter.format(d);
-        System.out.println("nextDay= " + nextYear);
+        String nextYear = "";
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+            Date date = formatter.parse(currentSystemDate);
+            sleep(1000);
+            Calendar c = Calendar.getInstance();
+            c.setTime(date);
+            c.add(Calendar.YEAR, 1);
+            sleep(1000);
+            Date d = c.getTime();
+            System.out.println("dueDate= " + currentSystemDate);
+            nextYear = formatter.format(d);
+            System.out.println("nextDay= " + nextYear);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExtentReporter.logger.log(LogStatus.INFO, "Error while getting due date from data sheet");
+        }
         return nextYear;
     }
 
     // Add retro date from Eff Date column
-    public PolicyIndicationPage addRetroactiveDate(String riskTypeValue) throws Exception {
+    public PolicyIndicationPage addRetroactiveDate(String riskTypeValue) {
         sleep(3000);
         // Get the system current date
         CommonUtilities comUtil = new CommonUtilities();

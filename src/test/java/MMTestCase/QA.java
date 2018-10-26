@@ -142,7 +142,7 @@ public class QA extends ExtentReporter {
     // @Test(description = "Rate a policy that existed before the change or
     // deployment to confirm it still displays as expected", groups = {
     // "Smoke Test" }, priority = 0)
-    public void TC42239() throws Exception {
+    public void TC42239() {
         LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
         LoginPage loginpage = new LoginPage(driver);
         RateApolicyPage rateapolicyPage = new RateApolicyPage(driver);
@@ -157,7 +157,7 @@ public class QA extends ExtentReporter {
     // + "Search an entity/person\r\n"
     // + "Navigate through the CIS screens", groups = { "Smoke Test" }, priority
     // = 2)
-    public void TC42253() throws Exception {
+    public void TC42253() {
         LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
         LoginPage loginpage = new LoginPage(driver);
         loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToCISPage().searchAndSelectAClientName()
@@ -166,7 +166,7 @@ public class QA extends ExtentReporter {
 
     // @Test(description = "Hospital Verify Interactive Form", groups = { "Smoke
     // Test" }, priority = 10)
-    public void TC42247() throws Exception {
+    public void TC42247() {
         LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
         LoginPage loginpage = new LoginPage(driver);
         RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
@@ -180,7 +180,7 @@ public class QA extends ExtentReporter {
 
     // @Test(description = "Hospital Claim - Verify Change Claim Status", groups
     // = { "Smoke Test" }, priority = 12)
-    public void TC42405() throws Exception {
+    public void TC42405() {
         LoginPage loginpage = new LoginPage(driver);
         LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
         RateApolicyPage rateapolicyPage = new RateApolicyPage(driver);
@@ -192,7 +192,7 @@ public class QA extends ExtentReporter {
 
     // @Test(description = "Claims - Enter Transactions", groups = { "Smoke
     // Test" },priority = 13)
-    public void TC42252() throws Exception {
+    public void TC42252() {
         LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
         LoginPage loginpage = new LoginPage(driver);
         loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToClaimsPageFromHomePageLink().searchClaim()
@@ -201,7 +201,7 @@ public class QA extends ExtentReporter {
 
     // @Test(description = "Verify Hospital Preview Forms", groups = { "Smoke
     // Test" }, priority = 14)
-    public void TC42240() throws Exception {
+    public void TC42240() {
         RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
         LoginPageDTO lpDTO;
         LoginPage loginpage;
@@ -219,7 +219,7 @@ public class QA extends ExtentReporter {
 
     // @Test(description = "Hospital Verify Image Right", groups = { "Smoke
     // Test" }, priority = 16)
-    public void TC42243() throws Exception {
+    public void TC42243() {
         LoginPageDTO lpDTO;
         LoginPage loginpage;
         FindPolicyPage findapolicypage = new FindPolicyPage(driver);
@@ -234,7 +234,7 @@ public class QA extends ExtentReporter {
 
     // @Test(description = "FM - Hospital Verify FM Installment", groups = {
     // "BTS Smoke Test" }, priority = 17)
-    public void TC42246() throws Exception {
+    public void TC42246() {
         LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
         LoginPage loginpage = new LoginPage(driver);
         HomePage homePage = new HomePage(driver);
@@ -271,7 +271,7 @@ public class QA extends ExtentReporter {
 
     // @Test(description = "Hospital Renewal", groups = { "Smoke Test" },
     // priority = 18)
-    public void TC42400() throws Exception {
+    public void TC42400() {
         LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
         LoginPage loginpage = new LoginPage(driver);
         PolicyQuotePage policyQuotePage = new PolicyQuotePage(driver);
@@ -290,7 +290,7 @@ public class QA extends ExtentReporter {
 
     // @Test(description = "FM - Verify that user can create an account in FM",
     // groups = { "Smoke Test" })
-    public void TC42251() throws Exception {
+    public void TC42251() {
 
         LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
         LoginPage loginpage = new LoginPage(driver);
@@ -302,7 +302,7 @@ public class QA extends ExtentReporter {
     // @Test(description = "Claims - Verify that user is allowed to change
     // Billing Parameter for an Existing Account", groups = {
     // "Smoke Test" }, priority = 20)
-    public void TC42403() throws Exception {
+    public void TC42403() {
         LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
         LoginPage loginpage = new LoginPage(driver);
         loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToFinancePageFromHeaderLink()
@@ -312,7 +312,7 @@ public class QA extends ExtentReporter {
 
     // @Test(description = "Hospital - Add multiple risks", groups = { "BTS Smoke
     // Test" }, priority = 21)
-    public void TC42244() throws Exception {
+    public void TC42244() {
         String Blank = "";
         LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
         LoginPage loginpage = new LoginPage(driver);
@@ -359,12 +359,12 @@ public class QA extends ExtentReporter {
     // *******************************QA Test Cases******************************
 
     @Test(description = "QA Hospital Rate", groups = { "QA Smoke Test" }, priority = 0)
-    public void TC43778() throws Exception {
+    public void TC43778() {
         TC42239();
     }
 
     @Test(description = "QA Hospital Verify Add Organization", groups = { "QA Smoke Test" }, priority = 1)
-    public void TC43767() throws Exception {
+    public void TC43767() {
         LoginPage loginpage = new LoginPage(driver);
         LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
         ExcelUtil exlUtil = new ExcelUtil();
@@ -376,12 +376,12 @@ public class QA extends ExtentReporter {
     }
 
     @Test(description = "QA Verify CIS Page Displays", groups = { "QA Smoke Test" }, priority = 2)
-    public void TC43766() throws Exception {
+    public void TC43766() {
         TC42253();
     }
 
     @Test(description = "QA Hospital Indication", groups = { "QA Smoke Test" }, priority = 3)
-    public void TC43768() throws Exception {
+    public void TC43768() {
         String Empty = "";
         LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
         LoginPage loginpage = new LoginPage(driver);
@@ -402,7 +402,7 @@ public class QA extends ExtentReporter {
                 .selectCoverageTab().selectAddCoverageButton()
                 .selectCoverageFromPopupListAddDatePremium(indicationPageDTO.retroDate.get(0)).closeAddCoverageWindow()
                 .selectCoverageFromGridList().addCoverageClass();
-        Thread.sleep(10000);
+        sleep(10000);
         String PolicyNo = policyindicationpage.policyNo();
         policyindicationpage.coverageUpdates(PolicyNo).openLimitSharingTab(PolicyNo).addSharedGroup(PolicyNo)
                 .closeLimitSharingtab().rateFunctionality(PolicyNo);
@@ -412,7 +412,7 @@ public class QA extends ExtentReporter {
     }
 
     @Test(description = "QA Hospital Quote", groups = { "QA Smoke Test" }, priority = 4)
-    public void TC43769() throws Exception {
+    public void TC43769() {
         LoginPageDTO lpDTO;
         LoginPage loginpage;
         RateApolicyPage rateapolicyPage = new RateApolicyPage(driver);
@@ -433,7 +433,7 @@ public class QA extends ExtentReporter {
 
     // latest back up policy search - error
     @Test(description = "QA Hospital Binder", groups = { "QA Smoke Test" }, priority = 5)
-    public void TC43770() throws Exception {
+    public void TC43770() {
         LoginPageDTO lpDTO;
         LoginPage loginpage;
         ExcelUtil exlUtil = new ExcelUtil();
@@ -454,7 +454,7 @@ public class QA extends ExtentReporter {
 
     // latest back up policy search done
     @Test(description = "QA Hospital Issue Policy Forms", groups = { "QA Smoke Test" }, priority = 6)
-    public void TC43771() throws Exception {
+    public void TC43771() {
         LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
         PolicyQuotePageDTO policyquotepagedto = new PolicyQuotePageDTO(TestCaseDetails.testDataDictionary);
         LoginPage loginpage = new LoginPage(driver);
@@ -480,22 +480,22 @@ public class QA extends ExtentReporter {
     // TODO-latest search
     @Test(description = "QA FM - Hospital Verify On Demand Invoice, Create Batch and Post Batch", groups = {
             "QA Smoke Test" }, priority = 7)
-    public void TC43783() throws Exception {
+    public void TC43783() {
         String Empty = "";
         LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
         LoginPage loginpage = new LoginPage(driver);
         FinancePageDTO financePageDTO = new FinancePageDTO(TestCaseDetails.testDataDictionary);
         ExcelUtil exlUtil = new ExcelUtil();
         loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToFinanceHomePage()
-                .searchPolicyOnFinanceHomePage().openFirstAccount().onDemandInvoice().exportExcelSheet("SampleFile")
-                .getInvoiceAmountFromExcel().cashEntry().batchFunction().validateBatch().postBatchFunctionality()
-                .donwloadFinalSheetBySearchingAccountNo();
+                .searchPolicyOnFinanceHomePage().openFirstAccount().onDemandInvoice()
+                .exportExcelSheet("OnDemandInvoiceCredit").getInvoiceAmountFromExcel().cashEntry().batchFunction()
+                .validateBatch().postBatchFunctionality().donwloadFinalSheetBySearchingAccountNo();
         exlUtil.writeData("TC44219", "PolicyNum", financePageDTO.policyNum, 1, ExcelPath);
     }
 
     // TODO-latest search
     @Test(description = "FM - Hospital Verify Credit Applications", groups = { "QA Smoke Test" }, priority = 8)
-    public void TC44219() throws Exception {
+    public void TC44219() {
         // To reuse canceled UMBPL -reinstate the UMB PL coverage by selecting
         // the coverage UMB PL
         // and click Policy Actions>Reinstate, then click rate and then save as
@@ -513,10 +513,11 @@ public class QA extends ExtentReporter {
         financepage.savePolicyAsofficial().navigateToFinancePageFromHeaderLink().searchPolicyOnFinanceHomePage()
                 .openFirstAccount().downloadExcel(financePageDTO.CancelledCoverageTransactionFileName)
                 .receivableDownloaWithoutNavigationForQA(financePageDTO.CreditInstallmentAfterFileName);
+
     }
 
     @Test(description = "QA Hospital Verify Attach Form", groups = { "QA Smoke Test" }, priority = 9)
-    public void TC43773() throws Exception {
+    public void TC43773() {
         LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
         LoginPage loginpage = new LoginPage(driver);
         ExcelUtil exlUtil = new ExcelUtil();
@@ -532,15 +533,13 @@ public class QA extends ExtentReporter {
                 .verifyPdfContent();
     }
 
-    // Note- updated script to select Form CHGGE before Data Entry action and
-    // for cincom.
     @Test(description = "QA Hospital Verify Interactive Form", groups = { "QA Smoke Test" }, priority = 10)
-    public void TC43774() throws Exception {
+    public void TC43774() {
         TC42247();
     }
 
     @Test(description = "QA Hospital Create Claim", groups = { "QA Smoke Test" }, priority = 11)
-    public void TC43776() throws Exception {
+    public void TC43776() {
         LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
         RateAPolicyPageDTO rpdto = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
         LoginPage loginpage = new LoginPage(driver);
@@ -558,23 +557,23 @@ public class QA extends ExtentReporter {
 
     // Known issue.- It needs special user privilege to change policy status.
     @Test(description = "QA Hospital Claim - Verify Change Claim Status", groups = { "QA Smoke Test" }, priority = 22)
-    public void TC43784() throws Exception {
+    public void TC43784() {
         TC42405();
     }
 
     @Test(description = "QA Claims - Enter Transactions", groups = { "QA Smoke Test" }, priority = 13)
-    public void TC43782() throws Exception {
+    public void TC43782() {
         TC42252();
     }
 
     // Search policy done.
     @Test(description = "QA Verify Hospital Preview Forms", groups = { "QA Smoke Test" }, priority = 14)
-    public void TC43775() throws Exception {
+    public void TC43775() {
         TC42240();
     }
 
     @Test(description = "QA Hospital Copy to Quote", groups = { "QA Smoke Test" }, priority = 15)
-    public void TC43781() throws Exception {
+    public void TC43781() {
         ExcelUtil exlUtil = new ExcelUtil();
         LoginPageDTO lpDTO;
         LoginPage loginpage;
@@ -610,36 +609,36 @@ public class QA extends ExtentReporter {
     }
 
     @Test(description = "QA Hospital Verify Image Right", groups = { "QA Smoke Test" }, priority = 16)
-    public void TC43780() throws Exception {
+    public void TC43780() {
         TC42243();
     }
 
     @Test(description = "QA FM - Hospital Verify FM Installment", groups = { "QA Smoke Test" }, priority = 17)
-    public void TC44218() throws Exception {
+    public void TC44218() {
         TC42246();
     }
 
     // latest back up policy search done
     @Test(description = "QA Hospital Renewal", groups = { "QA Smoke Test" }, priority = 18)
-    public void TC43777() throws Exception {
+    public void TC43777() {
         TC42400();
     }
 
     @Test(description = "QA FM - Verify that user can create an account in FM", groups = {
             "QA Smoke Test" }, priority = 19)
-    public void TC44217() throws Exception {
+    public void TC44217() {
         TC42251();
     }
 
     @Test(description = "QA FM Hospital - Change Billing Parameter for an Existing Account", groups = {
             "QA Smoke Test" }, priority = 20)
-    public void TC44216() throws Exception {
+    public void TC44216() {
         TC42403();
     }
 
     // @Test(description = "Hospital - Add multiple risks", groups = { "QA Smoke
     // Test" }, priority = 21)
-    public void TC44643() throws Exception {
+    public void TC44643() {
         TC42244();
     }
 
@@ -662,7 +661,7 @@ public class QA extends ExtentReporter {
 
         } else if (ITestResult.SUCCESS == result.getStatus()) {
             verdict = "Pass";
-            homepage.logoutFromeOasis();
+            // homepage.logoutFromeOasis();
         } else if (ITestResult.SKIP == result.getStatus()) {
             verdict = "Hold";
         }
@@ -677,8 +676,8 @@ public class QA extends ExtentReporter {
         iR.updateResultsInRally(serverURL, username, password, workspace, project, testcaseFormattedID.toUpperCase(),
                 buildNumber, notes, userRef, duration, verdict, ExtentReporter.excelPath);
 
-        Thread.sleep(2000);
-        driver.quit();
+        sleep(2000);
+        // driver.quit();
     }
 
     @AfterClass(alwaysRun = true)
@@ -691,7 +690,7 @@ public class QA extends ExtentReporter {
         ExtentReporter.report.flush();
         ExtentReporter.report.close();
         if (driver != null) {
-            driver.quit();
+            // driver.quit();
         }
     }
 }

@@ -32,8 +32,6 @@ public class PDFReader extends CommonAction {
         sleep(6000);
         ExtentReporter.logger.log(LogStatus.INFO,
                 "Click the Save button on the PDF to save the results & verify PDF is saved");
-        String[] savePDFPath = {
-                System.getProperty("user.dir") + "\\src\\main\\resources\\StoredPDF\\pdfDocument.pdf" };
         String[] executionPath = { System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\savePdf.exe" };
         try {
             Runtime.getRuntime().exec(executionPath).waitFor(20, TimeUnit.SECONDS);
@@ -52,7 +50,6 @@ public class PDFReader extends CommonAction {
                     ExtentReporter.logger.log(LogStatus.INFO, "Alert[Optional] is NOT present.");
                 }
                 sleep(5000);
-                // switchToParentWindowfromframe(driver);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -70,53 +67,57 @@ public class PDFReader extends CommonAction {
     }
 
     // Logic to verify PDF content.
-    public PolicyBinderPage verifyPdfContent() throws Exception {
+    public PolicyBinderPage verifyPdfContent() {
         sleep(15000);
-        // getPageTitle(driver, "Policy Folder "+PolicyNo);
-        boolean flag = false;
-        PDFTextStripper pdfStripper = null;
-        PDDocument pdDoc = null;
-        COSDocument cosDoc = null;
-        String parsedText = null;
-        int noOfPDFPages = 0;
-
         try {
-            File file = new File("C:\\savePDF\\verifyPDF.pdf");
-            pdDoc = PDDocument.load(file);
-            noOfPDFPages = pdDoc.getNumberOfPages();
-            pdfStripper = new PDFTextStripper();
-            parsedText = pdfStripper.getText(pdDoc);
-        } catch (MalformedURLException e2) {
-            System.err.println("URL string could not be parsed " + e2.getMessage());
-        } catch (IOException e) {
-            System.err.println("Unable to open PDF Parser. " + e.getMessage());
+            // getPageTitle(driver, "Policy Folder "+PolicyNo);
+            boolean flag = false;
+            PDFTextStripper pdfStripper = null;
+            PDDocument pdDoc = null;
+            COSDocument cosDoc = null;
+            String parsedText = null;
+            int noOfPDFPages = 0;
+
             try {
-                if (cosDoc != null)
-                    cosDoc.close();
-                if (pdDoc != null)
-                    pdDoc.close();
-            } catch (Exception e1) {
-                e.printStackTrace();
+                File file = new File("C:\\savePDF\\verifyPDF.pdf");
+                pdDoc = PDDocument.load(file);
+                noOfPDFPages = pdDoc.getNumberOfPages();
+                pdfStripper = new PDFTextStripper();
+                parsedText = pdfStripper.getText(pdDoc);
+            } catch (MalformedURLException e2) {
+                System.err.println("URL string could not be parsed " + e2.getMessage());
+            } catch (IOException e) {
+                System.err.println("Unable to open PDF Parser. " + e.getMessage());
+                try {
+                    if (cosDoc != null)
+                        cosDoc.close();
+                    if (pdDoc != null)
+                        pdDoc.close();
+                } catch (Exception e1) {
+                    e.printStackTrace();
+                }
             }
-        }
-        for (i = 0; i < pdfreaderdto.verifyPDFcontent.size(); i++) {
-            try {
-                if (pdfreaderdto.verifyPDFcontent.get(i).equals(Blank)) {
-                    break;
-                } else if (parsedText.toLowerCase().contains(pdfreaderdto.verifyPDFcontent.get(i).toLowerCase())) {
-                    ExtentReporter.logger.log(LogStatus.PASS,
-                            "PDF displays value- '" + pdfreaderdto.verifyPDFcontent.get(i) + "'.");
-                } else {
+            for (i = 0; i < pdfreaderdto.verifyPDFcontent.size(); i++) {
+                try {
+                    if (pdfreaderdto.verifyPDFcontent.get(i).equals(Blank)) {
+                        break;
+                    } else if (parsedText.toLowerCase().contains(pdfreaderdto.verifyPDFcontent.get(i).toLowerCase())) {
+                        ExtentReporter.logger.log(LogStatus.PASS,
+                                "PDF displays value- '" + pdfreaderdto.verifyPDFcontent.get(i) + "'.");
+                    } else {
+                        ExtentReporter.logger.log(LogStatus.FAIL,
+                                pdfreaderdto.verifyPDFcontent.get(i) + " - value  is not present in PDF.");
+                        Reporter.getCurrentTestResult().setStatus(ITestResult.FAILURE);
+                    }
+                } catch (Exception e) {
                     ExtentReporter.logger.log(LogStatus.FAIL,
                             pdfreaderdto.verifyPDFcontent.get(i) + " - value  is not present in PDF.");
-                    Reporter.getCurrentTestResult().setStatus(ITestResult.FAILURE);
                 }
-            } catch (Exception e) {
-                ExtentReporter.logger.log(LogStatus.FAIL,
-                        pdfreaderdto.verifyPDFcontent.get(i) + " - value  is not present in PDF.");
             }
+            pdDoc.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        pdDoc.close();
         switchToParentWindowfromframe(driver);
         return new PolicyBinderPage(driver);
     }

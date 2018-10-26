@@ -7,7 +7,6 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import org.openqa.selenium.Alert;
@@ -410,7 +409,7 @@ public class RateApolicyPage extends CommonAction {
         return new RateApolicyPage(driver);
     }
 
-    public RateApolicyPage searchPolicyRateAPolicyPage() throws Exception {
+    public RateApolicyPage searchPolicyRateAPolicyPage() {
         if (searchPolicy(rateApolicyPageDTO.policyNum).equals("false")) {
             sleep(3000);
             AcceptFromActionDropDownwithoutBackupPolicy();
@@ -611,22 +610,32 @@ public class RateApolicyPage extends CommonAction {
     }
 
     // This method will open Image Right app.
-    public void openImageRight() throws IOException, InterruptedException {
+    public void openImageRight() {
         ExtentReporter.logger.log(LogStatus.INFO, "Opening ImageRight applciation.");
-        File file = new File("C:\\Program Files (x86)\\ImageRight\\Clients\\imageright.desktop.exe");
-        Desktop desktop = Desktop.getDesktop();
-        desktop.open(file);
+        try {
+            File file = new File("C:\\Program Files (x86)\\ImageRight\\Clients\\imageright.desktop.exe");
+            Desktop desktop = Desktop.getDesktop();
+            desktop.open(file);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExtentReporter.logger.log(LogStatus.FAIL, "Error in Opening ImageRight app");
+        }
         sleep(6000);
     }
 
     // Screen shot is captured in last step by focusing on imageright app.
-    public void ImageRightFocus() throws Exception {
+    public void ImageRightFocus() {
         // invisibilityOfLoader(driver);
         sleep(6000);
         ExtentReporter.logger.log(LogStatus.INFO, "Setting focus on ImageRight application.");
-        String[] executionPath = {
-                System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\ImageRight.exe" };
-        Runtime.getRuntime().exec(executionPath);
+        try {
+            String[] executionPath = {
+                    System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\ImageRight.exe" };
+            Runtime.getRuntime().exec(executionPath);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExtentReporter.logger.log(LogStatus.FAIL, "Error while Focusing on ImageRight app");
+        }
         // ProcessBuilder pb = new ProcessBuilder(executionPath);
         captureScreenshot(driver, "ImageRight");
     }
@@ -809,7 +818,7 @@ public class RateApolicyPage extends CommonAction {
 
     public String verifyProductNotifyWindowDisplayed(String PolicyNo) {
         try {
-            sleep(15000);
+            sleep(12000);
             WebDriverWait wait = new WebDriverWait(driver, High);
             switchToFrameUsingElement(driver,
                     driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
@@ -856,12 +865,12 @@ public class RateApolicyPage extends CommonAction {
     public void handleProducNotifyWindow(String policyNo) {
         if (verifyProductNotifyWindowDisplayed(policyNo).equals("true")) {
             try {
-                sleep(1000);
+                sleep(2000);
                 invisibilityOfLoader(driver);
                 ExtentReporter.logger.log(LogStatus.PASS, "Product Notify Window is displayed to user.");
                 selectDropdownByValue(driver, productNotifyDropDown.get(0), rateApolicyPageDTO.productNotifyValue,
                         "product notify 1");
-                sleep(2000);
+                sleep(1000);
                 ExtentReporter.logger.log(LogStatus.PASS, " Yes selected from Product Notify drop down.");
                 // if two drop down are available in product notify window
                 try {

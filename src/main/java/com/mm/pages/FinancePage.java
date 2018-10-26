@@ -1,6 +1,5 @@
 package com.mm.pages;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -557,16 +556,21 @@ public class FinancePage extends CommonAction {
     }
 
     public String readDataFromExcelSheet(String readerDataSheetName, String readerTestDataColumnName,
-            int readerDataRowNumber, String readerExportedExcelSheetName) throws IOException {
-
-        String columnCellValue = getDataFromExcel(readerDataSheetName, readerTestDataColumnName, readerDataRowNumber,
-                ExtentReporter.reportFolderPath + "\\" + readerExportedExcelSheetName + ".xlsx");
-        sleep(3000);
+            int readerDataRowNumber, String readerExportedExcelSheetName) {
+        String columnCellValue = "";
+        try {
+            columnCellValue = getDataFromExcel(readerDataSheetName, readerTestDataColumnName, readerDataRowNumber,
+                    ExtentReporter.reportFolderPath + "\\" + readerExportedExcelSheetName + ".xlsx");
+            sleep(3000);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExtentReporter.logger.log(LogStatus.WARNING, "Error while reading data from excel");
+        }
         return columnCellValue;
     }
 
     public FinancePage writeDataInExcelSheet(String cellValue, String writerTCSheetNumber,
-            String writerTestDataColumnHeader, int writerRowNumber) throws IOException {
+            String writerTestDataColumnHeader, int writerRowNumber) {
         sleep(2000);
         writeData(writerTCSheetNumber, writerTestDataColumnHeader, cellValue, writerRowNumber,
                 System.getProperty("user.dir") + "\\src\\main\\resources\\Form_Data.xlsx");
@@ -576,7 +580,7 @@ public class FinancePage extends CommonAction {
 
     }
 
-    public FinancePage getInvoiceAmountFromExcel() throws IOException {
+    public FinancePage getInvoiceAmountFromExcel() {
         sleep(2000);
         // below line of code will copy file from temp location to given location
         copyFile(financePageDTO.saveFileName);
@@ -602,7 +606,7 @@ public class FinancePage extends CommonAction {
     }
 
     // Get the next day of the due date column from exported excel sheet
-    public String nextDayOfDueDate() throws Exception {
+    public String nextDayOfDueDate() {
         sleep(1000);
         String nextDay = null;
         try {
@@ -626,7 +630,7 @@ public class FinancePage extends CommonAction {
     }
 
     // Endorse policy scenario with input having date
-    public PolicyIndicationPage policyEndorsementWithDate(String PolicyNo, String nextDayOfDueDate) throws Exception {
+    public PolicyIndicationPage policyEndorsementWithDate(String PolicyNo, String nextDayOfDueDate) {
         invisibilityOfLoader(driver);
         switchToParentWindowfromframe(driver);
         sleep(4000);
@@ -664,21 +668,26 @@ public class FinancePage extends CommonAction {
 
         // If next date is not available or not in range then it will add date in given
         // range.
+        String nextDay = null;
         if (verifyAlertDisplay(driver) == true) {
-            String nextDay = null;
-            String alertText = getAlertText(driver);
-            String[] AlldateDisplayedOnAlert = alertText.split("and", 42);
-            String[] startingDate = AlldateDisplayedOnAlert[0].split(" ", 31);
-            String dueDate = startingDate[5].trim();
-            SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-            Date date = formatter.parse(dueDate);
-            sleep(1000);
-            Calendar c = Calendar.getInstance();
-            c.setTime(date);
-            c.add(Calendar.DATE, 1);
-            sleep(1000);
-            Date d = c.getTime();
-            nextDay = formatter.format(d);
+            try {
+                String alertText = getAlertText(driver);
+                String[] AlldateDisplayedOnAlert = alertText.split("and", 42);
+                String[] startingDate = AlldateDisplayedOnAlert[0].split(" ", 31);
+                String dueDate = startingDate[5].trim();
+                SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+                Date date = formatter.parse(dueDate);
+                sleep(1000);
+                Calendar c = Calendar.getInstance();
+                c.setTime(date);
+                c.add(Calendar.DATE, 1);
+                sleep(1000);
+                Date d = c.getTime();
+                nextDay = formatter.format(d);
+            } catch (Exception e) {
+                e.printStackTrace();
+                ExtentReporter.logger.log(LogStatus.WARNING, "Error while creating substitute date for Endorsement");
+            }
             exlUtil.writeData(financePageDTO.TCSheetNumber, "retorDate", nextDay, 1,
                     System.getProperty("user.dir") + "\\src\\main\\resources\\Form_Data.xlsx");
             acceptAlert(driver);
@@ -1023,14 +1032,14 @@ public class FinancePage extends CommonAction {
     }
 
     // this method will perform rate functionality.
-    public FinancePage rateFunctionality() throws Exception {
+    public FinancePage rateFunctionality() {
         RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
         String policyNo = rateapolicypage.policyNo();
         rateapolicypage.rateFunctionality(policyNo);
         return new FinancePage(driver);
     }
 
-    public FinancePage rateFunctionalityWithoutPremiumVerification() throws Exception {
+    public FinancePage rateFunctionalityWithoutPremiumVerification() {
         PolicyQuotePage policyquotepage = new PolicyQuotePage(driver);
         String policyNumber = policyquotepage.policyNo();
         policyquotepage.rateFunctionalityWithoutPremiumVerification(policyNumber);
@@ -1038,14 +1047,14 @@ public class FinancePage extends CommonAction {
     }
 
     // this method will click on preview button.
-    public PDFReader openPDF(String policyNo) throws Exception {
+    public PDFReader openPDF(String policyNo) {
         PolicyQuotePage policyquotepage = new PolicyQuotePage(driver);
         policyquotepage.clickPreviewTab(policyNo);
         return new PDFReader(driver);
     }
 
     // This method will save policy as official.
-    public HomePage savePolicyAsofficial() throws Exception {
+    public HomePage savePolicyAsofficial() {
         sleep(4000);
         RateApolicyPage rateAPolicyPage = new RateApolicyPage(driver);
         saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn, Exit_Ok, financePageDTO.saveOption,
@@ -1058,7 +1067,7 @@ public class FinancePage extends CommonAction {
     }
 
     // This method will open new account page.
-    public FinancePage newAccountOpen() throws Exception {
+    public FinancePage newAccountOpen() {
         ExtentReporter.logger.log(LogStatus.INFO,
                 "Click Account>Maintain Account. Verify Find Account pop window opens");
         sleep(2000);
@@ -1090,7 +1099,7 @@ public class FinancePage extends CommonAction {
     }
 
     // This method will search organization and select address for organization.
-    public FinancePage entitySelectSearch() throws Exception {
+    public FinancePage entitySelectSearch() {
         invisibilityOfLoader(driver);
         String parentWindow = switchToWindow(driver);
         ExtentReporter.logger.log(LogStatus.INFO,
@@ -1119,7 +1128,7 @@ public class FinancePage extends CommonAction {
     }
 
     // This method will select issue Company for pre populated account details.
-    public FinancePage selectIssueCompany() throws Exception {
+    public FinancePage selectIssueCompany() {
         ExtentReporter.logger.log(LogStatus.INFO, "Select Issue Company.Verify Address List window is displayed");
         selectDropdownByValue(driver, issueCompany, financePageDTO.issueCompanyValue, "Issue Company");
 
@@ -1127,7 +1136,7 @@ public class FinancePage extends CommonAction {
     }
 
     // This method will select address for prepopulated account details.
-    public FinancePage selectAddress() throws Exception {
+    public FinancePage selectAddress() {
 
         ExtentReporter.logger.log(LogStatus.INFO,
                 "Click Select Address Button. Verify Address List window is displayed");
@@ -1142,7 +1151,7 @@ public class FinancePage extends CommonAction {
     }
 
     // This method will save account details.
-    public FinancePage saveAccountDetails() throws Exception {
+    public FinancePage saveAccountDetails() {
         sleep(2000);
         ExtentReporter.logger.log(LogStatus.INFO, "Click [Save].Verify Message displays for account information saved");
         clickButton(driver, SaveBtnOnMaintainActPage, "save");
@@ -1161,7 +1170,7 @@ public class FinancePage extends CommonAction {
         return new FinancePage(driver);
     }
 
-    public void captureSaveScreenshotofMantainAccountpage() throws Exception {
+    public void captureSaveScreenshotofMantainAccountpage() {
         ExtentReporter.logger.log(LogStatus.INFO, "Take screenshot of account, save the name as "
                 + financePageDTO.screenShotName + " in folder SmokeTestFM");
         invisibilityOfLoader(driver);

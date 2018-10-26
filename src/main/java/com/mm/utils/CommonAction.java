@@ -7,7 +7,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -117,7 +116,7 @@ public class CommonAction implements CommonActionInterface {
         return flag;
     }
 
-    public void captureScreenshot(WebDriver driver, String imageFileName) throws IOException {
+    public void captureScreenshot(WebDriver driver, String imageFileName) {
 
         try {
             CommonUtilities commUtil = new CommonUtilities();
@@ -131,6 +130,7 @@ public class CommonAction implements CommonActionInterface {
             FileUtils.copyFile(source, destination);
         } catch (Exception e) {
             e.printStackTrace();
+            ExtentReporter.logger.log(LogStatus.WARNING, "Error occured while capturing screenshot");
         }
 
     }
@@ -559,48 +559,44 @@ public class CommonAction implements CommonActionInterface {
 
     public void copyFile(String saveFilName) {
         File source = new File("C:\\TempsaveExcel\\OnDemandInvoiceCredit.xlsx");
-        File dest2 = new File(ExtentReporter.reportFolderPath + "\\" + saveFilName + ".xlsx");
+        File dest = new File(ExtentReporter.reportFolderPath + "\\" + saveFilName + ".xlsx");
         ExtentReporter.excelPath = ExtentReporter.excelPath
                 .concat(ExtentReporter.reportFolderPath + "\\" + saveFilName + ".xlsx;");
         try {
-            FileUtils.copyFile(source, dest2);
+            FileUtils.copyFile(source, dest);
         } catch (IOException e) {
             e.printStackTrace();
-            Assert.assertTrue(false, "Error while copying file from location " + source + " TO " + dest2);
+            Assert.assertTrue(false, "Error while copying file from location " + source + " TO " + dest);
         }
     }
 
     public String copyPDFFile(String saveFilName) {
         String flag = null;
         File source = new File("C:\\savePDF\\verifyPDF.pdf");
-        File dest2 = new File(ExtentReporter.reportFolderPath + "\\" + saveFilName + ".pdf");
+        File dest = new File(ExtentReporter.reportFolderPath + "\\" + saveFilName + ".pdf");
         ExtentReporter.excelPath = ExtentReporter.excelPath
                 .concat(ExtentReporter.reportFolderPath + "\\" + saveFilName + ".pdf;");
-        if (dest2.exists() == false) {
+        if (source.exists() == false) {
             flag = "false";
         } else {
             try {
-                FileUtils.copyFile(source, dest2);
+                FileUtils.copyFile(source, dest);
             } catch (IOException e) {
                 e.printStackTrace();
-                Assert.assertTrue(false,
-                        "Error while copying file from location C:\\TempsaveExcel\\ TO C:\\SmokeTestFM or C:\\saveExcel");
+                Assert.assertTrue(false, "Error while copying file from location " + source + " TO " + dest);
             }
             flag = "true";
         }
         return flag;
     }
 
-    public String getDataFromExcel(String sheetName, String columnName, int rowNum, String filePath)
-            throws IOException {
+    public String getDataFromExcel(String sheetName, String columnName, int rowNum, String filePath) {
 
         String excelFilePath = filePath;
         FileInputStream inputStream;
         String returnCellValue = null;
-        inputStream = new FileInputStream(new File(excelFilePath));
-
         try {
-
+            inputStream = new FileInputStream(new File(excelFilePath));
             XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
             XSSFSheet dataSheet = (XSSFSheet) workbook.getSheet(sheetName);
 
@@ -626,22 +622,21 @@ public class CommonAction implements CommonActionInterface {
             workbook.close();
             outputStream.flush();
             outputStream.close();
-        } catch (NoSuchElementException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Assert.assertTrue(false, "Error while reading data from excel sheet.");
             Assert.assertTrue(false);
-
         }
         return returnCellValue;
     }
 
-    public static void writeData(String testCaseId, String columnName, String cellValue, int rowNum,
-            String saveDataFilePath) throws IOException {
-        String excelFilePath = saveDataFilePath;
-        FileInputStream inputStream;
+    public void writeData(String testCaseId, String columnName, String cellValue, int rowNum, String saveDataFilePath) {
 
-        inputStream = new FileInputStream(new File(excelFilePath));
         try {
+            String excelFilePath = saveDataFilePath;
+            FileInputStream inputStream;
+
+            inputStream = new FileInputStream(new File(excelFilePath));
 
             XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
             XSSFSheet dataSheet = (XSSFSheet) workbook.getSheet(testCaseId);
@@ -666,8 +661,7 @@ public class CommonAction implements CommonActionInterface {
             outputStream.flush();
             outputStream.close();
 
-        } catch (NoSuchElementException e) {
-
+        } catch (Exception e) {
             e.printStackTrace();
             Assert.assertTrue(false, "Error while Writing data to excel sheet.");
         }
@@ -711,17 +705,17 @@ public class CommonAction implements CommonActionInterface {
         invisibilityOfLoader(driver);
         clickButton(driver, saveOKBtn, "Save");
         invisibilityOfLoader(driver);
-        sleep(5000);
+        sleep(3000);
         RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
         rateapolicypage.handleProducNotifyWindow(policyNo);
         switchToParentWindowfromframe(driver);
         try {
-            sleep(2000);
+            sleep(1000);
             WebElement iframeEle1 = driver
                     .findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]"));
             switchToFrameUsingElement(driver, iframeEle1);
+            sleep(1000);
             ExtentReporter.logger.log(LogStatus.INFO, "Save as Official window displays");
-            sleep(2000);
             clickButton(driver, exitOK, "Workflow exit OK");
             switchToParentWindowfromframe(driver);
             sleep(5000);
@@ -772,12 +766,8 @@ public class CommonAction implements CommonActionInterface {
             ExtentReporter.logger.log(LogStatus.WARNING,
                     "Policy is not available, please enter another/correct policy Number.");
             ExtentReporter.logger.log(LogStatus.INFO, "Searching for backUp policy.");
-            /*
-             * RateApolicyPage rpp = new RateApolicyPage(driver); rpp.searchBackUpPolicy();
-             */
             PolicyQuotePage pqp = new PolicyQuotePage(driver);
             pqp.searchBackUpPolicyUsingSearchCriteria();
-            // TODO -verify code is working for all test cases.
             flag = "false";
         } else {
             getPageTitle(driver, "Policy Folder " + policybinderpage.policyNo());
@@ -829,7 +819,7 @@ public class CommonAction implements CommonActionInterface {
     }
 
     public void claimsSearch(WebDriver driver, String policyNo, WebElement policySearchTxtBox, WebElement searchBtn,
-            WebElement policyList) throws Exception {
+            WebElement policyList) {
         PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
         ExtentReporter.logger.log(LogStatus.INFO,
                 "Enter in active Hospital/Facility policy number in Enter Policy # entry box, Click Search. Policy Will display");

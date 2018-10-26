@@ -106,7 +106,7 @@ public class CincomPage extends CommonAction {
         cincomedto = new CincomPageDTO(TestCaseDetails.testDataDictionary);
     }
 
-    public RateApolicyPage cincomFlow(String PolicyNo) throws Exception {
+    public RateApolicyPage cincomFlow(String PolicyNo) {
         for (int j = 0; j < cincomedto.coverage.size(); j++) {
             for (int i = 0; i < coverageList.size(); i++) {
                 if (coverageList.get(i).getAttribute("innerHTML").equals(cincomedto.coverage.get(j))) {
@@ -165,9 +165,15 @@ public class CincomPage extends CommonAction {
             sleep(8000);
             // Below AutoIT code will accept the security warning window for
             // cincom page
-            String[] executionPath = {
-                    System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\SecurityWindowHandle.exe" };
-            Runtime.getRuntime().exec(executionPath).waitFor(30, TimeUnit.SECONDS);
+            try {
+                String[] executionPath = {
+                        System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\SecurityWindowHandle.exe" };
+                Runtime.getRuntime().exec(executionPath).waitFor(30, TimeUnit.SECONDS);
+            } catch (Exception e) {
+                e.printStackTrace();
+                ExtentReporter.logger.log(LogStatus.WARNING, "Error in handling Security Warning window");
+            }
+
             String parentWindowId = switchToWindow(driver);
             sleep(2000);
             // Below code will verify if there is an error on cincom page then

@@ -7,7 +7,7 @@ import java.util.Date;
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 
-public class ExtentReporter {
+public class ExtentReporter extends CommonAction {
 
     public static ExtentTest logger;
     public static String reportFolderPath;

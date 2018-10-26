@@ -328,7 +328,7 @@ public class PolicyQuotePage extends CommonAction {
         return new PolicyQuotePage(driver);
     }
 
-    public PolicyQuotePage saveOptionOfficial(String PolicyNo) throws Exception {
+    public PolicyQuotePage saveOptionOfficial(String PolicyNo) {
         RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
 
         /*
@@ -336,8 +336,13 @@ public class PolicyQuotePage extends CommonAction {
          * intermittently after PDF generation.
          */
         rateapolicypage.refreshCurrentPage(driver);
-        Process processkillpdf = Runtime.getRuntime()
-                .exec("TASKKILL /F /FI \"USERNAME eq " + System.getProperty("user.name") + "\" /IM savePdf.exe");
+        try {
+            Process processkillpdf = Runtime.getRuntime()
+                    .exec("TASKKILL /F /FI \"USERNAME eq " + System.getProperty("user.name") + "\" /IM savePdf.exe");
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExtentReporter.logger.log(LogStatus.WARNING, "Error while killing pdf process in SaveOption.");
+        }
         saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn, exitOK,
                 policyquotepageDTO.saveAsPolicyValueOfficial, PolicyNo);
         return new PolicyQuotePage(driver);

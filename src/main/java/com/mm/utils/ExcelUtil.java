@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -16,7 +15,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.relevantcodes.extentreports.LogStatus;
 
-public class ExcelUtil {
+public class ExcelUtil extends CommonAction {
     String xlFilePath = System.getProperty("user.dir") + "\\src\\main\\resources\\Form_Data.xlsx";
 
     ExcelApiTest eat = null;
@@ -52,25 +51,26 @@ public class ExcelUtil {
 
     public void downloadExcel() {
         try {
-            Thread.sleep(6000);
+            sleep(6000);
             String[] executionPath = {
                     System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\saveExcel.exe" };
             Runtime.getRuntime().exec(executionPath).waitFor(30, TimeUnit.SECONDS);
-            Thread.sleep(12000);
+            sleep(12000);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void writeData(String testCaseId, String columnName, String cellValue, int rowNum, String saveDataFilePath)
-            throws Exception {
-        String excelFilePath = saveDataFilePath;
-        FileInputStream inputStream;
-        ExtentReporter.logger.log(LogStatus.INFO,
-                "Note the policy number to use in the next test case - " + testCaseId + " is " + cellValue);
-        inputStream = new FileInputStream(new File(excelFilePath));
+    public void writeData(String testCaseId, String columnName, String cellValue, int rowNum, String saveDataFilePath) {
+
         try {
-            Thread.sleep(2000);
+            String excelFilePath = saveDataFilePath;
+            FileInputStream inputStream;
+            ExtentReporter.logger.log(LogStatus.INFO,
+                    "Note the policy number to use in the next test case - " + testCaseId + " is " + cellValue);
+            inputStream = new FileInputStream(new File(excelFilePath));
+
+            sleep(2000);
             XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
             XSSFSheet dataSheet = (XSSFSheet) workbook.getSheet(testCaseId);
 
@@ -82,13 +82,13 @@ public class ExcelUtil {
                 if (headerCell.getStringCellValue().toLowerCase().trim().equals(columnName.toLowerCase())) {
                     Row dataRow = dataSheet.getRow(rowNum);
                     Cell dataCell = dataRow.getCell(cellNumber);
-                    Thread.sleep(2000);
+                    sleep(2000);
                     dataCell.setCellValue(cellValue);
                     break;
                 }
 
             } // for loop - cellNumber
-            Thread.sleep(1000);
+            sleep(1000);
             inputStream.close();
             FileOutputStream outputStream = new FileOutputStream(excelFilePath);
             workbook.write(outputStream);
@@ -96,10 +96,11 @@ public class ExcelUtil {
             outputStream.flush();
             outputStream.close();
             ExtentReporter.logger.log(LogStatus.PASS,
-                    "Policy number " + cellValue + " is written successfully in test case data sheet - " + testCaseId);
-        } catch (NoSuchElementException e) {
-
+                    "Policy Number " + cellValue + " is written successfully in test case data sheet - " + testCaseId);
+        } catch (Exception e) {
             e.printStackTrace();
+            ExtentReporter.logger.log(LogStatus.FAIL,
+                    "Issue occured while writting value " + cellValue + " in test case data sheet - " + testCaseId);
         }
 
     }
