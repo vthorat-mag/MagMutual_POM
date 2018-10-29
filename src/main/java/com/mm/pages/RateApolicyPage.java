@@ -293,10 +293,10 @@ public class RateApolicyPage extends CommonAction {
     }
 
     // Search Policy from Search Policy text field on New BTS env.
-    public RateApolicyPage searchPolicyBTS_QA(String policy_no) throws Exception {
-        Thread.sleep(3000);
+    public RateApolicyPage searchPolicyBTS_QA(String policy_no) {
+        sleep(3000);
         policySearchBTS_QA(driver, policy_no, Policy_Search, Search_btn, policyList);
-        Thread.sleep(3000);
+        sleep(3000);
         return new RateApolicyPage(driver);
     }
 

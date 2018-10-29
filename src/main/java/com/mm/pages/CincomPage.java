@@ -100,6 +100,9 @@ public class CincomPage extends CommonAction {
     @FindBy(xpath = "//div[@id='CFORMCODELOVLABEL']")
     List<WebElement> manuScriptForm;
 
+    @FindBy(xpath = "//input[@name='paraSel' and @class='checked']")
+    WebElement formCheckbox;
+
     public CincomPage(WebDriver driver) {
         this.driver = driver;
         PageFactory.initElements(driver, this);
@@ -147,6 +150,7 @@ public class CincomPage extends CommonAction {
             ExtentReporter.logger.log(LogStatus.INFO, "Enter additional text: " + cincomedto.phase.get(k) + "");
             enterTextIn(driver, addText, cincomedto.phase.get(k) + " form added.", "Aditional Text");
             ExtentReporter.logger.log(LogStatus.INFO, "Select [Save]");
+            sleep(2000);
             clickButton(driver, manuscriptPageSaveBtn, "Manu Script page Save");
             sleep(4000);
             ExtentReporter.logger.log(LogStatus.INFO, "Select Form " + cincomedto.phase.get(k));
@@ -194,7 +198,10 @@ public class CincomPage extends CommonAction {
                                         + "\r\n" + "'Automated Test Case {Today's Date}\r\n" + "This test is to\r\n"
                                         + "\r\n" + "Adds the form \r\n" + "Enter data entry \r\n"
                                         + "Verify Bulletpoints display as entered. '");
-                        clickButton(driver, freeFormCHGGEBeginChkBox, "freeFormCHGGEBeginChkBox");
+
+                        if (freeFormCHGGEBeginChkBox.getAttribute("class").trim().equalsIgnoreCase("unchecked")) {
+                            clickButton(driver, freeFormCHGGEBeginChkBox, "freeFormCHGGEBeginChkBox");
+                        }
                         sleep(2000);
                         CommonUtilities comUtil = new CommonUtilities();
                         ExtentReporter.logger.log(LogStatus.INFO, "Select Font Family: Arial Select Font Size: 10pt");
@@ -202,9 +209,10 @@ public class CincomPage extends CommonAction {
                         executor.executeScript("tinyMCE.activeEditor.setContent('<p>Automated Test Case {"
                                 + comUtil.getSystemDatemm_dd_yyyy()
                                 + "}</p>This test is to <ul><li>Adds the form</li><li>Enter data entry </li><li>Verify Bulletpoints display as entered</li></ul>')");
-                        executor.executeScript("document.getElementById('mceu_43-open').innerHTML = 'Arial';");
-                        executor.executeScript("document.getElementById('mceu_44-open').innerHTML = '10pt';", "");
-                        // driver.switchTo().defaultContent();
+                        // executor.executeScript("document.getElementById('mceu_44-text').click();",
+                        // "");
+                        executor.executeScript("document.getElementById('mceu_22-open').innerHTML = 'Arial';", "");
+                        executor.executeScript("document.getElementById('mceu_23-open').innerHTML = '10pt';", "");
                         ExtentReporter.logger.log(LogStatus.INFO,
                                 "Click [Delivery Options] & verify Check Spelling window will appear.");
                         clickButton(driver, DelOptions, "Delivery Options");
@@ -264,7 +272,7 @@ public class CincomPage extends CommonAction {
     }
 
     // This method will handle spell check pop up on CINCOM page.
-    public boolean verifyCheckSpellingPopup() throws InterruptedException {
+    public boolean verifyCheckSpellingPopup() {
         try {
             WebDriverWait wait = new WebDriverWait(driver, 20);
             if (wait.until(ExpectedConditions.visibilityOf(spellchkBoxHeading)) != null)

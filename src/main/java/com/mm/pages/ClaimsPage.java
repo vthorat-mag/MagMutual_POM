@@ -416,7 +416,7 @@ public class ClaimsPage extends CommonAction {
 
     // Search and select the client from 'Entity Select List' using client name
     // and matching id from excel file
-    public void searchAPatientNameFromEntitySelectList(String parentWindow) throws InterruptedException {
+    public void searchAPatientNameFromEntitySelectList(String parentWindow) {
 
         waitForElementToLoad(driver, 20, lastOrgName);
         // getPageTitle(driver, entitySelectSearchPageTitle);
@@ -601,7 +601,7 @@ public class ClaimsPage extends CommonAction {
         clickButton(driver, selectEntityChkBox, "Insured Name");
         sleep(1000);
         clickButton(driver, selectBtnOnEntitySelectListPage, "Select");
-        sleep(4000);
+        sleep(10000);
         switchToParentWindowfromotherwindow(driver, parentWindowIdSearchEntity);
         invisibilityOfLoader(driver);
         sleep(5000);

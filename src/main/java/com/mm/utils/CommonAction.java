@@ -778,7 +778,7 @@ public class CommonAction implements CommonActionInterface {
     }
 
     public String policySearchBTS_QA(WebDriver driver, String policyNo, WebElement policySearchTxtBox,
-            WebElement searchBtn, WebElement policyList) throws Exception {
+            WebElement searchBtn, WebElement policyList) {
         String flag = null;
         WebDriverWait wait = new WebDriverWait(driver, High);
         wait.until(ExpectedConditions.visibilityOf(policySearchTxtBox));
@@ -788,9 +788,9 @@ public class CommonAction implements CommonActionInterface {
         clearTextBox(driver, policySearchTxtBox, "Enter Policy # text field");
         enterTextIn(driver, policySearchTxtBox, policyNo, "Enter Policy # text field");
         ExtentReporter.logger.log(LogStatus.INFO, "Click search button and Verify full policy page is displayed");
-        Thread.sleep(1000);
+        sleep(1000);
         click(driver, searchBtn, "Search button");
-        Thread.sleep(3000);
+        sleep(3000);
         invisibilityOfLoader(driver);
         if (verifyPolicyListDispOnQAEnv(driver, policyList) == true) {
             // clickButton(driver, policyList, "First policy from Searched

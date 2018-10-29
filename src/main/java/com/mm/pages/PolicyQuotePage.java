@@ -533,7 +533,7 @@ public class PolicyQuotePage extends CommonAction {
 
     // This method will select a policy using the required search criteria on
     // New BTS env
-    public void searchBackUpPolicyUsingSearchCriteriaBTS_QA() throws Exception {
+    public void searchBackUpPolicyUsingSearchCriteriaBTS_QA() {
         FindPolicyPage findPolicyPage = new FindPolicyPage(driver);
         findPolicyPage.navigateToPolicySearchPage().openSearchPolicyPane().selectTermStatusAndIssueCompany()
                 .selectPolicyType().policySearchFromFindPolicyPage_BTS_QA();
