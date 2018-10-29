@@ -182,6 +182,30 @@ public class PolicyQuotePage extends CommonAction {
         return new PolicyQuotePage(driver);
     }
 
+    // Select Copy to action from "Action DropDown", search back up policy if
+    // needed.
+    public PolicyQuotePage CopyOptionFromActionDropDowBTS_QA() {
+        sleep(4000);
+        invisibilityOfLoader(driver);
+        ExtentReporter.logger.log(LogStatus.INFO,
+                "Click Policy Actions>Copy>Ok and verify Policy displays in Indication phase.");
+        if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.valueOfPolicyActionCopy,
+                "Policy Action").equals("false")) {
+            PolicyBinderPage pbp = new PolicyBinderPage(driver);
+            // Below code will search the policy from application.
+            try {
+                searchBackUpPolicyUsingSearchCriteriaBTS_QA();
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            pbp.copyToQuoteFromActionDropDownwithoutBackUpPolicy(pbp.policyNo());
+            selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.valueOfPolicyActionCopy,
+                    "Policy Action");
+        }
+        return new PolicyQuotePage(driver);
+    }
+
     // Select Copy to action from "Action DropDown" without search for backup
     // policy.
     public PolicyQuotePage CopyOptionFromActionDropDownwithoutBackupPolicy() {
@@ -208,6 +232,16 @@ public class PolicyQuotePage extends CommonAction {
         sleep(2000);
         PolicyBinderPage policyBinderPage = new PolicyBinderPage(driver);
         CopyOptionFromActionDropDown();
+        isAlertPresent(driver);
+        String policyNum = policyBinderPage.policyNo();
+        policyBinderPage.captureTransactionDetails(policyNum);
+        return new PolicyQuotePage(driver);
+    }
+
+    public PolicyQuotePage copyFromActionDropDownForBTS_QA() {
+        sleep(2000);
+        PolicyBinderPage policyBinderPage = new PolicyBinderPage(driver);
+        CopyOptionFromActionDropDowBTS_QA();
         isAlertPresent(driver);
         String policyNum = policyBinderPage.policyNo();
         policyBinderPage.captureTransactionDetails(policyNum);
@@ -268,7 +302,8 @@ public class PolicyQuotePage extends CommonAction {
                     "Delete current Indication form, Are you sure you want to delete this? Click Ok");
             clickButton(driver, manuscriptPageDeleteBtn, "Manu script Delete");
             driver.switchTo().alert().accept();
-            // Verify first item displayed in menu script list is not displayed in list.
+            // Verify first item displayed in menu script list is not displayed
+            // in list.
             Assert.assertEquals(manuscriptPageFirstItem.getAttribute("innerHTML"), firstManuScriptInfoName,
                     "Manuscript lsit first item " + firstManuScriptInfoName + " is not deleted.");
             sleep(2000);
@@ -332,8 +367,8 @@ public class PolicyQuotePage extends CommonAction {
         RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
 
         /*
-         * Note- PDF process kill and refresh page code is added because IE faces issue
-         * intermittently after PDF generation.
+         * Note- PDF process kill and refresh page code is added because IE
+         * faces issue intermittently after PDF generation.
          */
         rateapolicypage.refreshCurrentPage(driver);
         try {

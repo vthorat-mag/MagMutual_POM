@@ -243,11 +243,12 @@ public class PolicyBinderPage extends CommonAction {
         // TODO - Need To add below steps once got confirmaiton on query - Cant
         // see policy No from Policy No drop down field.
         /*
-         * In the filter criteria section, click the Policy No dropdown and Select
-         * [Policy number entered in step 3] Click the checkbox next the Prof Liab
-         * coverage Click Save as Claim Possible duplicate claim screen displays Click
-         * Save as Claim Claim No displays in the upper left corner. Note (and save for
-         * later input) the claim number: ****add ########### Click [Close]
+         * In the filter criteria section, click the Policy No dropdown and
+         * Select [Policy number entered in step 3] Click the checkbox next the
+         * Prof Liab coverage Click Save as Claim Possible duplicate claim
+         * screen displays Click Save as Claim Claim No displays in the upper
+         * left corner. Note (and save for later input) the claim number:
+         * ****add ########### Click [Close]
          */
     }
 
@@ -409,10 +410,15 @@ public class PolicyBinderPage extends CommonAction {
     // Select Copy To Quote from "Action DropoDown".
     public PolicySubmissionPage copyToQuoteFromActionDropDownwithoutBackUpPolicy(String policyNum) {
         sleep(2000);
+        RateApolicyPage rpp = new RateApolicyPage(driver);
         ExtentReporter.logger.log(LogStatus.INFO,
                 "Click Policy Actions>Copy to Quote. Verify Policy folder shows a new number, Phase show Submission.");
-        selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
-                policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action");
+        if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
+                policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action") == "false") {
+            ExtentReporter.logger.log(LogStatus.INFO,
+                    "Copy To Quote Option is not available in Policy Action drop down list.");
+            Assert.assertTrue(false, "Copy To Quote Option is not available in Policy Action drop down list.");
+        }
         invisibilityOfLoader(driver);
         sleep(8000);
         String getUpdatedPolicyNo = policyNo();
@@ -421,10 +427,13 @@ public class PolicyBinderPage extends CommonAction {
             ExtentReporter.logger.log(LogStatus.INFO, "Captursaction details is NOT displayed.");
         }
 
-        switchToFrameUsingElement(driver,
-                driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + getUpdatedPolicyNo + "')]")));
+        /*
+         * switchToFrameUsingElement(driver,
+         * driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" +
+         * getUpdatedPolicyNo + "')]")));
+         */
 
-        // switchToFrameUsingElement(driver, entityMiniPopupFrameId);
+        switchToFrameUsingElement(driver, entityMiniPopupFrameId);
         ExtentReporter.logger.log(LogStatus.INFO,
                 "Click [OK]. Verify Policy folder shows a new number, Phase show Submission.");
         clickButton(driver, Exit_Ok, "OK button");
@@ -442,11 +451,12 @@ public class PolicyBinderPage extends CommonAction {
                 "Click Policy Actions>Copy to Quote. Verify Policy folder shows a new number, Phase show Submission.");
         if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
                 policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action").equals("false")) {
-            RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
-            RateAPolicyPageDTO rateApolicyPageDTO = new RateAPolicyPageDTO(TestCaseDetails.testDataDictionary);
-            rateapolicypage.searchBackUpPolicy();
-            selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
-                    policybinderpageDTO.valueOfPolicyActionCopyToQuote, "Policy Action");
+            PolicyQuotePage pqp = new PolicyQuotePage(driver);
+            try {
+                pqp.searchBackUpPolicyUsingSearchCriteriaBTS_QA();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         sleep(5000);
         invisibilityOfLoader(driver);
@@ -457,13 +467,17 @@ public class PolicyBinderPage extends CommonAction {
             ExtentReporter.logger.log(LogStatus.INFO, "Capture transaction details is NOT displayed.");
         }
 
-        sleep(15000);
+        sleep(8000);
         invisibilityOfLoader(driver);
         // Need latest policy number as it changes for TC43769, so policyNo
         // method is
         // called
-        switchToFrameUsingElement(driver,
-                driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo() + "')]")));
+        /*
+         * switchToFrameUsingElement(driver,
+         * driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" +
+         * policyNo() + "')]")));
+         */
+        switchToFrameUsingElement(driver, entityMiniPopupFrameId);
         ExtentReporter.logger.log(LogStatus.INFO,
                 "Click [OK]. Verify Policy folder shows a new number, Phase show Submission.");
         if (Exit_Ok.isDisplayed()) {

@@ -239,10 +239,6 @@ public class FindPolicyPage extends CommonAction {
                     // from data sheet, so select the required policy
                     if (lastTranctionColumn.getAttribute("innerHTML").trim()
                             .equalsIgnoreCase(FindPolicyPageDTO.lastTransaction)) {
-                        /*
-                         * for (int i = 0; i < 100; i++) { click(driver, righthorizontalScrollBtn,
-                         * "Horizontal Scroll button"); }
-                         */
                         action.dragAndDrop(policyListScrollBar, righthorizontalScrollBtn).build().perform();
                         sleep(1000);
                         WebElement policyNum = driver
@@ -323,7 +319,8 @@ public class FindPolicyPage extends CommonAction {
         invisibilityOfLoader(driver);
         sleep(2000);
 
-        // Below code will check if the policies displayed in search criteria result
+        // Below code will check if the policies displayed in search criteria
+        // result
         // match the last Transaction.
         // and will open/select matching policy.
         boolean flag = false;
@@ -331,7 +328,8 @@ public class FindPolicyPage extends CommonAction {
             List<String> policyList = new ArrayList<String>();
 
             for (int page = 0; page < 10; page++) {
-                // each page shows only four rows in DOM, so we need to change page to search
+                // each page shows only four rows in DOM, so we need to change
+                // page to search
                 // policy after 4 rows
                 for (int row = 0; row < 4; row++) {
 
@@ -342,19 +340,22 @@ public class FindPolicyPage extends CommonAction {
 
                     String policyNumValue = policyNum.getAttribute("innerHTML").trim();
 
-                    // compare the value of last Transaction to expected value from data sheet, so
+                    // compare the value of last Transaction to expected value
+                    // from data sheet, so
                     // select the required policy
                     if (lastTranctionColumn.getAttribute("innerHTML").trim()
                             .equalsIgnoreCase(FindPolicyPageDTO.lastTransaction)) {
                         ExtentReporter.logger.log(LogStatus.INFO,
                                 "Select Policy with Policy No." + policyNum.getAttribute("innerHTML"));
-                        // select the policy from First column if the last transaction is as expected.
+                        // select the policy from First column if the last
+                        // transaction is as expected.
                         click(driver, policyNum, "Policy Name");
                         flag = true;
                         break;
                     }
                 }
-                // if the policy is not found on first page then change page size to 5 and move
+                // if the policy is not found on first page then change page
+                // size to 5 and move
                 // to next page
                 if (flag == false) {
                     click(driver, pageSizeDDLArrow, "Page Size Down Arrow");

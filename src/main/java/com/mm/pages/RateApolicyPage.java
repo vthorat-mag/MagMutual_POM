@@ -437,7 +437,7 @@ public class RateApolicyPage extends CommonAction {
     public PolicyQuotePage searchPolicyPolicyQuotePageWithCopyTOQuteBTS_QA() throws Exception {
         searchPolicyBTS_QA(rateApolicyPageDTO.policyNum);
         PolicyBinderPage pbp = new PolicyBinderPage(driver);
-        pbp.copyToQuoteFromActionDropDownwithoutBackUpPolicy(pbp.policyNo());
+        pbp.copyToQuoteFromActionDropDownForCopyToQuoteTC(pbp.policyNo());
         return new PolicyQuotePage(driver);
     }
 
@@ -520,16 +520,19 @@ public class RateApolicyPage extends CommonAction {
         rob.keyPress(KeyEvent.VK_ENTER);
         rob.keyRelease(KeyEvent.VK_ENTER);
         /*
-         * try { File file = new File("C:\\MM_Testcase_Output\\"+fileDate+".xlsx");
+         * try { File file = new
+         * File("C:\\MM_Testcase_Output\\"+fileDate+".xlsx");
          * 
-         * if(file.exists()) { System.out.println("File is available at location");
+         * if(file.exists()) {
+         * System.out.println("File is available at location");
          * ExtentReporter.logger.log(LogStatus.PASS,
          * "Excel file is available at download location."); }
          * 
          * }catch(Exception e) {
          * System.out.println("File is Not available at location");
          * ExtentReporter.logger.log(LogStatus.FAIL,
-         * "Excel file is Not available at download location."); e.printStackTrace(); }
+         * "Excel file is Not available at download location.");
+         * e.printStackTrace(); }
          */
         return fileNamePath;
     }
@@ -552,7 +555,12 @@ public class RateApolicyPage extends CommonAction {
 
             // This method will select the policy using required criteria
             PolicyQuotePage quotepage = new PolicyQuotePage(driver);
-            quotepage.searchBackUpPolicyUsingSearchCriteria();
+            try {
+                quotepage.searchBackUpPolicyUsingSearchCriteriaBTS_QA();
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
 
             // Select Accept From Policy Action DDL
             if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction,

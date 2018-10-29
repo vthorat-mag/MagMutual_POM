@@ -803,9 +803,6 @@ public class CommonAction implements CommonActionInterface {
             ExtentReporter.logger.log(LogStatus.WARNING,
                     "Policy is not available, please enter another/correct policy Number.");
             ExtentReporter.logger.log(LogStatus.INFO, "Searching for backUp policy.");
-            /*
-             * RateApolicyPage rpp = new RateApolicyPage(driver); rpp.searchBackUpPolicy();
-             */
             PolicyQuotePage pqp = new PolicyQuotePage(driver);
             pqp.searchBackUpPolicyUsingSearchCriteriaBTS_QA();
             // TODO -verify code is working for all test cases.

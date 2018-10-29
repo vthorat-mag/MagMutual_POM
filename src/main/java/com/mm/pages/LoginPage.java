@@ -36,8 +36,8 @@ public class LoginPage extends CommonAction {
     // Code to login to eOasis application.
     public HomePage loginToeOasis(String UserName, String PassWord) {
         ExcelUtil exlutil = new ExcelUtil();
-        // driver.get("http://oasiscloud2017t:8081/oas17bts/CS/login.jsp");
-        driver.get("http://172.18.1.107:9080/magsoasisqa/CS/login.jsp");
+        driver.get("http://oasiscloud2017t:8081/oas17bts/CS/login.jsp");
+        // driver.get("http://172.18.1.107:9080/magsoasisqa/CS/login.jsp");
         ExtentReporter.logger.log(LogStatus.INFO,
                 "Accessing the URL - http://172.18.1.107:9080/magsoasisqa/CS/login.jsp");
         driver.manage().deleteAllCookies();
