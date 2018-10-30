@@ -3,8 +3,6 @@ package com.mm.dto;
 import java.util.List;
 import java.util.Map;
 
-import MMTestCase.SmokeTestCasesUpdated;
-
 public class PolicyBinderPageDTO {
 
 	public String policyNumber;
@@ -25,7 +23,10 @@ public class PolicyBinderPageDTO {
 	public String lastName;
 	public String firstName;
 	public String description;
+	public String policyPhaseValueBinder;
+	public String policyPhaseValuePolicy;
 
+	//This method will access DTO Code.
 	public PolicyBinderPageDTO(Map<String, List<String>> excelData) {
 
 		for (int i = 0; i <= PolicyBinderPageDTO.class.getFields().length - 1; i++) {

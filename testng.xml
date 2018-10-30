@@ -12,7 +12,7 @@
 			</run>
 		</groups>
 		<classes>
-			<class name="MMTestCase.SmokeTestCasesUpdated" />
+			<class name="MMTestCase.BTS" />
 		</classes>
 	</test> <!-- Test -->
 </suite> <!-- Suite -->

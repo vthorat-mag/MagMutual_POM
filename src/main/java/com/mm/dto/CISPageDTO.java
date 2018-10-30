@@ -3,7 +3,6 @@ package com.mm.dto;
 import java.util.List;
 import java.util.Map;
 
-import MMTestCase.SmokeTestCasesUpdated;
 
 public class CISPageDTO {
 
@@ -40,6 +39,7 @@ public class CISPageDTO {
 	public List<String> windowTitlesForAuditTabs;
 	public List<String> allMenuOptions;
 
+	//This method will access DTO Code.
 	public CISPageDTO(Map<String, List<String>> excelData) {
 
 		for (int i = 0; i <= CISPageDTO.class.getFields().length - 1; i++) {

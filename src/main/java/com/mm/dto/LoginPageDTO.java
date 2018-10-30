@@ -3,12 +3,11 @@ package com.mm.dto;
 import java.util.List;
 import java.util.Map;
 
-import MMTestCase.SmokeTestCasesUpdated;
-
 public class LoginPageDTO {
 	public String username;
 	public String password;
 
+	//This method will access DTO Code.
 	public LoginPageDTO(Map<String, List<String>> excelData) {
 
 		for (int i = 0; i <= LoginPageDTO.class.getFields().length - 1; i++) {

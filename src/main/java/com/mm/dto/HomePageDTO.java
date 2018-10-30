@@ -3,8 +3,6 @@ package com.mm.dto;
 import java.util.List;
 import java.util.Map;
 
-import MMTestCase.SmokeTestCasesUpdated;
-
 public class HomePageDTO {
 
 	public String lastOrgName;
@@ -17,6 +15,7 @@ public class HomePageDTO {
 	public String clientLastName;
 	public String backUpPpolicyNum;
 
+	//This method will access DTO Code.
 	public HomePageDTO(Map<String, List<String>> excelData) {
 
 		for (int i = 0; i <= HomePageDTO.class.getFields().length - 1; i++) {
