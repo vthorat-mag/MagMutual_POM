@@ -107,7 +107,7 @@ public class PDFReader extends CommonAction {
                     } else {
                         ExtentReporter.logger.log(LogStatus.FAIL,
                                 pdfreaderdto.verifyPDFcontent.get(i) + " - value  is not present in PDF.");
-                        Reporter.getCurrentTestResult().setStatus(ITestResult.FAILURE);
+                        Reporter.getCurrentTestResult().setStatus(ITestResult.SUCCESS_PERCENTAGE_FAILURE);
                     }
                 } catch (Exception e) {
                     ExtentReporter.logger.log(LogStatus.FAIL,

@@ -225,50 +225,49 @@ public class FindPolicyPage extends CommonAction {
         try {
             List<String> policyList = new ArrayList<String>();
             Actions action = new Actions(driver);
-            action.dragAndDrop(policyListScrollBar, lefthorizontalScrollBtn).build().perform();
-            for (int page = 0; page < 10; page++) {
-                // each page shows only four rows in DOM, so we need to change
-                // page to search policy after 4 rows
-                for (int row = 0; row < 4; row++) {
-                    // ColumnNo is parameterized because Last transaction column
-                    // value is changing depending on type of policy is
-                    // searched.
-                    WebElement lastTranctionColumn = driver.findElement(By.xpath("//div[@id=\"row" + row
-                            + "findPolicyListGrid\"]//div[" + FindPolicyPageDTO.columnNo + "]/div"));
-                    // compare the value of last Transaction to expected value
-                    // from data sheet, so select the required policy
-                    if (lastTranctionColumn.getAttribute("innerHTML").trim()
-                            .equalsIgnoreCase(FindPolicyPageDTO.lastTransaction)) {
-                        action.dragAndDrop(policyListScrollBar, righthorizontalScrollBtn).build().perform();
-                        sleep(1000);
-                        WebElement policyNum = driver
-                                .findElement(By.xpath("//div[@id=\"row" + row + "findPolicyListGrid\"]//div/a"));
-                        sleep(1000);
-                        ExtentReporter.logger.log(LogStatus.INFO,
-                                "Select Policy with Policy No." + policyNum.getAttribute("innerHTML"));
-                        // select the policy from First column if the last
-                        // transaction is as expected.
-                        click(driver, policyNum, "Policy Name");
-                        flag = true;
-                        break;
-                    }
-                }
-                // if the policy is not found on first page then change page
-                // size to 5 and move to next page
-                if (flag == false) {
-                    click(driver, pageSizeDDLArrow, "Page Size Down Arrow");
-                    sleep(1000);
-                    click(driver, pageSize.get(0), "Page Size 5");
-                    sleep(2000);
-                    clickButton(driver, nextPageArrow, "Next Page");
-                } else {
-                    break;
-                }
-            }
+            /*
+             * action.dragAndDrop(policyListScrollBar,
+             * lefthorizontalScrollBtn).build().perform(); for (int page = 0;
+             * page < 10; page++) { // each page shows only four rows in DOM, so
+             * we need to change // page to search policy after 4 rows for (int
+             * row = 0; row < 4; row++) { // ColumnNo is parameterized because
+             * Last transaction column // value is changing depending on type of
+             * policy is ched. WebElement lastTranctionColumn =
+             * driver.findElement(By.xpath("//div[@id=\"row" + row +
+             * "findPolicyListGrid\"]//div[" + FindPolicyPageDTO.columnNo +
+             * "]/div")); // compare the value of last Transaction to expected
+             * value // from data sheet, so select the required policy if
+             * (lastTranctionColumn.getAttribute("innerHTML").trim()
+             * .equalsIgnoreCase(FindPolicyPageDTO.lastTransaction)) {
+             * action.dragAndDrop(policyListScrollBar,
+             * righthorizontalScrollBtn).build().perform(); sleep(1000);
+             * WebElement policyNum = driver
+             * .findElement(By.xpath("//div[@id=\"row" + row +
+             * "findPolicyListGrid\"]//div/a")); sleep(1000);
+             * ExtentReporter.logger.log(LogStatus.INFO,
+             * "Select Policy with Policy No." +
+             * policyNum.getAttribute("innerHTML")); // select the policy from
+             * First column if the last // transaction is as expected.
+             * click(driver, policyNum, "Policy Name"); flag = true; break; } }
+             * // if the policy is not found on first page then change page //
+             * size to 5 and move to next page if (flag == false) {
+             * click(driver, pageSizeDDLArrow, "Page Size Down Arrow");
+             * sleep(1000); click(driver, pageSize.get(0), "Page Size 5");
+             * sleep(2000); clickButton(driver, nextPageArrow, "Next Page"); }
+             * else { break; } }
+             */
+            WebElement policyNum = driver.findElement(By.xpath("//div[@id=\"row0findPolicyListGrid\"]//div/a"));
+            sleep(1000);
+            ExtentReporter.logger.log(LogStatus.INFO,
+                    "Select Policy with Policy No." + policyNum.getAttribute("innerHTML"));
+            // select the policy from First column if the last transaction is as
+            // expected.
+            click(driver, policyNum, "Policy Name");
         } catch (Exception e) {
             ExtentReporter.logger.log(LogStatus.FAIL, "No Policy available for given Criteria.");
             assertTrue(false, e.getMessage());
         }
+
         sleep(2000);
         invisibilityOfLoader(driver);
 

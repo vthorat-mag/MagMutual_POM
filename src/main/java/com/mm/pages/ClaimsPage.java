@@ -287,7 +287,7 @@ public class ClaimsPage extends CommonAction {
         for (int i = 0; i < claimsdto.transactionType.size(); i++) {
             clickButton(driver, addTransactionBtn, "Add Transaction");
             invisibilityOfLoader(driver);
-            sleep(1000);
+            sleep(5000);
             // Logic to add first transaction value.
             String invoiceNumber = addTransactionDetails(claimsdto.transactionType.get(i), claimsdto.paymentType,
                     claimsdto.vendorIDValue.get(i), claimsdto.taxIDType.get(i), claimsdto.transactionAmount.get(i), i);
@@ -315,6 +315,9 @@ public class ClaimsPage extends CommonAction {
                 }
                 counter++;
             } while (counter < 3);
+            clickButton(driver, saveTransactionBtn, "Save Transaction");
+            acceptAlert(driver);
+            sleep(2000);
             // close Add transaction window
             closeAddTransactionWindow();
             switchToParentWindowfromframe(driver);
@@ -370,6 +373,8 @@ public class ClaimsPage extends CommonAction {
         switchToFrameUsingId(driver, "popupframe1");
         sleep(1000);
         clickButton(driver, closeTransactionBtn, "Close");
+        isAlertPresent(driver);
+        invisibilityOfLoader(driver);
         sleep(4000);
     }
 
@@ -502,9 +507,9 @@ public class ClaimsPage extends CommonAction {
         // required in case when application is down.
         // ****************
         /*
-         * switchToParentWindowfromframe(driver); switchToFrameUsingElement(driver,
-         * changeFileStatusFrameEle); click(driver, closeSymbolOnChagneStatusPopup,
-         * "Close");
+         * switchToParentWindowfromframe(driver);
+         * switchToFrameUsingElement(driver, changeFileStatusFrameEle);
+         * click(driver, closeSymbolOnChagneStatusPopup, "Close");
          */
         // *****************************
 

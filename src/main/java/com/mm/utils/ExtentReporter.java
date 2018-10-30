@@ -11,7 +11,7 @@ public class ExtentReporter extends CommonAction {
 
     public static ExtentTest logger;
     public static String reportFolderPath;
-    public static String screenshotfolderpath;
+    public static String screenshotfolderpath = "";
     public static String filePath;
     public static ExtentReports report;
     public static String excelPath;

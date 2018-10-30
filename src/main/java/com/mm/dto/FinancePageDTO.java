@@ -54,6 +54,7 @@ public class FinancePageDTO {
     public String OwnerDDLValue_N;
     public String savePDFAs;
     public String issueCompanyValue;
+    public String reinstate;
 
     // This method will access DTO Code.
     public FinancePageDTO(Map<String, List<String>> excelData) {

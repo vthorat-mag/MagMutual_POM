@@ -235,7 +235,7 @@ public class BTS extends ExtentReporter {
         PolicyIndicationPageDTO indicationPageDTO = new PolicyIndicationPageDTO(TestCaseDetails.testDataDictionary);
         loginpage = new LoginPage(driver);
         loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageUsingHeaderPolicyLink()
-                .searchPolicyPolicyQuotePageBTS_QA();
+                .searchPolicyPolicyQuotePageWithCopyTOQuteBTS_QA();
         rateapolicyPage.AcceptFromActionDropDown().identifyPhase(indicationPageDTO.policyPhaseValue).billingSetup()
                 .refreshCurrentPage(driver).coverageDetailsSelect();
         String policyNumber = rateapolicyPage.policyNo();
@@ -323,11 +323,11 @@ public class BTS extends ExtentReporter {
         String policyNum = homepage.policySearchUsingSearchCriteria();
         RateApolicyPage rateapolicyPage = new RateApolicyPage(driver);
         String policyNumber = rateapolicyPage.checkPolicyViewModeAndUpdateCoverage(policyNum);
-        exlUtil.writeData("TC43774", "PolicyNum", policyNumber, 1, ExcelPath);
         PolicyBinderPage pbp = new PolicyBinderPage(driver);
         String policyNo = pbp.policyNo();
         rateapolicyPage.rateFunctionality(policyNo).clickPreviewTab(policyNo).savePDF(testcaseFormattedID)
                 .verifyPdfContent();
+        exlUtil.writeData("TC42247", "PolicyNum", policyNo, 1, ExcelPath);
     }
 
     @Test(description = "Hospital Verify Interactive Form", groups = { "BTS Smoke Test" }, priority = 10)
@@ -336,7 +336,7 @@ public class BTS extends ExtentReporter {
         LoginPage loginpage = new LoginPage(driver);
         RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
         loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageUsingHeaderPolicyLink()
-                .searchPolicyRateAPolicyPage();
+                .searchPolicyPolicyQuotePageWithEndorsmenteBTS_QA();
         String policyNo = rateapolicypage.policyNo();
         rateapolicypage.coverageDetailSelectForCinCom().cincomFlow(policyNo)
                 .rateFunctionalityWithoutPremiumAmountVerification(policyNo).clickPreviewTab(policyNo)
@@ -351,7 +351,7 @@ public class BTS extends ExtentReporter {
         PolicyBinderPage policybinderpage = new PolicyBinderPage(driver);
         ExcelUtil exlUtil = new ExcelUtil();
         loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageUsingHeaderPolicyLink()
-                .searchPolicyRateAPolicyPage();
+                .searchPolicyPolicyQuotePageBTS_QA();
         String clientID = policybinderpage.getClientId();
         policybinderpage.verifyPhase(rpdto.policyPhaseValue).navigatetoClaimsPage().getPatientDetails()
                 .enterDataOnClaimsPage(clientID);
@@ -612,7 +612,7 @@ public class BTS extends ExtentReporter {
          * FailedTCRerun failedtcrun = new FailedTCRerun();
          * failedtcrun.reRunFailedTC();
          */
-        ExtentReporter.report.flush();
+        // ExtentReporter.report.flush();
         ExtentReporter.report.close();
         if (driver != null) {
             driver.quit();

@@ -383,11 +383,11 @@ public class PolicyBinderPage extends CommonAction {
                 clickButton(driver, captTranxOk, "Ok button for Capture Transaction Details");
                 isAlertPresent(driver);
             } else {
-                ExtentReporter.logger.log(LogStatus.FAIL, "Capture Transaction Details window is not displayed");
+                ExtentReporter.logger.log(LogStatus.WARNING, "Capture Transaction Details window is not displayed");
             }
             switchToParentWindowfromframe(driver);
         } catch (Exception e) {
-            ExtentReporter.logger.log(LogStatus.FAIL, "Capture Transaction Details window is not displayed");
+            ExtentReporter.logger.log(LogStatus.WARNING, "Capture Transaction Details window is not displayed");
         }
 
     }

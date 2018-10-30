@@ -403,11 +403,23 @@ public class PolicyQuotePage extends CommonAction {
         return new PolicyQuotePage(driver);
     }
 
-    public PolicyQuotePage deleteWIPForReUse() {
-        sleep(3000);
-        clickButton(driver, deleteWIPBtn, "DeleteWIP");
-        isAlertPresent(driver);
-        return new PolicyQuotePage(driver);
+    public Boolean deleteWIPForReUse() {
+        sleep(5000);
+        Boolean flag = null;
+        try {
+            // clickButton(driver, deleteWIPBtn, "DeleteWIP");
+            deleteWIPBtn.click();
+            /*
+             * JavascriptExecutor js = (JavascriptExecutor) driver;
+             * js.executeScript("arguments[0].click();", deleteWIPBtn);
+             */
+            ExtentReporter.logger.log(LogStatus.PASS, "clicked on button / Link- " + "DeleteWIP");
+            isAlertPresent(driver);
+            flag = true;
+        } catch (Exception e) {
+            flag = false;
+        }
+        return flag;
     }
 
     // Change phase to Quote.

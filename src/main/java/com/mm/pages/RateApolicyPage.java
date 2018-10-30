@@ -300,6 +300,19 @@ public class RateApolicyPage extends CommonAction {
         return new RateApolicyPage(driver);
     }
 
+    // Search Policy from Search Policy with endorsement text field on New BTS
+    // env.
+    public RateApolicyPage searchPolicyWithEndorsementBTS_QA(String policy_no) throws Exception {
+        Thread.sleep(3000);
+        if (policySearchBTS_QA(driver, policy_no, Policy_Search, Search_btn, policyList).equals("false")) {
+            PolicyBinderPage pbp = new PolicyBinderPage(driver);
+            pbp.endorsementFromActionDropDownwithoutBackupPolicy();
+            pbp.endorseAPolicyforRateApolicyPage(pbp.policyNo());
+        }
+        Thread.sleep(3000);
+        return new RateApolicyPage(driver);
+    }
+
     public String checkPolicyViewModeAndUpdateCoverage(String policyNo) {
         sleep(3000);
         String currentViewMode = getSelectedTextFromDropDown(driver, viewMode);
@@ -404,7 +417,7 @@ public class RateApolicyPage extends CommonAction {
         clickButton(driver, manuscriptPageCloseBtn, "Manu Script page Close");
         sleep(2000);
         switchToParentWindowfromframe(driver);
-        sleep(5000); // Add wait using loader element
+        sleep(10000); // Add wait using loader element
         click(driver, saveWIP, "Save WIP");
         return new RateApolicyPage(driver);
     }
@@ -435,9 +448,15 @@ public class RateApolicyPage extends CommonAction {
     }
 
     public PolicyQuotePage searchPolicyPolicyQuotePageWithCopyTOQuteBTS_QA() throws Exception {
-        searchPolicyBTS_QA(rateApolicyPageDTO.policyNum);
-        PolicyBinderPage pbp = new PolicyBinderPage(driver);
-        pbp.copyToQuoteFromActionDropDownForCopyToQuoteTC(pbp.policyNo());
+        if (searchPolicyBTS_QA(rateApolicyPageDTO.policyNum).equals("false")) {
+            PolicyBinderPage pbp = new PolicyBinderPage(driver);
+            pbp.copyToQuoteFromActionDropDownForCopyToQuoteTC(pbp.policyNo());
+        }
+        return new PolicyQuotePage(driver);
+    }
+
+    public PolicyQuotePage searchPolicyPolicyQuotePageWithEndorsmenteBTS_QA() throws Exception {
+        searchPolicyWithEndorsementBTS_QA(rateApolicyPageDTO.policyNum);
         return new PolicyQuotePage(driver);
     }
 

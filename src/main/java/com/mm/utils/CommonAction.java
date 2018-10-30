@@ -557,17 +557,26 @@ public class CommonAction implements CommonActionInterface {
         }
     }
 
-    public void copyFile(String saveFilName) {
+    public Boolean copyFile(String saveFilName) {
         File source = new File("C:\\TempsaveExcel\\OnDemandInvoiceCredit.xlsx");
         File dest = new File(ExtentReporter.reportFolderPath + "\\" + saveFilName + ".xlsx");
         ExtentReporter.excelPath = ExtentReporter.excelPath
                 .concat(ExtentReporter.reportFolderPath + "\\" + saveFilName + ".xlsx;");
-        try {
-            FileUtils.copyFile(source, dest);
-        } catch (IOException e) {
-            e.printStackTrace();
-            Assert.assertTrue(false, "Error while copying file from location " + source + " TO " + dest);
+        Boolean flag = null;
+        // Below logic will verify if file present at detination if not it will
+        // download file again and copy it to destination folder.
+        if (source.exists() == true) {
+            try {
+                FileUtils.copyFile(source, dest);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Assert.assertTrue(false, "Error while copying file from location " + source + " TO " + dest);
+            }
+            flag = false;
+        } else {
+            flag = true;
         }
+        return flag;
     }
 
     public String copyPDFFile(String saveFilName) {
@@ -576,6 +585,8 @@ public class CommonAction implements CommonActionInterface {
         File dest = new File(ExtentReporter.reportFolderPath + "\\" + saveFilName + ".pdf");
         ExtentReporter.excelPath = ExtentReporter.excelPath
                 .concat(ExtentReporter.reportFolderPath + "\\" + saveFilName + ".pdf;");
+        // Below logic will verify if file present at detination if not it will
+        // download file again and copy it to destination folder.
         if (source.exists() == false) {
             flag = "false";
         } else {

@@ -16,6 +16,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
 import com.mm.dto.FinancePageDTO;
+import com.mm.dto.PolicyBinderPageDTO;
 import com.mm.utils.CommonAction;
 import com.mm.utils.CommonUtilities;
 import com.mm.utils.ExcelUtil;
@@ -423,12 +424,14 @@ public class FinancePage extends CommonAction {
         enterDataIn(driver, startDate, todaysdate, "Start Date");
         ExtentReporter.logger.log(LogStatus.INFO,
                 "Change Lead Days from current number to another number accordingly(example 1 to 10). Verify Lead days is changed to different number");
-        // convert lead days field current value and random generated value from string
+        // convert lead days field current value and random generated value from
+        // string
         // to int for comparison
         int leadDaysValue = Integer.valueOf(leadDays.getAttribute("value"));
         int randomNewValue = Integer.valueOf(randomNumGenerator(1, "123456789"));
 
-        // New value to be entered (randomNewValue) and current lead days value should
+        // New value to be entered (randomNewValue) and current lead days value
+        // should
         // be different and between 1 to 10.
         if (randomNewValue == leadDaysValue) {
             randomNewValue++;
@@ -582,7 +585,8 @@ public class FinancePage extends CommonAction {
 
     public FinancePage getInvoiceAmountFromExcel() {
         sleep(2000);
-        // below line of code will copy file from temp location to given location
+        // below line of code will copy file from temp location to given
+        // location
         copyFile(financePageDTO.saveFileName);
         sleep(2000);
         // Read invoiceNumber from saved excel sheet.
@@ -666,7 +670,8 @@ public class FinancePage extends CommonAction {
         clickButton(driver, endorsePolicyOK, "OK");
         sleep(5000);
 
-        // If next date is not available or not in range then it will add date in given
+        // If next date is not available or not in range then it will add date
+        // in given
         // range.
         String nextDay = null;
         if (verifyAlertDisplay(driver) == true) {
@@ -694,7 +699,8 @@ public class FinancePage extends CommonAction {
             clearTextBox(driver, effectiveFromDate, "Effective Date");
             enterDataIn(driver, effectiveFromDate, nextDay, "Effective Date");
             clickButton(driver, endorsePolicyOK, "OK");
-            // below code will write New Next date to excel which will be used for add
+            // below code will write New Next date to excel which will be used
+            // for add
             // coverage flow.
         }
         sleep(8000);
@@ -852,13 +858,20 @@ public class FinancePage extends CommonAction {
         return new FinancePage(driver);
     }
 
-    // this method will download excel sheet from Receivable Policy inquiry for Poll
+    // this method will download excel sheet from Receivable Policy inquiry for
+    // Poll
     // transaction inquirey list.
     public FinancePage downloadExcelPollTxnInq(String fileName) {
         sleep(5000);
         clickButton(driver, exportExcelLink.get(1), "Export Excel");
         exlUtil.downloadExcel();
-        copyFile(fileName);
+        // Below logic will verify if file present at detination if not it will
+        // download file again and copy it to destination folder.
+        if (copyFile(fileName) == true) {
+            sleep(2000);
+            clickButton(driver, exportExcelLink.get(1), "Export Excel");
+            copyFile(fileName);
+        }
         return new FinancePage(driver);
     }
 
@@ -906,8 +919,8 @@ public class FinancePage extends CommonAction {
             }
         }
         /*
-         * Assert.assertTrue(currBalOnAllTxnEnqPage.getAttribute("innerHTML").equals(
-         * financePageDTO.currunetBalance),
+         * Assert.assertTrue(currBalOnAllTxnEnqPage.getAttribute("innerHTML").
+         * equals( financePageDTO.currunetBalance),
          * "Current Balance is not zero on All transaction enquirey Page");
          */
         return new FinancePage(driver);
@@ -937,17 +950,30 @@ public class FinancePage extends CommonAction {
 
     // Code to handle cancel pop up window.
     public void cancelwindowHandle() {
-        // If the 'Cancel' option is not available in policy action DDL then delete WIP
+        // If the 'Cancel' option is not available in policy action DDL then
+        // delete WIP
         // and select Cancel
         if (selectDropdownByValueFromPolicyActionDDL(driver, policyActionDDL, financePageDTO.policyAction,
                 "Policy Action").equals("false")) {
 
-            // Deleting the Work in progress will enable required action from policy Action
+            // Deleting the Work in progress will enable required action from
+            // policy Action
             // DDL
             PolicyQuotePage policyquotepage = new PolicyQuotePage(driver);
-            policyquotepage.deleteWIPForReUse();
+            if (policyquotepage.deleteWIPForReUse() == false) {
+                PolicyBinderPageDTO policybinderpageDTO = new PolicyBinderPageDTO(TestCaseDetails.testDataDictionary);
+                PolicyBinderPage pbp = new PolicyBinderPage(driver);
+                selectDropdownByValueFromPolicyActionDDL(driver, policyActionDDL, financePageDTO.reinstate,
+                        "Policy Action");
+                sleep(1000);
+                acceptAlert(driver);
+                sleep(2000);
+                saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn, Exit_Ok,
+                        policybinderpageDTO.saveAsPolicyValue, pbp.policyNo());
+            }
             sleep(5000);
-            // DeleteWIP will refresh page, so select the coverage again to select Cancel
+            // DeleteWIP will refresh page, so select the coverage again to
+            // select Cancel
             selectUMBCoverage();
             sleep(2000);
             selectDropdownByValue(driver, policyActionDDL, financePageDTO.policyAction, "Policy Action");
@@ -965,7 +991,8 @@ public class FinancePage extends CommonAction {
         clickButton(driver, cancelBtnOnCancelPopUp, "Cancel");
     }
 
-    // verify Alert to change coverage limit while canceling coverage is displayed.
+    // verify Alert to change coverage limit while canceling coverage is
+    // displayed.
     public void verifyChangeremoveCoverageAlertdisplayes() {
         if (getAlertText(driver).contains("reset the owner of limit sharing groups")) {
             PolicyBinderPage pbp = new PolicyBinderPage(driver);

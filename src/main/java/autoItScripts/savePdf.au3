@@ -1,4 +1,4 @@
-
+	
 Example()
 
 Func Example()
@@ -29,7 +29,7 @@ Func Example()
 		send("{TAB}")
 	EndIf
 	Sleep(5000)
-	send("{TAB 15}") 
+	send("{TAB 20}") 
 	send("{ENTER}")
 	; Wait 10 seconds for the Run dialogue window to appear.
 EndFunc   ;==>Example
