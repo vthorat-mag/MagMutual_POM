@@ -175,7 +175,7 @@ public class QA extends ExtentReporter {
         String policyNo = rateapolicypage.policyNo();
         rateapolicypage.coverageDetailSelectForCinCom().cincomFlow(policyNo)
                 .rateFunctionalityWithoutPremiumAmountVerification(policyNo).clickPreviewTab(policyNo)
-                .savePDF(testcaseFormattedID).verifyPdfContent().saveOption(policyNo);
+                .savePDF(testcaseFormattedID).verifyPdfContent(testcaseFormattedID).saveOption(policyNo);
     }
 
     // @Test(description = "Hospital Claim - Verify Change Claim Status", groups
@@ -213,7 +213,7 @@ public class QA extends ExtentReporter {
         rateapolicypage.policyEndorsement(rateapolicypage.policyNo());
         String policyNumber = rateapolicypage.policyNo();
         rateapolicypage.rateFunctionality(policyNumber).clickPreviewTab(policyNumber).savePDF(testcaseFormattedID)
-                .verifyPdfContent();
+                .verifyPdfContent(testcaseFormattedID);
         policyquotepage.saveOptionOfficial(policyNumber);
     }
 
@@ -244,7 +244,7 @@ public class QA extends ExtentReporter {
         RateApolicyPage rateApolicyPage = new RateApolicyPage(driver);
         PolicyQuotePage policyQuotePage = new PolicyQuotePage(driver);
         loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToFinanceHomePage()
-                .searchPolicyOnFinanceHomePage().openFirstAccount().onDemandInvoice()
+                .searchPolicyOnFinanceHomePageBTS_QA().openFirstAccount().onDemandInvoice()
                 .exportExcelSheet(financePageDTO.onDemandInvoiceInstallmentExcel)
                 .selectReceivableTabAndExportExcel(financePageDTO.onDemandInvoiceInstallementBeforeExcel)
                 .selectAccountTabInvoicesButtonAndExportExcel().navigateToPolicyPageThroughPolicyHeaderLink()
@@ -310,7 +310,8 @@ public class QA extends ExtentReporter {
                 .saveAccountInformation().captureSaveScreenshotofMantainAccountpage();
     }
 
-    // @Test(description = "Hospital - Add multiple risks", groups = { "BTS Smoke
+    // @Test(description = "Hospital - Add multiple risks", groups = { "BTS
+    // Smoke
     // Test" }, priority = 21)
     public void TC42244() {
         String Blank = "";
@@ -356,7 +357,8 @@ public class QA extends ExtentReporter {
         policyQuotePage.saveOptionOfficial(policyNum);
     }
 
-    // *******************************QA Test Cases******************************
+    // *******************************QA Test
+    // Cases******************************
 
     @Test(description = "QA Hospital Rate", groups = { "QA Smoke Test" }, priority = 0)
     public void TC43778() {
@@ -406,7 +408,7 @@ public class QA extends ExtentReporter {
         String PolicyNo = policyindicationpage.policyNo();
         policyindicationpage.coverageUpdates(PolicyNo).openLimitSharingTab(PolicyNo).addSharedGroup(PolicyNo)
                 .closeLimitSharingtab().rateFunctionality(PolicyNo);
-        policyQuotePage.clickPreviewTab(PolicyNo).savePDF(testcaseFormattedID).verifyPdfContent();
+        policyQuotePage.clickPreviewTab(PolicyNo).savePDF(testcaseFormattedID).verifyPdfContent(testcaseFormattedID);
         policyQuotePage.saveOptionOfficial(PolicyNo);
         exlUtil.writeData("TC43769", "PolicyNum", PolicyNo, 1, ExcelPath);
     }
@@ -428,7 +430,7 @@ public class QA extends ExtentReporter {
         rateapolicyPage.coverageUpdates(policyNumber);
         exlUtil.writeData("TC43770", "PolicyNum", policyNumber, 1, ExcelPath);
         policyquotepage.rateFunctionalityWithoutPremiumVerification(policyNumber).clickPreviewTab(policyNumber)
-                .savePDF(testcaseFormattedID).verifyPdfContent().saveOption(policyNumber);
+                .savePDF(testcaseFormattedID).verifyPdfContent(testcaseFormattedID).saveOption(policyNumber);
     }
 
     // latest back up policy search - error
@@ -447,7 +449,8 @@ public class QA extends ExtentReporter {
                 .coverageDetailsSelect();
         String policyNumber = rateapolicyPage.policyNo();
         rateapolicyPage.coverageUpdates(policyNumber).rateFunctionalityWithoutPremiumAmountVerification(policyNumber)
-                .clickPreviewTab(policyNumber).savePDF(testcaseFormattedID).verifyPdfContent().saveOption(policyNumber);
+                .clickPreviewTab(policyNumber).savePDF(testcaseFormattedID).verifyPdfContent(testcaseFormattedID)
+                .saveOption(policyNumber);
         exlUtil.writeData("TC43771", "PolicyNum", policyNumber, 1, ExcelPath);
 
     }
@@ -467,7 +470,7 @@ public class QA extends ExtentReporter {
         policybinderpage.endorsementFromActionDropDown().endorsePolicy(policyNumber)
                 .identifyPhase(policyquotepagedto.policyPhaseValue).rateFunctionality(policybinderpage.policyNo());
         String policyNo = policybinderpage.policyNo();
-        policyQuotePage.clickPreviewTab(policyNo).savePDF(testcaseFormattedID).verifyPdfContent();
+        policyQuotePage.clickPreviewTab(policyNo).savePDF(testcaseFormattedID).verifyPdfContent(testcaseFormattedID);
         policybinderpage.saveOption(policyNo);
         exlUtil.writeData("TC43783", "PolicyNum", policyNo, 1, ExcelPath);
         exlUtil.writeData("TC43773", "PolicyNum", policyNo, 1, ExcelPath);
@@ -530,7 +533,7 @@ public class QA extends ExtentReporter {
         PolicyBinderPage pbp = new PolicyBinderPage(driver);
         String policyNo = pbp.policyNo();
         rateapolicyPage.rateFunctionality(policyNo).clickPreviewTab(policyNo).savePDF(testcaseFormattedID)
-                .verifyPdfContent();
+                .verifyPdfContent(testcaseFormattedID);
     }
 
     @Test(description = "QA Hospital Verify Interactive Form", groups = { "QA Smoke Test" }, priority = 10)
@@ -685,7 +688,8 @@ public class QA extends ExtentReporter {
         /*
          * Another solution to run failed test cases
          * 
-         * FailedTCRerun failedtcrun = new FailedTCRerun(); failedtcrun.reRunFailedTC();
+         * FailedTCRerun failedtcrun = new FailedTCRerun();
+         * failedtcrun.reRunFailedTC();
          */
         ExtentReporter.report.flush();
         ExtentReporter.report.close();

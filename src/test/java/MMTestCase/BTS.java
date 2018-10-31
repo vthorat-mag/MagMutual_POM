@@ -59,7 +59,7 @@ public class BTS extends ExtentReporter {
     double duration = 0.0; // get from extent test
     String verdict = "Pass";
     String userRef = "";
-    String ExcelPath = System.getProperty("user.dir") + "\\src\\main\\resources\\Form_Data.xlsx";
+    public static String ExcelPath = System.getProperty("user.dir") + "\\src\\main\\resources\\Form_Data.xlsx";
 
     @BeforeClass(alwaysRun = true)
     public void beforeClass() throws IOException, URISyntaxException {
@@ -200,7 +200,7 @@ public class BTS extends ExtentReporter {
         String PolicyNo = policyindicationpage.policyNo();
         policyindicationpage.coverageUpdates(PolicyNo).openLimitSharingTab(PolicyNo).addSharedGroup(PolicyNo)
                 .closeLimitSharingtab().rateFunctionality(PolicyNo);
-        policyQuotePage.clickPreviewTab(PolicyNo).savePDF(testcaseFormattedID).verifyPdfContent();
+        policyQuotePage.clickPreviewTab(PolicyNo).savePDF(testcaseFormattedID).verifyPdfContent(testcaseFormattedID);
         policyQuotePage.saveOptionOfficial(PolicyNo);
         exlUtil.writeData("TC42238", "PolicyNum", PolicyNo, 1, ExcelPath);
     }
@@ -222,7 +222,7 @@ public class BTS extends ExtentReporter {
         rateapolicyPage.coverageUpdates(policyNumber);
         exlUtil.writeData("TC42242", "PolicyNum", policyNumber, 1, ExcelPath);
         policyquotepage.rateFunctionalityWithoutPremiumVerification(policyNumber).clickPreviewTab(policyNumber)
-                .savePDF(testcaseFormattedID).verifyPdfContent().saveOption(policyNumber);
+                .savePDF(testcaseFormattedID).verifyPdfContent(testcaseFormattedID).saveOption(policyNumber);
     }
 
     @Test(description = "QA Hospital Binder", groups = { "BTS Smoke Test" }, priority = 5)
@@ -240,7 +240,8 @@ public class BTS extends ExtentReporter {
                 .refreshCurrentPage(driver).coverageDetailsSelect();
         String policyNumber = rateapolicyPage.policyNo();
         rateapolicyPage.coverageUpdates(policyNumber).rateFunctionalityWithoutPremiumAmountVerification(policyNumber)
-                .clickPreviewTab(policyNumber).savePDF(testcaseFormattedID).verifyPdfContent().saveOption(policyNumber);
+                .clickPreviewTab(policyNumber).savePDF(testcaseFormattedID).verifyPdfContent(testcaseFormattedID)
+                .saveOption(policyNumber);
         exlUtil.writeData("TC42665", "PolicyNum", policyNumber, 1, ExcelPath);
 
     }
@@ -259,7 +260,7 @@ public class BTS extends ExtentReporter {
         policybinderpage.endorsementFromActionDropDown().endorsePolicy(policyNumber)
                 .identifyPhase(policyquotepagedto.policyPhaseValue).rateFunctionality(policybinderpage.policyNo());
         String policyNo = policybinderpage.policyNo();
-        policyQuotePage.clickPreviewTab(policyNo).savePDF(testcaseFormattedID).verifyPdfContent();
+        policyQuotePage.clickPreviewTab(policyNo).savePDF(testcaseFormattedID).verifyPdfContent(testcaseFormattedID);
         policybinderpage.saveOption(policyNo);
         /*
          * exlUtil.writeData("TC43783", "PolicyNum", policyNo, 1, ExcelPath);
@@ -326,7 +327,7 @@ public class BTS extends ExtentReporter {
         PolicyBinderPage pbp = new PolicyBinderPage(driver);
         String policyNo = pbp.policyNo();
         rateapolicyPage.rateFunctionality(policyNo).clickPreviewTab(policyNo).savePDF(testcaseFormattedID)
-                .verifyPdfContent();
+                .verifyPdfContent(testcaseFormattedID);
         exlUtil.writeData("TC42247", "PolicyNum", policyNo, 1, ExcelPath);
     }
 
@@ -340,7 +341,7 @@ public class BTS extends ExtentReporter {
         String policyNo = rateapolicypage.policyNo();
         rateapolicypage.coverageDetailSelectForCinCom().cincomFlow(policyNo)
                 .rateFunctionalityWithoutPremiumAmountVerification(policyNo).clickPreviewTab(policyNo)
-                .savePDF(testcaseFormattedID).verifyPdfContent();
+                .savePDF(testcaseFormattedID).verifyPdfContent(testcaseFormattedID);
     }
 
     @Test(description = "QA Hospital Create Claim", groups = { "BTS Smoke Test" }, priority = 11)
@@ -392,7 +393,7 @@ public class BTS extends ExtentReporter {
         rateapolicypage.policyEndorsement(rateapolicypage.policyNo());
         String policyNumber = rateapolicypage.policyNo();
         rateapolicypage.rateFunctionality(policyNumber).clickPreviewTab(policyNumber).savePDF(testcaseFormattedID)
-                .verifyPdfContent();
+                .verifyPdfContent(testcaseFormattedID);
         policyquotepage.saveOptionOfficial(policyNumber);
 
     }
@@ -425,7 +426,8 @@ public class BTS extends ExtentReporter {
         rateApolicyPage.AcceptFromActionDropDownwithoutBackupPolicy().billingSetup().refreshCurrentPage(driver)
                 .rateFunctionality(policybinderpage.policyNo()).saveOptionOfficial(policybinderpage.policyNo());
         policybinderpage.endorsementFromActionDropDownwithoutBackupPolicy()
-                .endorseAPolicyforRateApolicyPage(policyNumber).rateFunctionality(policybinderpage.policyNo());
+                .endorseAPolicyforRateApolicyPage(policybinderpage.policyNo())
+                .rateFunctionality(policybinderpage.policyNo());
         String policyNumb = policybinderpage.policyNo();
         policyQuotePage.clickPreviewTab(policyNumb).savePDF(testcaseFormattedID);
         policyQuotePage.saveOptionOfficial(policyNumb);
@@ -458,7 +460,7 @@ public class BTS extends ExtentReporter {
         RateApolicyPage rateApolicyPage = new RateApolicyPage(driver);
         PolicyQuotePage policyQuotePage = new PolicyQuotePage(driver);
         loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToFinanceHomePage()
-                .searchPolicyOnFinanceHomePage().openFirstAccount().onDemandInvoice()
+                .searchPolicyOnFinanceHomePageBTS_QA().openFirstAccount().onDemandInvoice()
                 .exportExcelSheet(financePageDTO.onDemandInvoiceInstallmentExcel)
                 .selectReceivableTabAndExportExcel(financePageDTO.onDemandInvoiceInstallementBeforeExcel)
                 .selectAccountTabInvoicesButtonAndExportExcel().navigateToPolicyPageThroughPolicyHeaderLink()
@@ -491,7 +493,6 @@ public class BTS extends ExtentReporter {
         loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageFromrateApolicyPage()
                 .searchPolicyPolicyQuotePage().selectPolicyAction().addQuoteDescription()
                 .save_CaptureTransactionDetails();
-
         String PolicyNo = policyBinderPage.policyNo();
         policyQuotePage.saveOptionAndCaptureTransactionDetails(policyquotepageDTO.saveAsPolicyDDLValue, PolicyNo);
         String policyNum = policyBinderPage.policyNo();
@@ -502,7 +503,6 @@ public class BTS extends ExtentReporter {
     @Test(description = "FM - Verify that user can create an account in FM", groups = {
             "BTS Smoke Test" }, priority = 19)
     public void TC42251() throws Exception {
-
         LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
         LoginPage loginpage = new LoginPage(driver);
         loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToFinancePageFromHeaderLink().newAccountOpen()

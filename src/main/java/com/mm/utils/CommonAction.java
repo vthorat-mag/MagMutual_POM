@@ -587,16 +587,18 @@ public class CommonAction implements CommonActionInterface {
                 .concat(ExtentReporter.reportFolderPath + "\\" + saveFilName + ".pdf;");
         // Below logic will verify if file present at detination if not it will
         // download file again and copy it to destination folder.
-        if (source.exists() == false) {
-            flag = "false";
-        } else {
-            try {
+        try {
+            if (source.exists() == false) {
+                flag = "false";
+            } else {
+                /* try { */
                 FileUtils.copyFile(source, dest);
-            } catch (IOException e) {
-                e.printStackTrace();
-                Assert.assertTrue(false, "Error while copying file from location " + source + " TO " + dest);
+
+                flag = "true";
             }
-            flag = "true";
+        } catch (IOException e) {
+            e.printStackTrace();
+            Assert.assertTrue(false, "Error while copying file from location " + source + " TO " + dest);
         }
         return flag;
     }
@@ -816,7 +818,6 @@ public class CommonAction implements CommonActionInterface {
             ExtentReporter.logger.log(LogStatus.INFO, "Searching for backUp policy.");
             PolicyQuotePage pqp = new PolicyQuotePage(driver);
             pqp.searchBackUpPolicyUsingSearchCriteriaBTS_QA();
-            // TODO -verify code is working for all test cases.
             flag = "false";
         } else {
             getPageTitle(driver, "Policy Folder " + policybinderpage.policyNo());

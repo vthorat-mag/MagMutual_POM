@@ -341,7 +341,9 @@ public class PolicyBinderPage extends CommonAction {
         if (verifyCpatureTxnDetailsPageDisplayedOrNot(getUpdatedPolicyNo) == false) {
             ExtentReporter.logger.log(LogStatus.INFO, "Capture transaction details is NOT displayed.");
         }
+        switchToParentWindowfromframe(driver);
         sleep(2000);
+        invisibilityOfLoader(driver);
         switchToFrameUsingElement(driver,
                 driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo() + "')]")));
         ExtentReporter.logger.log(LogStatus.INFO,

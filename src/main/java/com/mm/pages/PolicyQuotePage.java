@@ -460,6 +460,7 @@ public class PolicyQuotePage extends CommonAction {
             String errorMsgForPDF = pdfErrorMsg.getAttribute("innerHTML");
             errorMsgForPDF.contains(PDFErrorMsgContains);
             ExtentReporter.logger.log(LogStatus.FAIL, " Error while generating PDF.");
+            Assert.assertTrue(false, "PDF generated sucessfully.");
         } catch (Exception e) {
             ExtentReporter.logger.log(LogStatus.INFO, "PDF generated sucessfully.");
         }

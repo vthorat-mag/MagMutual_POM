@@ -309,12 +309,13 @@ public class ClaimsPage extends CommonAction {
             ExtentReporter.logger.log(LogStatus.INFO, "Transaction is entered and the Alert message is displayed");
             int counter = 0;
             do {
-                sleep(60000);
+                sleep(80000);
                 if (isAlertPresent(driver) == true) {
                     break;
                 }
                 counter++;
             } while (counter < 3);
+            sleep(2000);
             clickButton(driver, saveTransactionBtn, "Save Transaction");
             acceptAlert(driver);
             sleep(2000);
@@ -373,6 +374,7 @@ public class ClaimsPage extends CommonAction {
         switchToFrameUsingId(driver, "popupframe1");
         sleep(1000);
         clickButton(driver, closeTransactionBtn, "Close");
+        sleep(1000);
         isAlertPresent(driver);
         invisibilityOfLoader(driver);
         sleep(4000);

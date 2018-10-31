@@ -25,6 +25,8 @@ import com.mm.utils.PDFReader;
 import com.mm.utils.TestCaseDetails;
 import com.relevantcodes.extentreports.LogStatus;
 
+import MMTestCase.BTS;
+
 public class FinancePage extends CommonAction {
 
     WebDriver driver;
@@ -354,6 +356,9 @@ public class FinancePage extends CommonAction {
     @FindBy(name = "workflowExit_Ok")
     WebElement workFlowExitOk;
 
+    @FindBy(id = "topnav_Policy")
+    WebElement policyMainTab;
+
     // Constructor to initialize variables on Finance page.
     public FinancePage(WebDriver driver) {
         this.driver = driver;
@@ -478,6 +483,48 @@ public class FinancePage extends CommonAction {
             clearTextBox(driver, PolicyNoTxtBox, "Policy Number");
             enterTextIn(driver, PolicyNoTxtBox, financePageDTO.backUpPolicyNum, "Policy Number");
             clickButton(driver, searchBtn, "Search");
+            invisibilityOfLoader(driver);
+            sleep(3000);
+        }
+        Assert.assertTrue(accountList.get(0).isDisplayed(),
+                "Account list is not displayed on " + "Account Search" + "page");
+        return new FinancePage(driver);
+    }
+
+    // Search Account from Search Account text field on Finance Home Page for
+    // New BTS env.
+    public FinancePage searchPolicyOnFinanceHomePageBTS_QA() {
+        PolicyQuotePage PQP = new PolicyQuotePage(driver);
+        HomePage hp = new HomePage(driver);
+        sleep(2000);
+        invisibilityOfLoader(driver);
+        getPageTitle(driver, accountSearchPageTitle);
+        ExtentReporter.logger.log(LogStatus.INFO,
+                "Using the policy from 'Issue Policy Forms' test case enter Policy number in Policy#: search box and click Search.");
+        enterTextIn(driver, PolicyNoTxtBox, financePageDTO.policyNum, "Policy Number");
+        clickButton(driver, searchBtn, "Search");
+        invisibilityOfLoader(driver);
+        sleep(3000);
+        if (verifypolicyNotDisplayErrorMsg(driver).equals("true")) {
+            ExtentReporter.logger.log(LogStatus.INFO,
+                    "Searching for backup policy as account not displayed for previous policy.");
+            try {
+                // This will search new policy when previous policy is not
+                // working.
+                hp.navigateToPolicyPageThroughPolicyHeaderLink();
+                PQP.searchBackUpPolicyUsingSearchCriteriaBTS_QA();
+                String policyNum = PQP.policyNo();
+                exlUtil.writeData("TC42246", "PolicyNum", policyNum, 1, BTS.ExcelPath);
+                hp.navigateToFinanceHomePage();
+                invisibilityOfLoader(driver);
+                getPageTitle(driver, accountSearchPageTitle);
+                enterTextIn(driver, PolicyNoTxtBox, policyNum, "Policy Number");
+                clickButton(driver, searchBtn, "Search");
+                invisibilityOfLoader(driver);
+                sleep(3000);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             invisibilityOfLoader(driver);
             sleep(3000);
         }
