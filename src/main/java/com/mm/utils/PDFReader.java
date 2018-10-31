@@ -67,7 +67,7 @@ public class PDFReader extends CommonAction {
     }
 
     // Logic to verify PDF content.
-    public PolicyBinderPage verifyPdfContent() {
+    public PolicyBinderPage verifyPdfContent(String testcaseFormattedID) {
         sleep(15000);
         try {
             // getPageTitle(driver, "Policy Folder "+PolicyNo);
@@ -80,6 +80,8 @@ public class PDFReader extends CommonAction {
 
             try {
                 File file = new File("C:\\savePDF\\verifyPDF.pdf");
+                String pdfPath = ExtentReporter.reportFolderPath + "\\" + testcaseFormattedID + ".pdf";
+                // File file = new File(pdfPath);
                 pdDoc = PDDocument.load(file);
                 noOfPDFPages = pdDoc.getNumberOfPages();
                 pdfStripper = new PDFTextStripper();

@@ -205,7 +205,7 @@ public class BTS_2017 extends ExtentReporter {
 
         policyindicationpage.coverageUpdates(PolicyNo).openLimitSharingTab(PolicyNo).addSharedGroup(PolicyNo)
                 .closeLimitSharingtab().rateFunctionality(PolicyNo);
-        policyQuotePage.clickPreviewTab(PolicyNo).savePDF(reportFolderPath).verifyPdfContent();
+        policyQuotePage.clickPreviewTab(PolicyNo).savePDF(reportFolderPath).verifyPdfContent(testcaseFormattedID);
         policyQuotePage.saveOptionOfficial(PolicyNo);
         exlUtil.writeData("TC42238", "PolicyNum", PolicyNo, 1, ExcelPath);
     }
@@ -229,7 +229,7 @@ public class BTS_2017 extends ExtentReporter {
         String policyNumber = policyquotepage.policyNo();
         rateapolicyPage.coverageUpdates(policyNumber);
         policyquotepage.rateFunctionality(policyNumber).clickPreviewTab(policyNumber).savePDF(reportFolderPath)
-                .verifyPdfContent().saveOption(policyNumber);
+                .verifyPdfContent(testcaseFormattedID).saveOption(policyNumber);
         exlUtil.writeData("TC42242", "PolicyNum", policyNumber, 1, ExcelPath);
     }
 
@@ -248,7 +248,7 @@ public class BTS_2017 extends ExtentReporter {
                 .coverageDetailsSelect();
         String policyNumber = rateapolicyPage.policyNo();
         rateapolicyPage.coverageUpdates(policyNumber).rateFunctionality(policyNumber).clickPreviewTab(policyNumber)
-                .savePDF(reportFolderPath).verifyPdfContent().saveOption(policyNumber);
+                .savePDF(reportFolderPath).verifyPdfContent(testcaseFormattedID).saveOption(policyNumber);
         exlUtil.writeData("TC42665", "PolicyNum", policyNumber, 1, ExcelPath);
     }
 
@@ -268,7 +268,7 @@ public class BTS_2017 extends ExtentReporter {
         policybinderpage.endorsementFromActionDropDown().endorsePolicy(policyNumber)
                 .identifyPhase(indicationPageDTO.policyPhaseValue).rateFunctionality(policybinderpage.policyNo());
         String policyNo = policybinderpage.policyNo();
-        policyQuotePage.clickPreviewTab(policyNo).savePDF(reportFolderPath).verifyPdfContent();
+        policyQuotePage.clickPreviewTab(policyNo).savePDF(reportFolderPath).verifyPdfContent(testcaseFormattedID);
         policybinderpage.saveOption(policyNo);
         exlUtil.writeData("TC42399", "PolicyNum", policyNo, 1, ExcelPath);
         exlUtil.writeData("TC42240", "PolicyNum", policyNo, 1, ExcelPath);
@@ -326,7 +326,7 @@ public class BTS_2017 extends ExtentReporter {
         PolicyBinderPage pbp = new PolicyBinderPage(driver);
         String policyNo = pbp.policyNo();
         rateapolicyPage.rateFunctionality(policyNo).clickPreviewTab(policyNo).savePDF(reportFolderPath)
-                .verifyPdfContent();
+                .verifyPdfContent(testcaseFormattedID);
         exlUtil.writeData("TC42247", "PolicyNum", policyNumber, 1, ExcelPath);
     }
 
@@ -340,7 +340,8 @@ public class BTS_2017 extends ExtentReporter {
                 .searchPolicyRateAPolicyPage();
         String policyNo = rateapolicypage.policyNo();
         rateapolicypage.coverageDetailSelectForCinCom().cincomFlow(policyNo).rateFunctionality(policyNo)
-                .clickPreviewTab(policyNo).savePDF(reportFolderPath).verifyPdfContent().saveOption(policyNo);
+                .clickPreviewTab(policyNo).savePDF(reportFolderPath).verifyPdfContent(testcaseFormattedID)
+                .saveOption(policyNo);
     }
 
     @Test(description = "Hospital Create Claim", groups = { "BTS Smoke Test" }, priority = 11)
@@ -394,7 +395,7 @@ public class BTS_2017 extends ExtentReporter {
                 .searchPolicyRateAPolicyPage();
         String policyNumber = rateapolicypage.policyNo();
         rateapolicypage.policyEndorsement(policyNumber).rateFunctionality(policyNumber).clickPreviewTab(policyNumber)
-                .savePDF(reportFolderPath).verifyPdfContent();
+                .savePDF(reportFolderPath).verifyPdfContent(testcaseFormattedID);
         policyQuotePage.saveOptionOfficial(policyNumber);
     }
 
@@ -426,7 +427,8 @@ public class BTS_2017 extends ExtentReporter {
                 .rateFunctionality(policybinderpage.policyNo()).saveOptionOfficial(policybinderpage.policyNo());
         policybinderpage.endorsementFromActionDropDownwithoutBackupPolicy()
                 .endorseAPolicyforRateApolicyPage(policyNumber).rateFunctionality(policybinderpage.policyNo());
-        policyQuotePage.clickPreviewTab(policybinderpage.policyNo()).savePDF(reportFolderPath).verifyPdfContent();
+        policyQuotePage.clickPreviewTab(policybinderpage.policyNo()).savePDF(reportFolderPath)
+                .verifyPdfContent(testcaseFormattedID);
         policyQuotePage.saveOptionOfficial(policybinderpage.policyNo());
         exlUtil.writeData("TC42243", "PolicyNum", policybinderpage.policyNo(), 1, ExcelPath);
         exlUtil.writeData("TC42246", "PolicyNum", policybinderpage.policyNo(), 1, ExcelPath);
