@@ -308,6 +308,32 @@ public class PolicyBinderPage extends CommonAction {
         return new PolicyBinderPage(driver);
     }
 
+    // Select Endorsement from "Action DropoDown" on BTS QA env.
+    public PolicyBinderPage endorsementFromActionDropDownBTS_QA() {
+        sleep(3000);
+        ExtentReporter.logger.log(LogStatus.INFO,
+                "Select Policy Actions-> Endorsement. Verify Endorse policy window displays.");
+        if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
+                policybinderpageDTO.valueOfPolicyActionEndorse, "Policy Action").equals("false")) {
+            sleep(2000);
+
+            // This method will select the policy using required criteria
+            PolicyQuotePage quotepage = new PolicyQuotePage(driver);
+            quotepage.searchBackUpPolicyUsingSearchCriteriaBTS_QA();
+            sleep(4000);
+
+            if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction,
+                    policybinderpageDTO.valueOfPolicyActionEndorse, "Policy Action").equals("false")) {
+
+                // navigate through policy list till policy with expected
+                // criteria is found
+                RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
+                rateapolicypage.searchThroughPolicyList(policybinderpageDTO.valueOfPolicyActionEndorse);
+            }
+        }
+        return new PolicyBinderPage(driver);
+    }
+
     // Select Endorsement from "Action DropoDown" without searching for backup
     // policy.
     public PolicyBinderPage endorsementFromActionDropDownwithoutBackupPolicy() {

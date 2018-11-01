@@ -309,15 +309,15 @@ public class ClaimsPage extends CommonAction {
             ExtentReporter.logger.log(LogStatus.INFO, "Transaction is entered and the Alert message is displayed");
             int counter = 0;
             do {
-                sleep(80000);
+                sleep(30000);
                 if (isAlertPresent(driver) == true) {
                     break;
                 }
                 counter++;
-            } while (counter < 3);
+            } while (counter < 6);
             sleep(2000);
             clickButton(driver, saveTransactionBtn, "Save Transaction");
-            acceptAlert(driver);
+            isAlertPresent(driver);
             sleep(2000);
             // close Add transaction window
             closeAddTransactionWindow();

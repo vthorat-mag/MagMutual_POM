@@ -107,6 +107,9 @@ public class HomePage extends CommonAction {
     @FindBy(id = "PM_SPOL_SEARCH")
     WebElement searchCriteria;
 
+    @FindBy(name = "search")
+    WebElement globalSearchButton;
+
     @FindBy(id = "CPOLICYSTATUSLOVLABEL")
     List<WebElement> policyStatus;
 
@@ -136,6 +139,9 @@ public class HomePage extends CommonAction {
 
     @FindBy(name = "entitySearch_addlField")
     WebElement vendorID;
+
+    @FindBy(name = "globalSearch")
+    WebElement golbalSearch;
 
     // Constructor to initialize driver, page elements and DTO PageObject for
     // HomePage
@@ -256,14 +262,20 @@ public class HomePage extends CommonAction {
         // Enter policy number in Policy/Quote# text field
         ExtentReporter.logger.log(LogStatus.INFO,
                 "Enter in Hospital or Facility # from 'Issue Policy Form' test case, click Search. Verify Policy # displays correctly under Policy Count tab");
-        clearTextBox(driver, policyOrQuoteNum, "Policy/Quote#");
-        enterTextIn(driver, policyOrQuoteNum, homepageDTO.policyNum, "Policy/Quote#");
-        clickButton(driver, searchCriteria, "Search");
+        clearTextBox(driver, golbalSearch, "Policy/Quote#");
+        enterTextIn(driver, golbalSearch, homepageDTO.policyNum, "Policy/Quote#");
+        clickButton(driver, globalSearchButton, "Search");
         sleep(3000);
         // Select the first policy from the search results under Count tab
-        ExtentReporter.logger.log(LogStatus.INFO,
-                "Click the Policy number under Policy/Quote# column. Full Policy displays when web cycles to active policy window");
-        click(driver, policyNumFromPolicyCount, homepageDTO.policyNum);
+        ExtentReporter.logger.log(LogStatus.INFO, "Click the Policy number under Policy/Quote# column.");
+        try {
+            if (policyNumFromPolicyCount.isDisplayed()) {
+                click(driver, policyNumFromPolicyCount, homepageDTO.policyNum);
+            }
+        } catch (Exception e) {
+            ExtentReporter.logger.log(LogStatus.INFO, homepageDTO.policyNum
+                    + " policy is not displayed in policy list instead policy is opend directly.");
+        }
         invisibilityOfLoader(driver);
         rateapolicyPage = new RateApolicyPage(driver);
 
@@ -313,8 +325,8 @@ public class HomePage extends CommonAction {
     }
 
     /*
-     * Entity Select Search window appears and then we enter Organization name and
-     * search Then select the Organization name from populated list.
+     * Entity Select Search window appears and then we enter Organization name
+     * and search Then select the Organization name from populated list.
      */
     public HomePage searchEntity(String lastOrgNameValue, String vendorIDValue) {
 
@@ -337,12 +349,14 @@ public class HomePage extends CommonAction {
         ExtentReporter.logger.log(LogStatus.INFO,
                 "Click the checkbox next to the name to select the risk. Verify Risk is selected");
 
-        // If the Entity name is not provided then select first client name check box.
+        // If the Entity name is not provided then select first client name
+        // check box.
         if (clientNameFromDataSheet.equals(Empty)) {
 
             clickButton(driver, Select_Entity_Checkbox.get(0), "Select Entity Checkbox");
         } else {
-            // If the Entity name is provided then search and select Entity name check box.
+            // If the Entity name is provided then search and select Entity name
+            // check box.
 
             boolean flag = false;
             try {
@@ -353,7 +367,8 @@ public class HomePage extends CommonAction {
                     // Get the current client name from application to compare
                     String clientNameValue = clientNameList.get(i).getAttribute("innerHTML").trim();
 
-                    // Compare client name from application with client name from data sheet
+                    // Compare client name from application with client name
+                    // from data sheet
                     if (clientNameValue.equals(clientNameFromDataSheet)) {
 
                         ExtentReporter.logger.log(LogStatus.INFO, "Select risk " + clientNameFromDataSheet
@@ -368,7 +383,8 @@ public class HomePage extends CommonAction {
                     throw new Exception("Value from Data Sheet is not available in Entity list.");
                 }
             } catch (Exception e) {
-                // if the Entity name from Data sheet is not available use random entity name
+                // if the Entity name from Data sheet is not available use
+                // random entity name
                 // from list excluding top 4
                 int num = Integer.valueOf(randomNumGenerator(1, "456789"));
                 String substituteRiskName = Select_Entity_Checkbox.get(num).getAttribute("innerHTML");
@@ -438,13 +454,18 @@ public class HomePage extends CommonAction {
                 "Enter/Select the below information Effective Date: Enter Today's Date"
                         + "Issue Company: Select 'Professional Security Insurance' "
                         + "Issue State:Select GA. Click Search. Verify Policy Type window will display below");
-        // getPageTitle(driver, selectPolicyTypePageTitle); //TODO- clarify, Page title
+        // getPageTitle(driver, selectPolicyTypePageTitle); //TODO- clarify,
+        // Page title
         // is different in QA
         // Verify Select Policy Type window appeared, enter Effective date,Issue
         // company,state and click Search
         CommonUtilities comUtil = new CommonUtilities();
         String todaysDate = comUtil.getSystemDatemmddyyyy();
-        enterTextIn(driver, Effe_Date, todaysDate, "Effective Date"); // Updated date, taken current date
+        enterTextIn(driver, Effe_Date, todaysDate, "Effective Date"); // Updated
+                                                                      // date,
+                                                                      // taken
+                                                                      // current
+                                                                      // date
         selectDropdownByValue(driver, Issue_Comp, homepageDTO.issueCompany, "Issue Company");
         selectDropdownByValue(driver, Issue_State_Code, homepageDTO.issueState, "Issue State");
         click(driver, Policy_Search, "Search button for policy type");
