@@ -399,6 +399,7 @@ public class PolicyQuotePage extends CommonAction {
         sleep(2000);
         invisibilityOfLoader(driver);
         clickButton(driver, applyButton, "Apply");
+        sleep(2000);
         isAlertPresent(driver);
         return new PolicyQuotePage(driver);
     }
@@ -523,7 +524,7 @@ public class PolicyQuotePage extends CommonAction {
             // Deleting the Work in progress will enable required action from
             // policy Action
             // DDL
-            searchBackUpPolicyUsingSearchCriteria();
+            searchBackUpPolicyUsingSearchCriteriaBTS_QA();
             sleep(5000);
 
             if (selectDropdownByValueFromPolicyActionDDL(driver, policyAction, policyquotepageDTO.policyActionValue,

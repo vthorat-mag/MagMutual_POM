@@ -389,8 +389,8 @@ public class BTS extends ExtentReporter {
         lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
         loginpage = new LoginPage(driver);
         loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageUsingHeaderPolicyLink()
-                .searchPolicyRateAPolicyPage();
-        rateapolicypage.policyEndorsement(rateapolicypage.policyNo());
+                .searchPolicyRateAPolicyPageBTS_QA();
+        rateapolicypage.policyEndorsementBTS_QA(rateapolicypage.policyNo());
         String policyNumber = rateapolicypage.policyNo();
         rateapolicypage.rateFunctionality(policyNumber).clickPreviewTab(policyNumber).savePDF(testcaseFormattedID)
                 .verifyPdfContent(testcaseFormattedID);
@@ -446,7 +446,8 @@ public class BTS extends ExtentReporter {
         loginpage = new LoginPage(driver);
         loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageUsingHeaderPolicyLink();
         findapolicypage.openSearchPolicyPane().openSearchPolicyPane().selectTermStatusAndIssueCompany()
-                .selectPolicyType().searchFromFindPolicyPage().selectValueFromActionDropDown().ImageRightFocus();
+                .selectPolicyType().policySearchFromFindPolicyPage_BTS_QA().selectValueFromActionDropDown()
+                .ImageRightFocus();
     }
 
     @Test(description = "FM - Hospital Verify FM Installment", groups = { "BTS Smoke Test" }, priority = 17)
@@ -491,7 +492,7 @@ public class BTS extends ExtentReporter {
         PolicyQuotePageDTO policyquotepageDTO = new PolicyQuotePageDTO(TestCaseDetails.testDataDictionary);
         PolicyBinderPage policyBinderPage = new PolicyBinderPage(driver);
         loginpage.loginToeOasis(lpDTO.username, lpDTO.password).navigateToPolicyPageFromrateApolicyPage()
-                .searchPolicyPolicyQuotePage().selectPolicyAction().addQuoteDescription()
+                .searchPolicyPolicyQuotePageBTS_QA().selectPolicyAction().addQuoteDescription()
                 .save_CaptureTransactionDetails();
         String PolicyNo = policyBinderPage.policyNo();
         policyQuotePage.saveOptionAndCaptureTransactionDetails(policyquotepageDTO.saveAsPolicyDDLValue, PolicyNo);

@@ -274,6 +274,13 @@ public class RateApolicyPage extends CommonAction {
         return new RateApolicyPage(driver);
     }
 
+    public RateApolicyPage policyEndorsementBTS_QA(String PolicyNo) {
+        PolicyBinderPage pbp = new PolicyBinderPage(driver);
+        pbp.endorsementFromActionDropDownBTS_QA();
+        pbp.endorsePolicy(policyNo());
+        return new RateApolicyPage(driver);
+    }
+
     // Select Endorsement from Policy Action and from Endorse Policy pop up
     // select Reason as 'Issue Policy Forms'
     public RateApolicyPage policyEndorsementForQA(String policyNo) {
@@ -428,6 +435,14 @@ public class RateApolicyPage extends CommonAction {
             AcceptFromActionDropDownwithoutBackupPolicy();
         }
         return new RateApolicyPage(driver);
+    }
+
+    public PolicyQuotePage searchPolicyRateAPolicyPageBTS_QA() throws Exception {
+        if (searchPolicyBTS_QA(rateApolicyPageDTO.policyNum).equals("false")) {
+            sleep(3000);
+            // AcceptFromActionDropDownwithoutBackupPolicy();
+        }
+        return new PolicyQuotePage(driver);
     }
 
     public PolicyBinderPage searchPolicyPolicyBinderPage() {
