@@ -243,12 +243,11 @@ public class PolicyBinderPage extends CommonAction {
         // TODO - Need To add below steps once got confirmaiton on query - Cant
         // see policy No from Policy No drop down field.
         /*
-         * In the filter criteria section, click the Policy No dropdown and
-         * Select [Policy number entered in step 3] Click the checkbox next the
-         * Prof Liab coverage Click Save as Claim Possible duplicate claim
-         * screen displays Click Save as Claim Claim No displays in the upper
-         * left corner. Note (and save for later input) the claim number:
-         * ****add ########### Click [Close]
+         * In the filter criteria section, click the Policy No dropdown and Select
+         * [Policy number entered in step 3] Click the checkbox next the Prof Liab
+         * coverage Click Save as Claim Possible duplicate claim screen displays Click
+         * Save as Claim Claim No displays in the upper left corner. Note (and save for
+         * later input) the claim number: ****add ########### Click [Close]
          */
     }
 
@@ -268,7 +267,7 @@ public class PolicyBinderPage extends CommonAction {
 
     // Identify Policy number from Page.
     public String policyNo() {
-        sleep(2000);
+        sleep(3000);
         String profileNoLable = pageHeaderForPolicyFolder.getAttribute("innerHTML");
         String[] portfolioNo = profileNoLable.split(" ", 3);
         return portfolioNo[2];
@@ -502,8 +501,8 @@ public class PolicyBinderPage extends CommonAction {
         // called
         /*
          * switchToFrameUsingElement(driver,
-         * driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" +
-         * policyNo() + "')]")));
+         * driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo()
+         * + "')]")));
          */
         switchToFrameUsingElement(driver, entityMiniPopupFrameId);
         ExtentReporter.logger.log(LogStatus.INFO,
@@ -544,6 +543,7 @@ public class PolicyBinderPage extends CommonAction {
         switchToFrameUsingElement(driver,
                 driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNum + "')]")));
         // switchToFrameUsingElement(driver,"popupframe1");
+        sleep(2000);
         WebDriverWait wait = new WebDriverWait(driver, High);
         wait.until(ExpectedConditions.visibilityOf(selectReason));
         ExtentReporter.logger.log(LogStatus.INFO,

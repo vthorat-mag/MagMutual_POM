@@ -70,13 +70,16 @@ public class CincomPage extends CommonAction {
     @FindBy(id = "ictextField")
     WebElement titleHFLHPLCHGGE;
 
+    @FindBy(name = "ictextField")
+    WebElement titleHFLHPLCHGGETextField;
+
     @FindBy(name = "paraSel")
     WebElement freeFormCHGGEBeginChkBox;
 
     @FindBy(xpath = "//button[@role='presentation']//i[@class='mce-ico mce-i-paste']")
     WebElement saveIconOnCincom;
 
-    @FindBy(xpath = "//body[@id = 'tinymce']//p")
+    @FindBy(xpath = "//body[@id = 'tinymce']")
     WebElement freeFormCHGGEBeginTxtField;
 
     @FindBy(xpath = "//iframe[contains(@title,'Rich Text Area')]")
@@ -150,7 +153,7 @@ public class CincomPage extends CommonAction {
             ExtentReporter.logger.log(LogStatus.INFO, "Enter additional text: " + cincomedto.phase.get(k) + "");
             enterTextIn(driver, addText, cincomedto.phase.get(k) + " form added.", "Aditional Text");
             ExtentReporter.logger.log(LogStatus.INFO, "Select [Save]");
-            sleep(2000);
+            sleep(3000);
             clickButton(driver, manuscriptPageSaveBtn, "Manu Script page Save");
             sleep(4000);
             ExtentReporter.logger.log(LogStatus.INFO, "Select Form " + cincomedto.phase.get(k));
@@ -198,24 +201,34 @@ public class CincomPage extends CommonAction {
                                         + "\r\n" + "'Automated Test Case {Today's Date}\r\n" + "This test is to\r\n"
                                         + "\r\n" + "Adds the form \r\n" + "Enter data entry \r\n"
                                         + "Verify Bulletpoints display as entered. '");
-
+                        // If the Free Form CHGGE check box is unchecked, then select check box.
                         if (freeFormCHGGEBeginChkBox.getAttribute("class").trim().equalsIgnoreCase("unchecked")) {
                             clickButton(driver, freeFormCHGGEBeginChkBox, "freeFormCHGGEBeginChkBox");
                         }
                         sleep(2000);
+                        // To get cursor position
+                        titleHFLHPLCHGGETextField.click();
+                        sleep(2000);
                         CommonUtilities comUtil = new CommonUtilities();
                         ExtentReporter.logger.log(LogStatus.INFO, "Select Font Family: Arial Select Font Size: 10pt");
                         JavascriptExecutor executor = (JavascriptExecutor) driver;
+                        // Enter required test in the text field using TinyMCE
+
                         executor.executeScript("tinyMCE.activeEditor.setContent('<p>Automated Test Case {"
                                 + comUtil.getSystemDatemm_dd_yyyy()
                                 + "}</p>This test is to <ul><li>Adds the form</li><li>Enter data entry </li><li>Verify Bulletpoints display as entered</li></ul>')");
-                        // executor.executeScript("document.getElementById('mceu_44-text').click();",
-                        // "");
-                        executor.executeScript("document.getElementById('mceu_22-open').innerHTML = 'Arial';", "");
-                        executor.executeScript("document.getElementById('mceu_23-open').innerHTML = '10pt';", "");
+
+                        // executor.executeScript("document.getElementById('mceu_47').click();", "");
+                        executor.executeScript("document.getElementById('mceu_43-open').innerHTML='Arial';", "");
+                        executor.executeScript("document.getElementById('mceu_44-open').innerHTML='10pt';", "");
+                        String[] executionPath = {
+                                System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\Cincom.exe" };
+                        Runtime.getRuntime().exec(executionPath).waitFor(20, TimeUnit.SECONDS);
+                        sleep(3000);
                         ExtentReporter.logger.log(LogStatus.INFO,
                                 "Click [Delivery Options] & verify Check Spelling window will appear.");
                         clickButton(driver, DelOptions, "Delivery Options");
+                        sleep(4000);
                         ExtentReporter.logger.log(LogStatus.INFO,
                                 "Click Ingore All(Might have to do it multiple times) & verify Check Spelling window is closes.");
                         boolean chkspellpopupvalue = verifyCheckSpellingPopup();
@@ -230,6 +243,7 @@ public class CincomPage extends CommonAction {
                         ExtentReporter.logger.log(LogStatus.INFO,
                                 "Click [Deliver] Exit out of window  & Return code: 0 message appears, Exit out of window.");
                         clickButton(driver, deliverBtn, "deliver button");
+                        sleep(2000);
                         visibilityOfElement(driver, sucessMsg, "Sucess Message");
                         driver.close();
                     } catch (Exception e) {
@@ -240,7 +254,7 @@ public class CincomPage extends CommonAction {
                                 driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
                         sleep(2000);
                         clickButton(driver, manuscriptPageCloseBtn, "Manu Script page Close");
-                        sleep(5000);
+                        sleep(3000);
                         switchToParentWindowfromframe(driver);
                         Assert.assertTrue(false, "Error while performing action on Cincom Page.");
                     }
@@ -253,16 +267,17 @@ public class CincomPage extends CommonAction {
                         driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
                 sleep(2000);
                 clickButton(driver, manuscriptPageCloseBtn, "Manu Script page Close");
-                sleep(5000);
+                sleep(2000);
                 switchToParentWindowfromframe(driver);
                 Assert.assertTrue(false, "Error while opening Cincom Page.");
             }
 
             switchToParentWindowfromotherwindow(driver, parentWindowId);
+            sleep(1000);
             switchToFrameUsingElement(driver,
                     driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + PolicyNo + "')]")));
-
-            clickButton(driver, manuscriptPageSaveBtn, "Manu Script page Save");
+            sleep(3000);
+            click(driver, manuscriptPageSaveBtn, "Manu Script page Save");
             sleep(2000);
             clickButton(driver, manuscriptPageCloseBtn, "Manu Script page Close");
             switchToParentWindowfromframe(driver);

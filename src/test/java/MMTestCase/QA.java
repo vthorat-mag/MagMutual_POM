@@ -361,12 +361,14 @@ public class QA extends ExtentReporter {
     // *******************************QA Test
     // Cases******************************
 
-    @Test(description = "QA Hospital Rate", groups = { "QA Smoke Test" }, priority = 0)
+    // @Test(description = "QA Hospital Rate", groups = { "QA Smoke Test" },
+    // priority = 0)
     public void TC43778() {
         TC42239();
     }
 
-    @Test(description = "QA Hospital Verify Add Organization", groups = { "QA Smoke Test" }, priority = 1)
+    // @Test(description = "QA Hospital Verify Add Organization", groups = { "QA
+    // Smoke Test" }, priority = 1)
     public void TC43767() {
         LoginPage loginpage = new LoginPage(driver);
         LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
@@ -378,7 +380,8 @@ public class QA extends ExtentReporter {
         exlUtil.writeData("TC43768", "lastOrgName", OrganizationName, 1, ExcelPath);
     }
 
-    @Test(description = "QA Verify CIS Page Displays", groups = { "QA Smoke Test" }, priority = 2)
+    // @Test(description = "QA Verify CIS Page Displays", groups = { "QA Smoke Test"
+    // }, priority = 2)
     public void TC43766() {
         TC42253();
     }
@@ -453,7 +456,6 @@ public class QA extends ExtentReporter {
                 .clickPreviewTab(policyNumber).savePDF(testcaseFormattedID).verifyPdfContent(testcaseFormattedID)
                 .saveOption(policyNumber);
         exlUtil.writeData("TC43771", "PolicyNum", policyNumber, 1, ExcelPath);
-
     }
 
     // latest back up policy search done
@@ -517,7 +519,6 @@ public class QA extends ExtentReporter {
         financepage.savePolicyAsofficial().navigateToFinancePageFromHeaderLink().searchPolicyOnFinanceHomePage()
                 .openFirstAccount().downloadExcel(financePageDTO.CancelledCoverageTransactionFileName)
                 .receivableDownloaWithoutNavigationForQA(financePageDTO.CreditInstallmentAfterFileName);
-
     }
 
     @Test(description = "QA Hospital Verify Attach Form", groups = { "QA Smoke Test" }, priority = 9)
@@ -604,7 +605,8 @@ public class QA extends ExtentReporter {
         rateApolicyPage.AcceptFromActionDropDownwithoutBackupPolicy().billingSetup().refreshCurrentPage(driver)
                 .rateFunctionality(policybinderpage.policyNo()).saveOptionOfficial(policybinderpage.policyNo());
         policybinderpage.endorsementFromActionDropDownwithoutBackupPolicy()
-                .endorseAPolicyforRateApolicyPage(policyNumber).rateFunctionality(policybinderpage.policyNo());
+                .endorseAPolicyforRateApolicyPage(policybinderpage.policyNo())
+                .rateFunctionality(policybinderpage.policyNo());
         String policyNumb = policybinderpage.policyNo();
         policyQuotePage.clickPreviewTab(policyNumb).savePDF(testcaseFormattedID);
         policyQuotePage.saveOptionOfficial(policyNumb);
@@ -647,8 +649,7 @@ public class QA extends ExtentReporter {
     }
 
     @AfterMethod(alwaysRun = true)
-    public void logoffFromAppclication(ITestResult result) throws IOException, InterruptedException, URISyntaxException,
-            IllegalArgumentException, IllegalAccessException, SecurityException {
+    public void logoffFromAppclication(ITestResult result) {
         ExtentReporter.report.endTest(ExtentReporter.logger);
         HomePage homepage = new HomePage(driver);
         if (ITestResult.FAILURE == result.getStatus()) {
@@ -677,9 +678,15 @@ public class QA extends ExtentReporter {
         if (!ExtentReporter.excelPath.equals("")) {
             ExtentReporter.excelPath = ExtentReporter.excelPath.substring(0, ExtentReporter.excelPath.lastIndexOf(";"));
         }
-        iR.updateResultsInRally(serverURL, username, password, workspace, project, testcaseFormattedID.toUpperCase(),
-                buildNumber, notes, userRef, duration, verdict, ExtentReporter.excelPath);
-
+        try {
+            iR.updateResultsInRally(serverURL, username, password, workspace, project,
+                    testcaseFormattedID.toUpperCase(), buildNumber, notes, userRef, duration, verdict,
+                    ExtentReporter.excelPath);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExtentReporter.logger.log(LogStatus.WARNING, "Error while updating results in Rally");
+        }
+        ExtentReporter.report.flush();
         sleep(2000);
         // driver.quit();
     }

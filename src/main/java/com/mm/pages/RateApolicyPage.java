@@ -554,19 +554,16 @@ public class RateApolicyPage extends CommonAction {
         rob.keyPress(KeyEvent.VK_ENTER);
         rob.keyRelease(KeyEvent.VK_ENTER);
         /*
-         * try { File file = new
-         * File("C:\\MM_Testcase_Output\\"+fileDate+".xlsx");
+         * try { File file = new File("C:\\MM_Testcase_Output\\"+fileDate+".xlsx");
          * 
-         * if(file.exists()) {
-         * System.out.println("File is available at location");
+         * if(file.exists()) { System.out.println("File is available at location");
          * ExtentReporter.logger.log(LogStatus.PASS,
          * "Excel file is available at download location."); }
          * 
          * }catch(Exception e) {
          * System.out.println("File is Not available at location");
          * ExtentReporter.logger.log(LogStatus.FAIL,
-         * "Excel file is Not available at download location.");
-         * e.printStackTrace(); }
+         * "Excel file is Not available at download location."); e.printStackTrace(); }
          */
         return fileNamePath;
     }
@@ -736,8 +733,8 @@ public class RateApolicyPage extends CommonAction {
         ExtentReporter.logger.log(LogStatus.INFO, "Click [Save] Billing account is setup");
         clickButton(driver, billingSetupSaveBtn, "Save Button");
         sleep(15000);
-        invisibilityOfLoader(driver);
         switchToParentWindowfromframe(driver);
+        invisibilityOfLoader(driver);
         visibilityOfElement(driver, rateBtn, "Rate Button");
         return new RateApolicyPage(driver);
     }
@@ -893,6 +890,7 @@ public class RateApolicyPage extends CommonAction {
     }
 
     public RateApolicyPage refreshCurrentPage(WebDriver driver) {
+        sleep(3000);
         refreshAPage(driver);
         sleep(6000);
         if (isAlertPresent(driver) == false) {
@@ -975,17 +973,17 @@ public class RateApolicyPage extends CommonAction {
         ExtentReporter.logger.log(LogStatus.INFO,
                 "Click rate button in center of screen. Rate window validates and save, View Premium pop up window displays with correct rates");
         clickButton(driver, rateBtn, "Rate Tab");
-        sleep(6000);
+        sleep(5000);
         invisibilityOfLoader(driver);
         // If Product Notify Window appears then it will switch to window and
         // select 'Yes' from that window and close window
         handleProducNotifyWindow(policyNo);
-        sleep(3000);
+        sleep(2000);
         invisibilityOfLoader(driver);
         switchToParentWindowfromframe(driver);
         switchToFrameUsingElement(driver,
                 driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo + "')]")));
-        sleep(3000);
+        sleep(1000);
         invisibilityOfLoader(driver);
         waitForElementToLoad(driver, 30, closeBtnOnViewPremiumPopup);
         // Get the number of last row of Written premium from View premium

@@ -525,7 +525,7 @@ public class CommonAction implements CommonActionInterface {
     public void invisibilityOfLoader(WebDriver driver) {
         int i = 0;
         do {
-            sleep(2000);
+            sleep(3000);
             try {
                 if (verifypageloaderdisplayedornot(driver) == true) {
                     WebElement pageLoader = driver.findElement(By.xpath("//span[@class='txtOrange']"));
