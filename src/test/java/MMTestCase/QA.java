@@ -360,14 +360,12 @@ public class QA extends ExtentReporter {
     // *******************************QA Test
     // Cases******************************
 
-    // @Test(description = "QA Hospital Rate", groups = { "QA Smoke Test" },
-    // priority = 0)
+    @Test(description = "QA Hospital Rate", groups = { "QA Smoke Test" }, priority = 0)
     public void TC43778() {
         TC42239();
     }
 
-    // @Test(description = "QA Hospital Verify Add Organization", groups = { "QA
-    // Smoke Test" }, priority = 1)
+    @Test(description = "QA Hospital Verify Add Organization", groups = { "QA Smoke Test" }, priority = 1)
     public void TC43767() {
         LoginPage loginpage = new LoginPage(driver);
         LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
@@ -379,9 +377,7 @@ public class QA extends ExtentReporter {
         exlUtil.writeData("TC43768", "lastOrgName", OrganizationName, 1, ExcelPath);
     }
 
-    // @Test(description = "QA Verify CIS Page Displays", groups = { "QA Smoke
-    // Test"
-    // }, priority = 2)
+    @Test(description = "QA Verify CIS Page Displays", groups = { "QA Smoke Test" }, priority = 2)
     public void TC43766() {
         TC42253();
     }
@@ -502,10 +498,7 @@ public class QA extends ExtentReporter {
     // TODO-latest search
     @Test(description = "FM - Hospital Verify Credit Applications", groups = { "QA Smoke Test" }, priority = 8)
     public void TC44219() {
-        // To reuse canceled UMBPL -reinstate the UMB PL coverage by selecting
-        // the coverage UMB PL
-        // and click Policy Actions>Reinstate, then click rate and then save as
-        // official,
+        // To reuse canceled UMBPL -reinstate
         FinancePage financepage = new FinancePage(driver);
         RateApolicyPage rateAPolicyPage = new RateApolicyPage(driver);
         LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
@@ -650,7 +643,7 @@ public class QA extends ExtentReporter {
 
     @AfterMethod(alwaysRun = true)
     public void logoffFromAppclication(ITestResult result) {
-        ExtentReporter.report.endTest(ExtentReporter.logger);
+        // ExtentReporter.report.endTest(ExtentReporter.logger);
         HomePage homepage = new HomePage(driver);
         if (ITestResult.FAILURE == result.getStatus()) {
             verdict = "Fail";
@@ -666,12 +659,12 @@ public class QA extends ExtentReporter {
 
         } else if (ITestResult.SUCCESS == result.getStatus()) {
             verdict = "Pass";
-            // homepage.logoutFromeOasis();
+            homepage.logoutFromeOasis();
         } else if (ITestResult.SKIP == result.getStatus()) {
             verdict = "Hold";
         }
-        // ExtentReporter.report.endTest(ExtentReporter.logger);
-        // ExtentReporter.report.flush();
+        ExtentReporter.report.endTest(ExtentReporter.logger);
+        ExtentReporter.report.flush();
         // "Blocked", "Deferred", "Enhancement", "Error", "Fail", "Hold", "In
         // Progress", "Inconclusive", "Invalid", "Out of Scope", "Pass",
         // "Waiting for Policy"
@@ -684,11 +677,10 @@ public class QA extends ExtentReporter {
                     ExtentReporter.excelPath);
         } catch (Exception e) {
             e.printStackTrace();
-            ExtentReporter.logger.log(LogStatus.WARNING, "Error while updating results in Rally");
+            ExtentReporter.logger.log(LogStatus.WARNING, "Error while updating Rally status for " + result.getName());
         }
-        ExtentReporter.report.flush();
         sleep(2000);
-        // driver.quit();
+        driver.quit();
     }
 
     @AfterClass(alwaysRun = true)
@@ -696,13 +688,12 @@ public class QA extends ExtentReporter {
         /*
          * Another solution to run failed test cases
          * 
-         * FailedTCRerun failedtcrun = new FailedTCRerun();
-         * failedtcrun.reRunFailedTC();
+         * FailedTCRerun failedtcrun = new FailedTCRerun(); failedtcrun.reRunFailedTC();
          */
-        ExtentReporter.report.flush();
+        // ExtentReporter.report.flush();
         ExtentReporter.report.close();
         if (driver != null) {
-            // driver.quit();
+            driver.quit();
         }
     }
 }

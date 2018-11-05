@@ -367,8 +367,8 @@ public class PolicyQuotePage extends CommonAction {
         RateApolicyPage rateapolicypage = new RateApolicyPage(driver);
 
         /*
-         * Note- PDF process kill and refresh page code is added because IE
-         * faces issue intermittently after PDF generation.
+         * Note- PDF process kill and refresh page code is added because IE faces issue
+         * intermittently after PDF generation.
          */
         rateapolicypage.refreshCurrentPage(driver);
         try {
