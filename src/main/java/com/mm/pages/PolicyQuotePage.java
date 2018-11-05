@@ -408,12 +408,7 @@ public class PolicyQuotePage extends CommonAction {
         sleep(5000);
         Boolean flag = null;
         try {
-            // clickButton(driver, deleteWIPBtn, "DeleteWIP");
             deleteWIPBtn.click();
-            /*
-             * JavascriptExecutor js = (JavascriptExecutor) driver;
-             * js.executeScript("arguments[0].click();", deleteWIPBtn);
-             */
             ExtentReporter.logger.log(LogStatus.PASS, "clicked on button / Link- " + "DeleteWIP");
             isAlertPresent(driver);
             flag = true;
@@ -454,14 +449,12 @@ public class PolicyQuotePage extends CommonAction {
 
     public void verifyPDFgenratedOrNot() {
         try {
-
             WebDriverWait wait = new WebDriverWait(driver, Low);
             wait.until(ExpectedConditions.elementToBeClickable(pdfErrorForm));
             switchToFrameUsingElement(driver, pdfErrorForm);
             String errorMsgForPDF = pdfErrorMsg.getAttribute("innerHTML");
             errorMsgForPDF.contains(PDFErrorMsgContains);
             ExtentReporter.logger.log(LogStatus.FAIL, " Error while generating PDF.");
-            Assert.assertTrue(false, "PDF generated sucessfully.");
         } catch (Exception e) {
             ExtentReporter.logger.log(LogStatus.INFO, "PDF generated sucessfully.");
         }

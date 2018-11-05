@@ -250,7 +250,7 @@ public class HomePage extends CommonAction {
     public void logoutFromeOasis() {
         sleep(3000);
         ExtentReporter.logger.log(LogStatus.INFO, "User is logged out from application");
-        clickButton(driver, logoff, "Logoff button");
+        click(driver, logoff, "Logoff button");
         isAlertPresent(driver);
     }
 

@@ -10,8 +10,6 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
-import org.testng.ITestResult;
-import org.testng.Reporter;
 
 import com.mm.dto.pdfReaderDTO;
 import com.mm.pages.PolicyBinderPage;
@@ -34,6 +32,7 @@ public class PDFReader extends CommonAction {
                 "Click the Save button on the PDF to save the results & verify PDF is saved");
         String[] executionPath = { System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\savePdf.exe" };
         try {
+
             Runtime.getRuntime().exec(executionPath).waitFor(20, TimeUnit.SECONDS);
             if (copyPDFFile(FileName).equals("false")) {
                 switchToParentWindowfromframe(driver);
@@ -81,7 +80,6 @@ public class PDFReader extends CommonAction {
             try {
                 File file = new File("C:\\savePDF\\verifyPDF.pdf");
                 String pdfPath = ExtentReporter.reportFolderPath + "\\" + testcaseFormattedID + ".pdf";
-                // File file = new File(pdfPath);
                 pdDoc = PDDocument.load(file);
                 noOfPDFPages = pdDoc.getNumberOfPages();
                 pdfStripper = new PDFTextStripper();
@@ -109,7 +107,7 @@ public class PDFReader extends CommonAction {
                     } else {
                         ExtentReporter.logger.log(LogStatus.FAIL,
                                 pdfreaderdto.verifyPDFcontent.get(i) + " - value  is not present in PDF.");
-                        Reporter.getCurrentTestResult().setStatus(ITestResult.SUCCESS_PERCENTAGE_FAILURE);
+                        // Reporter.getCurrentTestResult().setStatus(ITestResult.SUCCESS_PERCENTAGE_FAILURE);
                     }
                 } catch (Exception e) {
                     ExtentReporter.logger.log(LogStatus.FAIL,

@@ -389,9 +389,6 @@ public class CommonAction implements CommonActionInterface {
             ExtentReporter.logger.log(LogStatus.PASS,
                     DropDownOption + " value is selected from " + label + " drop down list");
             sleep(4000);
-            /*
-             * Alert alert = driver.switchTo().alert(); alert.accept();
-             */
             return "true";
 
         } catch (Exception e) {
@@ -593,7 +590,6 @@ public class CommonAction implements CommonActionInterface {
             } else {
                 /* try { */
                 FileUtils.copyFile(source, dest);
-
                 flag = "true";
             }
         } catch (IOException e) {
@@ -714,9 +710,9 @@ public class CommonAction implements CommonActionInterface {
         selectDropdownByValue(driver, saveAsDropDown, saveAsValue, "Selected " + saveAsValue);
         ExtentReporter.logger.log(LogStatus.INFO,
                 "Select " + saveAsValue + " Click [OK]& verify Message is closed and WIP is saved as" + saveAsValue);
-        sleep(4000);
+        sleep(3000);
         invisibilityOfLoader(driver);
-        clickButton(driver, saveOKBtn, "Save");
+        click(driver, saveOKBtn, "Save");
         invisibilityOfLoader(driver);
         sleep(3000);
         RateApolicyPage rateapolicypage = new RateApolicyPage(driver);

@@ -1,6 +1,5 @@
 package com.mm.pages;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -682,8 +681,7 @@ public class FinancePage extends CommonAction {
     }
 
     // Endorse policy scenario with input having date
-    public PolicyIndicationPage policyEndorsementWithDate(String PolicyNo, String nextDayOfDueDate)
-            throws ParseException {
+    public PolicyIndicationPage policyEndorsementWithDate(String PolicyNo, String nextDayOfDueDate) {
         invisibilityOfLoader(driver);
         switchToParentWindowfromframe(driver);
         sleep(4000);
@@ -701,25 +699,10 @@ public class FinancePage extends CommonAction {
         // Effective Date is the retroDate from Sheet
         clearTextBox(driver, effectiveFromDate, "Effective Date");
 
-        // TODO-use expected date code
         if (nextDayOfDueDate == null) {
             CommonUtilities comUtil = new CommonUtilities();
             String currentDate = comUtil.getSystemDatemmddyyyy();
-            // enterDataIn(driver, effectiveFromDate, currentDate, "Effective
-            // Date");
-            String dueDate = termEffDate.getAttribute("innerHTML");
-            SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-            Date date = formatter.parse(dueDate);
-            sleep(1000);
-            Calendar c = Calendar.getInstance();
-            c.setTime(date);
-            c.add(Calendar.DATE, 1);
-            sleep(1000);
-            Date d = c.getTime();
-            System.out.println("dueDate= " + dueDate);
-            String nextDay = formatter.format(d);
-
-            enterDataIn(driver, effectiveFromDate, nextDay, "Effective Date");
+            enterDataIn(driver, effectiveFromDate, currentDate, "Effective Date");
             sleep(2000);
             exlUtil.writeData(financePageDTO.TCSheetNumber, "retroDate", "'" + currentDate, 1,
                     System.getProperty("user.dir") + "\\src\\main\\resources\\Form_Data.xlsx");

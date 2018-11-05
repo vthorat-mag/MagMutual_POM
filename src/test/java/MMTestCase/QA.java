@@ -64,6 +64,7 @@ public class QA extends ExtentReporter {
 
     @BeforeClass(alwaysRun = true)
     public void beforeClass() throws IOException, URISyntaxException {
+
         Properties configProperties = new Properties();
         InputStream inputFile = new FileInputStream("config.properties");
         configProperties.load(inputFile);
@@ -266,8 +267,6 @@ public class QA extends ExtentReporter {
         homePage.navigateToFinancePageFromHeaderLink().searchPolicyOnFinanceHomePage().openFirstAccount()
                 .exportExcelSheet(financePageDTO.excelNameAddCoverageInstallment)
                 .selectReceivableTabAndExportExcel(financePageDTO.excelNameOnDemandInvoiceInstallmentAfter);
-
-        // TODO- upload all excels and pdf to rally.
     }
 
     // @Test(description = "Hospital Renewal", groups = { "Smoke Test" },
@@ -380,7 +379,8 @@ public class QA extends ExtentReporter {
         exlUtil.writeData("TC43768", "lastOrgName", OrganizationName, 1, ExcelPath);
     }
 
-    // @Test(description = "QA Verify CIS Page Displays", groups = { "QA Smoke Test"
+    // @Test(description = "QA Verify CIS Page Displays", groups = { "QA Smoke
+    // Test"
     // }, priority = 2)
     public void TC43766() {
         TC42253();
@@ -594,7 +594,7 @@ public class QA extends ExtentReporter {
 
         String policyNumber = policybinderpage.policyNo();
 
-        policybinderpage.copyToQuoteFromActionDropDown(policyNumber); // For QA
+        policybinderpage.copyToQuoteFromActionDropDown(policyNumber);
         policyQuotePage.copyFromActionDropDownForQAWithoutBackup();
         policySubmissionPage.changePhaseToIndicationAndAddQuoteDescription();
         rateApolicyPage.rateFunctionality(policybinderpage.policyNo());
@@ -610,8 +610,8 @@ public class QA extends ExtentReporter {
         String policyNumb = policybinderpage.policyNo();
         policyQuotePage.clickPreviewTab(policyNumb).savePDF(testcaseFormattedID);
         policyQuotePage.saveOptionOfficial(policyNumb);
-        exlUtil.writeData("TC44218", "PolicyNum", policyNumb, 1, ExcelPath);
         exlUtil.writeData("TC43780", "PolicyNum", policyNumb, 1, ExcelPath);
+        exlUtil.writeData("TC44218", "PolicyNum", policyNumb, 1, ExcelPath);
     }
 
     @Test(description = "QA Hospital Verify Image Right", groups = { "QA Smoke Test" }, priority = 16)

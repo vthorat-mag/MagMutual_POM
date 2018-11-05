@@ -1,11 +1,6 @@
 package com.mm.pages;
 
-import java.awt.AWTException;
 import java.awt.Desktop;
-import java.awt.Robot;
-import java.awt.Toolkit;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.List;
 
@@ -309,14 +304,14 @@ public class RateApolicyPage extends CommonAction {
 
     // Search Policy from Search Policy with endorsement text field on New BTS
     // env.
-    public RateApolicyPage searchPolicyWithEndorsementBTS_QA(String policy_no) throws Exception {
-        Thread.sleep(3000);
+    public RateApolicyPage searchPolicyWithEndorsementBTS_QA(String policy_no) {
+        sleep(3000);
         if (policySearchBTS_QA(driver, policy_no, Policy_Search, Search_btn, policyList).equals("false")) {
             PolicyBinderPage pbp = new PolicyBinderPage(driver);
             pbp.endorsementFromActionDropDownwithoutBackupPolicy();
             pbp.endorseAPolicyforRateApolicyPage(pbp.policyNo());
         }
-        Thread.sleep(3000);
+        sleep(3000);
         return new RateApolicyPage(driver);
     }
 
@@ -437,7 +432,7 @@ public class RateApolicyPage extends CommonAction {
         return new RateApolicyPage(driver);
     }
 
-    public PolicyQuotePage searchPolicyRateAPolicyPageBTS_QA() throws Exception {
+    public PolicyQuotePage searchPolicyRateAPolicyPageBTS_QA() {
         if (searchPolicyBTS_QA(rateApolicyPageDTO.policyNum).equals("false")) {
             sleep(3000);
             // AcceptFromActionDropDownwithoutBackupPolicy();
@@ -457,12 +452,12 @@ public class RateApolicyPage extends CommonAction {
         return new PolicyQuotePage(driver);
     }
 
-    public PolicyQuotePage searchPolicyPolicyQuotePageBTS_QA() throws Exception {
+    public PolicyQuotePage searchPolicyPolicyQuotePageBTS_QA() {
         searchPolicyBTS_QA(rateApolicyPageDTO.policyNum);
         return new PolicyQuotePage(driver);
     }
 
-    public PolicyQuotePage searchPolicyPolicyQuotePageWithCopyTOQuteBTS_QA() throws Exception {
+    public PolicyQuotePage searchPolicyPolicyQuotePageWithCopyTOQuteBTS_QA() {
         if (searchPolicyBTS_QA(rateApolicyPageDTO.policyNum).equals("false")) {
             PolicyBinderPage pbp = new PolicyBinderPage(driver);
             pbp.copyToQuoteFromActionDropDownForCopyToQuoteTC(pbp.policyNo());
@@ -470,7 +465,7 @@ public class RateApolicyPage extends CommonAction {
         return new PolicyQuotePage(driver);
     }
 
-    public PolicyQuotePage searchPolicyPolicyQuotePageWithEndorsmenteBTS_QA() throws Exception {
+    public PolicyQuotePage searchPolicyPolicyQuotePageWithEndorsmenteBTS_QA() {
         searchPolicyWithEndorsementBTS_QA(rateApolicyPageDTO.policyNum);
         return new PolicyQuotePage(driver);
     }
@@ -494,84 +489,6 @@ public class RateApolicyPage extends CommonAction {
         click(driver, Notify_Close, "Close button");
         sleep(3000);
         return new RateApolicyPage(driver);
-    }
-
-    // Download Excel report and save in defined folder
-    public String startExcelExport() throws InterruptedException, AWTException {
-        clickButton(driver, Export, "Export link");
-        sleep(2000);
-
-        Robot rob = new Robot();
-
-        rob.keyPress(KeyEvent.VK_F6);
-        rob.keyRelease(KeyEvent.VK_F6);
-
-        rob.setAutoDelay(1000);
-        rob.keyPress(KeyEvent.VK_TAB);
-        rob.keyRelease(KeyEvent.VK_TAB);
-
-        rob.setAutoDelay(1000);
-        rob.keyPress(KeyEvent.VK_DOWN);
-
-        rob.setAutoDelay(1000);
-        rob.keyPress(KeyEvent.VK_DOWN);
-        rob.keyRelease(KeyEvent.VK_DOWN);
-
-        rob.setAutoDelay(1000);
-        rob.keyPress(KeyEvent.VK_ENTER);
-        rob.keyRelease(KeyEvent.VK_ENTER);
-
-        String fileDate = comUtil.getSystemDateMMddyy_hhmmss();
-
-        String fileNamePath = "C:\\MM_Testcase_Output\\" + fileDate + ".xlsx";
-        StringSelection fileName = new StringSelection(fileNamePath);
-
-        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(fileName, null);
-
-        rob.keyPress(KeyEvent.VK_CONTROL); // press 'cntrl' key
-        rob.keyPress(KeyEvent.VK_V); // press 'V' key
-
-        rob.keyRelease(KeyEvent.VK_CONTROL);
-        rob.keyRelease(KeyEvent.VK_V);
-        rob.setAutoDelay(2000);
-        rob.keyPress(KeyEvent.VK_ENTER);
-        rob.keyRelease(KeyEvent.VK_ENTER);
-
-        click(driver, Prem_Close, "Premium close");
-        sleep(1000);
-
-        click(driver, Exit_Ok, "OK button");
-        switchToParentWindowfromframe(driver);
-
-        rob.keyPress(KeyEvent.VK_F6);
-        rob.keyRelease(KeyEvent.VK_F6);
-        rob.setAutoDelay(1000);
-        rob.keyPress(KeyEvent.VK_TAB);
-        rob.keyPress(KeyEvent.VK_TAB);
-        rob.keyPress(KeyEvent.VK_TAB);
-        rob.keyRelease(KeyEvent.VK_TAB);
-        rob.setAutoDelay(1000);
-        rob.keyPress(KeyEvent.VK_ENTER);
-        rob.keyRelease(KeyEvent.VK_ENTER);
-        /*
-         * try { File file = new File("C:\\MM_Testcase_Output\\"+fileDate+".xlsx");
-         * 
-         * if(file.exists()) { System.out.println("File is available at location");
-         * ExtentReporter.logger.log(LogStatus.PASS,
-         * "Excel file is available at download location."); }
-         * 
-         * }catch(Exception e) {
-         * System.out.println("File is Not available at location");
-         * ExtentReporter.logger.log(LogStatus.FAIL,
-         * "Excel file is Not available at download location."); e.printStackTrace(); }
-         */
-        return fileNamePath;
-    }
-
-    // Verify file exist or not.
-    public void verifyFileExists(String fileNamePath) {
-
-        comUtil.downloadedFileExists(fileNamePath);
     }
 
     // Select Accept option from "Action Drop Down".

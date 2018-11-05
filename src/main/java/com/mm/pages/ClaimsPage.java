@@ -314,9 +314,10 @@ public class ClaimsPage extends CommonAction {
                     break;
                 }
                 counter++;
-            } while (counter < 6);
+            } while (counter < 8);
             sleep(2000);
-            clickButton(driver, saveTransactionBtn, "Save Transaction");
+            // clickButton(driver, saveTransactionBtn, "Save Transaction");
+            click(driver, saveTransactionBtn, "Save Transaction");
             isAlertPresent(driver);
             sleep(2000);
             // close Add transaction window

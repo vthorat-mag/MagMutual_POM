@@ -15,7 +15,6 @@ import org.testng.Assert;
 
 import com.mm.dto.CincomPageDTO;
 import com.mm.utils.CommonAction;
-import com.mm.utils.CommonUtilities;
 import com.mm.utils.ExtentReporter;
 import com.mm.utils.TestCaseDetails;
 import com.relevantcodes.extentreports.LogStatus;
@@ -178,7 +177,8 @@ public class CincomPage extends CommonAction {
                 Runtime.getRuntime().exec(executionPath).waitFor(30, TimeUnit.SECONDS);
             } catch (Exception e) {
                 e.printStackTrace();
-                ExtentReporter.logger.log(LogStatus.WARNING, "Error in handling Security Warning window");
+                ExtentReporter.logger.log(LogStatus.WARNING,
+                        "Security Warning window has not appeared Or Error handling window");
             }
 
             String parentWindowId = switchToWindow(driver);
@@ -201,26 +201,21 @@ public class CincomPage extends CommonAction {
                                         + "\r\n" + "'Automated Test Case {Today's Date}\r\n" + "This test is to\r\n"
                                         + "\r\n" + "Adds the form \r\n" + "Enter data entry \r\n"
                                         + "Verify Bulletpoints display as entered. '");
-                        // If the Free Form CHGGE check box is unchecked, then select check box.
+                        // If the Free Form CHGGE check box is unchecked, then
+                        // select check box.
                         if (freeFormCHGGEBeginChkBox.getAttribute("class").trim().equalsIgnoreCase("unchecked")) {
                             clickButton(driver, freeFormCHGGEBeginChkBox, "freeFormCHGGEBeginChkBox");
                         }
                         sleep(2000);
-                        // To get cursor position
-                        titleHFLHPLCHGGETextField.click();
-                        sleep(2000);
-                        CommonUtilities comUtil = new CommonUtilities();
+                        // Select Font family and font size
                         ExtentReporter.logger.log(LogStatus.INFO, "Select Font Family: Arial Select Font Size: 10pt");
                         JavascriptExecutor executor = (JavascriptExecutor) driver;
-                        // Enter required test in the text field using TinyMCE
-
-                        executor.executeScript("tinyMCE.activeEditor.setContent('<p>Automated Test Case {"
-                                + comUtil.getSystemDatemm_dd_yyyy()
-                                + "}</p>This test is to <ul><li>Adds the form</li><li>Enter data entry </li><li>Verify Bulletpoints display as entered</li></ul>')");
-
-                        // executor.executeScript("document.getElementById('mceu_47').click();", "");
                         executor.executeScript("document.getElementById('mceu_43-open').innerHTML='Arial';", "");
                         executor.executeScript("document.getElementById('mceu_44-open').innerHTML='10pt';", "");
+                        sleep(2000);
+                        // To get cursor position
+                        titleHFLHPLCHGGETextField.click();
+                        // Enter required test in the text field using AutoIT
                         String[] executionPath = {
                                 System.getProperty("user.dir") + "\\src\\main\\java\\autoItScripts\\Cincom.exe" };
                         Runtime.getRuntime().exec(executionPath).waitFor(20, TimeUnit.SECONDS);

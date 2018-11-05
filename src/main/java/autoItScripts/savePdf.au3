@@ -21,6 +21,7 @@ Func Example()
 	Sleep(1000)
 	ControlFocus("Save As","","Edit1")
 	ControlSend("Save As","","Edit1","C:\savePDF\verifyPDF.pdf");
+	;ControlSend("Save As","","Edit1","C:\" & $CmdLine[1] & "\verifyPDF.pdf");
 	ControlClick("Save As","&Save","Button1")
 	Sleep(3000)
 	if WinExists("Confirm Save As")then
