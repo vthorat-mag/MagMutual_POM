@@ -142,7 +142,8 @@ public class CommonAction implements CommonActionInterface {
         } catch (Exception e) {
             e.printStackTrace();
             ExtentReporter.logger.log(LogStatus.INFO, "Error while switching to default frame.");
-            Assert.assertTrue(false, "Error while switching to default frame.");
+            // Assert.assertTrue(false, "Error while switching to default
+            // frame.");
         }
     }
 
@@ -533,7 +534,6 @@ public class CommonAction implements CommonActionInterface {
                 }
             } catch (Exception e) {
                 ExtentReporter.logger.log(LogStatus.WARNING, "Page is taking longer time than usual for loading.");
-                Assert.assertTrue(false);
             }
         } while (i == 3);
     }
@@ -696,8 +696,16 @@ public class CommonAction implements CommonActionInterface {
 
     public void saveOption(WebDriver driver, WebElement saveOptionBtn, WebElement saveAsDropDown, WebElement saveOKBtn,
             WebElement exitOK, String saveAsValue, String policyNo) {
-        sleep(3000);
+
         driver.switchTo().defaultContent();
+        try {
+            Process processkillpdf = Runtime.getRuntime()
+                    .exec("TASKKILL /F /FI \"USERNAME eq " + System.getProperty("user.name") + "\" /IM savePdf.exe");
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExtentReporter.logger.log(LogStatus.WARNING, "Error while process kill savePDF");
+        }
+        sleep(3000);
         WebDriverWait wait = new WebDriverWait(driver, High);
         wait.until(ExpectedConditions.visibilityOf(saveOptionBtn));
         ExtentReporter.logger.log(LogStatus.INFO, "Click Save Options & verify Save as window displays.");
@@ -710,7 +718,7 @@ public class CommonAction implements CommonActionInterface {
         selectDropdownByValue(driver, saveAsDropDown, saveAsValue, "Selected " + saveAsValue);
         ExtentReporter.logger.log(LogStatus.INFO,
                 "Select " + saveAsValue + " Click [OK]& verify Message is closed and WIP is saved as" + saveAsValue);
-        sleep(3000);
+        sleep(30000);
         invisibilityOfLoader(driver);
         click(driver, saveOKBtn, "Save");
         invisibilityOfLoader(driver);

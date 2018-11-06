@@ -156,6 +156,7 @@ public class BTS extends ExtentReporter {
     @Test(description = "This test case will cover smoke test for Hospital(BTS) CIS\r\n" + "Verify CIS opens \r\n"
             + "Search an entity/person\r\n"
             + "Navigate through the CIS screens", groups = { "BTS Smoke Test" }, priority = 1)
+
     public void TC42253() {
         LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
         LoginPage loginpage = new LoginPage(driver);
@@ -272,7 +273,7 @@ public class BTS extends ExtentReporter {
 
     @Test(description = "QA FM - Hospital Verify On Demand Invoice, Create Batch and Post Batch", groups = {
             "BTS Smoke Test" }, priority = 7)
-    public void TC42250() throws Exception {
+    public void TC42250() {
         String Empty = "";
         LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
         LoginPage loginpage = new LoginPage(driver);
@@ -287,10 +288,7 @@ public class BTS extends ExtentReporter {
 
     @Test(description = "FM - Hospital Verify Credit Applications", groups = { "BTS Smoke Test" }, priority = 8)
     public void TC42248() {
-        // To reuse canceled UMBPL -reinstate the UMB PL coverage by selecting
-        // the coverage UMB PL
-        // and click Policy Actions>Reinstate, then click rate and then save as
-        // official,
+        // To reuse canceled UMBPL -reinstate the UMB PL coverage
         FinancePage financepage = new FinancePage(driver);
         RateApolicyPage rateAPolicyPage = new RateApolicyPage(driver);
         LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
@@ -568,7 +566,6 @@ public class BTS extends ExtentReporter {
                 String screenshotLocation = screenshotfolderpath + result.getName() + ".png";
                 ExtentReporter.logger.log(LogStatus.FAIL, ExtentReporter.logger.addScreenCapture(screenshotLocation));
                 ExtentReporter.logger.log(LogStatus.FAIL, result.getThrowable());
-                // homepage.logoutFromeOasis();
             } catch (Exception e) {
                 e.printStackTrace();
             }

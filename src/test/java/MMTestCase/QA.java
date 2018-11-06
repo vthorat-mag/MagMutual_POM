@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
-import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
@@ -236,7 +235,7 @@ public class QA extends ExtentReporter {
 
     // @Test(description = "FM - Hospital Verify FM Installment", groups = {
     // "BTS Smoke Test" }, priority = 17)
-    public void TC42246() throws ParseException {
+    public void TC42246() {
         LoginPageDTO lpDTO = new LoginPageDTO(TestCaseDetails.testDataDictionary);
         LoginPage loginpage = new LoginPage(driver);
         HomePage homePage = new HomePage(driver);
@@ -613,7 +612,7 @@ public class QA extends ExtentReporter {
     }
 
     @Test(description = "QA FM - Hospital Verify FM Installment", groups = { "QA Smoke Test" }, priority = 17)
-    public void TC44218() throws ParseException {
+    public void TC44218() {
         TC42246();
     }
 

@@ -243,11 +243,12 @@ public class PolicyBinderPage extends CommonAction {
         // TODO - Need To add below steps once got confirmaiton on query - Cant
         // see policy No from Policy No drop down field.
         /*
-         * In the filter criteria section, click the Policy No dropdown and Select
-         * [Policy number entered in step 3] Click the checkbox next the Prof Liab
-         * coverage Click Save as Claim Possible duplicate claim screen displays Click
-         * Save as Claim Claim No displays in the upper left corner. Note (and save for
-         * later input) the claim number: ****add ########### Click [Close]
+         * In the filter criteria section, click the Policy No dropdown and
+         * Select [Policy number entered in step 3] Click the checkbox next the
+         * Prof Liab coverage Click Save as Claim Possible duplicate claim
+         * screen displays Click Save as Claim Claim No displays in the upper
+         * left corner. Note (and save for later input) the claim number:
+         * ****add ########### Click [Close]
          */
     }
 
@@ -454,12 +455,6 @@ public class PolicyBinderPage extends CommonAction {
             ExtentReporter.logger.log(LogStatus.INFO, "Captursaction details is NOT displayed.");
         }
 
-        /*
-         * switchToFrameUsingElement(driver,
-         * driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" +
-         * getUpdatedPolicyNo + "')]")));
-         */
-
         switchToFrameUsingElement(driver, entityMiniPopupFrameId);
         ExtentReporter.logger.log(LogStatus.INFO,
                 "Click [OK]. Verify Policy folder shows a new number, Phase show Submission.");
@@ -501,8 +496,8 @@ public class PolicyBinderPage extends CommonAction {
         // called
         /*
          * switchToFrameUsingElement(driver,
-         * driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" + policyNo()
-         * + "')]")));
+         * driver.findElement(By.xpath("//iframe[contains(@src,'policyNo=" +
+         * policyNo() + "')]")));
          */
         switchToFrameUsingElement(driver, entityMiniPopupFrameId);
         ExtentReporter.logger.log(LogStatus.INFO,
@@ -573,6 +568,14 @@ public class PolicyBinderPage extends CommonAction {
 
     // Save Option functionality flow.
     public PolicyQuotePage saveOption(String policyNo) {
+        try {
+            Process processkillpdf = Runtime.getRuntime()
+                    .exec("TASKKILL /F /FI \"USERNAME eq " + System.getProperty("user.name") + "\" /IM savePdf.exe");
+        } catch (Exception e) {
+            e.printStackTrace();
+            ExtentReporter.logger.log(LogStatus.WARNING, "Error while process kill savePDF");
+        }
+
         saveOption(driver, saveOptionBtn, saveAsDropDown, saveOptionOkBtn, Exit_Ok,
                 policybinderpageDTO.saveAsPolicyValue, policyNo);
         return new PolicyQuotePage(driver);

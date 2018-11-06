@@ -10,6 +10,8 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
+import org.testng.ITestResult;
+import org.testng.Reporter;
 
 import com.mm.dto.pdfReaderDTO;
 import com.mm.pages.PolicyBinderPage;
@@ -107,7 +109,7 @@ public class PDFReader extends CommonAction {
                     } else {
                         ExtentReporter.logger.log(LogStatus.FAIL,
                                 pdfreaderdto.verifyPDFcontent.get(i) + " - value  is not present in PDF.");
-                        // Reporter.getCurrentTestResult().setStatus(ITestResult.SUCCESS_PERCENTAGE_FAILURE);
+                        Reporter.getCurrentTestResult().setStatus(ITestResult.SUCCESS_PERCENTAGE_FAILURE);
                     }
                 } catch (Exception e) {
                     ExtentReporter.logger.log(LogStatus.FAIL,
